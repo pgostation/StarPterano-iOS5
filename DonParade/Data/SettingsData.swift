@@ -11,12 +11,12 @@ import Foundation
 final class SettingsData {
     private static let defaults = UserDefaults(suiteName: "Settings")!
     
-    static var oauthString: String? {
+    static var oauthCode: String? {
         get {
-            return defaults.string(forKey: "oauthString")
+            return defaults.string(forKey: "oauthCode")
         }
         set(newValue) {
-            defaults.set(newValue, forKey: "oauthString")
+            defaults.set(newValue, forKey: "oauthCode")
         }
     }
 }

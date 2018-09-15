@@ -8,5 +8,8 @@
 
 // ログイン
 "PLACEHOLDER_INPUT_DOMAIN" = "ドメインを入力 (例：mstdn.jp)";
-"BUTTON_MASTODON_OAUTH" = "Mastodon認証";"
+"BUTTON_MASTODON_OAUTH" = "Mastodon認証";
 "ALERT_INPUT_DOMAIN" = "ドメインを入力してください";
+"PLACEHOLDER_INPUT_CODE" = "認証コードを入力してください";
+"BUTTON_ENTER_CODE" = "コード送信";
+"ALERT_INPUT_CODE_FAILURE" = "不正なコードです";

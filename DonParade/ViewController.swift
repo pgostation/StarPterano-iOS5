@@ -16,7 +16,7 @@ final class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        if SettingsData.oauthString == nil {
+        if SettingsData.oauthCode == nil {
             // 初回起動時はログイン画面を表示
             DispatchQueue.main.async {
                 let loginViewController = LoginViewController()
@@ -24,7 +24,8 @@ final class ViewController: UIViewController {
             }
         } else {
             // アカウント登録済みなので、メイン画面へ移動
-            print("#### 工事中")
+            let mainViewController = MainViewController()
+            self.present(mainViewController, animated: false, completion: nil)
         }
     }
 

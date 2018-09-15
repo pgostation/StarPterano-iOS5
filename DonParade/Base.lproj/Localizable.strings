@@ -8,5 +8,8 @@
 
 // ログイン
 "PLACEHOLDER_INPUT_DOMAIN" = "Input domain (ex：mstdn.jp)";
-"BUTTON_MASTODON_OAUTH" = "Mastodon Server Auth";"
+"BUTTON_MASTODON_OAUTH" = "Mastodon Server Auth";
 "ALERT_INPUT_DOMAIN" = "Input domain.";
+"PLACEHOLDER_INPUT_CODE" = "Input code";
+"BUTTON_ENTER_CODE" = "Enter code";
+"ALERT_INPUT_CODE_FAILURE" = "Bad code.";
