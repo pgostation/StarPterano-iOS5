@@ -45,7 +45,7 @@ final class LoginView: UIView {
         hostField.layer.borderColor = UIColor.gray.cgColor
         hostField.layer.borderWidth = 0.5
         
-        authButton.setTitle("BUTTON_MASTODON_OAUTH", for: .normal)
+        authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
         authButton.backgroundColor = UIColor.lightGray
         authButton.setTitleColor(UIColor.blue, for: .normal)
     }
@@ -84,7 +84,7 @@ final class Login {
         
         let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
         if hostName == "" {
-            Dialog.show(message: "ALERT_INPUT_DOMAIN")
+            Dialog.show(message: I18n.get("ALERT_INPUT_DOMAIN"))
             return
         }
         
