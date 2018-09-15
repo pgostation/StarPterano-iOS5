@@ -12,6 +12,14 @@
 		12F9AC7D214CA35F00E9E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC7B214CA35F00E9E508 /* Main.storyboard */; };
 		12F9AC7F214CA36100E9E508 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC7E214CA36100E9E508 /* Assets.xcassets */; };
 		12F9AC82214CA36100E9E508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC80214CA36100E9E508 /* LaunchScreen.storyboard */; };
+		12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC8B214CA3BD00E9E508 /* Dialog.swift */; };
+		12F9AC8F214CA41200E9E508 /* MastodonPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC8E214CA41200E9E508 /* MastodonPost.swift */; };
+		12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */; };
+		12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC98214CA9B100E9E508 /* SettingsData.swift */; };
+		12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC9A214CAB2200E9E508 /* LoginViewController.swift */; };
+		12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC9C214CAB7000E9E508 /* MyViewController.swift */; };
+		12F9AC9F214CDFAE00E9E508 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC9E214CDFAE00E9E508 /* Localizable.strings */; };
+		12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA0214CE18400E9E508 /* I18n.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +30,14 @@
 		12F9AC7E214CA36100E9E508 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		12F9AC81214CA36100E9E508 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		12F9AC83214CA36100E9E508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12F9AC8B214CA3BD00E9E508 /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		12F9AC8E214CA41200E9E508 /* MastodonPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonPost.swift; sourceTree = "<group>"; };
+		12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSafari.swift; sourceTree = "<group>"; };
+		12F9AC98214CA9B100E9E508 /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
+		12F9AC9A214CAB2200E9E508 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		12F9AC9C214CAB7000E9E508 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		12F9AC9E214CDFAE00E9E508 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		12F9ACA0214CE18400E9E508 /* I18n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I18n.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +70,94 @@
 		12F9AC76214CA35F00E9E508 /* DonParade */ = {
 			isa = PBXGroup;
 			children = (
+				12F9AC8D214CA3FD00E9E508 /* Mastodon */,
+				12F9AC8A214CA3A300E9E508 /* UI */,
+				12F9AC89214CA38B00E9E508 /* Utils */,
+				12F9AC97214CA99600E9E508 /* Data */,
+				12F9AC93214CA67D00E9E508 /* ScrollView */,
+				12F9AC95214CA73800E9E508 /* ProfileView */,
+				12F9AC94214CA6C500E9E508 /* TootView */,
+				12F9AC92214CA57E00E9E508 /* SettingsView */,
+				12F9AC96214CA74A00E9E508 /* LoginView */,
 				12F9AC77214CA35F00E9E508 /* AppDelegate.swift */,
 				12F9AC79214CA35F00E9E508 /* ViewController.swift */,
 				12F9AC7B214CA35F00E9E508 /* Main.storyboard */,
 				12F9AC7E214CA36100E9E508 /* Assets.xcassets */,
 				12F9AC80214CA36100E9E508 /* LaunchScreen.storyboard */,
 				12F9AC83214CA36100E9E508 /* Info.plist */,
+				12F9AC9E214CDFAE00E9E508 /* Localizable.strings */,
 			);
 			path = DonParade;
+			sourceTree = "<group>";
+		};
+		12F9AC89214CA38B00E9E508 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				12F9ACA0214CE18400E9E508 /* I18n.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		12F9AC8A214CA3A300E9E508 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				12F9AC8B214CA3BD00E9E508 /* Dialog.swift */,
+				12F9AC9C214CAB7000E9E508 /* MyViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		12F9AC8D214CA3FD00E9E508 /* Mastodon */ = {
+			isa = PBXGroup;
+			children = (
+				12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */,
+				12F9AC8E214CA41200E9E508 /* MastodonPost.swift */,
+			);
+			path = Mastodon;
+			sourceTree = "<group>";
+		};
+		12F9AC92214CA57E00E9E508 /* SettingsView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SettingsView;
+			sourceTree = "<group>";
+		};
+		12F9AC93214CA67D00E9E508 /* ScrollView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ScrollView;
+			sourceTree = "<group>";
+		};
+		12F9AC94214CA6C500E9E508 /* TootView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TootView;
+			sourceTree = "<group>";
+		};
+		12F9AC95214CA73800E9E508 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ProfileView;
+			sourceTree = "<group>";
+		};
+		12F9AC96214CA74A00E9E508 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				12F9AC9A214CAB2200E9E508 /* LoginViewController.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		12F9AC97214CA99600E9E508 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				12F9AC98214CA9B100E9E508 /* SettingsData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12F9AC82214CA36100E9E508 /* LaunchScreen.storyboard in Resources */,
+				12F9AC9F214CDFAE00E9E508 /* Localizable.strings in Resources */,
 				12F9AC7F214CA36100E9E508 /* Assets.xcassets in Resources */,
 				12F9AC7D214CA35F00E9E508 /* Main.storyboard in Resources */,
 			);
@@ -135,8 +232,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
+				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
+				12F9AC8F214CA41200E9E508 /* MastodonPost.swift in Sources */,
+				12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */,
+				12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
+				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,
 				12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */,
+				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
