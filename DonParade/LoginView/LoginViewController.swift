@@ -45,7 +45,6 @@ final class LoginViewController: MyViewController {
                 do {
                     self.responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
                     
-                    print("#### responseJson1=\(String(describing: self.responseJson))")
                     // Safariでログイン
                     self.login(hostName: hostName)
                     
@@ -69,8 +68,6 @@ final class LoginViewController: MyViewController {
         paramBase += "scope=read write follow"
         
         let params = paramBase.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        
-        print("##### params = \(params)")
         
         let loginUrl = URL(string: "https://\(hostName)/oauth//authorize?\(params)")!
         
@@ -105,8 +102,6 @@ final class LoginViewController: MyViewController {
             if let data = data {
                 do {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
-                    
-                    print("#### responseJson2=\(String(describing: responseJson))")
                     
                     SettingsData.hostName = hostName
                     SettingsData.accessToken = responseJson?["access_token"] as? String

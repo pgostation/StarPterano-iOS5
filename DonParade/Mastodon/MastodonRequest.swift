@@ -22,8 +22,6 @@ final class MastodonRequest {
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        print("#### " + "Bearer \(accessToken)")
-        
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
     

@@ -45,6 +45,8 @@ private final class TimeLineView: UITableView {
     private let model = TimeLineViewModel()
     private let refreshCon = UIRefreshControl()
     
+    private var accountList: [String: AccountData] = [:]
+    
     init(type: TimeLineViewController.TimeLineType, option: String?) {
         self.type = type
         self.option = option
@@ -107,8 +109,7 @@ private final class TimeLineView: UITableView {
                     }
                     
                     if let responseJson = responseJson {
-                        self?.analyseJson(json: responseJson)
-                        print("#### responseJson3=\(responseJson)")
+                        self?.analyseJson(jsonList: responseJson)
                     }
                 } catch {
                 }
@@ -119,14 +120,156 @@ private final class TimeLineView: UITableView {
     }
     
     // タイムラインのJSONデータを解析して、リストに格納
-    private func analyseJson(json: Array<AnyObject>) {
+    private func analyseJson(jsonList: [AnyObject]) {
+        var contentList: [ContentData] = []
         
+        var acct: String = ""
+        for json in jsonList {
+            guard let json = json as? [String: Any] else { continue }
+            
+            if let account = json["account"] as? [String: Any] {
+                acct = account["acct"] as? String ?? ""
+                let avatar = account["acct"] as? String
+                let avatar_static = account["avatar_static"] as? String
+                let bot = account["bot"] as? Int
+                let created_at = account["created_at"] as? String
+                let display_name = account["display_name"] as? String
+                let emojis = account["emojis"] as? [[String: Any]]
+                let fields = account["fields"] as? [[String: Any]]
+                let followers_count = account["followers_count"] as? Int
+                let following_count = account["following_count"] as? Int
+                let header = account["header"] as? String
+                let header_static = account["header_static"] as? String
+                let id = account["id"] as? Int
+                let locked = account["locked"] as? Int
+                let note = account["note"] as? String
+                let statuses_count = account["statuses_count"] as? Int
+                let url = account["url"] as? String
+                let username = account["username"] as? String
+                
+                let data = AccountData(acct: acct,
+                                       avatar: avatar,
+                                       avatar_static: avatar_static,
+                                       bot: bot,
+                                       created_at: created_at,
+                                       display_name: display_name,
+                                       emojis: emojis,
+                                       fields: fields,
+                                       followers_count: followers_count,
+                                       following_count: following_count,
+                                       header: header,
+                                       header_static: header_static,
+                                       id: id,
+                                       locked: locked,
+                                       note: note,
+                                       statuses_count: statuses_count,
+                                       url: url,
+                                       username: username)
+                self.accountList.updateValue(data, forKey: acct)
+            }
+            let content = json["content"] as? String
+            let created_at = json["created_at"] as? String
+            let emojis = json["emojis"] as? [[String: Any]]
+            let favourited = json["favourited"] as? Int
+            let favourites_count = json["favourites_count"] as? Int
+            let id = json["id"] as? Int
+            let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
+            let in_reply_to_id = json["in_reply_to_account_id"] as? String
+            let language = json["language"] as? String
+            let media_attachments = json["media_attachments"] as? [String]
+            let mentions = json["mentions"] as? [String]
+            let muted = json["muted"] as? Int
+            let reblog = json["reblog"] as? String
+            let reblogged = json["reblogged"] as? Int
+            let reblogs_count = json["reblogs_count"] as? Int
+            let replies_count = json["replies_count"] as? Int
+            let sensitive = json["sensitive"] as? Int
+            let spoiler_text = json["spoiler_text"] as? String
+            let tags = json["tags"] as? [String]
+            let uri = json["uri"] as? String
+            let url = json["url"] as? String
+            let visibility = json["visibility"] as? String
+            
+            let data = ContentData(accountId: acct,
+                                   content: content,
+                                   created_at: created_at,
+                                   emojis: emojis,
+                                   favourited: favourited,
+                                   favourites_count: favourites_count,
+                                   id: id,
+                                   in_reply_to_account_id: in_reply_to_account_id,
+                                   in_reply_to_id: in_reply_to_id,
+                                   language: language,
+                                   media_attachments: media_attachments,
+                                   mentions: mentions,
+                                   muted: muted,
+                                   reblog: reblog,
+                                   reblogged: reblogged,
+                                   reblogs_count: reblogs_count,
+                                   replies_count: replies_count,
+                                   sensitive: sensitive,
+                                   spoiler_text: spoiler_text,
+                                   tags: tags,
+                                   uri: uri,
+                                   url: url,
+                                   visibility: visibility)
+            contentList.append(data)
+        }
+        
+        model.change(tableView: self, addList: contentList, accountList: self.accountList)
+    }
+    
+    struct AccountData {
+        let acct: String?
+        let avatar: String?
+        let avatar_static: String?
+        let bot: Int?
+        let created_at: String?
+        let display_name: String?
+        let emojis: [[String: Any]]?
+        let fields: [[String: Any]]?
+        let followers_count: Int?
+        let following_count: Int?
+        let header: String?
+        let header_static: String?
+        let id: Int?
+        let locked: Int?
+        let note: String?
+        let statuses_count: Int?
+        let url: String?
+        let username: String?
+    }
+    
+    struct ContentData {
+        let accountId: String
+        let content: String?
+        let created_at: String?
+        let emojis: [[String: Any]]?
+        let favourited: Int?
+        let favourites_count: Int?
+        let id: Int?
+        let in_reply_to_account_id: String?
+        let in_reply_to_id: String?
+        let language: String?
+        let media_attachments: [String]?
+        let mentions: [String]?
+        let muted: Int?
+        let reblog: String?
+        let reblogged: Int?
+        let reblogs_count: Int?
+        let replies_count: Int?
+        let sensitive: Int?
+        let spoiler_text: String?
+        let tags: [String]?
+        let uri: String?
+        let url: String?
+        let visibility: String?
     }
 }
 
 private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
-    private var list: [Date: TootStruct] = [:]
-    private var sortedKeys: [Date] = []
+    private var list: [TimeLineView.ContentData] = []
+    private var accountList: [String: TimeLineView.AccountData] = [:]
     
     override init() {
         super.init()
@@ -136,19 +279,14 @@ private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableV
         fatalError("init(coder:) has not been implemented")
     }
     
-    func change(tableView: UITableView, addList: [Date: TootStruct]) {
-        for data in addList {
-            var time = data.key
-            while list.keys.contains(time) {
-                time = time.addingTimeInterval(0.001)
-            }
-            list.updateValue(data.value, forKey: time)
+    func change(tableView: UITableView, addList: [TimeLineView.ContentData], accountList: [String: TimeLineView.AccountData]) {
+        DispatchQueue.main.async {
+            self.list += addList
+            
+            self.accountList = accountList
+            
+            tableView.reloadData()
         }
-        
-        // 日付順にキーをソートして保持
-        sortedKeys = list.keys.sorted().reversed()
-        
-        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -158,13 +296,12 @@ private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = getCell(view: tableView)
         
-        if indexPath.row >= sortedKeys.count { return cell }
+        if indexPath.row >= list.count { return cell }
+        let data = list[indexPath.row]
+        let account = accountList[data.accountId]
         
-        let key = sortedKeys[indexPath.row]
-        guard let data = list[key] else { return cell }
-        
-        cell.textLabel?.text = data.text
-        cell.detailTextLabel?.text = data.id
+        cell.textLabel?.text = data.content
+        cell.detailTextLabel?.text = (account?.display_name ?? "") + " " + (account?.acct ?? "")
         
         return cell
     }
@@ -176,10 +313,4 @@ private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableV
         return cell
         
     }
-}
-
-// トゥート構造体
-struct TootStruct {
-    let id: String
-    let text: String
 }

@@ -27,18 +27,36 @@ final class MainViewController: MyViewController {
         tlAction(nil)
     }
     
+    private var timelineViewController: TimeLineViewController?
+    
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
-        let timelineViewController = TimeLineViewController(type: .home)
-        self.addChildViewController(timelineViewController)
-        self.view.addSubview(timelineViewController.view)
+        // 前のビューを外す
+        removeOldView()
+        
+        // 一番下にタイムラインビューを入れる
+        self.timelineViewController = TimeLineViewController(type: .home)
+        self.addChildViewController(self.timelineViewController!)
+        self.view.insertSubview(self.timelineViewController!.view, at: 0)
     }
     
     // LTLへの切り替え
     @objc func ltlAction(_ sender: UIButton?) {
-        let timelineViewController = TimeLineViewController(type: .local)
-        self.addChildViewController(timelineViewController)
-        self.view.addSubview(timelineViewController.view)
+        // 前のビューを外す
+        removeOldView()
+        
+        // 一番下にタイムラインビューを入れる
+        self.timelineViewController = TimeLineViewController(type: .local)
+        self.addChildViewController(self.timelineViewController!)
+        self.view.insertSubview(self.timelineViewController!.view, at: 0)
+    }
+    
+    // 前のビューを外す
+    private func removeOldView() {
+        if let oldViewController = self.timelineViewController {
+            oldViewController.removeFromParentViewController()
+            oldViewController.view.removeFromSuperview()
+        }
     }
 }
 

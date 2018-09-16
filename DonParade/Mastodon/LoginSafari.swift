@@ -33,7 +33,6 @@ final class LoginSafari {
             guard let callbackUrl = callbackUrl else {
                 return
             }
-            print("#### \(callbackUrl)")
             UIApplication.shared.open(callbackUrl, options: [:], completionHandler: nil)
         })
         self.authSession = authSession
