@@ -23,6 +23,8 @@ final class MainViewController: MyViewController {
         view.tlButton.addTarget(self, action: #selector(tlAction(_:)), for: .touchUpInside)
         view.ltlButton.addTarget(self, action: #selector(ltlAction(_:)), for: .touchUpInside)
         
+        view.accountButton.addTarget(self, action: #selector(accountAction(_:)), for: .touchUpInside)
+        
         // 起動時はTLを表示する
         tlAction(nil)
     }
@@ -57,6 +59,12 @@ final class MainViewController: MyViewController {
             oldViewController.removeFromParentViewController()
             oldViewController.view.removeFromSuperview()
         }
+    }
+    
+    // アカウント画面に移動
+    @objc func accountAction(_ sender: UIButton?) {
+        let settingsViewController = SettingsViewController()
+        self.present(settingsViewController, animated: true, completion: nil)
     }
 }
 

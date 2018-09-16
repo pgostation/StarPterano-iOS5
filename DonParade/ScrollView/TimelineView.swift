@@ -264,7 +264,8 @@ private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableV
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let cell = self.tableView(tableView, cellForRowAt: indexPath) as? TimeLineViewCell else { return 60 }
-        return cell.messageView.frame.height + 20
+        
+        return cell.messageView.frame.height + 14
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -278,26 +279,31 @@ private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableV
         let data = list[indexPath.row]
         let account = accountList[data.accountId]
         
-        if let iconUrl = URL(string: account?.avatar_static ?? "") {
-            if let data = try? Data(contentsOf: iconUrl) {
-                cell.iconView.image = UIImage(data: data)
-            }
+        ImageCache.image(urlStr: account?.avatar_static) { image in
+            cell.iconView.image = image
+            cell.iconView.layer.cornerRadius = 22
+            cell.iconView.clipsToBounds = true
         }
         
         cell.messageView.text = data.content
+        cell.messageView.font = UIFont.systemFont(ofSize: 16)
+        cell.messageView.frame.size.width = UIScreen.main.bounds.width - 56
         cell.messageView.sizeToFit()
-        cell.messageView.font = UIFont.boldSystemFont(ofSize: 18)
+        if cell.messageView.frame.size.height >= 140 - 14 {
+            cell.messageView.frame.size.height = 140 - 14
+        }
         
         cell.nameLabel.text = account?.display_name
+        cell.nameLabel.font = UIFont.boldSystemFont(ofSize: 13)
         cell.nameLabel.sizeToFit()
-        cell.nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
         
         cell.idLabel.text = account?.acct
+        cell.idLabel.font = UIFont.systemFont(ofSize: 13)
+        cell.idLabel.textColor = UIColor.darkGray
         cell.idLabel.sizeToFit()
-        cell.idLabel.font = UIFont.systemFont(ofSize: 14)
         
         cell.dateLabel.text = data.created_at
-        cell.dateLabel.font = UIFont.systemFont(ofSize: 14)
+        cell.dateLabel.font = UIFont.systemFont(ofSize: 13)
         cell.dateLabel.textAlignment = .right
         
         return cell
@@ -344,21 +350,21 @@ private final class TimeLineViewCell: UITableViewCell {
         self.nameLabel.frame = CGRect(x: 50,
                                       y: 0,
                                       width: self.nameLabel.frame.width,
-                                      height: 20)
+                                      height: 16)
         
         self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
                                     y: 0,
                                     width: self.idLabel.frame.width,
-                                    height: 20)
+                                    height: 16)
         
         self.dateLabel.frame = CGRect(x: UIScreen.main.bounds.width - 100,
                                       y: 0,
                                       width: 100,
-                                      height: 20)
+                                      height: 16)
         
         self.messageView.frame = CGRect(x: 50,
-                                        y: 22,
-                                        width: UIScreen.main.bounds.width - 56,
+                                        y: 14,
+                                        width: self.messageView.frame.width,
                                         height: self.messageView.frame.height)
     }
 }

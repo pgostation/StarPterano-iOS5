@@ -9,7 +9,10 @@
 import UIKit
 
 final class SettingsViewController: MyViewController {
-    
+    override func loadView() {
+        let view = SettingsView()
+        self.view = view
+    }
 }
 
 private final class SettingsView: UITableView {
