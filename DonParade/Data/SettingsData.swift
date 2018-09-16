@@ -11,12 +11,25 @@ import Foundation
 final class SettingsData {
     private static let defaults = UserDefaults(suiteName: "Settings")!
     
-    static var oauthCode: String? {
+    // 現在選択中のホストネーム
+    static var hostName: String? {
         get {
-            return defaults.string(forKey: "oauthCode")
+            return defaults.string(forKey: "hostName")
         }
         set(newValue) {
-            defaults.set(newValue, forKey: "oauthCode")
+            defaults.set(newValue, forKey: "hostName")
         }
     }
+    
+    // 現在選択中のアクセストークン
+    static var accessToken: String? {
+        get {
+            return defaults.string(forKey: "accessToken")
+        }
+        set(newValue) {
+            defaults.set(newValue, forKey: "accessToken")
+        }
+    }
+    
+    // 接続が確認されたアカウントの情報を保持
 }

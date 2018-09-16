@@ -13,7 +13,7 @@
 		12F9AC7F214CA36100E9E508 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC7E214CA36100E9E508 /* Assets.xcassets */; };
 		12F9AC82214CA36100E9E508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC80214CA36100E9E508 /* LaunchScreen.storyboard */; };
 		12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC8B214CA3BD00E9E508 /* Dialog.swift */; };
-		12F9AC8F214CA41200E9E508 /* MastodonPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC8E214CA41200E9E508 /* MastodonPost.swift */; };
+		12F9AC8F214CA41200E9E508 /* MastodonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC8E214CA41200E9E508 /* MastodonRequest.swift */; };
 		12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */; };
 		12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC98214CA9B100E9E508 /* SettingsData.swift */; };
 		12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC9A214CAB2200E9E508 /* LoginViewController.swift */; };
@@ -21,6 +21,8 @@
 		12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA0214CE18400E9E508 /* I18n.swift */; };
 		12F9ACA2214CE9B900E9E508 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12F9ACA4214CE9B900E9E508 /* Localizable.strings */; };
 		12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA7214D1C0900E9E508 /* MainViewController.swift */; };
+		12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */; };
+		12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACAB214D424D00E9E508 /* UIUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +34,7 @@
 		12F9AC81214CA36100E9E508 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		12F9AC83214CA36100E9E508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		12F9AC8B214CA3BD00E9E508 /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
-		12F9AC8E214CA41200E9E508 /* MastodonPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonPost.swift; sourceTree = "<group>"; };
+		12F9AC8E214CA41200E9E508 /* MastodonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonRequest.swift; sourceTree = "<group>"; };
 		12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSafari.swift; sourceTree = "<group>"; };
 		12F9AC98214CA9B100E9E508 /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 		12F9AC9A214CAB2200E9E508 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -41,6 +43,8 @@
 		12F9ACA5214CE9C200E9E508 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		12F9ACA6214CEACD00E9E508 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		12F9ACA7214D1C0900E9E508 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
+		12F9ACAB214D424D00E9E508 /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				12F9ACA0214CE18400E9E508 /* I18n.swift */,
+				12F9ACAB214D424D00E9E508 /* UIUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -114,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */,
-				12F9AC8E214CA41200E9E508 /* MastodonPost.swift */,
+				12F9AC8E214CA41200E9E508 /* MastodonRequest.swift */,
 			);
 			path = Mastodon;
 			sourceTree = "<group>";
@@ -130,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				12F9ACA7214D1C0900E9E508 /* MainViewController.swift */,
+				12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -239,10 +245,12 @@
 			files = (
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
-				12F9AC8F214CA41200E9E508 /* MastodonPost.swift in Sources */,
+				12F9AC8F214CA41200E9E508 /* MastodonRequest.swift in Sources */,
+				12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */,
 				12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */,
 				12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
+				12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */,
 				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,
 				12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
@@ -404,6 +412,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5M8K6XWJN;
 				INFOPLIST_FILE = DonParade/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -422,6 +431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5M8K6XWJN;
 				INFOPLIST_FILE = DonParade/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

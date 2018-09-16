@@ -9,20 +9,123 @@
 import UIKit
 
 final class LoginViewController: MyViewController {
-    static weak var instance: LoginViewController?
-    
     override func loadView() {
-        LoginViewController.instance = self
-        
         let loginView = LoginView()
         self.view = loginView
         
-        loginView.authButton.addTarget(Login.self, action: #selector(Login.authAction(_:)), for: .touchUpInside)
-        loginView.codeEnterButton.addTarget(Login.self, action: #selector(Login.codeEnterAction(_:)), for: .touchUpInside)
+        loginView.authButton.addTarget(self, action: #selector(authAction(_:)), for: .touchUpInside)
+        loginView.codeEnterButton.addTarget(self, action: #selector(codeEnterAction(_:)), for: .touchUpInside)
+    }
+    
+    // マストドン認証
+    private var responseJson: Dictionary<String, AnyObject>?
+    @objc func authAction(_ sender: UIButton) {
+        guard let view = sender.superview as? LoginView else { return }
+        
+        sender.backgroundColor = UIColor.darkGray
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            sender.backgroundColor = UIColor.lightGray
+        }
+        
+        let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
+        if hostName == "" {
+            Dialog.show(message: I18n.get("ALERT_INPUT_DOMAIN"))
+            return
+        }
+        
+        guard let registerUrl = URL(string: "https://\(hostName)/api/v1/apps") else { return }
+        
+        let body: [String: String] = ["client_name": "DonParade",
+                                      "redirect_uris": "urn:ietf:wg:oauth:2.0:oob",
+                                      "scopes": "read write follow"]
+        
+        // クライアント認証POST
+        try? MastodonRequest.post(url: registerUrl, body: body) { (data, response, error) in
+            if let data = data {
+                do {
+                    self.responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
+                    
+                    print("#### responseJson1=\(String(describing: self.responseJson))")
+                    // Safariでログイン
+                    self.login(hostName: hostName)
+                    
+                    // 認証コード入力フィールドを表示する
+                    view.showInputCodeField()
+                } catch {
+                }
+            } else if let error = error {
+                print(error)
+            }
+        }
+    }
+    
+    // Safariでのログイン
+    private func login(hostName: String) {
+        guard let clientId = responseJson?["client_id"] as? String else { return }
+        var paramBase = ""
+        paramBase += "client_id=\(clientId)&"
+        paramBase += "response_type=code&"
+        paramBase += "redirect_uri=urn:ietf:wg:oauth:2.0:oob&"
+        paramBase += "scope=read write follow"
+        
+        let params = paramBase.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        
+        print("##### params = \(params)")
+        
+        let loginUrl = URL(string: "https://\(hostName)/oauth//authorize?\(params)")!
+        
+        LoginSafari.login(url: loginUrl, viewController: self)
+    }
+    
+    // コード入力
+    @objc func codeEnterAction(_ sender: UIButton) {
+        guard let view = sender.superview as? LoginView else { return }
+        
+        if view.inputCodeField.text == nil || view.inputCodeField.text!.count < 10 {
+            Dialog.show(message: I18n.get("ALERT_INPUT_CODE_FAILURE"))
+            return
+        }
+        
+        // アクセストークンを取得
+        let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
+        guard let registerUrl = URL(string: "https://\(hostName)/oauth/token") else { return }
+        
+        guard let clientId = responseJson?["client_id"] as? String else { return }
+        guard let clientSecret = responseJson?["client_secret"] as? String else { return }
+        guard let oauthCode = view.inputCodeField.text else { return }
+        
+        let body: [String: String] = ["grant_type" : "authorization_code",
+                                      "redirect_uri" : "urn:ietf:wg:oauth:2.0:oob",
+                                      "client_id": "\(clientId)",
+                                      "client_secret": "\(clientSecret)",
+                                      "code": "\(oauthCode)"]
+        
+        // クライアント認証POST
+        try? MastodonRequest.post(url: registerUrl, body: body) { (data, response, error) in
+            if let data = data {
+                do {
+                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
+                    
+                    print("#### responseJson2=\(String(describing: responseJson))")
+                    
+                    SettingsData.hostName = hostName
+                    SettingsData.accessToken = responseJson?["access_token"] as? String
+                    
+                    // メイン画面へ移動
+                    DispatchQueue.main.async {
+                        let mainViewController = MainViewController()
+                        self.present(mainViewController, animated: false, completion: nil)
+                    }
+                } catch {
+                }
+            } else if let error = error {
+                print(error)
+            }
+        }
     }
 }
 
-final class LoginView: UIView {
+private final class LoginView: UIView {
     let hostField = UITextField()
     let authButton = UIButton()
     let inputCodeField = UITextField()
@@ -96,93 +199,11 @@ final class LoginView: UIView {
     
     // 認証コード入力フィールドを表示する
     func showInputCodeField() {
-        hostField.isHidden = true
-        authButton.isHidden = true
-        inputCodeField.isHidden = false
-        codeEnterButton.isHidden = false
-    }
-}
-
-final class Login {
-    private static var responseJson: Dictionary<String, AnyObject>?
-    
-    // マストドン認証
-    @objc static func authAction(_ sender: UIButton) {
-        guard let view = sender.superview as? LoginView else { return }
-        
-        sender.backgroundColor = UIColor.darkGray
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            sender.backgroundColor = UIColor.lightGray
+        DispatchQueue.main.async {
+            self.hostField.isHidden = true
+            self.authButton.isHidden = true
+            self.inputCodeField.isHidden = false
+            self.codeEnterButton.isHidden = false
         }
-        
-        let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
-        if hostName == "" {
-            Dialog.show(message: I18n.get("ALERT_INPUT_DOMAIN"))
-            return
-        }
-        
-        guard let registerUrl = URL(string: "https://\(hostName)/api/v1/apps") else { return }
-        
-        let body: [String: String] = ["client_name": "DonParade",
-                                      "redirect_uris": "urn:ietf:wg:oauth:2.0:oob",
-                                      "scopes": "write"]
-        
-        // クライアント認証POST
-        do {
-            try MastodonPost.post(url: registerUrl, body: body) { (data, response, error) in
-                if let data = data {
-                    do {
-                        self.responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
-                        
-                        print("#### responseJson=\(String(describing: self.responseJson))")
-                        // Safariでログイン
-                        self.login(hostName: hostName)
-                        
-                        // 認証コード入力フィールドを表示する
-                        view.showInputCodeField()
-                    } catch {
-                    }
-                } else if let error = error {
-                    print(error)
-                }
-            }
-        } catch {
-        }
-    }
-    
-    // Safariでのログイン
-    private static func login(hostName: String) {
-        let clientId = responseJson?["client_id"] as? String
-        var paramBase = ""
-        paramBase += "client_id=\(clientId ?? "")&"
-        paramBase += "response_type=code&"
-        paramBase += "redirect_uri=urn:ietf:wg:oauth:2.0:oob&"
-        paramBase += "scope=write"
-        
-        let params = paramBase.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        
-        print("##### params = \(params)")
-        
-        let loginUrl = URL(string: "https://\(hostName)/oauth//authorize?\(params)")!
-        
-        if let vc = LoginViewController.instance {
-            LoginSafari.login(url: loginUrl, viewController: vc)
-        }
-    }
-    
-    // コード入力
-    @objc static func codeEnterAction(_ sender: UIButton) {
-        guard let view = sender.superview as? LoginView else { return }
-        
-        if view.inputCodeField.text == nil || view.inputCodeField.text!.count < 10 {
-            Dialog.show(message: I18n.get("ALERT_INPUT_CODE_FAILURE"))
-            return
-        }
-        
-        SettingsData.oauthCode = view.inputCodeField.text
-        
-        // メイン画面へ移動
-        let mainViewController = MainViewController()
-        LoginViewController.instance?.present(mainViewController, animated: false, completion: nil)
     }
 }

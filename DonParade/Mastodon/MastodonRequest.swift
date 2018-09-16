@@ -1,17 +1,31 @@
 //
-//  MastodonPost.swift
+//  MastodonRequest.swift
 //  DonParade
 //
 //  Created by takayoshi on 2018/09/15.
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
-// MastodonサーバーにHTTP POSTメソッドでJSONを送信する
+// MastodonサーバーにHTTP GET/POSTメソッドでJSONを送信する
 
 import Foundation
 
-final class MastodonPost {
+final class MastodonRequest {
     static let session = URLSession.shared
+    
+    // GETメソッド
+    static func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        guard let accessToken = SettingsData.accessToken else { return }
+        
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        print("#### " + "Bearer \(accessToken)")
+        
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
     
     // POSTメソッド
     static func post(url: URL, body: Dictionary<String, String>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {

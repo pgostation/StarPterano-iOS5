@@ -13,3 +13,8 @@
 "PLACEHOLDER_INPUT_CODE" = "認証コードを入力してください";
 "BUTTON_ENTER_CODE" = "コード送信";
 "ALERT_INPUT_CODE_FAILURE" = "不正なコードです";
+
+// タイムライン
+"BUTTON_TL" = "TL";
+"BUTTON_LTL" = "LTL";
+"REFRESH_TIMELINE" = "更新";

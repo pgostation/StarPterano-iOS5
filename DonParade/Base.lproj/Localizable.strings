@@ -13,3 +13,8 @@
 "PLACEHOLDER_INPUT_CODE" = "Input code";
 "BUTTON_ENTER_CODE" = "Enter code";
 "ALERT_INPUT_CODE_FAILURE" = "Bad code.";
+
+// タイムライン
+"BUTTON_TL" = "TL";
+"BUTTON_LTL" = "LTL";
+"REFRESH_TIMELINE" = "Refresh";
