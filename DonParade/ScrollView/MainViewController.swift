@@ -64,11 +64,14 @@ private final class MainView: UIView {
     let tlButton = UIButton()
     let ltlButton = UIButton()
     
+    let accountButton = UIButton()
+    
     init() {
         super.init(frame: UIScreen.main.bounds)
         
         self.addSubview(tlButton)
         self.addSubview(ltlButton)
+        self.addSubview(accountButton)
         
         setProperties()
     }
@@ -87,22 +90,31 @@ private final class MainView: UIView {
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
         ltlButton.backgroundColor = UIColor.lightGray
         ltlButton.setTitleColor(UIColor.blue, for: .normal)
+        
+        accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
+        accountButton.backgroundColor = UIColor.lightGray
+        accountButton.setTitleColor(UIColor.blue, for: .normal)
     }
     
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         let bottomOffset: CGFloat = UIUtils.isIphoneX ? 50 : 0
-        let buttonWidth: CGFloat = 80
+        let buttonWidth: CGFloat = 60
         let buttonHeight: CGFloat = 40
         
         tlButton.frame = CGRect(x: 0,
-                                  y: screenBounds.height - 100 - bottomOffset,
-                                  width: buttonWidth,
-                                  height: buttonHeight)
+                                y: screenBounds.height - 100 - bottomOffset,
+                                width: buttonWidth,
+                                height: buttonHeight)
         
         ltlButton.frame = CGRect(x: 0,
-                                       y: screenBounds.height - 50 - bottomOffset,
-                                       width: buttonWidth,
-                                       height: buttonHeight)
+                                 y: screenBounds.height - 50 - bottomOffset,
+                                 width: buttonWidth,
+                                 height: buttonHeight)
+        
+        accountButton.frame = CGRect(x: screenBounds.width - 80,
+                                     y: 50 + bottomOffset / 2,
+                                     width: 50,
+                                     height: 50)
     }
 }
