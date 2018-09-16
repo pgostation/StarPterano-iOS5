@@ -10,7 +10,7 @@ import UIKit
 
 final class UIUtils {
     static var isIphoneX: Bool = {
-        let size = UIScreen.main.nativeBounds.size
+        let size = UIScreen.main.bounds.size
         if size.width == 320 && size.height == 480 { // iPhone 3G-4
             return false
         }
