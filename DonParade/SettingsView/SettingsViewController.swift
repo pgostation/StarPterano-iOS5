@@ -20,7 +20,7 @@ final class SettingsViewController: MyViewController {
         closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         closeButton.frame = CGRect(x: 10,
                                    y: UIUtils.statusBarHeight() + 3,
-                                   width: 70,
+                                   width: 60,
                                    height: 44)
         self.view.addSubview(closeButton)
     }

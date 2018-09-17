@@ -13,7 +13,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private enum Category: String {
         case selectAccount = "SETTINGS_SELECT_ACCOUNT"
         case account = "SETTINGS_ACCOUNT"
-        case mypage = "SETTINGS_MYPAGE"
+        case mypage = "SETTINGS_MASTODON"
         case control = "SETTINGS_CONTROL"
         case cache = "SETTINGS_CACHE"
         case other = "SETTINGS_OTHER"
@@ -81,7 +81,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     
     // セクションの名前
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return categoryList[section].rawValue
+        return I18n.get(categoryList[section].rawValue)
     }
     
     // セクション内のセルの数
@@ -115,15 +115,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 0:
             title = "#### test"
         case 1:
-            title = accountList[indexPath.row].rawValue
+            title = I18n.get(accountList[indexPath.row].rawValue)
         case 2:
-            title = myPageList[indexPath.row].rawValue
+            title = I18n.get(myPageList[indexPath.row].rawValue)
         case 3:
-            title = controlList[indexPath.row].rawValue
+            title = I18n.get(controlList[indexPath.row].rawValue)
         case 4:
-            title = cacheList[indexPath.row].rawValue
+            title = I18n.get(cacheList[indexPath.row].rawValue)
         case 5:
-            title = otherList[indexPath.row].rawValue
+            title = I18n.get(otherList[indexPath.row].rawValue)
         default:
             break
         }

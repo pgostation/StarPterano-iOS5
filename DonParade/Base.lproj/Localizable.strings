@@ -30,3 +30,34 @@
 
 // 設定画面
 "BUTTON_CLOSE" = "Close";
+
+// 設定画面(カテゴリ)
+"SETTINGS_SELECT_ACCOUNT" = "Change account";
+"SETTINGS_ACCOUNT" = "Account settings";
+"SETTINGS_MASTODON" = "Mastodon settings";
+"SETTINGS_CONTROL" = "Control settings";
+"SETTINGS_CACHE" = "Cache";
+"SETTINGS_OTHER" = "Other";
+
+// 設定画面(アカウント設定)
+"SETTINGS_ADD_ACCOUNT" = "Add account";
+"SETTINGS_REMOVE_ACCOUNT" = "Remove account";
+
+// 設定画面(マイページ)
+"SETTINGS_MYPAGE" = "Your Mastodon page";
+"SETTINGS_MUTELIST" = "Mute list";
+"SETTINGS_BLOCKLIST" = "Block list";
+
+// 設定画面(操作表示設定)
+"SETTINGS_THEME" = "Theme";
+"SETTINGS_FONTSIZE" = "Font size";
+"SETTINGS_TAP_TOOT" = "Tap detail mode";
+
+// 設定画面(キャッシュ)
+"SETTINGS_CLEAR_CACHE" = "Clear cache";
+"SETTINGS_SHOW_ICONS" = "Show icons";
+
+// 設定画面(その他)
+"SETTINGS_PRIVACY_POLICY" = "Privacy policy";
+"SETTINGS_LICENSE" = "Licenses";
+"SETTINGS_VERSION" = "Version";
