@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 設定データの管理
+
 import Foundation
 
 final class SettingsData {

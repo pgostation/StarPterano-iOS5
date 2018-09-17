@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// UI関連の便利機能
+
 import UIKit
 
 final class UIUtils {

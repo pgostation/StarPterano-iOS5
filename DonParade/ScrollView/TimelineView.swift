@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 各種タイムラインやお気に入りなどを表示するUITableView
+
 import UIKit
 
 final class TimeLineView: UITableView {
@@ -233,138 +235,5 @@ final class TimeLineView: UITableView {
         let uri: String?
         let url: String?
         let visibility: String?
-    }
-}
-
-private final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
-    private var list: [TimeLineView.ContentData] = []
-    private var accountList: [String: TimeLineView.AccountData] = [:]
-    
-    override init() {
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func change(tableView: UITableView, addList: [TimeLineView.ContentData], accountList: [String: TimeLineView.AccountData]) {
-        DispatchQueue.main.async {
-            self.list += addList
-            
-            self.accountList = accountList
-            
-            tableView.reloadData()
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let cell = self.tableView(tableView, cellForRowAt: indexPath) as? TimeLineViewCell else { return 60 }
-        
-        return cell.messageView.frame.height + 14
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = getCell(view: tableView)
-        
-        if indexPath.row >= list.count { return cell }
-        let data = list[indexPath.row]
-        let account = accountList[data.accountId]
-        
-        ImageCache.image(urlStr: account?.avatar_static) { image in
-            cell.iconView.image = image
-            cell.iconView.layer.cornerRadius = 22
-            cell.iconView.clipsToBounds = true
-        }
-        
-        cell.messageView.text = data.content
-        cell.messageView.font = UIFont.systemFont(ofSize: 16)
-        cell.messageView.frame.size.width = UIScreen.main.bounds.width - 56
-        cell.messageView.sizeToFit()
-        if cell.messageView.frame.size.height >= 140 - 14 {
-            cell.messageView.frame.size.height = 140 - 14
-        }
-        
-        cell.nameLabel.text = account?.display_name
-        cell.nameLabel.font = UIFont.boldSystemFont(ofSize: 13)
-        cell.nameLabel.sizeToFit()
-        
-        cell.idLabel.text = account?.acct
-        cell.idLabel.font = UIFont.systemFont(ofSize: 13)
-        cell.idLabel.textColor = UIColor.darkGray
-        cell.idLabel.sizeToFit()
-        
-        cell.dateLabel.text = data.created_at
-        cell.dateLabel.font = UIFont.systemFont(ofSize: 13)
-        cell.dateLabel.textAlignment = .right
-        
-        return cell
-    }
-    
-    // セルを使い回す
-    private func getCell(view: UITableView) -> TimeLineViewCell {
-        let reuseIdentifier = "TimeLineViewModel"
-        let cell = view.dequeueReusableCell(withIdentifier: reuseIdentifier) as? TimeLineViewCell ?? TimeLineViewCell(reuseIdentifier: reuseIdentifier)
-        return cell
-    }
-}
-
-private final class TimeLineViewCell: UITableViewCell {
-    let iconView = UIImageView()
-    let nameLabel = UILabel()
-    let idLabel = UILabel()
-    let dateLabel = UILabel()
-    let messageView = UITextView()
-    
-    init(reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        
-        self.textLabel?.removeFromSuperview()
-        self.detailTextLabel?.removeFromSuperview()
-        
-        self.addSubview(self.iconView)
-        self.addSubview(self.nameLabel)
-        self.addSubview(self.idLabel)
-        self.addSubview(self.dateLabel)
-        self.addSubview(self.messageView)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        self.iconView.frame = CGRect(x: 6,
-                                     y: 6,
-                                     width: 44,
-                                     height: 44)
-        
-        self.nameLabel.frame = CGRect(x: 50,
-                                      y: 0,
-                                      width: self.nameLabel.frame.width,
-                                      height: 16)
-        
-        self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
-                                    y: 0,
-                                    width: self.idLabel.frame.width,
-                                    height: 16)
-        
-        self.dateLabel.frame = CGRect(x: UIScreen.main.bounds.width - 100,
-                                      y: 0,
-                                      width: 100,
-                                      height: 16)
-        
-        self.messageView.frame = CGRect(x: 50,
-                                        y: 14,
-                                        width: self.messageView.frame.width,
-                                        height: self.messageView.frame.height)
     }
 }

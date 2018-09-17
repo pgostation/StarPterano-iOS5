@@ -120,8 +120,8 @@ private final class MainView: UIView {
                                  width: buttonWidth,
                                  height: buttonHeight)
         
-        accountButton.frame = CGRect(x: screenBounds.width - 80,
-                                     y: 50 + bottomOffset / 2,
+        accountButton.frame = CGRect(x: screenBounds.width - 60,
+                                     y: 30 + bottomOffset / 2,
                                      width: 50,
                                      height: 50)
     }

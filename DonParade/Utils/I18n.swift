@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 国際化の便利機能
+
 import Foundation
 
 final class I18n {

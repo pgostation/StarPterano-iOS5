@@ -11,6 +11,8 @@
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025B214EA75700133A95 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025A214EA75700133A95 /* TimelineView.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
+		12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */; };
+		12CD0261214F367100133A95 /* AnalyzeToot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0260214F367100133A95 /* AnalyzeToot.swift */; };
 		12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC77214CA35F00E9E508 /* AppDelegate.swift */; };
 		12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC79214CA35F00E9E508 /* ViewController.swift */; };
 		12F9AC7D214CA35F00E9E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC7B214CA35F00E9E508 /* Main.storyboard */; };
@@ -34,6 +36,8 @@
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025A214EA75700133A95 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewModel.swift; sourceTree = "<group>"; };
+		12CD0260214F367100133A95 /* AnalyzeToot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeToot.swift; sourceTree = "<group>"; };
 		12F9AC74214CA35F00E9E508 /* DonParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F9AC77214CA35F00E9E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F9AC79214CA35F00E9E508 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 				12F9ACA7214D1C0900E9E508 /* MainViewController.swift */,
 				12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */,
 				12CD025A214EA75700133A95 /* TimelineView.swift */,
+				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
+				12CD0260214F367100133A95 /* AnalyzeToot.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -257,11 +263,13 @@
 			files = (
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
+				12CD0261214F367100133A95 /* AnalyzeToot.swift in Sources */,
 				12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */,
 				12F9AC8F214CA41200E9E508 /* MastodonRequest.swift in Sources */,
 				12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */,
 				12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */,
 				12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */,
+				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
 				12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */,
 				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,

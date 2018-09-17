@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// アイコンやカスタム絵文字データのキャッシュ（インメモリ、ストレージ）、なければネットワークから取得
+
 import UIKit
 
 final class ImageCache {

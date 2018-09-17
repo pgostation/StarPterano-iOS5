@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 各種タイムラインやお気に入りなどを表示するViewController
+
 import UIKit
 
 final class TimeLineViewController: MyViewController {
