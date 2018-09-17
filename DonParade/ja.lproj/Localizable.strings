@@ -18,3 +18,4 @@
 "BUTTON_TL" = "TL";
 "BUTTON_LTL" = "LTL";
 "REFRESH_TIMELINE" = "更新";
+"BOOSTED_BY_%@" = "🔁 %@";

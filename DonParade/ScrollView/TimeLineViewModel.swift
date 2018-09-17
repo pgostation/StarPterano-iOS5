@@ -47,9 +47,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // セルの正確な高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // メッセージのビューを一度作り、高さを求める
-        let (messageView, _, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
+        let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
-        return max(55, messageView.frame.height + 28)
+        if data.reblog_acct != nil {
+            return max(55, messageView.frame.height + 28 + 20)
+        } else {
+            return max(55, messageView.frame.height + 28)
+        }
     }
     
     // メッセージのビューとデータを返す
@@ -57,7 +61,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let data = list[indexPath.row]
         
         // content解析
-        let (attributedText, hasLink) = AnalyzeToot.analyzeContent(content: data.content, emojis: data.emojis, callback: callback)
+        let (attributedText, hasLink) = DecodeToot.decodeContent(content: data.content, emojis: data.emojis, callback: callback)
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
@@ -99,8 +103,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         messageView.frame.size.width = UIScreen.main.bounds.width - 66
         messageView.sizeToFit()
         var isContinue = false
-        if messageView.frame.size.height >= 140 - 28 {
-            messageView.frame.size.height = 140 - 28
+        if messageView.frame.size.height >= 180 - 28 {
+            messageView.frame.size.height = 180 - 28
             isContinue = true
         }
         
@@ -138,9 +142,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 2)
         
-        cell.nameLabel.attributedText = AnalyzeToot.analyzeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
+        cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
             if cell.id == id {
-                cell.nameLabel.attributedText = AnalyzeToot.analyzeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: nil)
+                cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: nil)
                 cell?.setNeedsLayout()
             }
         })
@@ -151,12 +155,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell.dateLabel.text = data.created_at
         
+        // 長すぎて省略している場合
         if isContinue {
             cell.continueView = UILabel()
             cell.continueView?.font = UIFont.systemFont(ofSize: 14)
             cell.continueView?.text = "🔻"
             cell.continueView?.textAlignment = .center
             cell.addSubview(cell.continueView!)
+        }
+        
+        // ブーストの場合
+        if let reblog_acct = data.reblog_acct {
+            let account = accountList[reblog_acct]
+            cell.boostView = UILabel()
+            cell.boostView?.font = UIFont.systemFont(ofSize: 12)
+            cell.boostView?.textColor = UIColor.darkGray
+            cell.boostView?.text = String(format: I18n.get("BOOSTED_BY_%@"), account?.display_name ?? "")
+            cell.addSubview(cell.boostView!)
         }
         
         return cell
@@ -169,6 +184,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell.messageView?.removeFromSuperview()
         cell.continueView?.removeFromSuperview()
+        cell.boostView?.removeFromSuperview()
         cell.iconView.image = nil
         
         return cell
@@ -211,6 +227,7 @@ final class TimeLineViewCell: UITableViewCell {
     let dateLabel = UILabel()
     var messageView: UIView?
     var continueView: UILabel?
+    var boostView: UILabel?
     weak var tableView: UITableView?
     var indexPath: IndexPath?
     
@@ -298,5 +315,10 @@ final class TimeLineViewCell: UITableViewCell {
                                           y: (self.messageView?.frame.maxY ?? 0) - 6,
                                           width: 40,
                                           height: 18)
+        
+        self.boostView?.frame = CGRect(x: 40,
+                                       y: (self.messageView?.frame.maxY ?? 0) + 8,
+                                       width: screenBounds.width - 56,
+                                       height: 20)
     }
 }

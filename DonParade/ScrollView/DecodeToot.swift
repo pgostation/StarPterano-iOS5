@@ -1,5 +1,5 @@
 //
-//  AnalyzeToot.swift
+//  DecodeToot.swift
 //  DonParade
 //
 //  Created by takayoshi on 2018/09/17.
@@ -11,8 +11,8 @@
 import Foundation
 import UIKit
 
-final class AnalyzeToot {
-    static func analyzeContent(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> (NSMutableAttributedString, Bool) {
+final class DecodeToot {
+    static func decodeContent(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> (NSMutableAttributedString, Bool) {
         var text = content ?? ""
         
         // 先頭と最後の<p></p>を取り除く
@@ -31,6 +31,7 @@ final class AnalyzeToot {
         text = text.replacingOccurrences(of: "<span class=\"\">", with: "")
         text = text.replacingOccurrences(of: "<span class=\"invisible\">", with: "")
         text = text.replacingOccurrences(of: "<span class=\"ellipsis\">", with: "")
+        text = text.replacingOccurrences(of: "<span class=\"h-card\">", with: "")
         text = text.replacingOccurrences(of: "</span>", with: "")
         
         // リンク
@@ -112,7 +113,7 @@ final class AnalyzeToot {
     }
     
     // 名前部分の絵文字解析
-    static func analyzeName(name: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
+    static func decodeName(name: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
         var text = name ?? ""
         
         // 絵文字の位置をリストアップする

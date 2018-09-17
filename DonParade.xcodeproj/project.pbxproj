@@ -12,7 +12,7 @@
 		12CD025B214EA75700133A95 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025A214EA75700133A95 /* TimelineView.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
 		12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */; };
-		12CD0261214F367100133A95 /* AnalyzeToot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0260214F367100133A95 /* AnalyzeToot.swift */; };
+		12CD0261214F367100133A95 /* DecodeToot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0260214F367100133A95 /* DecodeToot.swift */; };
 		12CD0263214F49E000133A95 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0262214F49E000133A95 /* EmojiData.swift */; };
 		12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC77214CA35F00E9E508 /* AppDelegate.swift */; };
 		12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC79214CA35F00E9E508 /* ViewController.swift */; };
@@ -38,7 +38,7 @@
 		12CD025A214EA75700133A95 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewModel.swift; sourceTree = "<group>"; };
-		12CD0260214F367100133A95 /* AnalyzeToot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeToot.swift; sourceTree = "<group>"; };
+		12CD0260214F367100133A95 /* DecodeToot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeToot.swift; sourceTree = "<group>"; };
 		12CD0262214F49E000133A95 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
 		12F9AC74214CA35F00E9E508 /* DonParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F9AC77214CA35F00E9E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 				12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */,
 				12CD025A214EA75700133A95 /* TimelineView.swift */,
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
-				12CD0260214F367100133A95 /* AnalyzeToot.swift */,
+				12CD0260214F367100133A95 /* DecodeToot.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -266,7 +266,7 @@
 			files = (
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
-				12CD0261214F367100133A95 /* AnalyzeToot.swift in Sources */,
+				12CD0261214F367100133A95 /* DecodeToot.swift in Sources */,
 				12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */,
 				12F9AC8F214CA41200E9E508 /* MastodonRequest.swift in Sources */,
 				12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */,

@@ -102,42 +102,15 @@ final class TimeLineView: UITableView {
             
             if let account = json["account"] as? [String: Any] {
                 acct = account["acct"] as? String ?? ""
-                let avatar = account["acct"] as? String
-                let avatar_static = account["avatar_static"] as? String
-                let bot = account["bot"] as? Int
-                let created_at = account["created_at"] as? String
-                let display_name = account["display_name"] as? String
-                let emojis = account["emojis"] as? [[String: Any]]
-                let fields = account["fields"] as? [[String: Any]]
-                let followers_count = account["followers_count"] as? Int
-                let following_count = account["following_count"] as? Int
-                let header = account["header"] as? String
-                let header_static = account["header_static"] as? String
-                let id = account["id"] as? Int
-                let locked = account["locked"] as? Int
-                let note = account["note"] as? String
-                let statuses_count = account["statuses_count"] as? Int
-                let url = account["url"] as? String
-                let username = account["username"] as? String
-                
-                let data = AccountData(acct: acct,
-                                       avatar: avatar,
-                                       avatar_static: avatar_static,
-                                       bot: bot,
-                                       created_at: created_at,
-                                       display_name: display_name,
-                                       emojis: emojis,
-                                       fields: fields,
-                                       followers_count: followers_count,
-                                       following_count: following_count,
-                                       header: header,
-                                       header_static: header_static,
-                                       id: id,
-                                       locked: locked,
-                                       note: note,
-                                       statuses_count: statuses_count,
-                                       url: url,
-                                       username: username)
+                let data = analyzeAccountJson(account: account)
+                self.accountList.updateValue(data, forKey: acct)
+            }
+            let reblog = json["reblog"] as? [String: Any]
+            var reblog_acct: String? = nil
+            if let account = reblog?["account"] as? [String: Any] {
+                reblog_acct = acct
+                acct = account["acct"] as? String ?? ""
+                let data = analyzeAccountJson(account: account)
                 self.accountList.updateValue(data, forKey: acct)
             }
             let content = json["content"] as? String
@@ -145,14 +118,13 @@ final class TimeLineView: UITableView {
             let emojis = json["emojis"] as? [[String: Any]]
             let favourited = json["favourited"] as? Int
             let favourites_count = json["favourites_count"] as? Int
-            let id = json["id"] as? Int
+            let id = json["id"] as? Int64
             let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
-            let in_reply_to_id = json["in_reply_to_account_id"] as? String
+            let in_reply_to_id = json["in_reply_to_id"] as? Int64
             let language = json["language"] as? String
             let media_attachments = json["media_attachments"] as? [String]
             let mentions = json["mentions"] as? [String]
             let muted = json["muted"] as? Int
-            let reblog = json["reblog"] as? String
             let reblogged = json["reblogged"] as? Int
             let reblogs_count = json["reblogs_count"] as? Int
             let replies_count = json["replies_count"] as? Int
@@ -176,7 +148,7 @@ final class TimeLineView: UITableView {
                                    media_attachments: media_attachments,
                                    mentions: mentions,
                                    muted: muted,
-                                   reblog: reblog,
+                                   reblog_acct: reblog_acct,
                                    reblogged: reblogged,
                                    reblogs_count: reblogs_count,
                                    replies_count: replies_count,
@@ -190,6 +162,47 @@ final class TimeLineView: UITableView {
         }
         
         model.change(tableView: self, addList: contentList, accountList: self.accountList)
+    }
+    
+    private func analyzeAccountJson(account: [String: Any]) -> AccountData {
+        let acct = account["acct"] as? String ?? ""
+        let avatar = account["acct"] as? String
+        let avatar_static = account["avatar_static"] as? String
+        let bot = account["bot"] as? Int
+        let created_at = account["created_at"] as? String
+        let display_name = account["display_name"] as? String
+        let emojis = account["emojis"] as? [[String: Any]]
+        let fields = account["fields"] as? [[String: Any]]
+        let followers_count = account["followers_count"] as? Int
+        let following_count = account["following_count"] as? Int
+        let header = account["header"] as? String
+        let header_static = account["header_static"] as? String
+        let id = account["id"] as? Int
+        let locked = account["locked"] as? Int
+        let note = account["note"] as? String
+        let statuses_count = account["statuses_count"] as? Int
+        let url = account["url"] as? String
+        let username = account["username"] as? String
+        
+        let data = AccountData(acct: acct,
+                               avatar: avatar,
+                               avatar_static: avatar_static,
+                               bot: bot,
+                               created_at: created_at,
+                               display_name: display_name,
+                               emojis: emojis,
+                               fields: fields,
+                               followers_count: followers_count,
+                               following_count: following_count,
+                               header: header,
+                               header_static: header_static,
+                               id: id,
+                               locked: locked,
+                               note: note,
+                               statuses_count: statuses_count,
+                               url: url,
+                               username: username)
+        return data
     }
     
     struct AccountData {
@@ -220,14 +233,14 @@ final class TimeLineView: UITableView {
         let emojis: [[String: Any]]?
         let favourited: Int?
         let favourites_count: Int?
-        let id: Int?
+        let id: Int64?
         let in_reply_to_account_id: String?
-        let in_reply_to_id: String?
+        let in_reply_to_id: Int64?
         let language: String?
-        let media_attachments: [String]?
+        let media_attachments: [Any]?
         let mentions: [String]?
         let muted: Int?
-        let reblog: String?
+        let reblog_acct: String?
         let reblogged: Int?
         let reblogs_count: Int?
         let replies_count: Int?

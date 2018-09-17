@@ -18,3 +18,4 @@
 "BUTTON_TL" = "TL";
 "BUTTON_LTL" = "LTL";
 "REFRESH_TIMELINE" = "Refresh";
+"BOOSTED_BY_%@" = "🔁 %@";
