@@ -17,7 +17,7 @@ final class ImageCache {
     private static let imageQueue = DispatchQueue(label: "ImageCache")
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
-    static func image(urlStr: String?, callback: @escaping (UIImage)->Void) {
+    static func image(urlStr: String?, isTemp: Bool, callback: @escaping (UIImage)->Void) {
         guard let urlStr = urlStr else { return }
         
         // メモリキャッシュにある場合
@@ -27,7 +27,13 @@ final class ImageCache {
         }
         
         // ストレージキャッシュにある場合
-        let cacheDir = NSHomeDirectory() + "/Library/Caches/"
+        let cacheDir: String
+        if isTemp {
+            cacheDir = NSHomeDirectory() + "/Library/Caches/preview"
+            try? fileManager.createDirectory(atPath: cacheDir, withIntermediateDirectories: true, attributes: nil)
+        } else {
+            cacheDir = NSHomeDirectory() + "/Library/Caches"
+        }
         let filePath = cacheDir + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
             imageQueue.async {
@@ -35,7 +41,9 @@ final class ImageCache {
                 if let data = try? Data(contentsOf: url) {
                     if let image = UIImage(data: data) {
                         DispatchQueue.main.async {
-                            memCache.updateValue(image, forKey: urlStr)
+                            if !isTemp {
+                                memCache.updateValue(image, forKey: urlStr)
+                            }
                             callback(image)
                         }
                     }
@@ -58,7 +66,9 @@ final class ImageCache {
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        memCache.updateValue(image, forKey: urlStr)
+                        if !isTemp {
+                            memCache.updateValue(image, forKey: urlStr)
+                        }
                         callback(image)
                         
                         for waitingCallback in waitingDict[urlStr] ?? [] {
@@ -71,6 +81,11 @@ final class ImageCache {
                     // ストレージにキャッシュする
                     let fileUrl = URL(fileURLWithPath: filePath)
                     try? data.write(to: fileUrl)
+                    
+                    // ストレージの古いファイルを削除する
+                    if isTemp {
+                        
+                    }
                 }
             }
         }

@@ -30,6 +30,24 @@ final class AnalyzeJson {
                 let data = analyzeAccountJson(account: account)
                 view.accountList.updateValue(data, forKey: acct)
             }
+            var mediaData: [MediaData]? = nil
+            if let media_attachments = json["media_attachments"] as? [[String: Any]] {
+                for media_attachment in media_attachments {
+                    let id = media_attachment["id"] as? Int64
+                    let preview_url = media_attachment["preview_url"] as? String
+                    let url = media_attachment["url"] as? String
+                    let type = media_attachment["type"] as? String
+                    
+                    let data = MediaData(id: id,
+                                         preview_url: preview_url,
+                                         type: type,
+                                         url: url)
+                    if mediaData == nil {
+                        mediaData = []
+                    }
+                    mediaData?.append(data)
+                }
+            }
             let content = json["content"] as? String
             let created_at = json["created_at"] as? String
             let emojis = json["emojis"] as? [[String: Any]]
@@ -39,7 +57,6 @@ final class AnalyzeJson {
             let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
             let in_reply_to_id = json["in_reply_to_id"] as? Int64
             let language = json["language"] as? String
-            let media_attachments = json["media_attachments"] as? [String]
             let mentions = json["mentions"] as? [String]
             let muted = json["muted"] as? Int
             let reblogged = json["reblogged"] as? Int
@@ -62,7 +79,7 @@ final class AnalyzeJson {
                                    in_reply_to_account_id: in_reply_to_account_id,
                                    in_reply_to_id: in_reply_to_id,
                                    language: language,
-                                   media_attachments: media_attachments,
+                                   mediaData: mediaData,
                                    mentions: mentions,
                                    muted: muted,
                                    reblog_acct: reblog_acct,
@@ -122,6 +139,7 @@ final class AnalyzeJson {
         return data
     }
     
+    // トゥートした人の情報 (あるいはブーストした人)
     struct AccountData {
         let acct: String?
         let avatar: String?
@@ -143,6 +161,7 @@ final class AnalyzeJson {
         let username: String?
     }
     
+    // トゥート内容
     struct ContentData {
         let accountId: String
         let content: String?
@@ -154,7 +173,7 @@ final class AnalyzeJson {
         let in_reply_to_account_id: String?
         let in_reply_to_id: Int64?
         let language: String?
-        let media_attachments: [Any]?
+        let mediaData: [MediaData]?
         let mentions: [String]?
         let muted: Int?
         let reblog_acct: String?
@@ -167,5 +186,13 @@ final class AnalyzeJson {
         let uri: String?
         let url: String?
         let visibility: String?
+    }
+    
+    // 添付画像、動画
+    struct MediaData {
+        let id: Int64?
+        let preview_url: String?
+        let type: String?
+        let url: String?
     }
 }

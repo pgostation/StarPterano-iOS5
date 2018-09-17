@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// トゥートの内容を表示するセル
+
 import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
@@ -19,6 +21,7 @@ final class TimeLineViewCell: UITableViewCell {
     var messageView: UIView?
     var continueView: UILabel?
     var boostView: UILabel?
+    var imageViews: [UIImageView]?
     weak var tableView: UITableView?
     var indexPath: IndexPath?
     
@@ -107,9 +110,29 @@ final class TimeLineViewCell: UITableViewCell {
                                           width: 40,
                                           height: 18)
         
+        let imagesOffset = CGFloat((self.imageViews?.count ?? 0) * 90)
         self.boostView?.frame = CGRect(x: 40,
-                                       y: (self.messageView?.frame.maxY ?? 0) + 8,
+                                       y: (self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
                                        width: screenBounds.width - 56,
                                        height: 20)
+        
+        for (index, imageView) in (self.imageViews ?? []).enumerated() {
+            var imageWidth: CGFloat = 0
+            var imageHeight: CGFloat = 80
+            if let image = imageView.image {
+                let size = image.size
+                let rate = 80 / size.height
+                imageWidth = size.width * rate
+                if imageWidth > screenBounds.width - 50 {
+                    imageWidth = screenBounds.width - 50
+                    let newRate = imageWidth / size.width
+                    imageHeight = size.height * newRate
+                }
+            }
+            imageView.frame = CGRect(x: 50,
+                                     y: (self.messageView?.frame.maxY ?? 0) + 90 * CGFloat(index),
+                                     width: imageWidth,
+                                     height: imageHeight)
+        }
     }
 }

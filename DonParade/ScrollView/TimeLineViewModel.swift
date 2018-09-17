@@ -49,10 +49,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
-        if data.reblog_acct != nil {
-            return max(55, messageView.frame.height + 28 + 20)
+        let imagesOffset: CGFloat
+        if let mediaData = data.mediaData {
+            imagesOffset = 90 * CGFloat(mediaData.count)
         } else {
-            return max(55, messageView.frame.height + 28)
+            imagesOffset = 0
+        }
+        
+        if data.reblog_acct != nil {
+            return max(55, messageView.frame.height + 28 + 20 + imagesOffset)
+        } else {
+            return max(55, messageView.frame.height + 28 + imagesOffset)
         }
     }
     
@@ -135,7 +142,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.tableView = tableView
         cell.indexPath = indexPath
         
-        ImageCache.image(urlStr: account?.avatar_static) { image in
+        ImageCache.image(urlStr: account?.avatar_static, isTemp: false) { image in
             cell.iconView.image = image
         }
         
@@ -176,6 +183,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
+        // 画像や動画ありの場合
+        if let mediaData = data.mediaData {
+            cell.imageViews = []
+            
+            for media in mediaData {
+                let imageView = UIImageView()
+                ImageCache.image(urlStr: media.preview_url, isTemp: true) { image in
+                    imageView.image = image
+                    cell.setNeedsLayout()
+                }
+                cell.addSubview(imageView)
+                cell.imageViews?.append(imageView)
+            }
+        }
+        
         // 長すぎて省略している場合
         if isContinue {
             cell.continueView = UILabel()
@@ -206,6 +228,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.messageView?.removeFromSuperview()
         cell.continueView?.removeFromSuperview()
         cell.boostView?.removeFromSuperview()
+        for imageView in cell.imageViews ?? [] {
+            imageView.removeFromSuperview()
+        }
         cell.iconView.image = nil
         
         return cell

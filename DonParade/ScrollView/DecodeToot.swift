@@ -73,13 +73,13 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, callback: { image in
+                ImageCache.image(urlStr: static_url, isTemp: false) { image in
                     if execCallback {
                         callback?()
                     } else {
                         attachment.image = image
                     }
-                })
+                }
                 if attachment.image == nil {
                     execCallback = true
                 }
@@ -125,13 +125,13 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, callback: { image in
+                ImageCache.image(urlStr: static_url, isTemp: false) { image in
                     if execCallback {
                         callback?()
                     } else {
                         attachment.image = image
                     }
-                })
+                }
                 if attachment.image == nil {
                     execCallback = true
                 }

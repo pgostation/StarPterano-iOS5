@@ -15,12 +15,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case account = "SETTINGS_ACCOUNT"
         case mypage = "SETTINGS_MYPAGE"
         case view = "SETTINGS_VIEW"
+        case cache = "SETTINGS_CACHE"
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
                                             .account,
                                             .mypage,
                                             .view,
+                                            .cache,
                                             .other]
     
     // 1.アカウントの切り替え
@@ -54,7 +56,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                     .accountViewMode,
                                     .fontSize]
     
-    // 5.その他
+    // 5.キャッシュ
+    private enum Cache: String {
+        case clearCache = "SETTINGS_CLEAR_CACHE"
+        case showIcons = "SETTINGS_SHOW_ICONS"
+    }
+    private let cacheList: [Cache] = [.clearCache,
+                                      .showIcons]
+    
+    // 6.その他
     private enum Other: String {
         case privacyPolicy = "SETTINGS_PRIVACY_POLICY"
         case license = "SETTINGS_LICENSE"
@@ -86,6 +96,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 3:
             return viewList.count
         case 4:
+            return  cacheList.count
+        case 5:
             return otherList.count
         default:
             return 0
@@ -109,6 +121,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 3:
             title = viewList[indexPath.row].rawValue
         case 4:
+            title = cacheList[indexPath.row].rawValue
+        case 5:
             title = otherList[indexPath.row].rawValue
         default:
             break
