@@ -26,7 +26,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // トゥートの追加
     func change(tableView: UITableView, addList: [TimeLineView.ContentData], accountList: [String: TimeLineView.AccountData]) {
         DispatchQueue.main.async {
-            self.list += addList
+            self.list = addList + self.list
             
             self.accountList = accountList
             
@@ -153,7 +153,28 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.idLabel.text = account?.acct
         cell.idLabel.sizeToFit()
         
-        cell.dateLabel.text = data.created_at
+        if let created_at = data.created_at {
+            let date = DecodeToot.decodeTime(text: created_at)
+            let diffTime = Int(Date().timeIntervalSince(date))
+            if diffTime <= 0 {
+                cell.dateLabel.text = I18n.get("DATETIME_NOW")
+            }
+            else if diffTime < 60 {
+                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_SECS_AGO"), diffTime)
+            }
+            else if diffTime / 60 < 60 {
+                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_MINS_AGO"), diffTime / 60)
+            }
+            else if diffTime / 3600 < 24 {
+                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), diffTime / 3600)
+            }
+            else if diffTime / 86400 < 365 {
+                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_DAYS_AGO"), diffTime / 86400)
+            }
+            else {
+                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_YEARS_AGO"), diffTime / 86400 / 365)
+            }
+        }
         
         // 長すぎて省略している場合
         if isContinue {
@@ -298,12 +319,12 @@ final class TimeLineViewCell: UITableViewCell {
         
         self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
                                     y: 7,
-                                    width: screenBounds.width - (self.nameLabel.frame.width + 50 + 5 + 60 + 5),
+                                    width: screenBounds.width - (self.nameLabel.frame.width + 50 + 5 + 50 + 5),
                                     height: 16)
         
-        self.dateLabel.frame = CGRect(x: screenBounds.width - 60,
+        self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
                                       y: 7,
-                                      width: 60,
+                                      width: 45,
                                       height: 16)
         
         self.messageView?.frame = CGRect(x: 50,

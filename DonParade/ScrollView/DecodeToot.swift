@@ -156,4 +156,16 @@ final class DecodeToot {
         
         return attributedText
     }
+    
+    // 日時を解析
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = enUSPosixLocale
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        return formatter
+    }()
+    static func decodeTime(text: String) -> Date {
+        return dateFormatter.date(from: text) ?? Date()
+    }
 }

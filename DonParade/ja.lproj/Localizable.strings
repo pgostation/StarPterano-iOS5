@@ -19,3 +19,11 @@
 "BUTTON_LTL" = "LTL";
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";
+
+// 何分前
+"DATETIME_NOW" = "今";
+"DATETIME_%D_SECS_AGO" = "%d秒";
+"DATETIME_%D_MINS_AGO" = "%d分";
+"DATETIME_%D_HOURS_AGO" = "%d時間";
+"DATETIME_%D_DAYS_AGO" = "%d日";
+"DATETIME_%D_YEARS_AGO" = "%d年";
