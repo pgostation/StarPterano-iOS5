@@ -9,8 +9,9 @@
 // 各種タイムラインやお気に入りなどのデータを保持し、テーブルビューのセルに表示する
 
 import UIKit
+import SafariServices
 
-final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [TimeLineView.ContentData] = []
     private var accountList: [String: TimeLineView.AccountData] = [:]
     
@@ -52,11 +53,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // メッセージのビューとデータを返す
-    private func getMessageViewAndData(indexPath: IndexPath, callback: (()->Void)?) -> (UILabel, TimeLineView.ContentData, Bool) {
+    private func getMessageViewAndData(indexPath: IndexPath, callback: (()->Void)?) -> (UIView, TimeLineView.ContentData, Bool) {
         let data = list[indexPath.row]
         
         // content解析
-        let attributedText = AnalyzeToot.analyzeContent(content: data.content, emojis: data.emojis, callback: callback)
+        let (attributedText, hasLink) = AnalyzeToot.analyzeContent(content: data.content, emojis: data.emojis, callback: callback)
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
@@ -66,13 +67,27 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                      range: NSMakeRange(0, attributedText.length))
         
         // プロパティ設定
-        let messageView = UILabel()
-        messageView.attributedText = attributedText
-        messageView.font = UIFont.systemFont(ofSize: 14)
-        messageView.numberOfLines = 0
-        messageView.lineBreakMode = .byCharWrapping
-        messageView.backgroundColor = TimeLineViewCell.bgColor
-        messageView.isOpaque = true
+        let messageView: UIView
+        if hasLink {
+            let msgView = UITextView()
+            msgView.attributedText = attributedText
+            msgView.font = UIFont.systemFont(ofSize: 14)
+            msgView.backgroundColor = TimeLineViewCell.bgColor
+            msgView.isOpaque = true
+            msgView.isScrollEnabled = false
+            msgView.isEditable = false
+            msgView.delegate = self
+            messageView = msgView
+        } else {
+            let msgView = UILabel()
+            msgView.attributedText = attributedText
+            msgView.font = UIFont.systemFont(ofSize: 14)
+            msgView.numberOfLines = 0
+            msgView.lineBreakMode = .byCharWrapping
+            msgView.backgroundColor = TimeLineViewCell.bgColor
+            msgView.isOpaque = true
+            messageView = msgView
+        }
         
         // ビューの高さを決める
         messageView.frame.size.width = UIScreen.main.bounds.width - 66
@@ -98,7 +113,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if let (messageView, _, _) = self?.getMessageViewAndData(indexPath: indexPath, callback: nil) {
                     cell?.messageView?.removeFromSuperview()
                     cell?.messageView = messageView
-                    cell?.insertSubview(messageView, at: 0)
+                    cell?.insertSubview(messageView, at: 2)
                 }
             }
         })
@@ -113,7 +128,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         cell.messageView = messageView
-        cell.insertSubview(messageView, at: 0)
+        cell.insertSubview(messageView, at: 2)
         
         cell.nameLabel.attributedText = AnalyzeToot.analyzeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
             if cell.id == id {
@@ -150,6 +165,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         return cell
     }
+    
+    // リンクタップ時の処理
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        let controller = SFSafariViewController(url: URL)
+        MainViewController.instance?.present(controller, animated: true)
+        
+        return false
+    }
 }
 
 final class TimeLineViewCell: UITableViewCell {
@@ -160,7 +183,7 @@ final class TimeLineViewCell: UITableViewCell {
     let nameLabel = UILabel()
     let idLabel = UILabel()
     let dateLabel = UILabel()
-    var messageView: UILabel?
+    var messageView: UIView?
     var continueView: UILabel?
     
     // セルの初期化
