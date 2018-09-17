@@ -84,7 +84,18 @@ final class ImageCache {
                     
                     // ストレージの古いファイルを削除する
                     if isTemp {
-                        
+                        let cacheDirUrl = URL(fileURLWithPath: cacheDir)
+                        let urls = try? fileManager.contentsOfDirectory(at: cacheDirUrl, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
+                        let nowDate = Date()
+                        for url in urls ?? [] {
+                            if let attr = try? fileManager.attributesOfItem(atPath: url.path) {
+                                if let fileDate = attr[FileAttributeKey.creationDate] as? Date {
+                                    if nowDate.timeIntervalSince(fileDate) > 86400 {
+                                        try? fileManager.removeItem(at: url)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
