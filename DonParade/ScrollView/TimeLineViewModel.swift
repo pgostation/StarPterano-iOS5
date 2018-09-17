@@ -162,25 +162,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if let created_at = data.created_at {
             let date = DecodeToot.decodeTime(text: created_at)
-            let diffTime = Int(Date().timeIntervalSince(date))
-            if diffTime <= 0 {
-                cell.dateLabel.text = I18n.get("DATETIME_NOW")
-            }
-            else if diffTime < 60 {
-                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_SECS_AGO"), diffTime)
-            }
-            else if diffTime / 60 < 60 {
-                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_MINS_AGO"), diffTime / 60)
-            }
-            else if diffTime / 3600 < 24 {
-                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), diffTime / 3600)
-            }
-            else if diffTime / 86400 < 365 {
-                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_DAYS_AGO"), diffTime / 86400)
-            }
-            else {
-                cell.dateLabel.text = String(format: I18n.get("DATETIME_%D_YEARS_AGO"), diffTime / 86400 / 365)
-            }
+            cell.date = date
+            cell.refreshDate()
         }
         
         // 画像や動画ありの場合

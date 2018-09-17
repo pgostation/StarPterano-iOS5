@@ -14,14 +14,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case selectAccount = "SETTINGS_SELECT_ACCOUNT"
         case account = "SETTINGS_ACCOUNT"
         case mypage = "SETTINGS_MYPAGE"
-        case view = "SETTINGS_VIEW"
+        case control = "SETTINGS_CONTROL"
         case cache = "SETTINGS_CACHE"
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
                                             .account,
                                             .mypage,
-                                            .view,
+                                            .control,
                                             .cache,
                                             .other]
     
@@ -46,15 +46,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                         .mute,
                                         .block]
     
-    // 4.表示設定
-    private enum View: String {
+    // 4.操作表示設定
+    private enum Control: String {
         case theme = "SETTINGS_THEME"
-        case accountViewMode = "SETTINGS_ACCOUNT_VIEW_MODE" // 名前 / 名前とID / ID
         case fontSize = "SETTINGS_FONTSIZE"
+        case tapToot = "SETTINGS_TAP_TOOT" // タップでその場で詳細表示、ダブルタップで別画面 / タップで別画面
     }
-    private let viewList: [View] = [.theme,
-                                    .accountViewMode,
-                                    .fontSize]
+    private let controlList: [Control] = [.theme,
+                                          .fontSize,
+                                          .tapToot]
     
     // 5.キャッシュ
     private enum Cache: String {
@@ -94,9 +94,9 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 2:
             return myPageList.count
         case 3:
-            return viewList.count
+            return controlList.count
         case 4:
-            return  cacheList.count
+            return cacheList.count
         case 5:
             return otherList.count
         default:
@@ -119,7 +119,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 2:
             title = myPageList[indexPath.row].rawValue
         case 3:
-            title = viewList[indexPath.row].rawValue
+            title = controlList[indexPath.row].rawValue
         case 4:
             title = cacheList[indexPath.row].rawValue
         case 5:

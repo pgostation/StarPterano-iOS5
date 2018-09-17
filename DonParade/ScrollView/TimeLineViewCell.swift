@@ -24,9 +24,13 @@ final class TimeLineViewCell: UITableViewCell {
     var imageViews: [UIImageView]?
     weak var tableView: UITableView?
     var indexPath: IndexPath?
+    var date: Date
+    var timer: Timer?
     
     // セルの初期化
     init(reuseIdentifier: String?) {
+        self.date = Date()
+        
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのテキストァベルは不要
@@ -65,10 +69,44 @@ final class TimeLineViewCell: UITableViewCell {
         self.addSubview(self.idLabel)
         self.addSubview(self.dateLabel)
         self.layer.addSublayer(self.lineLayer)
+        
+        // タイマーで5秒ごとに時刻を更新
+        if #available(iOS 10.0, *) {
+            self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [weak self] timer in
+                if self?.superview == nil {
+                    return
+                }
+                
+                self?.refreshDate()
+            })
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 日時表示を更新
+    func refreshDate() {
+        let diffTime = Int(Date().timeIntervalSince(self.date))
+        if diffTime <= 0 {
+            self.dateLabel.text = I18n.get("DATETIME_NOW")
+        }
+        else if diffTime < 60 {
+            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_SECS_AGO"), diffTime)
+        }
+        else if diffTime / 60 < 60 {
+            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_MINS_AGO"), diffTime / 60)
+        }
+        else if diffTime / 3600 < 24 {
+            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), diffTime / 3600)
+        }
+        else if diffTime / 86400 < 365 {
+            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_DAYS_AGO"), diffTime / 86400)
+        }
+        else {
+            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_YEARS_AGO"), diffTime / 86400 / 365)
+        }
     }
     
     // セル内のレイアウト
