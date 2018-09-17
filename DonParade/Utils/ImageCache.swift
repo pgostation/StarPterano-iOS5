@@ -12,6 +12,7 @@ import UIKit
 
 final class ImageCache {
     private static var memCache: [String: UIImage] = [:]
+    private static var waitingDict: [String: [(UIImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "ImageCache")
     
@@ -34,8 +35,8 @@ final class ImageCache {
                 if let data = try? Data(contentsOf: url) {
                     if let image = UIImage(data: data) {
                         DispatchQueue.main.async {
-                            callback(image)
                             memCache.updateValue(image, forKey: urlStr)
+                            callback(image)
                         }
                     }
                 }
@@ -43,14 +44,28 @@ final class ImageCache {
             return
         }
         
+        // リクエスト済みの場合、コールバックリストに追加する
+        if waitingDict.keys.contains(urlStr) {
+            waitingDict[urlStr]?.append(callback)
+            return
+        }
+        
+        waitingDict[urlStr] = []
+        
         // ネットワークに取りに行く
         imageQueue.async {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        callback(image)
                         memCache.updateValue(image, forKey: urlStr)
+                        callback(image)
+                        
+                        for waitingCallback in waitingDict[urlStr] ?? [] {
+                            waitingCallback(image)
+                        }
+                        
+                        waitingDict.removeValue(forKey: urlStr)
                     }
                     
                     // ストレージにキャッシュする

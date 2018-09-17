@@ -46,17 +46,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // セルの正確な高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // メッセージのビューを一度作り、高さを求める
-        let (messageView, _, _) = getMessageViewAndData(indexPath: indexPath)
+        let (messageView, _, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
         return max(55, messageView.frame.height + 28)
     }
     
     // メッセージのビューとデータを返す
-    private func getMessageViewAndData(indexPath: IndexPath) -> (UILabel, TimeLineView.ContentData, Bool) {
+    private func getMessageViewAndData(indexPath: IndexPath, callback: (()->Void)?) -> (UILabel, TimeLineView.ContentData, Bool) {
         let data = list[indexPath.row]
         
         // content解析
-        let (attributedText, _) = AnalyzeToot.analyzeContent(content: data.content)
+        let attributedText = AnalyzeToot.analyzeContent(content: data.content, emojis: data.emojis, callback: callback)
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
@@ -75,7 +75,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         messageView.isOpaque = true
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - 56
+        messageView.frame.size.width = UIScreen.main.bounds.width - 66
         messageView.sizeToFit()
         var isContinue = false
         if messageView.frame.size.height >= 140 - 28 {
@@ -90,10 +90,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= list.count { return getCell(view: tableView, height: 55) }
         
-        let (messageView, data, isContinue) = getMessageViewAndData(indexPath: indexPath)
+        var cell: TimeLineViewCell! = nil
+        var id: String = ""
+        
+        let (messageView, data, isContinue) = getMessageViewAndData(indexPath: indexPath, callback: { [weak self] in
+            if cell.id == id {
+                if let (messageView, _, _) = self?.getMessageViewAndData(indexPath: indexPath, callback: nil) {
+                    cell?.messageView?.removeFromSuperview()
+                    cell?.messageView = messageView
+                    cell?.insertSubview(messageView, at: 0)
+                }
+            }
+        })
         let account = accountList[data.accountId]
         
-        let cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
+        cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
+        cell.id = data.content ?? ""
+        id = data.content ?? ""
         
         ImageCache.image(urlStr: account?.avatar_static) { image in
             cell.iconView.image = image
@@ -102,7 +115,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 0)
         
-        cell.nameLabel.text = account?.display_name
+        cell.nameLabel.attributedText = AnalyzeToot.analyzeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
+            if cell.id == id {
+                cell.nameLabel.attributedText = AnalyzeToot.analyzeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: nil)
+                cell?.setNeedsLayout()
+            }
+        })
         cell.nameLabel.sizeToFit()
         
         cell.idLabel.text = account?.acct
@@ -136,6 +154,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
 
 final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
+    var id = ""
     let lineLayer = CALayer()
     let iconView = UIImageView()
     let nameLabel = UILabel()

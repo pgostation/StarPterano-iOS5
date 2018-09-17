@@ -45,11 +45,13 @@ final class LoginViewController: MyViewController {
                 do {
                     self.responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
                     
-                    // Safariでログイン
-                    self.login(hostName: hostName)
-                    
-                    // 認証コード入力フィールドを表示する
-                    view.showInputCodeField()
+                    DispatchQueue.main.async {
+                        // Safariでログイン
+                        self.login(hostName: hostName)
+                        
+                        // 認証コード入力フィールドを表示する
+                        view.showInputCodeField()
+                    }
                 } catch {
                 }
             } else if let error = error {
@@ -84,7 +86,8 @@ final class LoginViewController: MyViewController {
         }
         
         // アクセストークンを取得
-        let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
+        let tmpHostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
+        let hostName = String(tmpHostName).lowercased()
         guard let registerUrl = URL(string: "https://\(hostName)/oauth/token") else { return }
         
         guard let clientId = responseJson?["client_id"] as? String else { return }
@@ -147,6 +150,7 @@ private final class LoginView: UIView {
         hostField.placeholder = I18n.get("PLACEHOLDER_INPUT_DOMAIN")
         hostField.layer.borderColor = UIColor.gray.cgColor
         hostField.layer.borderWidth = 0.5
+        hostField.keyboardType = .alphabet
         
         authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
         authButton.backgroundColor = UIColor.lightGray
@@ -155,6 +159,7 @@ private final class LoginView: UIView {
         inputCodeField.placeholder = I18n.get("PLACEHOLDER_INPUT_CODE")
         inputCodeField.layer.borderColor = UIColor.gray.cgColor
         inputCodeField.layer.borderWidth = 0.5
+        inputCodeField.keyboardType = .alphabet
         
         codeEnterButton.setTitle(I18n.get("BUTTON_ENTER_CODE"), for: .normal)
         codeEnterButton.backgroundColor = UIColor.lightGray

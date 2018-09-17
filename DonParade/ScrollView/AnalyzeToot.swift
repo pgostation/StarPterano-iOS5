@@ -6,12 +6,13 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
-// トゥートのHTML文字列を解析して、本文、リンク付き本文、絵文字リストに分解する
+// トゥートのHTML文字列を解析して、リンクや絵文字付き文字列にする
 
 import Foundation
+import UIKit
 
 final class AnalyzeToot {
-    static func analyzeContent(content: String?) -> (NSMutableAttributedString, [String]) {
+    static func analyzeContent(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
         var text = content ?? ""
         
         // 先頭と最後の<p></p>を取り除く
@@ -26,35 +27,92 @@ final class AnalyzeToot {
         text = text.replacingOccurrences(of: "</p><p>", with: "\n\n")
         text = text.replacingOccurrences(of: "<br />", with: "\n")
         
-        // 絵文字を空白に変換
-        for (index, char) in text.enumerated() {
-            if char == ":" {
-                var emojiStr = ""
-                for endIndex in index + 1..<text.count {
-                    let endChar = text[text.index(text.startIndex, offsetBy: endIndex)..<text.index(text.startIndex, offsetBy: endIndex + 1)]
-                    if let endChar1 = endChar.first {
-                        if endChar1 == ":" {
-                            // サーバの絵文字リストと一致して入れば絵文字とする
-                            //####
-                        }
-                        else if endChar1 >= "a" && endChar1 <= "z" || endChar1 == "_" {
-                            //
-                            emojiStr += String(endChar1)
-                        } else {
-                            // 間に英小文字と_以外があれば、この「:」は無視する
-                            break
-                        }
+        // &lt;などをデコード
+        text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&amp;", with: "&")
+        
+        // 絵文字の位置をリストアップする
+        var emojiList: [(String.Index, NSAttributedString)] = []
+        if let emojis = emojis {
+            for emoji in emojis {
+                guard let shortcode = emoji["shortcode"] as? String else { continue }
+                let static_url = emoji["static_url"] as? String
+                
+                let attachment = NSTextAttachment()
+                var execCallback = false
+                ImageCache.image(urlStr: static_url, callback: { image in
+                    if execCallback {
+                        callback?()
+                    } else {
+                        attachment.image = image
                     }
+                })
+                if attachment.image == nil {
+                    execCallback = true
+                }
+                attachment.bounds = CGRect(x: 0, y: 0, width: 18, height: 18)
+                
+                let attrStr = NSAttributedString(attachment: attachment)
+                
+                while let range = text.range(of: ":\(shortcode):") {
+                    let index = text.index(range.lowerBound, offsetBy: 0)
+                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "")
+                    emojiList.append((index, attrStr))
                 }
             }
         }
         
-        // &lt;などをデコード
-        text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&amp;", with: "&")
+        let attributedText = NSMutableAttributedString(string: text)
+        
+        // 絵文字を追加
+        for emoji in emojiList {
+            attributedText.insert(emoji.1, at: emoji.0.encodedOffset)
+        }
+        
+        return attributedText
+    }
+    
+    // 名前部分の絵文字解析
+    static func analyzeName(name: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
+        var text = name ?? ""
+        
+        // 絵文字の位置をリストアップする
+        var emojiList: [(String.Index, NSAttributedString)] = []
+        if let emojis = emojis {
+            for emoji in emojis {
+                guard let shortcode = emoji["shortcode"] as? String else { continue }
+                let static_url = emoji["static_url"] as? String
+                
+                let attachment = NSTextAttachment()
+                var execCallback = false
+                ImageCache.image(urlStr: static_url, callback: { image in
+                    if execCallback {
+                        callback?()
+                    } else {
+                        attachment.image = image
+                    }
+                })
+                if attachment.image == nil {
+                    execCallback = true
+                }
+                attachment.bounds = CGRect(x: 0, y: 0, width: 18, height: 18)
+                
+                let attrStr = NSAttributedString(attachment: attachment)
+                
+                while let range = text.range(of: ":\(shortcode):") {
+                    let index = text.index(range.lowerBound, offsetBy: 0)
+                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "")
+                    emojiList.append((index, attrStr))
+                }
+            }
+        }
         
         let attributedText = NSMutableAttributedString(string: text)
-        let emojiList: [String] = []
         
-        return (attributedText, emojiList)
+        // 絵文字を追加
+        for emoji in emojiList {
+            attributedText.insert(emoji.1, at: emoji.0.encodedOffset)
+        }
+        
+        return attributedText
     }
 }

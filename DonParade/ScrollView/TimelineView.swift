@@ -27,6 +27,8 @@ final class TimeLineView: UITableView {
         self.delegate = model
         self.dataSource = model
         
+        self.separatorColor = UIColor.clear
+        
         // 引っ張って更新するやつを追加
         self.refreshCon.attributedTitle = NSAttributedString(string: I18n.get("REFRESH_TIMELINE"))
         self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
