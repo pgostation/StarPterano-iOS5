@@ -92,15 +92,15 @@ private final class MainView: UIView {
         self.backgroundColor = UIColor.white
         
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
-        tlButton.backgroundColor = UIColor.lightGray
+        tlButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         tlButton.setTitleColor(UIColor.blue, for: .normal)
         
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-        ltlButton.backgroundColor = UIColor.lightGray
+        ltlButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         ltlButton.setTitleColor(UIColor.blue, for: .normal)
         
         accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
-        accountButton.backgroundColor = UIColor.lightGray
+        accountButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         accountButton.setTitleColor(UIColor.blue, for: .normal)
     }
     

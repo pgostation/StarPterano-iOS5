@@ -27,3 +27,6 @@
 "DATETIME_%D_HOURS_AGO" = "%dh";
 "DATETIME_%D_DAYS_AGO" = "%dd";
 "DATETIME_%D_YEARS_AGO" = "%dy";
+
+// 設定画面
+"BUTTON_CLOSE" = "Close";

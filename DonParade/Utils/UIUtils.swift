@@ -11,6 +11,7 @@
 import UIKit
 
 final class UIUtils {
+    // iPhone Xのようなノッチ付き画面かどうか
     static var isIphoneX: Bool = {
         let size = UIScreen.main.bounds.size
         if size.width == 320 && size.height == 480 { // iPhone 3G-4
@@ -28,4 +29,9 @@ final class UIUtils {
         
         return true
     }()
+    
+    // ステータスバーの高さ
+    static func statusBarHeight() -> CGFloat {
+        return UIApplication.shared.statusBarFrame.height
+    }
 }
