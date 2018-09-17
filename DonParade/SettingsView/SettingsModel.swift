@@ -47,10 +47,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 4.表示設定
     private enum View: String {
         case theme = "SETTINGS_THEME"
-        case remove = "SETTINGS_REMOVE_ACCOUNT"
+        case accountViewMode = "SETTINGS_ACCOUNT_VIEW_MODE" // 名前 / 名前とID / ID
+        case fontSize = "SETTINGS_FONTSIZE"
     }
     private let viewList: [View] = [.theme,
-                                        .remove]
+                                    .accountViewMode,
+                                    .fontSize]
     
     // 5.その他
     private enum Other: String {

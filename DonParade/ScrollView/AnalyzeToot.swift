@@ -26,9 +26,11 @@ final class AnalyzeToot {
         // 改行
         text = text.replacingOccurrences(of: "</p><p>", with: "\n\n")
         text = text.replacingOccurrences(of: "<br />", with: "\n")
+        text = text.replacingOccurrences(of: "<br>", with: "\n")
         text = text.replacingOccurrences(of: "<span>", with: "")
         text = text.replacingOccurrences(of: "<span class=\"\">", with: "")
         text = text.replacingOccurrences(of: "<span class=\"invisible\">", with: "")
+        text = text.replacingOccurrences(of: "<span class=\"ellipsis\">", with: "")
         text = text.replacingOccurrences(of: "</span>", with: "")
         
         // リンク
@@ -59,7 +61,7 @@ final class AnalyzeToot {
         }
         
         // &lt;などをデコード
-        text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&amp;", with: "&")
+        text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "'").replacingOccurrences(of: "&amp;", with: "&")
         
         // 絵文字の位置をリストアップする
         var emojiList: [(String.Index, NSAttributedString)] = []

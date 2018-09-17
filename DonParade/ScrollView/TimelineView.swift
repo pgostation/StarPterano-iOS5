@@ -52,7 +52,7 @@ final class TimeLineView: UITableView {
         case .home:
             url = URL(string: "https://\(hostName)/api/v1/timelines/home?limit=50")
         case .local:
-            url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=&limit=50")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=1&limit=50")
         case .global:
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=50")
         case .user:
@@ -63,11 +63,11 @@ final class TimeLineView: UITableView {
         case .localTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
-            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=&limit=50")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=1&limit=50")
         case .globalTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
-            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=&limit=50")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50")
         }
         
         guard let requestUrl = url else { return }

@@ -73,10 +73,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             msgView.attributedText = attributedText
             msgView.font = UIFont.systemFont(ofSize: 14)
             msgView.backgroundColor = TimeLineViewCell.bgColor
+            msgView.textContainer.lineBreakMode = .byCharWrapping
             msgView.isOpaque = true
             msgView.isScrollEnabled = false
             msgView.isEditable = false
-            msgView.delegate = self
+            msgView.delegate = self // URLタップ用
+            
+            // URL以外の場所タップ用
+            let tapGensture = UITapGestureRecognizer.init(target: self, action: #selector(tapTextViewAction(_:)))
+            msgView.addGestureRecognizer(tapGensture)
+            
             messageView = msgView
         } else {
             let msgView = UILabel()
@@ -122,6 +128,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
         cell.id = data.content ?? ""
         id = data.content ?? ""
+        cell.tableView = tableView
+        cell.indexPath = indexPath
         
         ImageCache.image(urlStr: account?.avatar_static) { image in
             cell.iconView.image = image
@@ -166,12 +174,30 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         return cell
     }
     
-    // リンクタップ時の処理
+    // セル選択時の処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // トゥート詳細画面
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    // UITextViewのリンクタップ時の処理
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
         let controller = SFSafariViewController(url: URL)
         MainViewController.instance?.present(controller, animated: true)
         
         return false
+    }
+    
+    // UITextViewのリンク以外タップ時の処理
+    @objc func tapTextViewAction(_ gesture: UIGestureRecognizer) {
+        guard let msgView = gesture.view else { return }
+        guard let cell = msgView.superview as? TimeLineViewCell else { return }
+        
+        if let tableView = cell.tableView, let indexPath = cell.indexPath {
+            // セル選択時の処理を実行
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+        }
     }
 }
 
@@ -185,6 +211,8 @@ final class TimeLineViewCell: UITableViewCell {
     let dateLabel = UILabel()
     var messageView: UIView?
     var continueView: UILabel?
+    weak var tableView: UITableView?
+    var indexPath: IndexPath?
     
     // セルの初期化
     init(reuseIdentifier: String?) {
