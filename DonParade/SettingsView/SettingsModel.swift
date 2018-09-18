@@ -12,6 +12,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // カテゴリー
     private enum Category: String {
         case selectAccount = "SETTINGS_SELECT_ACCOUNT"
+        case accountSettings = "SETTINGS_ACCOUNT_SETTINGS"
         case account = "SETTINGS_ACCOUNT"
         case mypage = "SETTINGS_MASTODON"
         case control = "SETTINGS_CONTROL"
@@ -19,6 +20,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
+                                            .accountSettings,
                                             .account,
                                             .mypage,
                                             .control,
@@ -28,7 +30,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 1.アカウントの切り替え
     //   SettingsDataに登録してあるアカウントを表示する
     
-    // 2.アカウントの追加と削除
+    // 2.アカウントごとの設定
+    private enum AccountSettings: String {
+        case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
+        case accountBUttonView = "SETTINGS_ACCOUNT_BUTTON_VIEW"
+    }
+    private let accountSettingsList: [AccountSettings] = [.tootProtectDefault,
+                                                          .accountBUttonView]
+    
+    // 3.アカウントの追加と削除
     private enum Account: String {
         case add = "SETTINGS_ADD_ACCOUNT"
         case remove = "SETTINGS_REMOVE_ACCOUNT"
@@ -36,7 +46,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private let accountList: [Account] = [.add,
                                           .remove]
     
-    // 3.マイページ
+    // 4.マストドン設定
     private enum MyPage: String {
         case mypage = "SETTINGS_MYPAGE"
         case mute = "SETTINGS_MUTELIST"
@@ -46,17 +56,20 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                         .mute,
                                         .block]
     
-    // 4.操作表示設定
+    // 5.操作表示設定
     private enum Control: String {
-        case theme = "SETTINGS_THEME"
-        case fontSize = "SETTINGS_FONTSIZE"
+        case theme = "SETTINGS_THEME" // テーマ切り替え、さらに各色もカスタムできる
+        // 背景色 / ユーザ名表示色 / ID表示色(同一インスタンス, 別インスタンス) / テキスト表示色 / 時刻表示色
+        case fontSize = "SETTINGS_WALLPAPER"
+        case wallPaper = "SETTINGS_FONTSIZE"
         case tapToot = "SETTINGS_TAP_TOOT" // タップでその場で詳細表示、ダブルタップで別画面 / タップで別画面
     }
     private let controlList: [Control] = [.theme,
                                           .fontSize,
+                                          .wallPaper,
                                           .tapToot]
     
-    // 5.キャッシュ
+    // 6.キャッシュ
     private enum Cache: String {
         case clearCache = "SETTINGS_CLEAR_CACHE"
         case showIcons = "SETTINGS_SHOW_ICONS"
@@ -64,7 +77,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private let cacheList: [Cache] = [.clearCache,
                                       .showIcons]
     
-    // 6.その他
+    // 7.その他
     private enum Other: String {
         case privacyPolicy = "SETTINGS_PRIVACY_POLICY"
         case license = "SETTINGS_LICENSE"
@@ -90,14 +103,16 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 0:
             return 1
         case 1:
-            return accountList.count
+            return accountSettingsList.count
         case 2:
-            return myPageList.count
+            return accountList.count
         case 3:
-            return controlList.count
+            return myPageList.count
         case 4:
-            return cacheList.count
+            return controlList.count
         case 5:
+            return cacheList.count
+        case 6:
             return otherList.count
         default:
             return 0
@@ -115,14 +130,16 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 0:
             title = "#### test"
         case 1:
-            title = I18n.get(accountList[indexPath.row].rawValue)
+            title = I18n.get(accountSettingsList[indexPath.row].rawValue)
         case 2:
-            title = I18n.get(myPageList[indexPath.row].rawValue)
+            title = I18n.get(accountList[indexPath.row].rawValue)
         case 3:
-            title = I18n.get(controlList[indexPath.row].rawValue)
+            title = I18n.get(myPageList[indexPath.row].rawValue)
         case 4:
-            title = I18n.get(cacheList[indexPath.row].rawValue)
+            title = I18n.get(controlList[indexPath.row].rawValue)
         case 5:
+            title = I18n.get(cacheList[indexPath.row].rawValue)
+        case 6:
             title = I18n.get(otherList[indexPath.row].rawValue)
         default:
             break

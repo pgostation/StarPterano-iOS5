@@ -14,6 +14,7 @@ import SafariServices
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
+    private var showGrowlCell = true // 過去遡り用セルを表示するかどうか
     
     override init() {
         super.init()
@@ -23,20 +24,44 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         fatalError("init(coder:) has not been implemented")
     }
     
+    // 一番新しいトゥートのID
+    func getFirstTootId() -> String? {
+        return list.first?.id
+    }
+    
     // トゥートの追加
     func change(tableView: UITableView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData]) {
         DispatchQueue.main.async {
-            self.list = addList + self.list
+            if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+                if date1 > date2 {
+                    self.list = self.list + addList
+                } else {
+                    self.list = addList + self.list
+                }
+            } else {
+                self.list = addList + self.list
+            }
             
-            self.accountList = accountList
+            // アカウント情報を更新
+            for account in accountList {
+                self.accountList.updateValue(account.value, forKey: account.key)
+            }
             
             tableView.reloadData()
         }
     }
     
     // セルの数
+    private var isFirstView = true
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
+        if list.count == 0, isFirstView {
+            isFirstView = false
+            if let timelineView = tableView as? TimeLineView {
+                timelineView.refresh()
+            }
+        }
+        
+        return list.count + (showGrowlCell ? 1 : 0)
     }
     
     // セルのだいたいの高さ(スクロールバーの表示用)
@@ -46,6 +71,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルの正確な高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == list.count {
+            // Growl用セルの高さ
+            return 55
+        }
+        
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
@@ -120,7 +150,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルを返す
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row >= list.count { return getCell(view: tableView, height: 55) }
+        if indexPath.row >= list.count {
+            if self.showGrowlCell, let timelineView = tableView as? TimeLineView {
+                // 過去のトゥートに遡る
+                timelineView.refreshOld(id: list.last?.id)
+            }
+            return getCell(view: tableView, height: 55)
+        }
         
         var cell: TimeLineViewCell! = nil
         var id: String = ""

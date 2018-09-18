@@ -53,7 +53,7 @@ final class AnalyzeJson {
             let emojis = json["emojis"] as? [[String: Any]]
             let favourited = json["favourited"] as? Int
             let favourites_count = json["favourites_count"] as? Int
-            let id = json["id"] as? Int64
+            let id = json["id"] as? String
             let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
             let in_reply_to_id = json["in_reply_to_id"] as? Int64
             let language = json["language"] as? String
@@ -111,7 +111,7 @@ final class AnalyzeJson {
         let following_count = account["following_count"] as? Int
         let header = account["header"] as? String
         let header_static = account["header_static"] as? String
-        let id = account["id"] as? Int
+        let id = account["id"] as? String
         let locked = account["locked"] as? Int
         let note = account["note"] as? String
         let statuses_count = account["statuses_count"] as? Int
@@ -153,7 +153,7 @@ final class AnalyzeJson {
         let following_count: Int?
         let header: String?
         let header_static: String?
-        let id: Int?
+        let id: String?
         let locked: Int?
         let note: String?
         let statuses_count: Int?
@@ -169,7 +169,7 @@ final class AnalyzeJson {
         let emojis: [[String: Any]]?
         let favourited: Int?
         let favourites_count: Int?
-        let id: Int64?
+        let id: String?
         let in_reply_to_account_id: String?
         let in_reply_to_id: Int64?
         let language: String?
