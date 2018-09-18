@@ -13,15 +13,29 @@ import UIKit
 final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
     var id = ""
+    
+    // 基本ビュー
     let lineLayer = CALayer()
     let iconView = UIImageView()
     let nameLabel = UILabel()
     let idLabel = UILabel()
     let dateLabel = UILabel()
     var messageView: UIView?
-    var continueView: UILabel?
-    var boostView: UILabel?
-    var imageViews: [UIImageView]?
+    
+    //追加ビュー
+    var continueView: UILabel? // 長すぎるトゥートで、続きがあることを表示
+    var boostView: UILabel? // 誰がboostしたかを表示
+    var imageViews: [UIImageView]? // 添付画像を表示
+    
+    // 詳細ビュー
+    var showDetail = false
+    var replyButton: UIButton?
+    var boostButton: UIButton?
+    var boostedLabel: UILabel?
+    var favoriteButton: UIButton?
+    var favoritedLabel: UILabel?
+    var detailButton: UIButton?
+    
     weak var tableView: UITableView?
     var indexPath: IndexPath?
     var date: Date
@@ -112,6 +126,7 @@ final class TimeLineViewCell: UITableViewCell {
     // セル内のレイアウト
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
+        let isDetailMode = !SettingsData.tapDetailMode && self.showDetail
         
         self.lineLayer.frame = CGRect(x: 0,
                                       y: 0,
@@ -154,12 +169,46 @@ final class TimeLineViewCell: UITableViewCell {
                                        width: screenBounds.width - 56,
                                        height: 20)
         
+        if self.replyButton != nil {
+            let top: CGFloat = self.boostView?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+            
+            self.replyButton?.frame = CGRect(x: 50,
+                                             y: top,
+                                             width: 40,
+                                             height: 40)
+            
+            self.boostButton?.frame = CGRect(x: 110,
+                                             y: top,
+                                             width: 40,
+                                             height: 40)
+            
+            self.boostedLabel?.frame = CGRect(x: 150,
+                                              y: top + 10,
+                                              width: 20,
+                                              height: 20)
+            
+            self.favoriteButton?.frame = CGRect(x: 170,
+                                                y: top,
+                                                width: 40,
+                                                height: 40)
+            
+            self.favoritedLabel?.frame = CGRect(x: 210,
+                                                y: top + 10,
+                                                width: 20,
+                                                height: 20)
+            
+            self.detailButton?.frame = CGRect(x: 230,
+                                              y: top,
+                                              width: 40,
+                                              height: 40)
+        }
+        
         for (index, imageView) in (self.imageViews ?? []).enumerated() {
             var imageWidth: CGFloat = 0
-            var imageHeight: CGFloat = 80
+            var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
             if let image = imageView.image {
                 let size = image.size
-                let rate = 80 / size.height
+                let rate = imageHeight / size.height
                 imageWidth = size.width * rate
                 if imageWidth > screenBounds.width - 50 {
                     imageWidth = screenBounds.width - 50
@@ -168,7 +217,7 @@ final class TimeLineViewCell: UITableViewCell {
                 }
             }
             imageView.frame = CGRect(x: 50,
-                                     y: (self.messageView?.frame.maxY ?? 0) + 90 * CGFloat(index),
+                                     y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
                                      width: imageWidth,
                                      height: imageHeight)
         }

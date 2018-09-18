@@ -15,6 +15,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
     private var showGrowlCell = true // 過去遡り用セルを表示するかどうか
+    private var selectedIndexPath: IndexPath? = nil
     
     override init() {
         super.init()
@@ -76,20 +77,24 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return 55
         }
         
+        // セルを拡大表示するかどうか
+        let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedIndexPath?.row
+        let detailOffset: CGFloat = isSelected ? 40 : 0
+            
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
         let imagesOffset: CGFloat
         if let mediaData = data.mediaData {
-            imagesOffset = 90 * CGFloat(mediaData.count)
+            imagesOffset = (isSelected ? UIScreen.main.bounds.width - 70 : 90) * CGFloat(mediaData.count)
         } else {
             imagesOffset = 0
         }
         
         if data.reblog_acct != nil {
-            return max(55, messageView.frame.height + 28 + 20 + imagesOffset)
+            return max(55, messageView.frame.height + 28 + 20 + imagesOffset + detailOffset)
         } else {
-            return max(55, messageView.frame.height + 28 + imagesOffset)
+            return max(55, messageView.frame.height + 28 + imagesOffset + detailOffset)
         }
     }
     
@@ -236,6 +241,58 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostView!)
         }
         
+        // 詳細表示の場合
+        if self.selectedIndexPath?.row == indexPath.row {
+            cell.showDetail = true
+            cell.isSelected = true
+            
+            // 返信ボタンを追加
+            cell.replyButton = UIButton()
+            cell.replyButton?.setTitle("↩︎", for: .normal)
+            cell.replyButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.addSubview(cell.replyButton!)
+            
+            // ブーストボタン
+            cell.boostButton = UIButton()
+            cell.boostButton?.setTitle("⇄", for: .normal)
+            if data.reblogged == 1 {
+                cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
+            } else {
+                cell.boostButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            }
+            cell.addSubview(cell.boostButton!)
+            
+            // ブーストされた数
+            cell.boostedLabel = UILabel()
+            cell.addSubview(cell.boostedLabel!)
+            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+                cell.boostedLabel?.text = "\(reblogs_count)"
+            }
+            
+            // お気に入りボタン
+            cell.favoriteButton = UIButton()
+            cell.favoriteButton?.setTitle("★", for: .normal)
+            if data.favourited == 1 {
+                cell.favoriteButton?.setTitleColor(UIColor.blue, for: .normal)
+            } else {
+                cell.favoriteButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            }
+            cell.addSubview(cell.favoriteButton!)
+            
+            // お気に入りされた数
+            cell.favoritedLabel = UILabel()
+            cell.addSubview(cell.favoritedLabel!)
+            if let favourites_count = data.favourites_count, favourites_count > 0 {
+                cell.favoritedLabel?.text = "\(favourites_count)"
+            }
+            
+            // 詳細ボタン
+            cell.detailButton = UIButton()
+            cell.detailButton?.setTitle("…", for: .normal)
+            cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.addSubview(cell.detailButton!)
+        }
+        
         return cell
     }
     
@@ -244,11 +301,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let reuseIdentifier = "TimeLineViewModel\(height)"
         let cell = view.dequeueReusableCell(withIdentifier: reuseIdentifier) as? TimeLineViewCell ?? TimeLineViewCell(reuseIdentifier: reuseIdentifier)
         
+        cell.showDetail = false
         cell.messageView?.removeFromSuperview()
         cell.continueView?.removeFromSuperview()
         cell.boostView?.removeFromSuperview()
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
+        }
+        if cell.replyButton != nil {
+            cell.replyButton?.removeFromSuperview()
+            cell.boostButton?.removeFromSuperview()
+            cell.boostedLabel?.removeFromSuperview()
+            cell.favoriteButton?.removeFromSuperview()
+            cell.favoritedLabel?.removeFromSuperview()
+            cell.detailButton?.removeFromSuperview()
         }
         cell.iconView.image = nil
         
@@ -257,9 +323,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セル選択時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // トゥート詳細画面
-        
-        tableView.deselectRow(at: indexPath, animated: true)
+        if SettingsData.tapDetailMode {
+            // トゥート詳細画面に移動
+            // #### 工事中
+            
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            // セルを拡大して表示
+            self.selectedIndexPath = indexPath
+            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        }
     }
     
     // UITextViewのリンクタップ時の処理
@@ -278,6 +351,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if let tableView = cell.tableView, let indexPath = cell.indexPath {
             // セル選択時の処理を実行
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            self.tableView(tableView, didSelectRowAt: indexPath)
         }
     }
 }
