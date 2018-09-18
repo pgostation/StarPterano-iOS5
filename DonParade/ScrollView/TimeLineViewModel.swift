@@ -306,9 +306,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.messageView?.removeFromSuperview()
         cell.continueView?.removeFromSuperview()
         cell.boostView?.removeFromSuperview()
+        cell.boostView = nil
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
         }
+        cell.imageViews = []
         if cell.replyButton != nil {
             cell.replyButton?.removeFromSuperview()
             cell.boostButton?.removeFromSuperview()
