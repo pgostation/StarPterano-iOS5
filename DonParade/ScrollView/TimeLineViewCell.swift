@@ -40,6 +40,7 @@ final class TimeLineViewCell: UITableViewCell {
     var indexPath: IndexPath?
     var date: Date
     var timer: Timer?
+    var acccountId: String?
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -94,10 +95,27 @@ final class TimeLineViewCell: UITableViewCell {
                 self?.refreshDate()
             })
         }
+        
+        //
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+        self.iconView.addGestureRecognizer(tapGesture1)
+        self.iconView.isUserInteractionEnabled = true
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+        self.nameLabel.addGestureRecognizer(tapGesture2)
+        self.nameLabel.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // アイコンか名前欄をタップした時の処理
+    @objc func tapAccountAction() {
+        if let acccountId = self.acccountId {
+            let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: acccountId)
+            accountTimeLineViewController.modalTransitionStyle = UIModalTransitionStyle.partialCurl;
+            MainViewController.instance?.present(accountTimeLineViewController, animated: true, completion: nil)
+        }
     }
     
     // 日時表示を更新
@@ -169,8 +187,27 @@ final class TimeLineViewCell: UITableViewCell {
                                        width: screenBounds.width - 56,
                                        height: 20)
         
+        for (index, imageView) in (self.imageViews ?? []).enumerated() {
+            var imageWidth: CGFloat = 0
+            var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
+            if let image = imageView.image {
+                let size = image.size
+                let rate = imageHeight / size.height
+                imageWidth = size.width * rate
+                if imageWidth > screenBounds.width - 60 {
+                    imageWidth = screenBounds.width - 60
+                    let newRate = imageWidth / size.width
+                    imageHeight = size.height * newRate
+                }
+            }
+            imageView.frame = CGRect(x: 50,
+                                     y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
+                                     width: imageWidth,
+                                     height: imageHeight)
+        }
+        
         if self.replyButton != nil {
-            let top: CGFloat = self.boostView?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+            let top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews?.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
             self.replyButton?.frame = CGRect(x: 50,
                                              y: top,
@@ -201,25 +238,6 @@ final class TimeLineViewCell: UITableViewCell {
                                               y: top,
                                               width: 40,
                                               height: 40)
-        }
-        
-        for (index, imageView) in (self.imageViews ?? []).enumerated() {
-            var imageWidth: CGFloat = 0
-            var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
-            if let image = imageView.image {
-                let size = image.size
-                let rate = imageHeight / size.height
-                imageWidth = size.width * rate
-                if imageWidth > screenBounds.width - 50 {
-                    imageWidth = screenBounds.width - 50
-                    let newRate = imageWidth / size.width
-                    imageHeight = size.height * newRate
-                }
-            }
-            imageView.frame = CGRect(x: 50,
-                                     y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
-                                     width: imageWidth,
-                                     height: imageHeight)
         }
     }
 }

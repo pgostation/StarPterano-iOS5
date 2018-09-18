@@ -36,7 +36,27 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        let view = TimeLineView(type: self.type, option: self.option)
-        self.view = view
+        if self.type == .user {
+            let view = TimeLineView(type: self.type, option: self.option)
+            self.view = view
+                
+            let closeButton = UIButton()
+            closeButton.setTitle("CLOSE", for: .normal)
+            closeButton.setTitleColor(UIColor.blue, for: .normal)
+            closeButton.backgroundColor = UIColor.lightGray
+            closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
+                                       y: UIScreen.main.bounds.height - 70,
+                                       width: 50,
+                                       height: 50)
+            closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
+            self.view?.addSubview(closeButton)
+        } else {
+            let view = TimeLineView(type: self.type, option: self.option)
+            self.view = view
+        }
+    }
+    
+    @objc func closeAction() {
+        self.dismiss(animated: true, completion: nil)
     }
 }

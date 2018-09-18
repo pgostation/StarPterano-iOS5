@@ -182,6 +182,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         id = data.content ?? ""
         cell.tableView = tableView
         cell.indexPath = indexPath
+        cell.acccountId = account?.id
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false) { image in
             cell.iconView.image = image

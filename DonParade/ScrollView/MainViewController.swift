@@ -61,7 +61,7 @@ final class MainViewController: MyViewController {
         }
     }
     
-    // アカウント画面に移動
+    // アカウントボタンをタップ（設定画面に移動）
     @objc func accountAction(_ sender: UIButton?) {
         let settingsViewController = SettingsViewController()
         self.present(settingsViewController, animated: true, completion: nil)
