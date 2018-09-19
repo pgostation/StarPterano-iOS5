@@ -50,6 +50,19 @@ final class AnalyzeJson {
                     mediaData?.append(data)
                 }
             }
+            var mentions: MensionsData? = nil
+            if let mentionsJson = json["mentions"] as? [String: Any] {
+                let acct = mentionsJson["acct"] as? String
+                let id = mentionsJson["id"] as? String
+                let url = mentionsJson["url"] as? String
+                let username = mentionsJson["username"] as? String
+                
+                let data = MensionsData(acct: acct,
+                                        id: id,
+                                        url: url,
+                                        username: username)
+                mentions = data
+            }
             let content = json["content"] as? String
             let created_at = json["created_at"] as? String
             let emojis = json["emojis"] as? [[String: Any]]
@@ -57,9 +70,8 @@ final class AnalyzeJson {
             let favourites_count = json["favourites_count"] as? Int
             let id = json["id"] as? String
             let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
-            let in_reply_to_id = json["in_reply_to_id"] as? Int64
+            let in_reply_to_id = json["in_reply_to_id"] as? String
             let language = json["language"] as? String
-            let mentions = json["mentions"] as? [String]
             let muted = json["muted"] as? Int
             let reblogged = json["reblogged"] as? Int
             let reblogs_count = json["reblogs_count"] as? Int
@@ -155,7 +167,7 @@ final class AnalyzeJson {
         let following_count: Int?
         let header: String?
         let header_static: String?
-        let id: String?
+        let id: String? // 数値のID
         let locked: Int?
         let note: String?
         let statuses_count: Int?
@@ -171,12 +183,12 @@ final class AnalyzeJson {
         let emojis: [[String: Any]]?
         let favourited: Int?
         let favourites_count: Int?
-        let id: String?
+        let id: String? // 数値のID
         let in_reply_to_account_id: String?
-        let in_reply_to_id: Int64?
+        let in_reply_to_id: String?
         let language: String?
         let mediaData: [MediaData]?
-        let mentions: [String]?
+        let mentions: MensionsData?
         let muted: Int?
         let reblog_acct: String?
         let reblogged: Int?
@@ -196,5 +208,12 @@ final class AnalyzeJson {
         let preview_url: String?
         let type: String?
         let url: String?
+    }
+    
+    struct MensionsData {
+        let acct: String?
+        let id: String? // 数値のID
+        let url: String?
+        let username: String?
     }
 }

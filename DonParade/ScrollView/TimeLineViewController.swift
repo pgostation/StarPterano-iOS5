@@ -19,6 +19,8 @@ final class TimeLineViewController: MyViewController {
         case favorites // お気に入り
         case localTag
         case globalTag
+        case mensions // 単一トゥート(と会話)
+        // 会話の場合、@の相手全てのTimelineを取得して表示する。まず過去、それから未来。関係ないのは非表示
     }
     
     private let type: TimeLineType
@@ -36,7 +38,7 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user {
+        if self.type == .user || self.type == .mensions {
             let view = TimeLineView(type: self.type, option: self.option)
             self.view = view
                 

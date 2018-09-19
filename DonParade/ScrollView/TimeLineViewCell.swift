@@ -13,7 +13,9 @@ import UIKit
 final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
     static let selectedBgColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 1)
-    static let relatedBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
+    static let sameAccountBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
+    static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.85, alpha: 1)
+    static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.88, alpha: 1)
     var id = ""
     
     // 基本ビュー
@@ -32,7 +34,7 @@ final class TimeLineViewCell: UITableViewCell {
     // 詳細ビュー
     var showDetail = false
     var replyButton: UIButton?
-    var replyedLabel: UILabel?
+    var repliedLabel: UILabel?
     var boostButton: UIButton?
     var boostedLabel: UILabel?
     var favoriteButton: UIButton?
@@ -221,7 +223,7 @@ final class TimeLineViewCell: UITableViewCell {
                                              width: 40,
                                              height: 40)
             
-            self.replyedLabel?.frame = CGRect(x: 90,
+            self.repliedLabel?.frame = CGRect(x: 85,
                                               y: top + 10,
                                               width: 20,
                                               height: 20)
@@ -231,7 +233,7 @@ final class TimeLineViewCell: UITableViewCell {
                                              width: 40,
                                              height: 40)
             
-            self.boostedLabel?.frame = CGRect(x: 150,
+            self.boostedLabel?.frame = CGRect(x: 145,
                                               y: top + 10,
                                               width: 20,
                                               height: 20)
@@ -241,7 +243,7 @@ final class TimeLineViewCell: UITableViewCell {
                                                 width: 40,
                                                 height: 40)
             
-            self.favoritedLabel?.frame = CGRect(x: 210,
+            self.favoritedLabel?.frame = CGRect(x: 205,
                                                 y: top + 10,
                                                 width: 20,
                                                 height: 20)

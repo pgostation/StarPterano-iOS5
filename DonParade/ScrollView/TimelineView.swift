@@ -18,7 +18,7 @@ final class TimeLineView: UITableView {
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
-    init(type: TimeLineViewController.TimeLineType, option: String?) {
+    init(type: TimeLineViewController.TimeLineType, option: String?, mensions: [String]? = nil) {
         self.type = type
         self.option = option
         
@@ -29,13 +29,15 @@ final class TimeLineView: UITableView {
         
         self.separatorColor = UIColor.clear
         
-        // 引っ張って更新するやつを追加
-        self.refreshCon.attributedTitle = NSAttributedString(string: I18n.get("REFRESH_TIMELINE"))
-        self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
-        if #available(iOS 10.0, *) {
-            self.refreshControl = self.refreshCon
-        } else {
-            self.backgroundView = self.refreshCon
+        if type != .mensions {
+            // 引っ張って更新するやつを追加
+            self.refreshCon.attributedTitle = NSAttributedString(string: I18n.get("REFRESH_TIMELINE"))
+            self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+            if #available(iOS 10.0, *) {
+                self.refreshControl = self.refreshCon
+            } else {
+                self.backgroundView = self.refreshCon
+            }
         }
     }
     
@@ -73,6 +75,8 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=200\(sinceIdStr)")
+        case .mensions:
+            return //#### 工事中
         }
         
         guard let requestUrl = url else { return }
@@ -128,6 +132,8 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50\(maxIdStr)")
+        case .mensions:
+            return
         }
         
         guard let requestUrl = url else { return }
