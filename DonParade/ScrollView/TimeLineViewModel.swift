@@ -213,6 +213,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.indexPath = indexPath
         cell.accountId = account?.id
         cell.mensionsList = data.mentions
+        cell.contentData = data.content ?? ""
+        cell.urlStr = data.url ?? ""
         
         cell.isFaved = (data.favourited == 1)
         cell.isBoosted = (data.reblogged == 1)

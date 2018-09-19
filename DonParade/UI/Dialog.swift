@@ -14,8 +14,8 @@ final class Dialog {
     static func show(message: String, viewController: UIViewController? = nil) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
         
-        if let viewController = viewController ?? UIApplication.shared.keyWindow?.rootViewController {
-            viewController.present(alert, animated: true, completion: nil)
-        }
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        
+        UIUtils.getFrontViewController()?.present(alert, animated: false, completion: nil)
     }
 }

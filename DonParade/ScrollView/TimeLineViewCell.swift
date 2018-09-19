@@ -48,6 +48,8 @@ final class TimeLineViewCell: UITableViewCell {
     var date: Date
     var timer: Timer?
     var accountId: String?
+    var contentData: String = ""
+    var urlStr: String = ""
     var mensionsList: [AnalyzeJson.MensionData]?
     
     var isFaved = false
@@ -157,7 +159,39 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 「・・・」ボタンをタップした時の処理
     @objc func detailAction() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
+        // Safariで開く
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                guard let url = URL(string: self.urlStr) else { return }
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+        }))
+        
+        // 生データを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("生データを表示"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    Dialog.show(message: self.contentData)
+                }
+        }))
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertActionStyle.cancel,
+            handler: { _ in
+        }))
+        
+        UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
     }
     
     // 日時表示を更新

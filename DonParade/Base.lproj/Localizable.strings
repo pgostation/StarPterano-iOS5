@@ -19,6 +19,8 @@
 "BUTTON_LTL" = "LTL";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
+"ACTION_OPEN_WITH_SAFARI" = "Open with Safari";
+"BUTTON_CANCEL" = "Cancel";
 
 // 何分前
 "DATETIME_NOW" = "now";

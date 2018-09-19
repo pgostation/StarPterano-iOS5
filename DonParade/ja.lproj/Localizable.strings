@@ -19,6 +19,8 @@
 "BUTTON_LTL" = "LTL";
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";
+"ACTION_OPEN_WITH_SAFARI" = "Safariで開く";
+"BUTTON_CANCEL" = "キャンセル";
 
 // 何分前
 "DATETIME_NOW" = "今";

@@ -62,14 +62,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private enum Control: String {
         case theme = "SETTINGS_THEME" // テーマ切り替え、さらに各色もカスタムできる
         // 背景色 / ユーザ名表示色 / ID表示色(同一インスタンス, 別インスタンス) / テキスト表示色 / 時刻表示色
-        case fontSize = "SETTINGS_WALLPAPER"
-        case wallPaper = "SETTINGS_FONTSIZE"
-        case tapToot = "SETTINGS_TAP_TOOT" // タップでその場で詳細表示、ダブルタップで別画面 / タップで別画面
+        case fontSize = "SETTINGS_FONTSIZE"
+        //case wallPaper = "SETTINGS_WALLPAPER"// 壁紙設定
     }
     private let controlList: [Control] = [.theme,
-                                          .fontSize,
-                                          .wallPaper,
-                                          .tapToot]
+                                          .fontSize]
     
     // 6.キャッシュ
     private enum Cache: String {
