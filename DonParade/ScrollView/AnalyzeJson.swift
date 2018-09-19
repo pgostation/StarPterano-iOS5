@@ -28,7 +28,6 @@ final class AnalyzeJson {
     }
     
     static func analyseJson(view: TimeLineView, model: TimeLineViewModel, json: [String: Any], acct: inout String) -> ContentData {
-        print("#### \(json)")
         if let account = json["account"] as? [String: Any] {
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)

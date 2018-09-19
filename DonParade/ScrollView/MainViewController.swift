@@ -54,6 +54,10 @@ final class MainViewController: MyViewController {
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
+        if let view = self.view as? MainView {
+            view.ltlButton.setTitle("LTL", for: .normal)
+            view.tlButton.setTitle("<TL>", for: .normal)
+        }
     }
     
     // LTLへの切り替え
@@ -76,6 +80,11 @@ final class MainViewController: MyViewController {
         // 一番下にタイムラインビューを入れる
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        
+        if let view = self.view as? MainView {
+            view.ltlButton.setTitle("<LTL>", for: .normal)
+            view.tlButton.setTitle("TL", for: .normal)
+        }
     }
     
     func swipeView(toRight: Bool) {
@@ -89,6 +98,17 @@ final class MainViewController: MyViewController {
             } else {
                 self.timelineViewController = TimeLineViewController(type: isLTL ? .local : .home)
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+            
+            if let view = self.view as? MainView {
+                if isLTL {
+                    view.ltlButton.setTitle("<LTL>", for: .normal)
+                    view.tlButton.setTitle("TL", for: .normal)
+                } else {
+                    view.ltlButton.setTitle("LTL", for: .normal)
+                    view.tlButton.setTitle("<TL>", for: .normal)
+                }
+                view.accountButton.setTitle(String(hostName.prefix(8)), for: .normal)
             }
         }
         

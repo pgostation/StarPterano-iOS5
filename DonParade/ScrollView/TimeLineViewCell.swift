@@ -14,8 +14,8 @@ final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
     static let selectedBgColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 1)
     static let sameAccountBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
-    static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.85, alpha: 1)
-    static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.88, alpha: 1)
+    static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
+    static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
     static let toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
     var id = ""
     
