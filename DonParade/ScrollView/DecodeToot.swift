@@ -104,6 +104,7 @@ final class DecodeToot {
         
         // リンクを追加
         for link in linkList {
+            if link.0.encodedOffset + link.2.count > attributedText.length { continue }
             attributedText.addAttribute(NSAttributedStringKey.link,
                                         value: link.1,
                                         range: NSRange(location: link.0.encodedOffset, length: link.2.count))

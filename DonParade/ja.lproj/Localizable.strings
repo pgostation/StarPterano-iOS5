@@ -46,6 +46,7 @@
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "マストドンのWebサイトへ";
+"SETTINGS_FAVORITELIST"= "お気に入りリスト";
 "SETTINGS_MUTELIST" = "ミュートリスト";
 "SETTINGS_BLOCKLIST" = "ブロックリスト";
 

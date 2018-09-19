@@ -15,7 +15,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
     var showGrowlCell = true // 過去遡り用セルを表示するかどうか
-    private var selectedIndexPath: IndexPath? = nil
+    var selectedIndexPath: IndexPath? = nil
     private var selectedAccountId: String?
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
@@ -41,14 +41,30 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // トゥートの追加
     func change(tableView: UITableView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData]) {
         DispatchQueue.main.async {
-            if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+            if self.list.count == 0 {
+                self.list = addList
+            } else if addList.count >= 2, let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+                // 前か後に付ければ良い
                 if date1 > date2 {
                     self.list = self.list + addList
                 } else {
                     self.list = addList + self.list
                 }
             } else {
-                self.list = addList + self.list
+                // すでにあるデータを更新する
+                for newContent in addList {
+                    var flag = false
+                    for (index, listData) in self.list.enumerated() {
+                        if listData.id == newContent.id {
+                            self.list[index] = newContent
+                            flag = true
+                            break
+                        }
+                    }
+                    if !flag {
+                        self.list.append(newContent)
+                    }
+                }
             }
             
             // アカウント情報を更新
@@ -193,10 +209,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
         cell.id = data.id ?? ""
         id = data.id ?? ""
-        cell.tableView = tableView
+        cell.tableView = tableView as? TimeLineView
         cell.indexPath = indexPath
         cell.accountId = account?.id
         cell.mensionsList = data.mentions
+        
+        cell.isFaved = (data.favourited == 1)
+        cell.isBoosted = (data.reblogged == 1)
         
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 2)
@@ -226,6 +245,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.replyButton = UIButton()
             cell.replyButton?.setTitle("↩︎", for: .normal)
             cell.replyButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.replyButton?.addTarget(cell, action: #selector(cell.replyAction), for: .touchUpInside)
             cell.addSubview(cell.replyButton!)
             
             // 返信された数
@@ -233,7 +253,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.repliedLabel!)
             if let replies_count = data.replies_count, replies_count > 0 {
                 cell.repliedLabel?.text = "\(replies_count)"
-                cell.repliedLabel?.font = UIFont.systemFont(ofSize: 16)
+                cell.repliedLabel?.font = UIFont.systemFont(ofSize: 14)
             }
             
             // ブーストボタン
@@ -242,8 +262,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if data.reblogged == 1 {
                 cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
             } else {
-                cell.boostButton?.setTitleColor(UIColor.darkGray, for: .normal)
+                cell.boostButton?.setTitleColor(UIColor.gray, for: .normal)
             }
+            cell.boostButton?.addTarget(cell, action: #selector(cell.boostAction), for: .touchUpInside)
             cell.addSubview(cell.boostButton!)
             
             // ブーストされた数
@@ -251,7 +272,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostedLabel!)
             if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
                 cell.boostedLabel?.text = "\(reblogs_count)"
-                cell.boostedLabel?.font = UIFont.systemFont(ofSize: 16)
+                cell.boostedLabel?.font = UIFont.systemFont(ofSize: 14)
             }
             
             // お気に入りボタン
@@ -260,8 +281,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if data.favourited == 1 {
                 cell.favoriteButton?.setTitleColor(UIColor.blue, for: .normal)
             } else {
-                cell.favoriteButton?.setTitleColor(UIColor.darkGray, for: .normal)
+                cell.favoriteButton?.setTitleColor(UIColor.gray, for: .normal)
             }
+            cell.favoriteButton?.addTarget(cell, action: #selector(cell.favoriteAction), for: .touchUpInside)
             cell.addSubview(cell.favoriteButton!)
             
             // お気に入りされた数
@@ -269,13 +291,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.favoritedLabel!)
             if let favourites_count = data.favourites_count, favourites_count > 0 {
                 cell.favoritedLabel?.text = "\(favourites_count)"
-                cell.favoritedLabel?.font = UIFont.systemFont(ofSize: 16)
+                cell.favoritedLabel?.font = UIFont.systemFont(ofSize: 14)
             }
             
             // 詳細ボタン
             cell.detailButton = UIButton()
             cell.detailButton?.setTitle("…", for: .normal)
             cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.detailButton?.addTarget(cell, action: #selector(cell.detailAction), for: .touchUpInside)
             cell.addSubview(cell.detailButton!)
         } else {
             setCellColor(cell: cell)

@@ -16,7 +16,7 @@ final class TimeLineViewCell: UITableViewCell {
     static let sameAccountBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
     static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.85, alpha: 1)
     static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.88, alpha: 1)
-    static let toMentionBgColor = UIColor(red: 0.88, green: 0.88, blue: 1.00, alpha: 1)
+    static let toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
     var id = ""
     
     // 基本ビュー
@@ -42,12 +42,15 @@ final class TimeLineViewCell: UITableViewCell {
     var favoritedLabel: UILabel?
     var detailButton: UIButton?
     
-    weak var tableView: UITableView?
+    weak var tableView: TimeLineView?
     var indexPath: IndexPath?
     var date: Date
     var timer: Timer?
     var accountId: String?
     var mensionsList: [AnalyzeJson.MensionData]?
+    
+    var isFaved = false
+    var isBoosted = false
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -130,6 +133,30 @@ final class TimeLineViewCell: UITableViewCell {
                 accountTimeLineViewController.view.frame.origin.x = 0
             }
         }
+    }
+    
+    // リプライボタンをタップした時の処理
+    @objc func replyAction() {
+    
+    }
+    
+    // ブーストボタンをタップした時の処理
+    @objc func boostAction() {
+        self.boostButton?.isHidden = true
+        
+        tableView?.boostAction(id: self.id, isBoosted: self.isBoosted)
+    }
+    
+    // お気に入りボタンをタップした時の処理
+    @objc func favoriteAction() {
+        self.favoriteButton?.isHidden = true
+        
+        tableView?.favoriteAction(id: self.id, isFaved: self.isFaved)
+    }
+    
+    // 「・・・」ボタンをタップした時の処理
+    @objc func detailAction() {
+        
     }
     
     // 日時表示を更新

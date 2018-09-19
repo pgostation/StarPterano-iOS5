@@ -29,6 +29,20 @@ final class MastodonRequest {
     static func post(url: URL, body: Dictionary<String, String>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
         var request: URLRequest = URLRequest(url: url)
         
+        guard let accessToken = SettingsData.accessToken else { return }
+        
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+        
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    // POSTメソッド (アクセストークンなし、認証前に使う)
+    static func firstPost(url: URL, body: Dictionary<String, String>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)

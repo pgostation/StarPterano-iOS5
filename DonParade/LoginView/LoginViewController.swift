@@ -40,7 +40,7 @@ final class LoginViewController: MyViewController {
                                       "scopes": "read write follow"]
         
         // クライアント認証POST
-        try? MastodonRequest.post(url: registerUrl, body: body) { (data, response, error) in
+        try? MastodonRequest.firstPost(url: registerUrl, body: body) { (data, response, error) in
             if let data = data {
                 do {
                     self.responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>
@@ -101,7 +101,7 @@ final class LoginViewController: MyViewController {
                                       "code": "\(oauthCode)"]
         
         // クライアント認証POST
-        try? MastodonRequest.post(url: registerUrl, body: body) { (data, response, error) in
+        try? MastodonRequest.firstPost(url: registerUrl, body: body) { (data, response, error) in
             if let data = data {
                 do {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Dictionary<String, AnyObject>

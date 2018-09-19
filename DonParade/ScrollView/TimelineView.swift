@@ -42,6 +42,7 @@ final class TimeLineView: UITableView {
             // 会話表示
             self.model.showGrowlCell = false
             self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
+            self.model.selectedIndexPath = IndexPath(row: 0, section: 0)
             DispatchQueue.main.async {
                 // 古い物を取りに行く
                 self.refresh()
@@ -106,12 +107,12 @@ final class TimeLineView: UITableView {
                         let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
                         strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
+                        
+                        // 続きを取得
                         DispatchQueue.main.async {
                             strongSelf.refresh()
                         }
                     }
-                    
-                    
                 } catch {
                 }
             } else if let error = error {
@@ -169,6 +170,64 @@ final class TimeLineView: UITableView {
                 }
             } else if let error = error {
                 print(error)
+            }
+        }
+    }
+    
+    // お気に入りにする/解除する
+    func favoriteAction(id: String, isFaved: Bool) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url: URL
+        if isFaved {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unfavourite")!
+        } else {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/favourite")!
+        }
+        
+        try? MastodonRequest.post(url: url, body: [:]) { [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
+                    }
+                } catch {
+                    
+                }
+            }
+        }
+    }
+    
+    // ブーストする/解除する
+    func boostAction(id: String, isBoosted: Bool) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url: URL
+        if isBoosted {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unreblog")!
+        } else {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/reblog")!
+        }
+        
+        try? MastodonRequest.post(url: url, body: [:]) { [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
+                    }
+                } catch {
+                    
+                }
             }
         }
     }

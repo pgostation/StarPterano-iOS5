@@ -46,6 +46,7 @@
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "Your Mastodon page";
+"SETTINGS_FAVORITELIST"= "Favorite list";
 "SETTINGS_MUTELIST" = "Mute list";
 "SETTINGS_BLOCKLIST" = "Block list";
 
