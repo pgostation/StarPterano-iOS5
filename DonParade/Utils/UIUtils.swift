@@ -34,4 +34,19 @@ final class UIUtils {
     static func statusBarHeight() -> CGFloat {
         return UIApplication.shared.statusBarFrame.height
     }
+    
+    // 最前面のViewControllerを取得
+    static func getFrontViewController() -> UIViewController? {
+        var viewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
+        
+        while let vc = viewController?.presentedViewController {
+            if vc is MyViewController {
+                viewController = vc
+            } else {
+                break
+            }
+        }
+        
+        return viewController
+    }
 }

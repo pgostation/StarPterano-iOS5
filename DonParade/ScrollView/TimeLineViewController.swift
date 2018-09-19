@@ -25,10 +25,12 @@ final class TimeLineViewController: MyViewController {
     
     private let type: TimeLineType
     private let option: String? // user指定時はユーザID、タグ指定時はタグ
+    private let mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? // typeに.mensions指定時のみ有効
     
-    init(type: TimeLineType, option: String? = nil) {
+    init(type: TimeLineType, option: String? = nil, mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? = nil) {
         self.type = type
         self.option = option
+        self.mensions = mensions
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,7 +41,7 @@ final class TimeLineViewController: MyViewController {
     
     override func loadView() {
         if self.type == .user || self.type == .mensions {
-            let view = TimeLineView(type: self.type, option: self.option)
+            let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
             self.view = view
                 
             let closeButton = UIButton()
@@ -53,12 +55,20 @@ final class TimeLineViewController: MyViewController {
             closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
             self.view?.addSubview(closeButton)
         } else {
-            let view = TimeLineView(type: self.type, option: self.option)
+            let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
             self.view = view
         }
     }
     
     @objc func closeAction() {
-        self.dismiss(animated: true, completion: nil)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                     y: 0,
+                                     width: UIScreen.main.bounds.width,
+                                     height: UIScreen.main.bounds.height)
+        }, completion: { _ in
+            self.removeFromParentViewController()
+            self.view.removeFromSuperview()
+        })
     }
 }

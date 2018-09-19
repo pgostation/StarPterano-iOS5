@@ -16,6 +16,7 @@ final class TimeLineViewCell: UITableViewCell {
     static let sameAccountBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
     static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.85, alpha: 1)
     static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.88, alpha: 1)
+    static let toMentionBgColor = UIColor(red: 0.88, green: 0.88, blue: 1.00, alpha: 1)
     var id = ""
     
     // 基本ビュー
@@ -46,6 +47,7 @@ final class TimeLineViewCell: UITableViewCell {
     var date: Date
     var timer: Timer?
     var accountId: String?
+    var mensionsList: [AnalyzeJson.MensionData]?
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -118,8 +120,15 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func tapAccountAction() {
         if let accountId = self.accountId {
             let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
-            accountTimeLineViewController.modalTransitionStyle = UIModalTransitionStyle.partialCurl;
-            MainViewController.instance?.present(accountTimeLineViewController, animated: true, completion: nil)
+            MainViewController.instance?.addChildViewController(accountTimeLineViewController)
+            MainViewController.instance?.view.addSubview(accountTimeLineViewController.view)
+            accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                              y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height)
+            UIView.animate(withDuration: 0.3) {
+                accountTimeLineViewController.view.frame.origin.x = 0
+            }
         }
     }
     

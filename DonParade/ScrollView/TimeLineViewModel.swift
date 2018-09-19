@@ -14,7 +14,7 @@ import SafariServices
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
-    private var showGrowlCell = true // 過去遡り用セルを表示するかどうか
+    var showGrowlCell = true // 過去遡り用セルを表示するかどうか
     private var selectedIndexPath: IndexPath? = nil
     private var selectedAccountId: String?
     private var inReplyToTootId: String?
@@ -31,6 +31,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // 一番新しいトゥートのID
     func getFirstTootId() -> String? {
         return list.first?.id
+    }
+    
+    // 一番古いトゥートのin_reply_to_id
+    func getLastInReplyToId() -> String? {
+        return list.last?.in_reply_to_id
     }
     
     // トゥートの追加
@@ -191,6 +196,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.tableView = tableView
         cell.indexPath = indexPath
         cell.accountId = account?.id
+        cell.mensionsList = data.mentions
         
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 2)
@@ -336,6 +342,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルの色を設定
     private func setCellColor(cell: TimeLineViewCell) {
+        func mensionContains(selectedAccountId: String?, mensions: [AnalyzeJson.MensionData]?) -> Bool {
+            guard let selectedAccountId = selectedAccountId else { return false }
+            guard let mensions = mensions else { return false }
+            for mension in mensions {
+                if selectedAccountId == mension.id {
+                    return true
+                }
+            }
+            return false
+        }
+        
         if self.selectedIndexPath != nil && self.selectedIndexPath?.row == cell.indexPath?.row {
             // 選択色
             cell.backgroundColor = TimeLineViewCell.selectedBgColor
@@ -364,6 +381,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
             cell.idLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
             cell.dateLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
+        } else if mensionContains(selectedAccountId: self.selectedAccountId, mensions: cell.mensionsList) {
+            // メンションが選択中アカウントの場合の色
+            cell.backgroundColor = TimeLineViewCell.toMentionBgColor
+            cell.messageView?.backgroundColor = TimeLineViewCell.toMentionBgColor
+            cell.nameLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
+            cell.idLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
+            cell.dateLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
         } else {
             // 通常色
             cell.backgroundColor = TimeLineViewCell.bgColor
@@ -407,9 +431,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if SettingsData.tapDetailMode || self.selectedIndexPath?.row == indexPath.row {
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
-            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mensions, option: data.id)
-            viewController.modalTransitionStyle = UIModalTransitionStyle.partialCurl;
-            MainViewController.instance?.present(viewController, animated: true, completion: nil)
+            let mensionsData = getMensionsData(data: data)
+            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mensions, option: nil, mensions: (mensionsData, accountList))
+            MainViewController.instance?.addChildViewController(viewController)
+            MainViewController.instance?.view.addSubview(viewController.view)
+            viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                              y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height)
+            UIView.animate(withDuration: 0.3) {
+                viewController.view.frame.origin.x = 0
+            }
             
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
@@ -434,6 +466,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             tableView.reloadRows(at: indexPaths, with: UITableViewRowAnimation.none)
         }
+    }
+    
+    // 会話部分のデータを取り出す
+    private func getMensionsData(data: AnalyzeJson.ContentData) -> [AnalyzeJson.ContentData] {
+        var mensionContents: [AnalyzeJson.ContentData] = [data]
+        
+        var in_reply_to_id = data.in_reply_to_id
+        for listData in self.list {
+            if listData.id == in_reply_to_id {
+                mensionContents.append(listData)
+                in_reply_to_id = listData.in_reply_to_id
+                if in_reply_to_id == nil { break }
+            }
+        }
+        
+        return mensionContents
     }
     
     // UITextViewのリンクタップ時の処理

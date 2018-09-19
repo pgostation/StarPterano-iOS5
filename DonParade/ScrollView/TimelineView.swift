@@ -18,7 +18,7 @@ final class TimeLineView: UITableView {
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
-    init(type: TimeLineViewController.TimeLineType, option: String?, mensions: [String]? = nil) {
+    init(type: TimeLineViewController.TimeLineType, option: String?, mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])?) {
         self.type = type
         self.option = option
         
@@ -37,6 +37,14 @@ final class TimeLineView: UITableView {
                 self.refreshControl = self.refreshCon
             } else {
                 self.backgroundView = self.refreshCon
+            }
+        } else {
+            // 会話表示
+            self.model.showGrowlCell = false
+            self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
+            DispatchQueue.main.async {
+                // 古い物を取りに行く
+                self.refresh()
             }
         }
     }
@@ -76,7 +84,8 @@ final class TimeLineView: UITableView {
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=200\(sinceIdStr)")
         case .mensions:
-            return //#### 工事中
+            guard let lastInReplyToId = model.getLastInReplyToId() else { return }
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
         }
         
         guard let requestUrl = url else { return }
@@ -86,15 +95,23 @@ final class TimeLineView: UITableView {
             
             if let data = data {
                 do {
-                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject>
-                    
                     DispatchQueue.main.async {
                         self?.refreshCon.endRefreshing()
                     }
                     
-                    if let responseJson = responseJson {
-                        AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
+                        AnalyzeJson.analyseJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
+                    } else if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
+                        DispatchQueue.main.async {
+                            strongSelf.refresh()
+                        }
                     }
+                    
+                    
                 } catch {
                 }
             } else if let error = error {
@@ -146,7 +163,7 @@ final class TimeLineView: UITableView {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject>
                     
                     if let responseJson = responseJson {
-                        AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
+                        AnalyzeJson.analyseJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
                     }
                 } catch {
                 }

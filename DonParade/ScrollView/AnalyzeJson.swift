@@ -12,104 +12,115 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyseJson(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject]) {
+    static func analyseJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject]) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
         for json in jsonList {
             guard let json = json as? [String: Any] else { continue }
             
-            if let account = json["account"] as? [String: Any] {
-                acct = account["acct"] as? String ?? ""
-                let data = analyzeAccountJson(account: account)
-                view.accountList.updateValue(data, forKey: acct)
-            }
-            let reblog = json["reblog"] as? [String: Any]
-            var reblog_acct: String? = nil
-            if let account = reblog?["account"] as? [String: Any] {
-                reblog_acct = acct
-                acct = account["acct"] as? String ?? ""
-                let data = analyzeAccountJson(account: account)
-                view.accountList.updateValue(data, forKey: acct)
-            }
-            var mediaData: [MediaData]? = nil
-            if let media_attachments = json["media_attachments"] as? [[String: Any]] {
-                for media_attachment in media_attachments {
-                    let id = media_attachment["id"] as? Int64
-                    let preview_url = media_attachment["preview_url"] as? String
-                    let url = media_attachment["url"] as? String
-                    let type = media_attachment["type"] as? String
-                    
-                    let data = MediaData(id: id,
-                                         preview_url: preview_url,
-                                         type: type,
-                                         url: url)
-                    if mediaData == nil {
-                        mediaData = []
-                    }
-                    mediaData?.append(data)
-                }
-            }
-            var mentions: MensionsData? = nil
-            if let mentionsJson = json["mentions"] as? [String: Any] {
-                let acct = mentionsJson["acct"] as? String
-                let id = mentionsJson["id"] as? String
-                let url = mentionsJson["url"] as? String
-                let username = mentionsJson["username"] as? String
-                
-                let data = MensionsData(acct: acct,
-                                        id: id,
-                                        url: url,
-                                        username: username)
-                mentions = data
-            }
-            let content = json["content"] as? String
-            let created_at = json["created_at"] as? String
-            let emojis = json["emojis"] as? [[String: Any]]
-            let favourited = json["favourited"] as? Int
-            let favourites_count = json["favourites_count"] as? Int
-            let id = json["id"] as? String
-            let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
-            let in_reply_to_id = json["in_reply_to_id"] as? String
-            let language = json["language"] as? String
-            let muted = json["muted"] as? Int
-            let reblogged = json["reblogged"] as? Int
-            let reblogs_count = json["reblogs_count"] as? Int
-            let replies_count = json["replies_count"] as? Int
-            let sensitive = json["sensitive"] as? Int
-            let spoiler_text = json["spoiler_text"] as? String
-            let tags = json["tags"] as? [String]
-            let uri = json["uri"] as? String
-            let url = json["url"] as? String
-            let visibility = json["visibility"] as? String
+            let data = analyseJson(view: view, model: model, json: json, acct: &acct)
             
-            let data = ContentData(accountId: acct,
-                                   content: content,
-                                   created_at: created_at,
-                                   emojis: emojis,
-                                   favourited: favourited,
-                                   favourites_count: favourites_count,
-                                   id: id,
-                                   in_reply_to_account_id: in_reply_to_account_id,
-                                   in_reply_to_id: in_reply_to_id,
-                                   language: language,
-                                   mediaData: mediaData,
-                                   mentions: mentions,
-                                   muted: muted,
-                                   reblog_acct: reblog_acct,
-                                   reblogged: reblogged,
-                                   reblogs_count: reblogs_count,
-                                   replies_count: replies_count,
-                                   sensitive: sensitive,
-                                   spoiler_text: spoiler_text,
-                                   tags: tags,
-                                   uri: uri,
-                                   url: url,
-                                   visibility: visibility)
             contentList.append(data)
         }
         
         model.change(tableView: view, addList: contentList, accountList: view.accountList)
+    }
+    
+    static func analyseJson(view: TimeLineView, model: TimeLineViewModel, json: [String: Any], acct: inout String) -> ContentData {
+        if let account = json["account"] as? [String: Any] {
+            acct = account["acct"] as? String ?? ""
+            let data = analyzeAccountJson(account: account)
+            view.accountList.updateValue(data, forKey: acct)
+        }
+        let reblog = json["reblog"] as? [String: Any]
+        var reblog_acct: String? = nil
+        if let account = reblog?["account"] as? [String: Any] {
+            reblog_acct = acct
+            acct = account["acct"] as? String ?? ""
+            let data = analyzeAccountJson(account: account)
+            view.accountList.updateValue(data, forKey: acct)
+        }
+        var mediaData: [MediaData]? = nil
+        if let media_attachments = json["media_attachments"] as? [[String: Any]] {
+            for media_attachment in media_attachments {
+                let id = media_attachment["id"] as? Int64
+                let preview_url = media_attachment["preview_url"] as? String
+                let url = media_attachment["url"] as? String
+                let type = media_attachment["type"] as? String
+                
+                let data = MediaData(id: id,
+                                     preview_url: preview_url,
+                                     type: type,
+                                     url: url)
+                if mediaData == nil {
+                    mediaData = []
+                }
+                mediaData?.append(data)
+            }
+        }
+        var mentions: [MensionData]? = nil
+        if let mentionsJson = json["mentions"] as? [[String: Any]] {
+            for json in mentionsJson {
+                let acct = json["acct"] as? String
+                let id = json["id"] as? String
+                let url = json["url"] as? String
+                let username = json["username"] as? String
+                
+                let data = MensionData(acct: acct,
+                                       id: id,
+                                       url: url,
+                                       username: username)
+                if mentions == nil {
+                    mentions = []
+                }
+                mentions?.append(data)
+            }
+        }
+        let content = json["content"] as? String
+        let created_at = json["created_at"] as? String
+        let emojis = json["emojis"] as? [[String: Any]]
+        let favourited = json["favourited"] as? Int
+        let favourites_count = json["favourites_count"] as? Int
+        let id = json["id"] as? String
+        let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
+        let in_reply_to_id = json["in_reply_to_id"] as? String
+        let language = json["language"] as? String
+        let muted = json["muted"] as? Int
+        let reblogged = json["reblogged"] as? Int
+        let reblogs_count = json["reblogs_count"] as? Int
+        let replies_count = json["replies_count"] as? Int
+        let sensitive = json["sensitive"] as? Int
+        let spoiler_text = json["spoiler_text"] as? String
+        let tags = json["tags"] as? [String]
+        let uri = json["uri"] as? String
+        let url = json["url"] as? String
+        let visibility = json["visibility"] as? String
+        
+        let data = ContentData(accountId: acct,
+                               content: content,
+                               created_at: created_at,
+                               emojis: emojis,
+                               favourited: favourited,
+                               favourites_count: favourites_count,
+                               id: id,
+                               in_reply_to_account_id: in_reply_to_account_id,
+                               in_reply_to_id: in_reply_to_id,
+                               language: language,
+                               mediaData: mediaData,
+                               mentions: mentions,
+                               muted: muted,
+                               reblog_acct: reblog_acct,
+                               reblogged: reblogged,
+                               reblogs_count: reblogs_count,
+                               replies_count: replies_count,
+                               sensitive: sensitive,
+                               spoiler_text: spoiler_text,
+                               tags: tags,
+                               uri: uri,
+                               url: url,
+                               visibility: visibility)
+        return data
     }
     
     static func analyzeAccountJson(account: [String: Any]) -> AccountData {
@@ -188,7 +199,7 @@ final class AnalyzeJson {
         let in_reply_to_id: String?
         let language: String?
         let mediaData: [MediaData]?
-        let mentions: MensionsData?
+        let mentions: [MensionData]?
         let muted: Int?
         let reblog_acct: String?
         let reblogged: Int?
@@ -210,7 +221,8 @@ final class AnalyzeJson {
         let url: String?
     }
     
-    struct MensionsData {
+    // メンション
+    struct MensionData {
         let acct: String?
         let id: String? // 数値のID
         let url: String?
