@@ -24,6 +24,8 @@ final class MainViewController: MyViewController {
         view.tlButton.addTarget(self, action: #selector(tlAction(_:)), for: .touchUpInside)
         view.ltlButton.addTarget(self, action: #selector(ltlAction(_:)), for: .touchUpInside)
         
+        view.tootButton.addTarget(self, action: #selector(tootAction(_:)), for: .touchUpInside)
+        
         view.accountButton.addTarget(self, action: #selector(accountAction(_:)), for: .touchUpInside)
         
         // 起動時はTLを表示する
@@ -166,12 +168,29 @@ final class MainViewController: MyViewController {
         let settingsViewController = SettingsViewController()
         self.present(settingsViewController, animated: true, completion: nil)
     }
+    
+    // トゥート画面を開く
+    @objc func tootAction(_ sender: UIButton?) {
+        let tootViewController = TootViewController()
+        tootViewController.modalPresentationStyle = .overCurrentContext
+        tootViewController.view.backgroundColor = UIColor.clear
+        self.present(tootViewController, animated: false, completion: nil)
+    }
 }
 
 private final class MainView: UIView {
+    // 左下
     let tlButton = UIButton()
     let ltlButton = UIButton()
     
+    // 中央下
+    let tootButton = UIButton()
+    
+    // 右下
+    let listButton = UIButton()
+    let notificationsButton = UIButton()
+    
+    // 右上
     let accountButton = UIButton()
     
     init() {
@@ -179,6 +198,9 @@ private final class MainView: UIView {
         
         self.addSubview(tlButton)
         self.addSubview(ltlButton)
+        self.addSubview(tootButton)
+        self.addSubview(listButton)
+        self.addSubview(notificationsButton)
         self.addSubview(accountButton)
         
         setProperties()
@@ -199,9 +221,25 @@ private final class MainView: UIView {
         ltlButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         ltlButton.setTitleColor(UIColor.blue, for: .normal)
         
+        tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        tootButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
+        tootButton.setTitleColor(UIColor.blue, for: .normal)
+        tootButton.clipsToBounds = true
+        tootButton.layer.cornerRadius = 20
+        
+        listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
+        listButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
+        listButton.setTitleColor(UIColor.blue, for: .normal)
+        
+        notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
+        notificationsButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
+        notificationsButton.setTitleColor(UIColor.blue, for: .normal)
+        
         accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
         accountButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         accountButton.setTitleColor(UIColor.blue, for: .normal)
+        accountButton.clipsToBounds = true
+        accountButton.layer.cornerRadius = 10
     }
     
     override func layoutSubviews() {
@@ -219,6 +257,21 @@ private final class MainView: UIView {
                                  y: screenBounds.height - 50 - bottomOffset,
                                  width: buttonWidth,
                                  height: buttonHeight)
+        
+        tootButton.frame = CGRect(x: screenBounds.width / 2 - 70 / 2,
+                                  y: screenBounds.height - 70 - bottomOffset,
+                                  width: 70,
+                                  height: 70)
+        
+        listButton.frame = CGRect(x: screenBounds.width - buttonWidth,
+                                  y: screenBounds.height - 100 - bottomOffset,
+                                  width: buttonWidth,
+                                  height: buttonHeight)
+        
+        notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth,
+                                           y: screenBounds.height - 50 - bottomOffset,
+                                           width: buttonWidth,
+                                           height: buttonHeight)
         
         accountButton.frame = CGRect(x: screenBounds.width - 60,
                                      y: 30 + bottomOffset / 2,

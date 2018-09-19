@@ -17,6 +17,9 @@
 // タイムライン
 "BUTTON_TL" = "TL";
 "BUTTON_LTL" = "LTL";
+"BUTTON_TOOT" = "Toot!";
+"BUTTON_LIST" = "リスト";
+"BUTTON_NOTIFY" = "通知";
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";
 "ACTION_OPEN_WITH_SAFARI" = "Safariで開く";

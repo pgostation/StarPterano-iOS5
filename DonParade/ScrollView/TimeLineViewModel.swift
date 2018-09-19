@@ -65,7 +65,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         }
                     }
                     if !flag {
-                        self.list.append(newContent)
+                        self.list.insert(newContent, at: 0)
                     }
                 }
             }
