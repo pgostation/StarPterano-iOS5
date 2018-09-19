@@ -324,9 +324,10 @@ final class TimeLineViewCell: UITableViewCell {
                                               width: 40,
                                               height: 40)
             
-            self.applicationLabel?.frame = CGRect(x: 265,
+            let applicationLabelWidth = max(80, screenBounds.width - 270)
+            self.applicationLabel?.frame = CGRect(x: screenBounds.width - applicationLabelWidth,
                                                   y: top - 5,
-                                                  width: screenBounds.width - 270,
+                                                  width: applicationLabelWidth,
                                                   height: 20)
         }
     }

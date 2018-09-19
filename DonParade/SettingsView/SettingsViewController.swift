@@ -9,14 +9,19 @@
 import UIKit
 
 final class SettingsViewController: MyViewController {
+    static weak var instance: SettingsViewController?
+    
     override func viewDidLoad() {
-        self.view.backgroundColor = UIColor.lightGray
+        SettingsViewController.instance = self
+        
+        self.view.backgroundColor = TimeLineViewCell.selectedBgColor
         
         let view = SettingsView()
         self.view.addSubview(view)
         
         let closeButton = UIButton()
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
+        closeButton.setTitleColor(UIColor.darkGray, for: .normal)
         closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         closeButton.frame = CGRect(x: 10,
                                    y: UIUtils.statusBarHeight() + 3,
@@ -26,7 +31,17 @@ final class SettingsViewController: MyViewController {
     }
     
     @objc func closeAction() {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: {
+            // 一度メイン画面も閉じる
+            MainViewController.instance?.dismiss(animated: false, completion: nil)
+            
+            // 改めてメイン画面を開く
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                let mainViewController = MainViewController()
+                UIUtils.getFrontViewController()?.present(mainViewController, animated: false, completion: nil)
+            }
+        })
+        
     }
 }
 

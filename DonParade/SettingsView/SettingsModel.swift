@@ -33,10 +33,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 2.アカウントごとの設定
     private enum AccountSettings: String {
         case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
-        case accountBUttonView = "SETTINGS_ACCOUNT_BUTTON_VIEW"
+        case accountButtonView = "SETTINGS_ACCOUNT_BUTTON_VIEW"
     }
     private let accountSettingsList: [AccountSettings] = [.tootProtectDefault,
-                                                          .accountBUttonView]
+                                                          .accountButtonView]
     
     // 3.アカウントの追加と削除
     private enum Account: String {
@@ -102,7 +102,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return SettingsData.accountList.count
         case 1:
             return accountSettingsList.count
         case 2:
@@ -126,10 +126,17 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
         
+        cell.accessoryType = .none
+        
         var title = ""
         switch indexPath.section {
         case 0:
-            title = "#### test"
+            let data = SettingsData.accountList[indexPath.row]
+            title = data.0.replacingOccurrences(of: "https://", with: "") + " " + (SettingsData.accountUsername(accessToken: data.1) ?? "")
+            
+            if SettingsData.hostName == data.0 && SettingsData.accessToken == data.1 {
+                cell.accessoryType = .checkmark
+            }
         case 1:
             title = I18n.get(accountSettingsList[indexPath.row].rawValue)
         case 2:
@@ -149,5 +156,51 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         cell.textLabel?.text = title
         
         return cell
+    }
+    
+    // セルを選択
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            let data = SettingsData.accountList[indexPath.row]
+            SettingsData.hostName = data.0
+            SettingsData.accessToken = data.1
+            tableView.reloadData()
+        case 1:
+            switch accountSettingsList[indexPath.row] {
+            case .accountButtonView:
+                break
+            case .tootProtectDefault:
+                break
+            }
+        case 2:
+            switch accountList[indexPath.row] {
+            case .add:
+                SettingsViewController.instance?.dismiss(animated: false, completion: nil)
+                MainViewController.instance?.dismiss(animated: false, completion: nil)
+                
+                // ログイン画面を表示
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if let vc = UIUtils.getFrontViewController() as? LoginViewController {
+                        (vc.view as? LoginView)?.reset()
+                    } else {
+                        let loginViewController = LoginViewController()
+                        UIUtils.getFrontViewController()?.present(loginViewController, animated: false, completion: nil)
+                    }
+                }
+            case .remove:
+                break
+            }
+        case 3:
+            break
+        case 4:
+            break
+        case 5:
+            break
+        case 6:
+            break
+        default:
+            break
+        }
     }
 }

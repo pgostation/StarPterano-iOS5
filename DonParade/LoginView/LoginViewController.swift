@@ -123,7 +123,7 @@ final class LoginViewController: MyViewController {
     }
 }
 
-private final class LoginView: UIView {
+final class LoginView: UIView {
     let hostField = UITextField()
     let authButton = UIButton()
     let inputCodeField = UITextField()
@@ -205,5 +205,13 @@ private final class LoginView: UIView {
             self.inputCodeField.isHidden = false
             self.codeEnterButton.isHidden = false
         }
+    }
+    
+    // 初期状態に戻す
+    func reset() {
+        self.hostField.isHidden = false
+        self.authButton.isHidden = false
+        self.inputCodeField.isHidden = true
+        self.codeEnterButton.isHidden = true
     }
 }

@@ -36,13 +36,18 @@
 
 // 設定画面(カテゴリ)
 "SETTINGS_SELECT_ACCOUNT" = "Change account";
-"SETTINGS_ACCOUNT" = "Account settings";
+"SETTINGS_ACCOUNT_SETTINGS" = "Account settings";
+"SETTINGS_ACCOUNT" = "Add and remove account";
 "SETTINGS_MASTODON" = "Mastodon settings";
 "SETTINGS_CONTROL" = "Control settings";
 "SETTINGS_CACHE" = "Cache";
 "SETTINGS_OTHER" = "Other";
 
 // 設定画面(アカウント設定)
+"SETTINGS_TOOT_PROTECT_DEFAULT" = "Default protect mode";
+"SETTINGS_ACCOUNT_BUTTON_VIEW" = "Account button view";
+
+// 設定画面(アカウントの追加と削除)
 "SETTINGS_ADD_ACCOUNT" = "Add account";
 "SETTINGS_REMOVE_ACCOUNT" = "Remove account";
 
@@ -62,6 +67,7 @@
 "SETTINGS_SHOW_ICONS" = "Show icons";
 
 // 設定画面(その他)
+"SETTINGS_SEARCH" = "Search in timeline";
 "SETTINGS_PRIVACY_POLICY" = "Privacy policy";
 "SETTINGS_LICENSE" = "Licenses";
 "SETTINGS_VERSION" = "Version";
