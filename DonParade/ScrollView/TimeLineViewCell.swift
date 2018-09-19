@@ -41,6 +41,7 @@ final class TimeLineViewCell: UITableViewCell {
     var favoriteButton: UIButton?
     var favoritedLabel: UILabel?
     var detailButton: UIButton?
+    var applicationLabel: UILabel?
     
     weak var tableView: TimeLineView?
     var indexPath: IndexPath?
@@ -288,6 +289,11 @@ final class TimeLineViewCell: UITableViewCell {
                                               y: top,
                                               width: 40,
                                               height: 40)
+            
+            self.applicationLabel?.frame = CGRect(x: 265,
+                                                  y: top - 5,
+                                                  width: screenBounds.width - 270,
+                                                  height: 20)
         }
     }
 }

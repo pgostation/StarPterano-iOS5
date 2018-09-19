@@ -28,6 +28,7 @@ final class AnalyzeJson {
     }
     
     static func analyseJson(view: TimeLineView, model: TimeLineViewModel, json: [String: Any], acct: inout String) -> ContentData {
+        print("#### \(json)")
         if let account = json["account"] as? [String: Any] {
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)
@@ -77,6 +78,7 @@ final class AnalyzeJson {
                 mentions?.append(data)
             }
         }
+        let application = json["application"] as? [String: Any]
         let content = json["content"] as? String
         let created_at = json["created_at"] as? String
         let emojis = json["emojis"] as? [[String: Any]]
@@ -98,6 +100,7 @@ final class AnalyzeJson {
         let visibility = json["visibility"] as? String
         
         let data = ContentData(accountId: acct,
+                               application: application,
                                content: content,
                                created_at: created_at,
                                emojis: emojis,
@@ -189,6 +192,7 @@ final class AnalyzeJson {
     // トゥート内容
     struct ContentData {
         let accountId: String
+        let application: [String: Any]?
         let content: String?
         let created_at: String?
         let emojis: [[String: Any]]?

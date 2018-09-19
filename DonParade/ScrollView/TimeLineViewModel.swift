@@ -300,6 +300,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
             cell.detailButton?.addTarget(cell, action: #selector(cell.detailAction), for: .touchUpInside)
             cell.addSubview(cell.detailButton!)
+            
+            // 使用アプリケーション
+            if let application = data.application {
+                cell.applicationLabel = UILabel()
+                cell.addSubview(cell.applicationLabel!)
+                cell.applicationLabel?.text = "\(application["name"] ?? "")"
+                cell.applicationLabel?.textColor = UIColor.gray
+                cell.applicationLabel?.textAlignment = .right
+                cell.applicationLabel?.adjustsFontSizeToFitWidth = true
+                cell.applicationLabel?.font = UIFont.systemFont(ofSize: 12)
+            }
         } else {
             setCellColor(cell: cell)
         }
@@ -443,6 +454,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.favoriteButton?.removeFromSuperview()
             cell.favoritedLabel?.removeFromSuperview()
             cell.detailButton?.removeFromSuperview()
+            cell.applicationLabel?.removeFromSuperview()
         }
         cell.iconView.image = nil
         
