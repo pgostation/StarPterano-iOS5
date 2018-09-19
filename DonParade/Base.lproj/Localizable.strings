@@ -25,6 +25,7 @@
 "DATETIME_%D_SECS_AGO" = "%ds";
 "DATETIME_%D_MINS_AGO" = "%dm";
 "DATETIME_%D_HOURS_AGO" = "%dh";
+"DATETIME_%D_HOURS_HALF_AGO" = "%d.5h";
 "DATETIME_%D_DAYS_AGO" = "%dd";
 "DATETIME_%D_YEARS_AGO" = "%dy";
 

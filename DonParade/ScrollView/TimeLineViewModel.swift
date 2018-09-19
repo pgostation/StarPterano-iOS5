@@ -208,12 +208,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         if self.selectedIndexPath?.row == cell.indexPath?.row { continue }
                         
                         if self.selectedAccountId == cell.accountId {
+                            // 関連色
                             cell.backgroundColor = TimeLineViewCell.relatedBgColor
                             cell.messageView?.backgroundColor = TimeLineViewCell.relatedBgColor
                             cell.nameLabel.backgroundColor = TimeLineViewCell.relatedBgColor
                             cell.idLabel.backgroundColor = TimeLineViewCell.relatedBgColor
                             cell.dateLabel.backgroundColor = TimeLineViewCell.relatedBgColor
                         } else {
+                            // 通常色
                             cell.backgroundColor = TimeLineViewCell.bgColor
                             cell.messageView?.backgroundColor = TimeLineViewCell.bgColor
                             cell.nameLabel.backgroundColor = TimeLineViewCell.bgColor

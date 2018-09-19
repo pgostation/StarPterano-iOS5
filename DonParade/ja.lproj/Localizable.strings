@@ -25,6 +25,7 @@
 "DATETIME_%D_SECS_AGO" = "%d秒";
 "DATETIME_%D_MINS_AGO" = "%d分";
 "DATETIME_%D_HOURS_AGO" = "%d時間";
+"DATETIME_%D_HOURS_HALF_AGO" = "%d時間半";
 "DATETIME_%D_DAYS_AGO" = "%d日";
 "DATETIME_%D_YEARS_AGO" = "%d年";
 

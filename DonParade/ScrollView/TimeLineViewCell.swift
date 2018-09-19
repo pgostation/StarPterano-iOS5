@@ -134,7 +134,11 @@ final class TimeLineViewCell: UITableViewCell {
             self.dateLabel.text = String(format: I18n.get("DATETIME_%D_MINS_AGO"), diffTime / 60)
         }
         else if diffTime / 3600 < 24 {
-            self.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), diffTime / 3600)
+            if diffTime / 3600 < 10 && diffTime % 3600 >= 1800 {
+                self.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_HALF_AGO"), diffTime / 3600)
+            } else {
+                self.dateLabel.text = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), diffTime / 3600)
+            }
         }
         else if diffTime / 86400 < 365 {
             self.dateLabel.text = String(format: I18n.get("DATETIME_%D_DAYS_AGO"), diffTime / 86400)
