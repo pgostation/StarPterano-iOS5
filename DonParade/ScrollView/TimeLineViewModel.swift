@@ -15,7 +15,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
     var showGrowlCell = true // 過去遡り用セルを表示するかどうか
-    var selectedIndexPath: IndexPath? = nil
+    var selectedRow: Int? = nil
     private var selectedAccountId: String?
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
@@ -49,6 +49,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     self.list = self.list + addList
                 } else {
                     self.list = addList + self.list
+                    if self.selectedRow != nil {
+                        self.selectedRow = self.selectedRow! + addList.count
+                    }
                 }
             } else {
                 // すでにあるデータを更新する
@@ -102,7 +105,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // セルを拡大表示するかどうか
-        let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedIndexPath?.row
+        let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
         let detailOffset: CGFloat = isSelected ? 40 : 0
             
         // メッセージのビューを一度作り、高さを求める
@@ -169,7 +172,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         messageView.frame.size.width = UIScreen.main.bounds.width - 66
         messageView.sizeToFit()
         var isContinue = false
-        if self.selectedIndexPath?.row == indexPath.row {
+        if self.selectedRow == indexPath.row {
             // 詳細表示の場合
         } else {
             if messageView.frame.size.height >= 180 - 28 {
@@ -223,7 +226,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.insertSubview(messageView, at: 2)
         
         // 詳細表示の場合
-        if self.selectedIndexPath?.row == indexPath.row {
+        if self.selectedRow == indexPath.row {
             cell.showDetail = true
             cell.isSelected = true
             
@@ -236,7 +239,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 
                 for subview in tableView.subviews {
                     if let cell = subview as? TimeLineViewCell {
-                        if self.selectedIndexPath?.row == cell.indexPath?.row { continue }
+                        if self.selectedRow == cell.indexPath?.row { continue }
                         
                         self.setCellColor(cell: cell)
                     }
@@ -389,7 +392,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return false
         }
         
-        if self.selectedIndexPath != nil && self.selectedIndexPath?.row == cell.indexPath?.row {
+        if self.selectedRow != nil && self.selectedRow == cell.indexPath?.row {
             // 選択色
             cell.backgroundColor = TimeLineViewCell.selectedBgColor
             cell.messageView?.backgroundColor = TimeLineViewCell.selectedBgColor
@@ -465,7 +468,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セル選択時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if SettingsData.tapDetailMode || self.selectedIndexPath?.row == indexPath.row {
+        if SettingsData.tapDetailMode || self.selectedRow == indexPath.row {
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
             let mensionsData = getMensionsData(data: data)
@@ -484,13 +487,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         } else {
             // セルを拡大して表示
             var indexPaths: [IndexPath] = [indexPath]
-            if let oldPath = self.selectedIndexPath {
+            if self.selectedRow != nil {
+                let oldPath = IndexPath(row: self.selectedRow ?? 0, section: 0)
                 indexPaths.append(oldPath)
                 
                 if oldPath.row < indexPath.row {
                     // 高さのずれを吸収
                     let oldHeight = self.tableView(tableView, heightForRowAt: oldPath)
-                    self.selectedIndexPath = indexPath
+                    self.selectedRow = indexPath.row
                     let newHeight = self.tableView(tableView, heightForRowAt: oldPath)
                     
                     DispatchQueue.main.async {
@@ -499,7 +503,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             }
             
-            self.selectedIndexPath = indexPath
+            self.selectedRow = indexPath.row
             
             tableView.reloadRows(at: indexPaths, with: UITableViewRowAnimation.none)
         }

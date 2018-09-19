@@ -42,7 +42,7 @@ final class TimeLineView: UITableView {
             // 会話表示
             self.model.showGrowlCell = false
             self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
-            self.model.selectedIndexPath = IndexPath(row: 0, section: 0)
+            self.model.selectedRow = 0
             DispatchQueue.main.async {
                 // 古い物を取りに行く
                 self.refresh()
