@@ -16,6 +16,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
     private var showGrowlCell = true // 過去遡り用セルを表示するかどうか
     private var selectedIndexPath: IndexPath? = nil
+    private var selectedAccountId: String?
     
     override init() {
         super.init()
@@ -145,9 +146,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         messageView.frame.size.width = UIScreen.main.bounds.width - 66
         messageView.sizeToFit()
         var isContinue = false
-        if messageView.frame.size.height >= 180 - 28 {
-            messageView.frame.size.height = 180 - 28
-            isContinue = true
+        if self.selectedIndexPath?.row == indexPath.row {
+            // 詳細表示の場合
+        } else {
+            if messageView.frame.size.height >= 180 - 28 {
+                messageView.frame.size.height = 180 - 28
+                isContinue = true
+            }
         }
         
         return (messageView, data, isContinue)
@@ -182,7 +187,108 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         id = data.content ?? ""
         cell.tableView = tableView
         cell.indexPath = indexPath
-        cell.acccountId = account?.id
+        cell.accountId = account?.id
+        
+        // 詳細表示の場合
+        if self.selectedIndexPath?.row == indexPath.row {
+            cell.showDetail = true
+            cell.isSelected = true
+            
+            self.selectedAccountId = account?.id
+            
+            cell.backgroundColor = TimeLineViewCell.selectedBgColor
+            messageView.backgroundColor = TimeLineViewCell.selectedBgColor
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                cell.nameLabel.backgroundColor = TimeLineViewCell.selectedBgColor
+                cell.idLabel.backgroundColor = TimeLineViewCell.selectedBgColor
+                cell.dateLabel.backgroundColor = TimeLineViewCell.selectedBgColor
+                
+                for subview in tableView.subviews {
+                    if let cell = subview as? TimeLineViewCell {
+                        if self.selectedIndexPath?.row == cell.indexPath?.row { continue }
+                        
+                        if self.selectedAccountId == cell.accountId {
+                            cell.backgroundColor = TimeLineViewCell.relatedBgColor
+                            cell.messageView?.backgroundColor = TimeLineViewCell.relatedBgColor
+                            cell.nameLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+                            cell.idLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+                            cell.dateLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+                        } else {
+                            cell.backgroundColor = TimeLineViewCell.bgColor
+                            cell.messageView?.backgroundColor = TimeLineViewCell.bgColor
+                            cell.nameLabel.backgroundColor = TimeLineViewCell.bgColor
+                            cell.idLabel.backgroundColor = TimeLineViewCell.bgColor
+                            cell.dateLabel.backgroundColor = TimeLineViewCell.bgColor
+                        }
+                    }
+                }
+            }
+            
+            // 返信ボタンを追加
+            cell.replyButton = UIButton()
+            cell.replyButton?.setTitle("↩︎", for: .normal)
+            cell.replyButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.addSubview(cell.replyButton!)
+            
+            // 返信された数
+            cell.replyedLabel = UILabel()
+            cell.addSubview(cell.replyedLabel!)
+            if let replies_count = data.replies_count, replies_count > 0 {
+                cell.replyedLabel?.text = "\(replies_count)"
+            }
+            
+            // ブーストボタン
+            cell.boostButton = UIButton()
+            cell.boostButton?.setTitle("⇄", for: .normal)
+            if data.reblogged == 1 {
+                cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
+            } else {
+                cell.boostButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            }
+            cell.addSubview(cell.boostButton!)
+            
+            // ブーストされた数
+            cell.boostedLabel = UILabel()
+            cell.addSubview(cell.boostedLabel!)
+            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+                cell.boostedLabel?.text = "\(reblogs_count)"
+            }
+            
+            // お気に入りボタン
+            cell.favoriteButton = UIButton()
+            cell.favoriteButton?.setTitle("★", for: .normal)
+            if data.favourited == 1 {
+                cell.favoriteButton?.setTitleColor(UIColor.blue, for: .normal)
+            } else {
+                cell.favoriteButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            }
+            cell.addSubview(cell.favoriteButton!)
+            
+            // お気に入りされた数
+            cell.favoritedLabel = UILabel()
+            cell.addSubview(cell.favoritedLabel!)
+            if let favourites_count = data.favourites_count, favourites_count > 0 {
+                cell.favoritedLabel?.text = "\(favourites_count)"
+            }
+            
+            // 詳細ボタン
+            cell.detailButton = UIButton()
+            cell.detailButton?.setTitle("…", for: .normal)
+            cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.addSubview(cell.detailButton!)
+        } else if self.selectedAccountId == account?.id {
+            cell.backgroundColor = TimeLineViewCell.relatedBgColor
+            messageView.backgroundColor = TimeLineViewCell.relatedBgColor
+            cell.nameLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+            cell.idLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+            cell.dateLabel.backgroundColor = TimeLineViewCell.relatedBgColor
+        } else {
+            cell.backgroundColor = TimeLineViewCell.bgColor
+            messageView.backgroundColor = TimeLineViewCell.bgColor
+            cell.nameLabel.backgroundColor = TimeLineViewCell.bgColor
+            cell.idLabel.backgroundColor = TimeLineViewCell.bgColor
+            cell.dateLabel.backgroundColor = TimeLineViewCell.bgColor
+        }
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false) { image in
             cell.iconView.image = image
@@ -242,58 +348,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostView!)
         }
         
-        // 詳細表示の場合
-        if self.selectedIndexPath?.row == indexPath.row {
-            cell.showDetail = true
-            cell.isSelected = true
-            
-            // 返信ボタンを追加
-            cell.replyButton = UIButton()
-            cell.replyButton?.setTitle("↩︎", for: .normal)
-            cell.replyButton?.setTitleColor(UIColor.darkGray, for: .normal)
-            cell.addSubview(cell.replyButton!)
-            
-            // ブーストボタン
-            cell.boostButton = UIButton()
-            cell.boostButton?.setTitle("⇄", for: .normal)
-            if data.reblogged == 1 {
-                cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
-            } else {
-                cell.boostButton?.setTitleColor(UIColor.darkGray, for: .normal)
-            }
-            cell.addSubview(cell.boostButton!)
-            
-            // ブーストされた数
-            cell.boostedLabel = UILabel()
-            cell.addSubview(cell.boostedLabel!)
-            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
-                cell.boostedLabel?.text = "\(reblogs_count)"
-            }
-            
-            // お気に入りボタン
-            cell.favoriteButton = UIButton()
-            cell.favoriteButton?.setTitle("★", for: .normal)
-            if data.favourited == 1 {
-                cell.favoriteButton?.setTitleColor(UIColor.blue, for: .normal)
-            } else {
-                cell.favoriteButton?.setTitleColor(UIColor.darkGray, for: .normal)
-            }
-            cell.addSubview(cell.favoriteButton!)
-            
-            // お気に入りされた数
-            cell.favoritedLabel = UILabel()
-            cell.addSubview(cell.favoritedLabel!)
-            if let favourites_count = data.favourites_count, favourites_count > 0 {
-                cell.favoritedLabel?.text = "\(favourites_count)"
-            }
-            
-            // 詳細ボタン
-            cell.detailButton = UIButton()
-            cell.detailButton?.setTitle("…", for: .normal)
-            cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
-            cell.addSubview(cell.detailButton!)
-        }
-        
         return cell
     }
     
@@ -313,6 +367,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.imageViews = []
         if cell.replyButton != nil {
             cell.replyButton?.removeFromSuperview()
+            cell.replyedLabel?.removeFromSuperview()
             cell.boostButton?.removeFromSuperview()
             cell.boostedLabel?.removeFromSuperview()
             cell.favoriteButton?.removeFromSuperview()
@@ -333,8 +388,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
             // セルを拡大して表示
+            var indexPaths: [IndexPath] = [indexPath]
+            if let oldPath = self.selectedIndexPath {
+                indexPaths.append(oldPath)
+            }
             self.selectedIndexPath = indexPath
-            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            tableView.reloadRows(at: indexPaths, with: UITableViewRowAnimation.none)
         }
     }
     

@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// タイムラインのJSON文字列を解析して、構造体に格納する
+
 import Foundation
 
 final class AnalyzeJson {

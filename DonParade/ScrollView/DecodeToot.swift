@@ -58,7 +58,7 @@ final class DecodeToot {
             
             // リストに追加
             linkList.append((startIndex, String(urlStr), linkStr))
-            text = String(text.prefix(startIndex.encodedOffset)) + linkStr + String(text.suffix(text.count - endIndex.encodedOffset))
+            text = String(text.prefix(startIndex.encodedOffset)) + linkStr + String(text.suffix(max(0, text.count - endIndex.encodedOffset)))
         }
         
         // &lt;などをデコード
@@ -89,7 +89,7 @@ final class DecodeToot {
                 
                 while let range = text.range(of: ":\(shortcode):") {
                     let index = text.index(range.lowerBound, offsetBy: 0)
-                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "")
+                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "", options: String.CompareOptions.anchored, range: range)
                     emojiList.append((index, attrStr))
                 }
             }
@@ -141,7 +141,7 @@ final class DecodeToot {
                 
                 while let range = text.range(of: ":\(shortcode):") {
                     let index = text.index(range.lowerBound, offsetBy: 0)
-                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "")
+                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "", options: String.CompareOptions.anchored, range: range)
                     emojiList.append((index, attrStr))
                 }
             }

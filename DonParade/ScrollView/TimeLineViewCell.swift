@@ -12,6 +12,8 @@ import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
+    static let selectedBgColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 1)
+    static let relatedBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
     var id = ""
     
     // 基本ビュー
@@ -30,6 +32,7 @@ final class TimeLineViewCell: UITableViewCell {
     // 詳細ビュー
     var showDetail = false
     var replyButton: UIButton?
+    var replyedLabel: UILabel?
     var boostButton: UIButton?
     var boostedLabel: UILabel?
     var favoriteButton: UIButton?
@@ -40,7 +43,7 @@ final class TimeLineViewCell: UITableViewCell {
     var indexPath: IndexPath?
     var date: Date
     var timer: Timer?
-    var acccountId: String?
+    var accountId: String?
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -60,7 +63,7 @@ final class TimeLineViewCell: UITableViewCell {
         self.iconView.layer.cornerRadius = 5
         self.iconView.clipsToBounds = true
         
-        self.nameLabel.textColor = UIColor(red: 0.2, green: 0.3, blue: 1.0, alpha: 1)
+        self.nameLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1)
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
         self.nameLabel.backgroundColor = TimeLineViewCell.bgColor
         self.nameLabel.isOpaque = true
@@ -111,8 +114,8 @@ final class TimeLineViewCell: UITableViewCell {
     
     // アイコンか名前欄をタップした時の処理
     @objc func tapAccountAction() {
-        if let acccountId = self.acccountId {
-            let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: acccountId)
+        if let accountId = self.accountId {
+            let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
             accountTimeLineViewController.modalTransitionStyle = UIModalTransitionStyle.partialCurl;
             MainViewController.instance?.present(accountTimeLineViewController, animated: true, completion: nil)
         }
@@ -213,6 +216,11 @@ final class TimeLineViewCell: UITableViewCell {
                                              y: top,
                                              width: 40,
                                              height: 40)
+            
+            self.replyedLabel?.frame = CGRect(x: 90,
+                                              y: top + 10,
+                                              width: 20,
+                                              height: 20)
             
             self.boostButton?.frame = CGRect(x: 110,
                                              y: top,
