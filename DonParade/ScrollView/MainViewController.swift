@@ -12,6 +12,7 @@ import UIKit
 
 final class MainViewController: MyViewController {
     static weak var instance: MainViewController?
+    var TimelineList: [String: TimeLineViewController] = [:]
     
     override func loadView() {
         MainViewController.instance = self
@@ -30,16 +31,29 @@ final class MainViewController: MyViewController {
     }
     
     private var timelineViewController: TimeLineViewController?
+    static var isLTLDict: [String: Bool] = [:]
     
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
         // 前のビューを外す
         removeOldView()
         
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            let key = "\(hostName)_\(accessToken)_Home"
+            if let vc = self.TimelineList[key] {
+                self.timelineViewController = vc
+            } else {
+                self.timelineViewController = TimeLineViewController(type: .home)
+                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+            
+            MainViewController.isLTLDict[hostName + "," + accessToken] = false
+        }
+        
         // 一番下にタイムラインビューを入れる
-        self.timelineViewController = TimeLineViewController(type: .home)
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        
     }
     
     // LTLへの切り替え
@@ -47,10 +61,76 @@ final class MainViewController: MyViewController {
         // 前のビューを外す
         removeOldView()
         
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            let key = "\(hostName)_\(accessToken)_LTL"
+            if let vc = self.TimelineList[key] {
+                self.timelineViewController = vc
+            } else {
+                self.timelineViewController = TimeLineViewController(type: .local)
+                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+            
+            MainViewController.isLTLDict[hostName + "," + accessToken] = true
+        }
+        
         // 一番下にタイムラインビューを入れる
-        self.timelineViewController = TimeLineViewController(type: .local)
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+    }
+    
+    func swipeView(toRight: Bool) {
+        let oldTimelineViewController = self.timelineViewController
+        
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            let isLTL = MainViewController.isLTLDict[hostName + "," + accessToken] ?? false
+            let key = "\(hostName)_\(accessToken)_" + (isLTL ? "LTL" : "Home")
+            if let vc = self.TimelineList[key] {
+                self.timelineViewController = vc
+            } else {
+                self.timelineViewController = TimeLineViewController(type: isLTL ? .local : .home)
+                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+        }
+        
+        // タイムラインビューを入れる
+        self.addChildViewController(self.timelineViewController!)
+        self.view.insertSubview(self.timelineViewController!.view, at: 1)
+        
+        let screenBounds = UIScreen.main.bounds
+        if toRight {
+            self.timelineViewController?.view.frame = CGRect(x: -screenBounds.width,
+                                                             y: 0,
+                                                             width: screenBounds.width,
+                                                             height: screenBounds.height)
+        } else {
+            self.timelineViewController?.view.frame = CGRect(x: screenBounds.width,
+                                                             y: 0,
+                                                             width: screenBounds.width,
+                                                             height: screenBounds.height)
+        }
+        
+        // アニメーション
+        UIView.animate(withDuration: 0.3, animations: {
+            self.timelineViewController?.view.frame = CGRect(x: 0,
+                                                             y: 0,
+                                                             width: screenBounds.width,
+                                                             height: screenBounds.height)
+            
+            if toRight {
+                oldTimelineViewController?.view.frame = CGRect(x: screenBounds.width,
+                                                               y: 0,
+                                                               width: screenBounds.width,
+                                                               height: screenBounds.height)
+            } else {
+                oldTimelineViewController?.view.frame = CGRect(x: -screenBounds.width,
+                                                               y: 0,
+                                                               width: screenBounds.width,
+                                                               height: screenBounds.height)
+            }
+        }, completion: { _ in
+            oldTimelineViewController?.removeFromParentViewController()
+            oldTimelineViewController?.view.removeFromSuperview()
+        })
     }
     
     // 前のビューを外す

@@ -188,7 +188,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 // 過去のトゥートに遡る
                 timelineView.refreshOld(id: list.last?.id)
             }
-            return getCell(view: tableView, height: 55)
+            return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
         }
         
         var cell: TimeLineViewCell! = nil
