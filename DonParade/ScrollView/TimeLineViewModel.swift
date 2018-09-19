@@ -393,8 +393,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             var indexPaths: [IndexPath] = [indexPath]
             if let oldPath = self.selectedIndexPath {
                 indexPaths.append(oldPath)
+                
+                if oldPath.row < indexPath.row {
+                    // 高さのずれを吸収
+                    let oldHeight = self.tableView(tableView, heightForRowAt: oldPath)
+                    self.selectedIndexPath = indexPath
+                    let newHeight = self.tableView(tableView, heightForRowAt: oldPath)
+                    
+                    DispatchQueue.main.async {
+                        print("\(newHeight) \(oldHeight)")
+                        tableView.contentOffset.y = max(0, tableView.contentOffset.y + newHeight - oldHeight + 40)
+                    }
+                }
             }
+            
             self.selectedIndexPath = indexPath
+            
             tableView.reloadRows(at: indexPaths, with: UITableViewRowAnimation.none)
         }
     }
