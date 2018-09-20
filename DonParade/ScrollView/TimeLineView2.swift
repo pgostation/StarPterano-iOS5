@@ -1,3 +1,4 @@
+
 //
 //  TimelineView.swift
 //  DonParade
@@ -110,6 +111,9 @@ final class TimeLineView: UITableView {
                         
                         // 続きを取得
                         DispatchQueue.main.async {
+                            if self?.type == .mensions && contentData.in_reply_to_id == nil {
+                                return // ループ防止
+                            }
                             strongSelf.refresh()
                         }
                     }
@@ -230,5 +234,12 @@ final class TimeLineView: UITableView {
                 }
             }
         }
+    }
+    
+    // タッチしている間ボタンを隠す
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        MainViewController.instance?.hideButtons()
     }
 }

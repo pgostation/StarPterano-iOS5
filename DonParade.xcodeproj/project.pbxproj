@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0D92152955F00928DCC /* TootViewController.swift */; };
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
+		121DC0DE2153CF7F00928DCC /* TimeLineView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
-		12CD025B214EA75700133A95 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025A214EA75700133A95 /* TimelineView.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
 		12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */; };
 		12CD0261214F367100133A95 /* DecodeToot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0260214F367100133A95 /* DecodeToot.swift */; };
@@ -39,9 +39,9 @@
 /* Begin PBXFileReference section */
 		121DC0D92152955F00928DCC /* TootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootViewController.swift; sourceTree = "<group>"; };
 		121DC0DB2153C64F00928DCC /* MyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWindow.swift; sourceTree = "<group>"; };
+		121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView2.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
-		12CD025A214EA75700133A95 /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewModel.swift; sourceTree = "<group>"; };
 		12CD0260214F367100133A95 /* DecodeToot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeToot.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 			children = (
 				12F9ACA7214D1C0900E9E508 /* MainViewController.swift */,
 				12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */,
-				12CD025A214EA75700133A95 /* TimelineView.swift */,
+				121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */,
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
 				12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */,
 				12CD0264214FD37700133A95 /* AnalyzeJson.swift */,
@@ -278,6 +278,7 @@
 			files = (
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
+				121DC0DE2153CF7F00928DCC /* TimeLineView2.swift in Sources */,
 				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
 				12CD0261214F367100133A95 /* DecodeToot.swift in Sources */,
 				12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */,
@@ -296,7 +297,6 @@
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,
 				121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */,
-				12CD025B214EA75700133A95 /* TimelineView.swift in Sources */,
 				12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */,
 				12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */,
 			);
