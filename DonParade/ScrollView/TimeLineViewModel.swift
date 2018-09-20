@@ -272,13 +272,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             // ブーストボタン
             cell.boostButton = UIButton()
-            cell.boostButton?.setTitle("⇄", for: .normal)
-            if data.reblogged == 1 {
-                cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
+            if data.visibility == "direct" || data.visibility == "private" {
+                cell.boostButton?.setTitle("🔐", for: .normal)
             } else {
-                cell.boostButton?.setTitleColor(UIColor.gray, for: .normal)
+                cell.boostButton?.setTitle("⇄", for: .normal)
+                if data.reblogged == 1 {
+                    cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
+                } else {
+                    cell.boostButton?.setTitleColor(UIColor.gray, for: .normal)
+                }
+                cell.boostButton?.addTarget(cell, action: #selector(cell.boostAction), for: .touchUpInside)
             }
-            cell.boostButton?.addTarget(cell, action: #selector(cell.boostAction), for: .touchUpInside)
             cell.addSubview(cell.boostButton!)
             
             // ブーストされた数
@@ -382,6 +386,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.boostView?.font = UIFont.systemFont(ofSize: 12)
             cell.boostView?.textColor = UIColor.darkGray
             cell.boostView?.text = String(format: I18n.get("BOOSTED_BY_%@"), account?.display_name ?? "")
+            cell.addSubview(cell.boostView!)
+        }
+        
+        // DMの場合
+        if data.visibility == "direct" {
+            cell.boostView = UILabel()
+            cell.boostView?.font = UIFont.boldSystemFont(ofSize: 14)
+            cell.boostView?.textColor = UIColor.red
+            cell.boostView?.text = I18n.get("THIS_TOOT_IS_DIRECT_MESSAGE")
             cell.addSubview(cell.boostView!)
         }
         

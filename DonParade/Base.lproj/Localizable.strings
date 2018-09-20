@@ -22,6 +22,7 @@
 "BUTTON_NOTIFY" = "Notify";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
+"THIS_TOOT_IS_DIRECT_MESSAGE" = "Direct Message";
 "ACTION_OPEN_WITH_SAFARI" = "Open with Safari";
 "BUTTON_CANCEL" = "Cancel";
 

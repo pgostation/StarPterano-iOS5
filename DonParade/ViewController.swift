@@ -33,7 +33,5 @@ final class ViewController: MyViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 
