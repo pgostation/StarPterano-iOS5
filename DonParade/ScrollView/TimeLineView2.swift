@@ -16,6 +16,7 @@ final class TimeLineView: UITableView {
     private let option: String?
     private let model = TimeLineViewModel()
     private let refreshCon = UIRefreshControl()
+    private weak var waitIndicator: UIView?
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -39,6 +40,10 @@ final class TimeLineView: UITableView {
             } else {
                 self.backgroundView = self.refreshCon
             }
+            
+            let waitIndicator = WaitIndicator()
+            self.waitIndicator = waitIndicator
+            self.addSubview(waitIndicator)
         } else {
             // 会話表示
             self.model.showGrowlCell = false
@@ -99,6 +104,7 @@ final class TimeLineView: UITableView {
                 do {
                     DispatchQueue.main.async {
                         self?.refreshCon.endRefreshing()
+                        self?.waitIndicator?.removeFromSuperview()
                     }
                     
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
