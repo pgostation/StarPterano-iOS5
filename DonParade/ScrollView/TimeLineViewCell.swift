@@ -12,8 +12,8 @@ import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
     static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
-    static let selectedBgColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 1)
-    static let sameAccountBgColor = UIColor(red: 0.88, green: 0.95, blue: 0.88, alpha: 1)
+    static let selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
+    static let sameAccountBgColor = UIColor(red: 0.86, green: 0.96, blue: 0.86, alpha: 1)
     static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
     static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
     static let toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
@@ -33,6 +33,7 @@ final class TimeLineViewCell: UITableViewCell {
     var imageViews: [UIImageView]? // 添付画像を表示
     var showMoreButton: UIButton? // もっと見る
     var spolerTextLabel: UILabel?
+    var detailDateLabel: UILabel?
     
     // 詳細ビュー
     var showDetail = false
@@ -246,9 +247,15 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: self.nameLabel.frame.width,
                                       height: 16)
         
+        let idWidth: CGFloat
+        if self.detailDateLabel != nil {
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + 50 + 5)
+        } else {
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + 50 + 5 + 50 + 5)
+        }
         self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
                                     y: 7,
-                                    width: screenBounds.width - (self.nameLabel.frame.width + 50 + 5 + 50 + 5),
+                                    width: idWidth,
                                     height: 16)
         
         self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
@@ -256,13 +263,18 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: 45,
                                       height: 16)
         
+        self.detailDateLabel?.frame = CGRect(x: 50,
+                                             y: 22,
+                                             width: screenBounds.width - 55,
+                                             height: 18)
+        
         self.spolerTextLabel?.frame = CGRect(x: 50,
-                                         y: 19,
+                                         y: self.detailDateLabel?.frame.maxY ?? 19,
                                          width: self.spolerTextLabel?.frame.width ?? 0,
                                          height: self.spolerTextLabel?.frame.height ?? 0)
         
         self.messageView?.frame = CGRect(x: 50,
-                                         y: self.spolerTextLabel?.frame.maxY ?? 19,
+                                         y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? 19,
                                          width: self.messageView?.frame.width ?? 0,
                                          height: self.messageView?.frame.height ?? 0)
         

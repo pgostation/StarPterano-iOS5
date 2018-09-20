@@ -19,6 +19,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var selectedAccountId: String?
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
+    var isDetailTimeline = false
     
     override init() {
         super.init()
@@ -49,8 +50,27 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     self.list = self.list + addList
                 } else {
                     self.list = addList + self.list
+                    
+                    // 選択位置がずれないようにする
                     if self.selectedRow != nil {
-                        self.selectedRow = self.selectedRow! - addList.count
+                        self.selectedRow = self.selectedRow! + addList.count
+                    }
+                    
+                    // スクロールして、表示していたツイートがあまりずれないようにする
+                    if tableView.contentOffset.y <= 0 {
+                        DispatchQueue.main.async {
+                            tableView.scrollToRow(at: IndexPath(row: addList.count, section: 0),
+                                                  at: UITableViewScrollPosition.top,
+                                                  animated: false)
+                        }
+                    } else {
+                        let oldOffsetY = tableView.contentOffset.y
+                        DispatchQueue.main.async {
+                            tableView.scrollToRow(at: IndexPath(row: addList.count, section: 0),
+                                                  at: UITableViewScrollPosition.top,
+                                                  animated: false)
+                            tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
+                        }
                     }
                 }
             } else {
@@ -115,7 +135,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // セルを拡大表示するかどうか
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
-        let detailOffset: CGFloat = isSelected ? 40 : 0
+        var detailOffset: CGFloat = isSelected ? 40 : 0
+        if isDetailTimeline && indexPath.row == selectedRow { // 詳細拡大表示
+            detailOffset += 20
+        }
             
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
@@ -153,7 +176,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if hasLink {
             let msgView = UITextView()
             msgView.attributedText = attributedText
-            msgView.font = UIFont.systemFont(ofSize: 14)
+            if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
+                msgView.font = UIFont.systemFont(ofSize: 16)
+            } else {
+                msgView.font = UIFont.systemFont(ofSize: 14)
+            }
             msgView.backgroundColor = TimeLineViewCell.bgColor
             msgView.textContainer.lineBreakMode = .byCharWrapping
             msgView.isOpaque = true
@@ -251,6 +278,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.spolerTextLabel?.numberOfLines = 0
             cell.spolerTextLabel?.lineBreakMode = .byCharWrapping
             cell.spolerTextLabel?.sizeToFit()
+            cell.addSubview(cell.spolerTextLabel!)
         }
         
         // 詳細表示の場合
@@ -369,8 +397,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if let created_at = data.created_at {
             let date = DecodeToot.decodeTime(text: created_at)
-            cell.date = date
-            cell.refreshDate()
+            
+            if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
+                cell.dateLabel.isHidden = true
+                cell.detailDateLabel = UILabel()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .medium
+                cell.detailDateLabel?.text = dateFormatter.string(from: date)
+                cell.detailDateLabel?.textColor = UIColor.gray
+                cell.detailDateLabel?.font = UIFont.systemFont(ofSize: 14)
+                cell.detailDateLabel?.textAlignment = .right
+                cell.addSubview(cell.detailDateLabel!)
+            } else {
+                cell.date = date
+                cell.refreshDate()
+                cell.dateLabel.isHidden = false
+            }
         }
         
         // 画像や動画ありの場合
@@ -499,6 +542,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.boostView = nil
         cell.showMoreButton?.removeFromSuperview()
         cell.showMoreButton = nil
+        cell.spolerTextLabel?.removeFromSuperview()
+        cell.spolerTextLabel = nil
+        cell.detailDateLabel?.removeFromSuperview()
+        cell.detailDateLabel = nil
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
         }

@@ -47,6 +47,7 @@ final class TimeLineView: UITableView {
         } else {
             // 会話表示
             self.model.showGrowlCell = false
+            self.model.isDetailTimeline = true
             self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
             self.model.selectedRow = 0
             DispatchQueue.main.async {
