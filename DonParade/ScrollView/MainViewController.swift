@@ -163,6 +163,42 @@ final class MainViewController: MyViewController {
         }
     }
     
+    // 一時的にボタンを隠す
+    private var buttonTimer: Timer?
+    func hideButtons() {
+        guard let view = self.view as? MainView else { return }
+        
+        UIView.animate(withDuration: 0.1) {
+            view.tlButton.alpha = 0
+            view.ltlButton.alpha = 0
+            view.tootButton.alpha = 0
+            view.listButton.alpha = 0
+            view.notificationsButton.alpha = 0
+            view.accountButton.alpha = 0
+        }
+        
+        self.buttonTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(checkTouch), userInfo: nil, repeats: true)
+    }
+    
+    @objc func checkTouch() {
+        guard let view = self.view as? MainView else { return }
+        
+        if let touchCount = (UIApplication.shared.keyWindow as? MyWindow)?.allTouches.count, touchCount > 0 {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.1) {
+            view.tlButton.alpha = 1
+            view.ltlButton.alpha = 1
+            view.tootButton.alpha = 1
+            view.listButton.alpha = 1
+            view.notificationsButton.alpha = 1
+            view.accountButton.alpha = 1
+        }
+        
+        self.buttonTimer = nil
+    }
+    
     // アカウントボタンをタップ（設定画面に移動）
     @objc func accountAction(_ sender: UIButton?) {
         let settingsViewController = SettingsViewController()

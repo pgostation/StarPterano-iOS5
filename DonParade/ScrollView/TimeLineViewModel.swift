@@ -50,7 +50,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 } else {
                     self.list = addList + self.list
                     if self.selectedRow != nil {
-                        self.selectedRow = self.selectedRow! + addList.count
+                        self.selectedRow = self.selectedRow! - addList.count
                     }
                 }
             } else {
@@ -65,7 +65,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         }
                     }
                     if !flag {
-                        self.list.insert(newContent, at: 0)
+                        // なかったので前か後ろに追加する
+                        if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+                            if date1 > date2 {
+                                self.list.append(newContent)
+                            } else {
+                                self.list.insert(newContent, at: 0)
+                            }
+                        } else {
+                            self.list.insert(newContent, at: 0)
+                        }
                     }
                 }
             }
@@ -543,5 +552,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             self.tableView(tableView, didSelectRowAt: indexPath)
         }
+    }
+    
+    // スクロールしている間ボタンを隠す
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        MainViewController.instance?.hideButtons()
     }
 }

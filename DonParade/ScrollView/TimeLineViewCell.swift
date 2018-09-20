@@ -110,12 +110,9 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         //
-        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
-        self.iconView.addGestureRecognizer(tapGesture1)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+        self.iconView.addGestureRecognizer(tapGesture)
         self.iconView.isUserInteractionEnabled = true
-        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
-        self.nameLabel.addGestureRecognizer(tapGesture2)
-        self.nameLabel.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {

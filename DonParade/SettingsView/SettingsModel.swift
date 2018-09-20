@@ -79,12 +79,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 7.その他
     private enum Other: String {
         case search = "SETTINGS_SEARCH" // 表示しているタイムラインから検索
-        case privacyPolicy = "SETTINGS_PRIVACY_POLICY"
         case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
     }
     private let otherList: [Other] = [.search,
-                                      .privacyPolicy,
                                       .license,
                                       .version]
     
