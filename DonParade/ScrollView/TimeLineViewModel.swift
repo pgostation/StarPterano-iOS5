@@ -206,9 +206,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         var cell: TimeLineViewCell! = nil
         var id: String = ""
         
+        // 表示用のデータを取得
         let (messageView, data, isContinue) = getMessageViewAndData(indexPath: indexPath, callback: { [weak self] in
+            // あとから絵文字が読み込めた場合の更新処理
             if cell.id == id {
                 if let (messageView, _, _) = self?.getMessageViewAndData(indexPath: indexPath, callback: nil) {
+                    let isHidden = cell?.messageView?.isHidden ?? false
+                    messageView.isHidden = isHidden
                     cell?.messageView?.removeFromSuperview()
                     cell?.messageView = messageView
                     cell?.insertSubview(messageView, at: 2)
@@ -233,6 +237,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 2)
+        
+        // 「もっと見る」の場合
+        if data.sensitive == 1 {
+            messageView.isHidden = true
+            cell.spolerTextLabel = UILabel()
+            cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: {
+                if cell.id == id {
+                    cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: nil)
+                    cell?.setNeedsLayout()
+                }
+            })
+            cell.spolerTextLabel?.numberOfLines = 0
+            cell.spolerTextLabel?.lineBreakMode = .byCharWrapping
+            cell.spolerTextLabel?.sizeToFit()
+        }
         
         // 詳細表示の場合
         if self.selectedRow == indexPath.row {
@@ -389,6 +408,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostView!)
         }
         
+        // もっと見るの場合
+        if data.sensitive == 1 {
+            cell.showMoreButton = UIButton()
+            cell.showMoreButton?.setTitle("…", for: .normal)
+            cell.showMoreButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
+            cell.addSubview(cell.showMoreButton!)
+        }
+        
         // DMの場合
         if data.visibility == "direct" {
             cell.boostView = UILabel()
@@ -469,6 +497,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.continueView?.removeFromSuperview()
         cell.boostView?.removeFromSuperview()
         cell.boostView = nil
+        cell.showMoreButton?.removeFromSuperview()
+        cell.showMoreButton = nil
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
         }

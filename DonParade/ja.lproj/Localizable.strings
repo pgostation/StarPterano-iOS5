@@ -20,6 +20,7 @@
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_LIST" = "リスト";
 "BUTTON_NOTIFY" = "通知";
+"BUTTON_SHOW_MORE" = "もっと見る";
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";
 "THIS_TOOT_IS_DIRECT_MESSAGE" = "ダイレクトメッセージ";
@@ -72,6 +73,5 @@
 
 // 設定画面(その他)
 "SETTINGS_SEARCH" = "タイムライン内を検索";
-"SETTINGS_PRIVACY_POLICY" = "プライバシーポリシー";
 "SETTINGS_LICENSE" = "著作権情報";
 "SETTINGS_VERSION" = "バージョン";

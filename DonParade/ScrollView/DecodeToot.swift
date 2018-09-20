@@ -46,7 +46,7 @@ final class DecodeToot {
             if let startHrefRange = tmpHrefStr.range(of: " href=\""), let endHrefRange = tmpHrefStr.range(of: "\" ") {
                 let hrefStartIndex = tmpHrefStr.index(startHrefRange.lowerBound, offsetBy: 7)
                 let hrefEndIndex = tmpHrefStr.index(endHrefRange.lowerBound, offsetBy: -1)
-                urlStr = String(text.suffix(text.count - hrefStartIndex.encodedOffset).prefix(hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset))
+                urlStr = String(text.suffix(text.count - hrefStartIndex.encodedOffset).prefix(hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset + 1))
             }
             
             // 表示用文字列を取り出す
@@ -99,7 +99,7 @@ final class DecodeToot {
         
         // 絵文字を追加
         for emoji in emojiList {
-            attributedText.insert(emoji.1, at: emoji.0.encodedOffset)
+            attributedText.insert(emoji.1, at: min(emoji.0.encodedOffset, attributedText.length))
         }
         
         // リンクを追加

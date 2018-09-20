@@ -7,7 +7,7 @@
 */
 
 // ログイン
-"PLACEHOLDER_INPUT_DOMAIN" = "Input domain (ex：mstdn.jp)";
+"PLACEHOLDER_INPUT_DOMAIN" = "Input domain (ex：mastodon.social)";
 "BUTTON_MASTODON_OAUTH" = "Mastodon Server Auth";
 "ALERT_INPUT_DOMAIN" = "Input domain.";
 "PLACEHOLDER_INPUT_CODE" = "Input code";
@@ -20,6 +20,7 @@
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_LIST" = "List";
 "BUTTON_NOTIFY" = "Notify";
+"BUTTON_SHOW_MORE" = "Show More";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
 "THIS_TOOT_IS_DIRECT_MESSAGE" = "Direct Message";
@@ -72,6 +73,5 @@
 
 // 設定画面(その他)
 "SETTINGS_SEARCH" = "Search in timeline";
-"SETTINGS_PRIVACY_POLICY" = "Privacy policy";
 "SETTINGS_LICENSE" = "Licenses";
 "SETTINGS_VERSION" = "Version";

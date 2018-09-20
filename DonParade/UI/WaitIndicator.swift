@@ -14,10 +14,18 @@ final class WaitIndicator: UIView {
     var animationTimer: Timer?
     var ballLocsList: [[CGFloat]] = [
         [-2,-1,0,1,2],
+        [-2.5,-1,0,1,2],
         [-3,-1,0,1,2],
-        [-3,-1,0,1,3],
-        [-3,-2,0,1,2],
+        [-3.5,-1,0,1,2],
         [-4,-1,0,1,2],
+        [-3,-1,0,1,3],
+        [-2,-1,0,1,2.5],
+        [-2,-1,0,1,3],
+        [-2,-1,0,1,3.5],
+        [-2,-1,0,1,4],
+        [-2.5,-1.5,0,1,2],
+        [-3,-2,0,1,2],
+        [-3.5,-2.5,0,1,2],
         [-4,-1,0,1,3],
         [-3,-2,0,1,3],
         [-4,-1,0,2,3],
@@ -28,6 +36,7 @@ final class WaitIndicator: UIView {
         [-4,-3,-2,-1,0],
         [-4,-3,0,3,4],
         [-4,-2,0,2,4],
+        [-3,-2,-1,0,1],
         ]
     var ballLocs: [CGFloat] = [0,0,0,0,0]
     var ballSpeeds: [CGFloat] = [0,0,0,0,0]
@@ -83,7 +92,7 @@ final class WaitIndicator: UIView {
             // ヒモ
             path.move(to: CGPoint(x: x1, y: top))
             path.addLine(to: CGPoint(x: x2, y: top + length * cos(angle)))
-            path.lineWidth = 1.0 // 線の太さ
+            path.lineWidth = 1 / UIScreen.main.scale // 線の太さ
             UIColor.white.setStroke() // 色をセット
             path.stroke()
             
@@ -109,7 +118,7 @@ final class WaitIndicator: UIView {
         // ボールが他の球に触れていれば、ボールの速度を交換する
         for index in 0..<ballLocs.count - 1 {
             if ballSpeeds[index] < 0 { continue }
-            let loc1 = ballLocs[index] + ballSpeeds[index] / 100
+            let loc1 = ballLocs[index] + ballSpeeds[index] / 2
             let loc2 = ballLocs[index + 1]
             
             if loc2 - loc1 < 1 && ballSpeeds[index] > ballSpeeds[index + 1] {
@@ -120,7 +129,7 @@ final class WaitIndicator: UIView {
         }
         for index in (0..<ballLocs.count - 1).reversed() {
             if ballSpeeds[index] > 0 { continue }
-            let loc1 = ballLocs[index] + ballSpeeds[index] / 100
+            let loc1 = ballLocs[index] + ballSpeeds[index] / 2
             let loc2 = ballLocs[index + 1]
             
             if loc2 - loc1 < 1 && ballSpeeds[index] > ballSpeeds[index + 1] {

@@ -31,6 +31,8 @@ final class TimeLineViewCell: UITableViewCell {
     var continueView: UILabel? // 長すぎるトゥートで、続きがあることを表示
     var boostView: UILabel? // 誰がboostしたかを表示
     var imageViews: [UIImageView]? // 添付画像を表示
+    var showMoreButton: UIButton? // もっと見る
+    var spolerTextLabel: UILabel?
     
     // 詳細ビュー
     var showDetail = false
@@ -173,7 +175,7 @@ final class TimeLineViewCell: UITableViewCell {
         
         // 生データを表示
         alertController.addAction(UIAlertAction(
-            title: I18n.get("生データを表示"),
+            title: "生データを表示",
             style: UIAlertActionStyle.default,
             handler: { _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -189,6 +191,12 @@ final class TimeLineViewCell: UITableViewCell {
         }))
         
         UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
+    }
+    
+    // もっと見る
+    @objc func showMoreAction() {
+        self.messageView?.isHidden = false
+        self.showMoreButton?.removeFromSuperview()
     }
     
     // 日時表示を更新
@@ -248,8 +256,13 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: 45,
                                       height: 16)
         
-        self.messageView?.frame = CGRect(x: 50,
+        self.spolerTextLabel?.frame = CGRect(x: 50,
                                          y: 19,
+                                         width: self.spolerTextLabel?.frame.width ?? 0,
+                                         height: self.spolerTextLabel?.frame.height ?? 0)
+        
+        self.messageView?.frame = CGRect(x: 50,
+                                         y: self.spolerTextLabel?.frame.maxY ?? 19,
                                          width: self.messageView?.frame.width ?? 0,
                                          height: self.messageView?.frame.height ?? 0)
         
@@ -263,6 +276,11 @@ final class TimeLineViewCell: UITableViewCell {
                                        y: (self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
                                        width: screenBounds.width - 56,
                                        height: 20)
+        
+        self.showMoreButton?.frame = CGRect(x: 40,
+                                            y: (self.boostView?.frame.maxY ?? self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
+                                            width: screenBounds.width - 56,
+                                            height: 20)
         
         for (index, imageView) in (self.imageViews ?? []).enumerated() {
             var imageWidth: CGFloat = 0
