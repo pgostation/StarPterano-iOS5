@@ -45,6 +45,7 @@
 
 // 設定画面
 "BUTTON_CLOSE" = "Close";
+"BUTTON_REMOVE" = "Remove";
 
 // 設定画面(カテゴリ)
 "SETTINGS_SELECT_ACCOUNT" = "Change account";
@@ -54,8 +55,9 @@
 "SETTINGS_CACHE" = "Cache";
 "SETTINGS_OTHER" = "Other";
 
-// 設定画面(アカウントの追加と削除)
+// 設定画面(アカウントの追加)
 "SETTINGS_ADD_ACCOUNT" = "Add account";
+"DIALOG_REMOVE_ACCOUNT" = "Remove account";
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "Your Mastodon page";

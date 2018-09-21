@@ -242,7 +242,23 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.section == 0 && indexPath.row < SettingsData.accountList.count {
-                
+                Dialog.show(message: I18n.get("DIALOG_REMOVE_ACCOUNT"),
+                            okName: I18n.get("BUTTON_REMOVE"),
+                            cancelName: I18n.get("BUTTON_CANCEL"))
+                { result in
+                    if result {
+                        let oldData = SettingsData.accountList[indexPath.row]
+                        
+                        // 削除
+                        SettingsData.accountList.remove(at: indexPath.row)
+                        
+                        // 選択中のアカウントを削除した場合、最初のアカウントに移動するか、ログアウト状態にする
+                        if oldData.0 == SettingsData.hostName && oldData.0 == SettingsData.accessToken {
+                            SettingsData.hostName = SettingsData.accountList.first?.0
+                            SettingsData.accessToken = SettingsData.accountList.first?.1
+                        }
+                    }
+                }
             }
         }
     }

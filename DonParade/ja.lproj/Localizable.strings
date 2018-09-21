@@ -45,6 +45,7 @@
 
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";
+"BUTTON_REMOVE" = "削除";
 
 // 設定画面(カテゴリ)
 "SETTINGS_SELECT_ACCOUNT" = "アカウント切り替え";
@@ -54,8 +55,9 @@
 "SETTINGS_CACHE" = "キャッシュ";
 "SETTINGS_OTHER" = "その他";
 
-// 設定画面(アカウントの追加と削除)
+// 設定画面(アカウントの追加)
 "SETTINGS_ADD_ACCOUNT" = "アカウントを追加";
+"DIALOG_REMOVE_ACCOUNT" = "アカウントを削除します";
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "マストドンのWebサイトへ";
