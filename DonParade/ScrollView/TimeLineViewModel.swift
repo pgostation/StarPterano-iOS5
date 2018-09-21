@@ -20,7 +20,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
     var isDetailTimeline = false
-    var isMiniView = false
     
     override init() {
         super.init()
@@ -124,7 +123,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルのだいたいの高さ(スクロールバーの表示用)
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isMiniView {
+        if SettingsData.isMiniView {
             return 44
         } else {
             return 60
@@ -140,7 +139,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
         
-        if self.isMiniView && !isSelected {
+        if SettingsData.isMiniView && !isSelected {
             return 44
         }
         
@@ -219,7 +218,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - (self.isMiniView ? 50 : 66)
+        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView ? 50 : 66)
         messageView.sizeToFit()
         var isContinue = false
         if self.selectedRow == indexPath.row {
@@ -272,7 +271,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.mensionsList = data.mentions
         cell.contentData = data.content ?? ""
         cell.urlStr = data.url ?? ""
-        cell.isMiniView = self.isMiniView
+        cell.isMiniView = SettingsData.isMiniView
         
         cell.isFaved = (data.favourited == 1)
         cell.isBoosted = (data.reblogged == 1)

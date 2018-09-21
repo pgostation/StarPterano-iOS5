@@ -118,4 +118,28 @@ final class SettingsData {
             }
         }
     }
+    
+    // ミニビューかどうか
+    private static var _isMiniView: Bool?
+    static var isMiniView: Bool {
+        get {
+            if let cache = self._isMiniView {
+                return cache
+            }
+            if let string = defaults.string(forKey: "isMiniView") {
+                self._isMiniView = (string == "ON")
+                return (string == "ON")
+            }
+            self._isMiniView = false
+            return false
+        }
+        set(newValue) {
+            self._isMiniView = newValue
+            if newValue {
+                defaults.set("ON", forKey: "isMiniView")
+            } else {
+                defaults.removeObject(forKey: "isMiniView")
+            }
+        }
+    }
 }
