@@ -14,19 +14,6 @@ final class MainViewController: MyViewController {
     static weak var instance: MainViewController?
     var TimelineList: [String: TimeLineViewController] = [:]
     
-    
-    override var prefersStatusBarHidden: Bool {
-        return false
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        if SettingsData.isDarkMode {
-            return UIStatusBarStyle.lightContent
-        } else {
-            return UIStatusBarStyle.default
-        }
-    }
-    
     override func loadView() {
         MainViewController.instance = self
         

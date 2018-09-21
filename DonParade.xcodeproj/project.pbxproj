@@ -13,6 +13,7 @@
 		121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0E12153E32500928DCC /* WaitIndicator.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
+		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -46,6 +47,7 @@
 		121DC0E12153E32500928DCC /* WaitIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitIndicator.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
+		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				12CD0256214E981D00133A95 /* SettingsViewController.swift */,
 				12CD0258214E989D00133A95 /* SettingsModel.swift */,
 				1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */,
+				1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */,
 			);
 			path = SettingsView;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
+				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,
 				121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */,

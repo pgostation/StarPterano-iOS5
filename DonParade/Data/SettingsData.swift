@@ -8,7 +8,7 @@
 
 // 設定データの管理
 
-import Foundation
+import UIKit
 
 final class SettingsData {
     private static let defaults = UserDefaults(suiteName: "Settings")!
@@ -162,5 +162,22 @@ final class SettingsData {
         }
     }
     
-    
+    // 基準フォントサイズ
+    private static var _fontSize: CGFloat?
+    static var fontSize: CGFloat {
+        get {
+            if let cache = self._fontSize {
+                return cache
+            }
+            let value = defaults.double(forKey: "fontSize")
+            if value > 0 {
+                return CGFloat(value)
+            }
+            return 16
+        }
+        set(newValue) {
+            self._fontSize = newValue
+            defaults.set(newValue, forKey: "fontSize")
+        }
+    }
 }

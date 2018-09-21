@@ -73,17 +73,17 @@ final class TimeLineViewCell: UITableViewCell {
         self.iconView.clipsToBounds = true
         
         self.nameLabel.textColor = ThemeColor.nameColor
-        self.nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         self.nameLabel.backgroundColor = ThemeColor.cellBgColor
         self.nameLabel.isOpaque = true
         
         self.idLabel.textColor = ThemeColor.idColor
-        self.idLabel.font = UIFont.systemFont(ofSize: 12)
+        self.idLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         self.idLabel.backgroundColor = ThemeColor.cellBgColor
         self.idLabel.isOpaque = true
         
         self.dateLabel.textColor = ThemeColor.dateColor
-        self.dateLabel.font = UIFont.systemFont(ofSize: 12)
+        self.dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         self.dateLabel.textAlignment = .right
         self.dateLabel.backgroundColor = ThemeColor.cellBgColor
         self.dateLabel.adjustsFontSizeToFitWidth = true
@@ -243,7 +243,7 @@ final class TimeLineViewCell: UITableViewCell {
         self.nameLabel.frame = CGRect(x: isMiniView ? 42 : 50,
                                       y: isMiniView ? 3 : 7,
                                       width: self.nameLabel.frame.width,
-                                      height: 16)
+                                      height: SettingsData.fontSize)
         
         let idWidth: CGFloat
         if self.detailDateLabel != nil {
@@ -254,12 +254,12 @@ final class TimeLineViewCell: UITableViewCell {
         self.idLabel.frame = CGRect(x: (isMiniView ? 42 : 50) + self.nameLabel.frame.width + 5,
                                     y: isMiniView ? 3 : 7,
                                     width: idWidth,
-                                    height: 16)
+                                    height: SettingsData.fontSize)
         
         self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
                                       y: isMiniView ? 3 : 7,
                                       width: 45,
-                                      height: 16)
+                                      height: SettingsData.fontSize)
         
         self.detailDateLabel?.frame = CGRect(x: 50,
                                              y: 22,
@@ -272,7 +272,7 @@ final class TimeLineViewCell: UITableViewCell {
                                              height: self.spolerTextLabel?.frame.height ?? 0)
         
         self.messageView?.frame = CGRect(x: isMiniView ? 42 : 50,
-                                         y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? (isMiniView ? 15 : 19),
+                                         y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView ? 1 : 5) + SettingsData.fontSize),
                                          width: self.messageView?.frame.width ?? 0,
                                          height: self.messageView?.frame.height ?? 0)
         

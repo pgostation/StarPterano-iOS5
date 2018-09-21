@@ -84,7 +84,7 @@ final class DecodeToot {
                 if attachment.image == nil {
                     execCallback = true
                 }
-                attachment.bounds = CGRect(x: 0, y: 0, width: 18, height: 18)
+                attachment.bounds = CGRect(x: 0, y: 0, width: SettingsData.fontSize + 4, height: SettingsData.fontSize + 4)
                 
                 let attrStr = NSAttributedString(attachment: attachment)
                 
@@ -131,7 +131,7 @@ final class DecodeToot {
                 if attachment.image == nil {
                     execCallback = true
                 }
-                attachment.bounds = CGRect(x: 0, y: 0, width: 18, height: 18)
+                attachment.bounds = CGRect(x: 0, y: 0, width: SettingsData.fontSize + 4, height: SettingsData.fontSize + 4)
                 
                 let attrStr = NSAttributedString(attachment: attachment)
                 

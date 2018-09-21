@@ -11,5 +11,15 @@
 import UIKit
 
 class MyViewController: UIViewController {
+    override var prefersStatusBarHidden: Bool {
+        return false
+    }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if SettingsData.isDarkMode {
+            return UIStatusBarStyle.lightContent
+        } else {
+            return UIStatusBarStyle.default
+        }
+    }
 }

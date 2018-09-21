@@ -152,7 +152,17 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
                 return cell
             case .fontSize:
-                break
+                let cell = SettingsStepperCell(style: .default,
+                                               value: Double(SettingsData.fontSize),
+                                               minValue: 12,
+                                               maxValue: 24,
+                                               step: 1)
+                cell.textLabel?.text = title + " : " + "\(Int(SettingsData.fontSize))pt"
+                cell.callback = { [weak cell] value in
+                    SettingsData.fontSize = CGFloat(value)
+                    cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.fontSize))pt"
+                }
+                return cell
             }
         case 5:
             title = I18n.get(cacheList[indexPath.row].rawValue)

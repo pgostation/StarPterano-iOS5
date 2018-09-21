@@ -140,7 +140,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
         
         if SettingsData.isMiniView && !isSelected {
-            return 44
+            return 23 + SettingsData.fontSize * 1.5
         }
         
         // セルを拡大表示するかどうか
@@ -179,8 +179,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
-        paragrahStyle.minimumLineHeight = 24
-        paragrahStyle.maximumLineHeight = 24
+        paragrahStyle.minimumLineHeight = SettingsData.fontSize + 10
+        paragrahStyle.maximumLineHeight = SettingsData.fontSize + 10
         attributedText.addAttributes([NSAttributedStringKey.paragraphStyle : paragrahStyle],
                                      range: NSMakeRange(0, attributedText.length))
         
@@ -190,9 +190,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let msgView = UITextView()
             msgView.attributedText = attributedText
             if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
-                msgView.font = UIFont.systemFont(ofSize: 16)
+                msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
             } else {
-                msgView.font = UIFont.systemFont(ofSize: 14)
+                msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             }
             msgView.textColor = ThemeColor.messageColor
             msgView.backgroundColor = ThemeColor.cellBgColor
@@ -210,7 +210,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         } else {
             let msgView = UILabel()
             msgView.attributedText = attributedText
-            msgView.font = UIFont.systemFont(ofSize: 14)
+            msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             msgView.textColor = ThemeColor.messageColor
             msgView.numberOfLines = 0
             msgView.lineBreakMode = .byCharWrapping
@@ -287,7 +287,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if data.sensitive == 1 {
             messageView.isHidden = true
             cell.spolerTextLabel = UILabel()
-            cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: 14)
+            cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: {
                 if cell.id == id {
                     cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: nil)
@@ -333,7 +333,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.repliedLabel!)
             if let replies_count = data.replies_count, replies_count > 0 {
                 cell.repliedLabel?.text = "\(replies_count)"
-                cell.repliedLabel?.font = UIFont.systemFont(ofSize: 14)
+                cell.repliedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
             // ブーストボタン
@@ -356,7 +356,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostedLabel!)
             if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
                 cell.boostedLabel?.text = "\(reblogs_count)"
-                cell.boostedLabel?.font = UIFont.systemFont(ofSize: 14)
+                cell.boostedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
             // お気に入りボタン
@@ -375,7 +375,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.favoritedLabel!)
             if let favourites_count = data.favourites_count, favourites_count > 0 {
                 cell.favoritedLabel?.text = "\(favourites_count)"
-                cell.favoritedLabel?.font = UIFont.systemFont(ofSize: 14)
+                cell.favoritedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
             // 詳細ボタン
@@ -393,7 +393,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.applicationLabel?.textColor = ThemeColor.dateColor
                 cell.applicationLabel?.textAlignment = .right
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
-                cell.applicationLabel?.font = UIFont.systemFont(ofSize: 12)
+                cell.applicationLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
         } else {
             setCellColor(cell: cell)
@@ -425,7 +425,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 dateFormatter.timeStyle = .medium
                 cell.detailDateLabel?.text = dateFormatter.string(from: date)
                 cell.detailDateLabel?.textColor = ThemeColor.dateColor
-                cell.detailDateLabel?.font = UIFont.systemFont(ofSize: 14)
+                cell.detailDateLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                 cell.detailDateLabel?.textAlignment = .right
                 cell.addSubview(cell.detailDateLabel!)
             } else {
@@ -453,7 +453,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // 長すぎて省略している場合
         if isContinue {
             cell.continueView = UILabel()
-            cell.continueView?.font = UIFont.systemFont(ofSize: 14)
+            cell.continueView?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             cell.continueView?.text = "▼"
             cell.continueView?.textColor = ThemeColor.nameColor
             cell.continueView?.textAlignment = .center
@@ -464,7 +464,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if let reblog_acct = data.reblog_acct {
             let account = accountList[reblog_acct]
             cell.boostView = UILabel()
-            cell.boostView?.font = UIFont.systemFont(ofSize: 12)
+            cell.boostView?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             cell.boostView?.textColor = ThemeColor.dateColor
             cell.boostView?.text = String(format: I18n.get("BOOSTED_BY_%@"), account?.display_name ?? "")
             cell.addSubview(cell.boostView!)
@@ -482,7 +482,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // DMの場合
         if data.visibility == "direct" {
             cell.boostView = UILabel()
-            cell.boostView?.font = UIFont.boldSystemFont(ofSize: 14)
+            cell.boostView?.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
             cell.boostView?.textColor = UIColor.red
             cell.boostView?.text = I18n.get("THIS_TOOT_IS_DIRECT_MESSAGE")
             cell.addSubview(cell.boostView!)
