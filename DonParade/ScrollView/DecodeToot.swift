@@ -64,8 +64,9 @@ final class DecodeToot {
         // &lt;などをデコード
         text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "'").replacingOccurrences(of: "&amp;", with: "&")
         
-        // 絵文字の位置をリストアップする
-        var emojiList: [(String.Index, NSAttributedString)] = []
+        let attributedText = NSMutableAttributedString(string: text)
+        
+        // 絵文字に変える
         if let emojis = emojis {
             for emoji in emojis {
                 guard let shortcode = emoji["shortcode"] as? String else { continue }
@@ -87,19 +88,13 @@ final class DecodeToot {
                 
                 let attrStr = NSAttributedString(attachment: attachment)
                 
-                while let range = text.range(of: ":\(shortcode):") {
-                    let index = text.index(range.lowerBound, offsetBy: 0)
-                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "", options: String.CompareOptions.anchored, range: range)
-                    emojiList.append((index, attrStr))
+                while true {
+                    let nsStr = attributedText.string as NSString
+                    if !nsStr.contains(":\(shortcode):") { break }
+                    let range = nsStr.range(of: ":\(shortcode):")
+                    attributedText.replaceCharacters(in: range, with: attrStr)
                 }
             }
-        }
-        
-        let attributedText = NSMutableAttributedString(string: text)
-        
-        // 絵文字を追加
-        for emoji in emojiList {
-            attributedText.insert(emoji.1, at: min(emoji.0.encodedOffset, attributedText.length))
         }
         
         // リンクを追加
