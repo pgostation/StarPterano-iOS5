@@ -20,6 +20,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
     var isDetailTimeline = false
+    var isMiniView = false
     
     override init() {
         super.init()
@@ -123,7 +124,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルのだいたいの高さ(スクロールバーの表示用)
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        if self.isMiniView {
+            return 44
+        } else {
+            return 60
+        }
     }
     
     // セルの正確な高さ
@@ -133,8 +138,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return 55
         }
         
-        // セルを拡大表示するかどうか
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
+        
+        if self.isMiniView && !isSelected {
+            return 44
+        }
+        
+        // セルを拡大表示するかどうか
         var detailOffset: CGFloat = isSelected ? 40 : 0
         if isDetailTimeline && indexPath.row == selectedRow { // 詳細拡大表示
             detailOffset += 20
@@ -205,7 +215,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - 66
+        messageView.frame.size.width = UIScreen.main.bounds.width - (self.isMiniView ? 50 : 66)
         messageView.sizeToFit()
         var isContinue = false
         if self.selectedRow == indexPath.row {
@@ -258,6 +268,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.mensionsList = data.mentions
         cell.contentData = data.content ?? ""
         cell.urlStr = data.url ?? ""
+        cell.isMiniView = self.isMiniView
         
         cell.isFaved = (data.favourited == 1)
         cell.isBoosted = (data.reblogged == 1)

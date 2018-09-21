@@ -74,6 +74,10 @@ final class TimeLineViewController: MyViewController {
                 self.view?.addGestureRecognizer(leftSwipeGesture)
             }
         }
+        
+        // ピンチインでミニビューへ
+        let pinchInGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
+        self.view?.addGestureRecognizer(pinchInGesture)
     }
     
     // ユーザータイムライン/詳細トゥートを閉じる
@@ -125,5 +129,16 @@ final class TimeLineViewController: MyViewController {
         }
         
         return 0
+    }
+    
+    // ピンチインでミニビューへ
+    @objc func pinchAction(_ gesture: UIPinchGestureRecognizer) {
+        guard let view = self.view as? TimeLineView else { return }
+        
+        if gesture.scale < 0.9 {
+            view.enterMiniView()
+        } else if gesture.scale > 1.1 {
+            view.exitMiniView()
+        }
     }
 }

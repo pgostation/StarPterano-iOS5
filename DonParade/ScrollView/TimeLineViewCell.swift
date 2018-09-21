@@ -54,6 +54,7 @@ final class TimeLineViewCell: UITableViewCell {
     var contentData: String = ""
     var urlStr: String = ""
     var mensionsList: [AnalyzeJson.MensionData]?
+    var isMiniView = false
     
     var isFaved = false
     var isBoosted = false
@@ -89,6 +90,7 @@ final class TimeLineViewCell: UITableViewCell {
         self.dateLabel.font = UIFont.systemFont(ofSize: 12)
         self.dateLabel.textAlignment = .right
         self.dateLabel.backgroundColor = TimeLineViewCell.bgColor
+        self.dateLabel.adjustsFontSizeToFitWidth = true
         self.dateLabel.isOpaque = true
         
         self.lineLayer.backgroundColor = UIColor.lightGray.cgColor
@@ -237,29 +239,29 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: screenBounds.width,
                                       height: 1 / UIScreen.main.scale)
         
-        self.iconView.frame = CGRect(x: 8,
-                                     y: 10,
-                                     width: 36,
-                                     height: 36)
+        self.iconView.frame = CGRect(x: isMiniView ? 4 : 8,
+                                     y: isMiniView ? 6 : 10,
+                                     width: isMiniView ? 32 : 36,
+                                     height: isMiniView ? 32 : 36)
         
-        self.nameLabel.frame = CGRect(x: 50,
-                                      y: 7,
+        self.nameLabel.frame = CGRect(x: isMiniView ? 42 : 50,
+                                      y: isMiniView ? 3 : 7,
                                       width: self.nameLabel.frame.width,
                                       height: 16)
         
         let idWidth: CGFloat
         if self.detailDateLabel != nil {
-            idWidth = screenBounds.width - (self.nameLabel.frame.width + 50 + 5)
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + (isMiniView ? 42 : 50))
         } else {
-            idWidth = screenBounds.width - (self.nameLabel.frame.width + 50 + 5 + 50 + 5)
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + (isMiniView ? 42 : 50) + 45 + 5)
         }
-        self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
-                                    y: 7,
+        self.idLabel.frame = CGRect(x: (isMiniView ? 42 : 50) + self.nameLabel.frame.width + 5,
+                                    y: isMiniView ? 3 : 7,
                                     width: idWidth,
                                     height: 16)
         
         self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
-                                      y: 7,
+                                      y: isMiniView ? 3 : 7,
                                       width: 45,
                                       height: 16)
         
@@ -273,8 +275,8 @@ final class TimeLineViewCell: UITableViewCell {
                                          width: self.spolerTextLabel?.frame.width ?? 0,
                                          height: self.spolerTextLabel?.frame.height ?? 0)
         
-        self.messageView?.frame = CGRect(x: 50,
-                                         y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? 19,
+        self.messageView?.frame = CGRect(x: isMiniView ? 42 : 50,
+                                         y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? (isMiniView ? 15 : 19),
                                          width: self.messageView?.frame.width ?? 0,
                                          height: self.messageView?.frame.height ?? 0)
         

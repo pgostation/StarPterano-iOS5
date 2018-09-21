@@ -243,6 +243,24 @@ final class TimeLineView: UITableView {
         }
     }
     
+    // ミニビューにする
+    func enterMiniView() {
+        if model.isMiniView == true { return }
+        
+        model.isMiniView = true
+        
+        self.reloadData()
+    }
+    
+    // ミニビューを解除する
+    func exitMiniView() {
+        if model.isMiniView == false { return }
+        
+        model.isMiniView = false
+        
+        self.reloadData()
+    }
+    
     // タッチしている間ボタンを隠す
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
