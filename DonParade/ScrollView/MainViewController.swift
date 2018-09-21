@@ -189,7 +189,7 @@ final class MainViewController: MyViewController {
             view.accountButton.alpha = 0
         }
         
-        TimeLineViewController.closeButton?.isHidden = true
+        TimeLineViewController.closeButtons.last?.isHidden = true
         
         self.buttonTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(checkTouch), userInfo: nil, repeats: true)
     }
@@ -210,9 +210,9 @@ final class MainViewController: MyViewController {
             view.accountButton.alpha = 1
         }
         
-        if let tableView = TimeLineViewController.closeButton?.superview as? UITableView {
-            TimeLineViewController.closeButton?.frame.origin.y = UIScreen.main.bounds.height - 70 + tableView.contentOffset.y
-            TimeLineViewController.closeButton?.isHidden = false
+        if let tableView = TimeLineViewController.closeButtons.last?.superview as? UITableView {
+            TimeLineViewController.closeButtons.last?.frame.origin.y = UIScreen.main.bounds.height - 70 + tableView.contentOffset.y
+            TimeLineViewController.closeButtons.last?.isHidden = false
         }
         
         self.buttonTimer = nil
