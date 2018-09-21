@@ -28,6 +28,7 @@ final class ThemeColor {
     static var mainButtonsBgColor = UIColor.white
     static var mainButtonsTitleColor = UIColor.white
     static var buttonBorderColor = UIColor.white
+    static var opaqueButtonsBgColor = UIColor.white
     
     // セル選択色
     static var selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
@@ -53,6 +54,7 @@ final class ThemeColor {
             mainButtonsBgColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
             mainButtonsTitleColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 1)
             buttonBorderColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 0.5)
+            opaqueButtonsBgColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             
             selectedBgColor = UIColor(red: 0.00, green: 0.25, blue: 0.00, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.06, green: 0.16, blue: 0.06, alpha: 1)
@@ -75,6 +77,7 @@ final class ThemeColor {
             mainButtonsBgColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
             mainButtonsTitleColor = UIColor(red: 0.0, green: 0.4, blue: 0.0, alpha: 1)
             buttonBorderColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.5)
+            opaqueButtonsBgColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
             
             selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.86, green: 0.96, blue: 0.86, alpha: 1)

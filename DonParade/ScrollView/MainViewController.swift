@@ -61,8 +61,8 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
-            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-            view.tlButton.setTitle("<\(I18n.get("BUTTON_TL"))>", for: .normal)
+            view.tlButton.layer.borderWidth = 2
+            view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
         }
     }
     
@@ -88,8 +88,8 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
-            view.tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
-            view.ltlButton.setTitle("<\(I18n.get("BUTTON_LTL"))>", for: .normal)
+            view.ltlButton.layer.borderWidth = 2
+            view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
         }
     }
     
@@ -110,11 +110,11 @@ final class MainViewController: MyViewController {
             
             if let view = self.view as? MainView {
                 if isLTL {
-                    view.ltlButton.setTitle("<\(I18n.get("BUTTON_LTL"))>", for: .normal)
-                    view.tlButton.setTitle(I18n.get("BUTTON_LL"), for: .normal)
+                    view.ltlButton.layer.borderWidth = 2
+                    view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 } else {
-                    view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-                    view.tlButton.setTitle("<\(I18n.get("BUTTON_TL"))>", for: .normal)
+                    view.tlButton.layer.borderWidth = 2
+                    view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 }
                 
                 if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {

@@ -94,9 +94,9 @@ final class TimeLineViewCell: UITableViewCell {
         
         // addする
         self.addSubview(self.iconView)
-        self.addSubview(self.nameLabel)
         self.addSubview(self.idLabel)
         self.addSubview(self.dateLabel)
+        self.addSubview(self.nameLabel)
         self.layer.addSublayer(self.lineLayer)
         
         // タイマーで5秒ごとに時刻を更新
