@@ -15,6 +15,7 @@ final class LoginViewController: MyViewController {
         
         loginView.authButton.addTarget(self, action: #selector(authAction(_:)), for: .touchUpInside)
         loginView.codeEnterButton.addTarget(self, action: #selector(codeEnterAction(_:)), for: .touchUpInside)
+        loginView.resetButton.addTarget(loginView, action: #selector(loginView.reset), for: .touchUpInside)
     }
     
     // マストドン認証
@@ -113,6 +114,10 @@ final class LoginViewController: MyViewController {
                     DispatchQueue.main.async {
                         let mainViewController = MainViewController()
                         self.present(mainViewController, animated: false, completion: nil)
+                        
+                        view.inputCodeField.isHidden = true
+                        view.codeEnterButton.isHidden = true
+                        view.resetButton.isHidden = true
                     }
                 } catch {
                 }
@@ -128,6 +133,7 @@ final class LoginView: UIView {
     let authButton = UIButton()
     let inputCodeField = UITextField()
     let codeEnterButton = UIButton()
+    let resetButton = UIButton()
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -136,6 +142,7 @@ final class LoginView: UIView {
         self.addSubview(authButton)
         self.addSubview(inputCodeField)
         self.addSubview(codeEnterButton)
+        self.addSubview(resetButton)
         
         setProperties()
     }
@@ -165,15 +172,19 @@ final class LoginView: UIView {
         codeEnterButton.backgroundColor = UIColor.lightGray
         codeEnterButton.setTitleColor(UIColor.blue, for: .normal)
         
+        resetButton.setTitle("×", for: .normal)
+        resetButton.setTitleColor(UIColor.blue, for: .normal)
+        
         inputCodeField.isHidden = true
         codeEnterButton.isHidden = true
+        resetButton.isHidden = true
     }
     
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
-        let fieldWidth: CGFloat = 240
+        let fieldWidth: CGFloat = 280
         let fieldHeight: CGFloat = 40
-        let buttonWidth: CGFloat = 150
+        let buttonWidth: CGFloat = 200
         let buttonHeight: CGFloat = 50
         
         hostField.frame = CGRect(x: screenBounds.width / 2 - fieldWidth / 2,
@@ -195,6 +206,11 @@ final class LoginView: UIView {
                                        y: 200,
                                        width: buttonWidth,
                                        height: buttonHeight)
+        
+        resetButton.frame = CGRect(x: 10,
+                                   y: 30,
+                                   width: buttonHeight,
+                                   height: buttonHeight)
     }
     
     // 認証コード入力フィールドを表示する
@@ -204,14 +220,16 @@ final class LoginView: UIView {
             self.authButton.isHidden = true
             self.inputCodeField.isHidden = false
             self.codeEnterButton.isHidden = false
+            self.resetButton.isHidden = false
         }
     }
     
     // 初期状態に戻す
-    func reset() {
+    @objc func reset() {
         self.hostField.isHidden = false
         self.authButton.isHidden = false
         self.inputCodeField.isHidden = true
         self.codeEnterButton.isHidden = true
+        self.resetButton.isHidden = true
     }
 }

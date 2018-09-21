@@ -271,9 +271,9 @@ final class TimeLineViewCell: UITableViewCell {
                                              height: 18)
         
         self.spolerTextLabel?.frame = CGRect(x: 50,
-                                         y: self.detailDateLabel?.frame.maxY ?? 19,
-                                         width: self.spolerTextLabel?.frame.width ?? 0,
-                                         height: self.spolerTextLabel?.frame.height ?? 0)
+                                             y: self.detailDateLabel?.frame.maxY ?? 19,
+                                             width: self.spolerTextLabel?.frame.width ?? 0,
+                                             height: self.spolerTextLabel?.frame.height ?? 0)
         
         self.messageView?.frame = CGRect(x: isMiniView ? 42 : 50,
                                          y: self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? (isMiniView ? 15 : 19),
@@ -291,9 +291,9 @@ final class TimeLineViewCell: UITableViewCell {
                                        width: screenBounds.width - 56,
                                        height: 20)
         
-        self.showMoreButton?.frame = CGRect(x: 40,
-                                            y: (self.boostView?.frame.maxY ?? self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
-                                            width: screenBounds.width - 56,
+        self.showMoreButton?.frame = CGRect(x: 50,
+                                            y: self.spolerTextLabel?.frame.maxY ?? 20,
+                                            width: screenBounds.width - 66,
                                             height: 20)
         
         for (index, imageView) in (self.imageViews ?? []).enumerated() {

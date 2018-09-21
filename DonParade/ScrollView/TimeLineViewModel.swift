@@ -153,6 +153,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
+        if data.sensitive == 1 { // もっと見る
+            detailOffset += 20
+        }
+        
         let imagesOffset: CGFloat
         if let mediaData = data.mediaData {
             imagesOffset = (isSelected ? UIScreen.main.bounds.width - 70 : 90) * CGFloat(mediaData.count)
@@ -280,6 +284,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if data.sensitive == 1 {
             messageView.isHidden = true
             cell.spolerTextLabel = UILabel()
+            cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: 14)
             cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: {
                 if cell.id == id {
                     cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: nil)
@@ -465,7 +470,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // もっと見るの場合
         if data.sensitive == 1 {
             cell.showMoreButton = UIButton()
-            cell.showMoreButton?.setTitle("…", for: .normal)
+            cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             cell.showMoreButton?.setTitleColor(UIColor.darkGray, for: .normal)
             cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
             cell.addSubview(cell.showMoreButton!)
@@ -579,6 +584,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // セル選択時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if SettingsData.tapDetailMode || self.selectedRow == indexPath.row {
+            if self.isDetailTimeline { return } // すでに詳細表示画面
+            
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
             let mensionsData = getMensionsData(data: data)
