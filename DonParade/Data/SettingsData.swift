@@ -102,6 +102,9 @@ final class SettingsData {
         defaults.set(value, forKey: "accountIconUrl_\(accessToken)")
     }
     
+    // ログインがアプリ起動後初めてかどうか（ユーザ名を取得するかどうかを判定するために使う）
+    static var loginedAccessTokenList: [String] = []
+    
     // タップで詳細に移動
     static var tapDetailMode: Bool {
         get {

@@ -114,7 +114,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         switch indexPath.section {
         case 0:
             let data = SettingsData.accountList[indexPath.row]
-            title = data.0.replacingOccurrences(of: "https://", with: "") + " " + (SettingsData.accountUsername(accessToken: data.1) ?? "")
+            title = (SettingsData.accountUsername(accessToken: data.1) ?? "") + " @ " + data.0.replacingOccurrences(of: "https://", with: "") 
             
             if SettingsData.hostName == data.0 && SettingsData.accessToken == data.1 {
                 cell.accessoryType = .checkmark

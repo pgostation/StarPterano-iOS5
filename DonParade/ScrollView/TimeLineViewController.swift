@@ -33,6 +33,56 @@ final class TimeLineViewController: MyViewController {
         self.mensions = mensions
         
         super.init(nibName: nil, bundle: nil)
+        
+        // アプリ起動後初回アクセスの場合はユーザーネームなどの情報を取得する
+        if let accessToken = SettingsData.accessToken {
+            if !SettingsData.loginedAccessTokenList.contains(accessToken) {
+                SettingsData.loginedAccessTokenList.append(accessToken)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    guard let hostName = SettingsData.hostName else { return }
+                    guard let accessToken = SettingsData.accessToken else { return }
+                    
+                    guard let url = URL(string: "https://\(hostName)/api/v1/accounts/verify_credentials") else { return }
+                    
+                    try? MastodonRequest.get(url: url, completionHandler: { (data, response, error) in
+                        if let data = data {
+                            do {
+                                if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                                    let accountData = AnalyzeJson.analyzeAccountJson(account: responseJson)
+                                    
+                                    if let username = accountData.username, SettingsData.accountUsername(accessToken: accessToken) != username {
+                                        SettingsData.setAccountUsername(accessToken: accessToken, value: username)
+                                    }
+                                    if let icon = accountData.avatar_static, SettingsData.accountIconUrl(accessToken: accessToken) != icon {
+                                        SettingsData.setAccountIconUrl(accessToken: accessToken, value: icon)
+                                        
+                                        ImageCache.image(urlStr: icon, isTemp: false, callback: { image in
+                                            if accessToken != SettingsData.accessToken { return }
+                                            
+                                            if let view = MainViewController.instance?.view as? MainView {
+                                                view.accountButton.setImage(image, for: .normal)
+                                            }
+                                        })
+                                    }
+                                }
+                            } catch {
+                            }
+                        }
+                    })
+                }
+            }
+            
+            if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
+                ImageCache.image(urlStr: iconStr, isTemp: false, callback: { image in
+                    if accessToken != SettingsData.accessToken { return }
+                    
+                    if let view = MainViewController.instance?.view as? MainView {
+                        view.accountButton.setImage(image, for: .normal)
+                    }
+                })
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

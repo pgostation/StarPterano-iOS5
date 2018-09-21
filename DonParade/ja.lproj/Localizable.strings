@@ -15,8 +15,8 @@
 "ALERT_INPUT_CODE_FAILURE" = "不正なコードです";
 
 // タイムライン
-"BUTTON_TL" = "TL";
-"BUTTON_LTL" = "LTL";
+"BUTTON_TL" = "ホーム";
+"BUTTON_LTL" = "ローカル";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_LIST" = "リスト";
 "BUTTON_NOTIFY" = "通知";

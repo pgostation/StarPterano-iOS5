@@ -61,8 +61,8 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
-            view.ltlButton.setTitle("LTL", for: .normal)
-            view.tlButton.setTitle("<TL>", for: .normal)
+            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+            view.tlButton.setTitle("<\(I18n.get("BUTTON_TL"))>", for: .normal)
         }
     }
     
@@ -88,8 +88,8 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
-            view.ltlButton.setTitle("<LTL>", for: .normal)
-            view.tlButton.setTitle("TL", for: .normal)
+            view.tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
+            view.ltlButton.setTitle("<\(I18n.get("BUTTON_LTL"))>", for: .normal)
         }
     }
     
@@ -110,13 +110,19 @@ final class MainViewController: MyViewController {
             
             if let view = self.view as? MainView {
                 if isLTL {
-                    view.ltlButton.setTitle("<LTL>", for: .normal)
-                    view.tlButton.setTitle("TL", for: .normal)
+                    view.ltlButton.setTitle("<\(I18n.get("BUTTON_LTL"))>", for: .normal)
+                    view.tlButton.setTitle(I18n.get("BUTTON_LL"), for: .normal)
                 } else {
-                    view.ltlButton.setTitle("LTL", for: .normal)
-                    view.tlButton.setTitle("<TL>", for: .normal)
+                    view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+                    view.tlButton.setTitle("<\(I18n.get("BUTTON_TL"))>", for: .normal)
                 }
-                view.accountButton.setTitle(String(hostName.prefix(8)), for: .normal)
+                
+                if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
+                    ImageCache.image(urlStr: iconStr, isTemp: false) { image in
+                        if accessToken != SettingsData.accessToken { return }
+                        view.accountButton.setImage(image, for: .normal)
+                    }
+                }
             }
         }
         
@@ -220,7 +226,7 @@ final class MainViewController: MyViewController {
     }
 }
 
-private final class MainView: UIView {
+final class MainView: UIView {
     // 左下
     let tlButton = UIButton()
     let ltlButton = UIButton()
@@ -256,6 +262,7 @@ private final class MainView: UIView {
         self.backgroundColor = ThemeColor.viewBgColor
         
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
+        tlButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
         tlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         tlButton.backgroundColor = ThemeColor.mainButtonsBgColor
@@ -269,6 +276,7 @@ private final class MainView: UIView {
         }
         
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+        ltlButton.titleLabel?.adjustsFontSizeToFitWidth = true
         ltlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
         ltlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         ltlButton.backgroundColor = ThemeColor.mainButtonsBgColor
@@ -317,7 +325,7 @@ private final class MainView: UIView {
             notificationsButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
         
-        accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
+        accountButton.setTitle("", for: .normal)
         accountButton.backgroundColor = ThemeColor.mainButtonsBgColor
         accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         accountButton.clipsToBounds = true
@@ -355,9 +363,9 @@ private final class MainView: UIView {
                                            width: buttonWidth,
                                            height: buttonHeight)
         
-        accountButton.frame = CGRect(x: screenBounds.width - 60,
+        accountButton.frame = CGRect(x: screenBounds.width - 50,
                                      y: 30 + bottomOffset / 2,
-                                     width: 50,
-                                     height: 50)
+                                     width: 40,
+                                     height: 40)
     }
 }
