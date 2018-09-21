@@ -23,6 +23,7 @@ final class TimeLineViewController: MyViewController {
         // 会話の場合、@の相手全てのTimelineを取得して表示する。まず過去、それから未来。関係ないのは非表示
     }
     
+    static var closeButton: UIButton?
     private let type: TimeLineType
     private let option: String? // user指定時はユーザID、タグ指定時はタグ
     private let mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? // typeに.mensions指定時のみ有効
@@ -93,9 +94,10 @@ final class TimeLineViewController: MyViewController {
         if self.type == .user || self.type == .mensions {
             let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
             self.view = view
-                
+            
+            // 閉じるボタンを追加
             let closeButton = UIButton()
-            closeButton.setTitle("CLOSE", for: .normal)
+            closeButton.setTitle("×", for: .normal)
             closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
             closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
             closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
@@ -104,6 +106,7 @@ final class TimeLineViewController: MyViewController {
                                        height: 50)
             closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
             self.view?.addSubview(closeButton)
+            TimeLineViewController.closeButton = closeButton
             
             // 右スワイプで閉じる
             let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
@@ -140,6 +143,8 @@ final class TimeLineViewController: MyViewController {
         }, completion: { _ in
             self.removeFromParentViewController()
             self.view.removeFromSuperview()
+            
+            TimeLineViewController.closeButton = nil
         })
     }
     

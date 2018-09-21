@@ -189,6 +189,8 @@ final class MainViewController: MyViewController {
             view.accountButton.alpha = 0
         }
         
+        TimeLineViewController.closeButton?.isHidden = true
+        
         self.buttonTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(checkTouch), userInfo: nil, repeats: true)
     }
     
@@ -206,6 +208,11 @@ final class MainViewController: MyViewController {
             view.listButton.alpha = 1
             view.notificationsButton.alpha = 1
             view.accountButton.alpha = 1
+        }
+        
+        if let tableView = TimeLineViewController.closeButton?.superview as? UITableView {
+            TimeLineViewController.closeButton?.frame.origin.y = UIScreen.main.bounds.height - 70 + tableView.contentOffset.y
+            TimeLineViewController.closeButton?.isHidden = false
         }
         
         self.buttonTimer = nil
@@ -262,9 +269,10 @@ final class MainView: UIView {
         self.backgroundColor = ThemeColor.viewBgColor
         
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
+        tlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         tlButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        tlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        tlButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         tlButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         tlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
@@ -276,9 +284,10 @@ final class MainView: UIView {
         }
         
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+        ltlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         ltlButton.titleLabel?.adjustsFontSizeToFitWidth = true
         ltlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        ltlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        ltlButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         ltlButton.backgroundColor = ThemeColor.mainButtonsBgColor
         ltlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         ltlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
@@ -290,18 +299,22 @@ final class MainView: UIView {
         }
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        ltlButton.titleLabel?.adjustsFontSizeToFitWidth = true
         tootButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        tootButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        tootButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         tootButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
         tootButton.layer.borderWidth = 1 / UIScreen.main.scale
         tootButton.clipsToBounds = true
-        tootButton.layer.cornerRadius = 20
+        tootButton.layer.cornerRadius = 35
         
         listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
+        listButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        listButton.titleLabel?.adjustsFontSizeToFitWidth = true
         listButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        listButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        listButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         listButton.backgroundColor = ThemeColor.mainButtonsBgColor
         listButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         listButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
@@ -313,8 +326,10 @@ final class MainView: UIView {
         }
         
         notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
+        notificationsButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        notificationsButton.titleLabel?.adjustsFontSizeToFitWidth = true
         notificationsButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        notificationsButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        notificationsButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         notificationsButton.backgroundColor = ThemeColor.mainButtonsBgColor
         notificationsButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         notificationsButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
@@ -338,12 +353,12 @@ final class MainView: UIView {
         let buttonWidth: CGFloat = 60
         let buttonHeight: CGFloat = 40
         
-        tlButton.frame = CGRect(x: 0,
+        tlButton.frame = CGRect(x: -1,
                                 y: screenBounds.height - 100 - bottomOffset,
                                 width: buttonWidth,
                                 height: buttonHeight)
         
-        ltlButton.frame = CGRect(x: 0,
+        ltlButton.frame = CGRect(x: -1,
                                  y: screenBounds.height - 50 - bottomOffset,
                                  width: buttonWidth,
                                  height: buttonHeight)
@@ -353,12 +368,12 @@ final class MainView: UIView {
                                   width: 70,
                                   height: 70)
         
-        listButton.frame = CGRect(x: screenBounds.width - buttonWidth,
+        listButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
                                   y: screenBounds.height - 100 - bottomOffset,
                                   width: buttonWidth,
                                   height: buttonHeight)
         
-        notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth,
+        notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
                                            y: screenBounds.height - 50 - bottomOffset,
                                            width: buttonWidth,
                                            height: buttonHeight)
