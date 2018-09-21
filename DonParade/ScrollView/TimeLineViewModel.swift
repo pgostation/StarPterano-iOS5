@@ -194,7 +194,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             } else {
                 msgView.font = UIFont.systemFont(ofSize: 14)
             }
-            msgView.backgroundColor = TimeLineViewCell.bgColor
+            msgView.textColor = ThemeColor.messageColor
+            msgView.backgroundColor = ThemeColor.cellBgColor
             msgView.textContainer.lineBreakMode = .byCharWrapping
             msgView.isOpaque = true
             msgView.isScrollEnabled = false
@@ -210,9 +211,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let msgView = UILabel()
             msgView.attributedText = attributedText
             msgView.font = UIFont.systemFont(ofSize: 14)
+            msgView.textColor = ThemeColor.messageColor
             msgView.numberOfLines = 0
             msgView.lineBreakMode = .byCharWrapping
-            msgView.backgroundColor = TimeLineViewCell.bgColor
+            msgView.backgroundColor = ThemeColor.cellBgColor
             msgView.isOpaque = true
             messageView = msgView
         }
@@ -240,7 +242,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 // 過去のトゥートに遡る
                 timelineView.refreshOld(id: list.last?.id)
             }
-            return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            cell.backgroundColor = ThemeColor.viewBgColor
+            return cell
         }
         
         var cell: TimeLineViewCell! = nil
@@ -320,7 +324,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // 返信ボタンを追加
             cell.replyButton = UIButton()
             cell.replyButton?.setTitle("↩︎", for: .normal)
-            cell.replyButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.replyButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             cell.replyButton?.addTarget(cell, action: #selector(cell.replyAction), for: .touchUpInside)
             cell.addSubview(cell.replyButton!)
             
@@ -339,9 +343,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             } else {
                 cell.boostButton?.setTitle("⇄", for: .normal)
                 if data.reblogged == 1 {
-                    cell.boostButton?.setTitleColor(UIColor.blue, for: .normal)
+                    cell.boostButton?.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
                 } else {
-                    cell.boostButton?.setTitleColor(UIColor.gray, for: .normal)
+                    cell.boostButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
                 }
                 cell.boostButton?.addTarget(cell, action: #selector(cell.boostAction), for: .touchUpInside)
             }
@@ -359,9 +363,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.favoriteButton = UIButton()
             cell.favoriteButton?.setTitle("★", for: .normal)
             if data.favourited == 1 {
-                cell.favoriteButton?.setTitleColor(UIColor.blue, for: .normal)
+                cell.favoriteButton?.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
             } else {
-                cell.favoriteButton?.setTitleColor(UIColor.gray, for: .normal)
+                cell.favoriteButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             }
             cell.favoriteButton?.addTarget(cell, action: #selector(cell.favoriteAction), for: .touchUpInside)
             cell.addSubview(cell.favoriteButton!)
@@ -377,7 +381,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // 詳細ボタン
             cell.detailButton = UIButton()
             cell.detailButton?.setTitle("…", for: .normal)
-            cell.detailButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.detailButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             cell.detailButton?.addTarget(cell, action: #selector(cell.detailAction), for: .touchUpInside)
             cell.addSubview(cell.detailButton!)
             
@@ -386,7 +390,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.applicationLabel = UILabel()
                 cell.addSubview(cell.applicationLabel!)
                 cell.applicationLabel?.text = "\(application["name"] ?? "")"
-                cell.applicationLabel?.textColor = UIColor.gray
+                cell.applicationLabel?.textColor = ThemeColor.dateColor
                 cell.applicationLabel?.textAlignment = .right
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
                 cell.applicationLabel?.font = UIFont.systemFont(ofSize: 12)
@@ -420,7 +424,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 dateFormatter.dateStyle = .medium
                 dateFormatter.timeStyle = .medium
                 cell.detailDateLabel?.text = dateFormatter.string(from: date)
-                cell.detailDateLabel?.textColor = UIColor.gray
+                cell.detailDateLabel?.textColor = ThemeColor.dateColor
                 cell.detailDateLabel?.font = UIFont.systemFont(ofSize: 14)
                 cell.detailDateLabel?.textAlignment = .right
                 cell.addSubview(cell.detailDateLabel!)
@@ -451,7 +455,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.continueView = UILabel()
             cell.continueView?.font = UIFont.systemFont(ofSize: 14)
             cell.continueView?.text = "▼"
-            cell.continueView?.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
+            cell.continueView?.textColor = ThemeColor.nameColor
             cell.continueView?.textAlignment = .center
             cell.addSubview(cell.continueView!)
         }
@@ -461,7 +465,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let account = accountList[reblog_acct]
             cell.boostView = UILabel()
             cell.boostView?.font = UIFont.systemFont(ofSize: 12)
-            cell.boostView?.textColor = UIColor.darkGray
+            cell.boostView?.textColor = ThemeColor.dateColor
             cell.boostView?.text = String(format: I18n.get("BOOSTED_BY_%@"), account?.display_name ?? "")
             cell.addSubview(cell.boostView!)
         }
@@ -470,7 +474,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if data.sensitive == 1 {
             cell.showMoreButton = UIButton()
             cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
-            cell.showMoreButton?.setTitleColor(UIColor.darkGray, for: .normal)
+            cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
             cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
             cell.addSubview(cell.showMoreButton!)
         }
@@ -502,46 +506,46 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if self.selectedRow != nil && self.selectedRow == cell.indexPath?.row {
             // 選択色
-            cell.backgroundColor = TimeLineViewCell.selectedBgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.selectedBgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.selectedBgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.selectedBgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.selectedBgColor
+            cell.backgroundColor = ThemeColor.selectedBgColor
+            cell.messageView?.backgroundColor = ThemeColor.selectedBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.selectedBgColor
+            cell.idLabel.backgroundColor = ThemeColor.selectedBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.selectedBgColor
         } else if self.selectedAccountId == cell.accountId {
             // 関連色
-            cell.backgroundColor = TimeLineViewCell.sameAccountBgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.sameAccountBgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.sameAccountBgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.sameAccountBgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.sameAccountBgColor
+            cell.backgroundColor = ThemeColor.sameAccountBgColor
+            cell.messageView?.backgroundColor = ThemeColor.sameAccountBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.sameAccountBgColor
+            cell.idLabel.backgroundColor = ThemeColor.sameAccountBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.sameAccountBgColor
         } else if self.inReplyToTootId == cell.id {
             // 返信先のトゥートの色
-            cell.backgroundColor = TimeLineViewCell.mentionedBgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.mentionedBgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.mentionedBgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.mentionedBgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.mentionedBgColor
+            cell.backgroundColor = ThemeColor.mentionedBgColor
+            cell.messageView?.backgroundColor = ThemeColor.mentionedBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.mentionedBgColor
+            cell.idLabel.backgroundColor = ThemeColor.mentionedBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.mentionedBgColor
         } else if self.inReplyToAccountId == cell.accountId {
             // 返信先のアカウントの色
-            cell.backgroundColor = TimeLineViewCell.mentionedSameBgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.mentionedSameBgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.mentionedSameBgColor
+            cell.backgroundColor = ThemeColor.mentionedSameBgColor
+            cell.messageView?.backgroundColor = ThemeColor.mentionedSameBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.mentionedSameBgColor
+            cell.idLabel.backgroundColor = ThemeColor.mentionedSameBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.mentionedSameBgColor
         } else if mensionContains(selectedAccountId: self.selectedAccountId, mensions: cell.mensionsList) {
             // メンションが選択中アカウントの場合の色
-            cell.backgroundColor = TimeLineViewCell.toMentionBgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.toMentionBgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.toMentionBgColor
+            cell.backgroundColor = ThemeColor.toMentionBgColor
+            cell.messageView?.backgroundColor = ThemeColor.toMentionBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.toMentionBgColor
+            cell.idLabel.backgroundColor = ThemeColor.toMentionBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.toMentionBgColor
         } else {
             // 通常色
-            cell.backgroundColor = TimeLineViewCell.bgColor
-            cell.messageView?.backgroundColor = TimeLineViewCell.bgColor
-            cell.nameLabel.backgroundColor = TimeLineViewCell.bgColor
-            cell.idLabel.backgroundColor = TimeLineViewCell.bgColor
-            cell.dateLabel.backgroundColor = TimeLineViewCell.bgColor
+            cell.backgroundColor = ThemeColor.cellBgColor
+            cell.messageView?.backgroundColor = ThemeColor.cellBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.cellBgColor
+            cell.idLabel.backgroundColor = ThemeColor.cellBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.cellBgColor
         }
     }
     

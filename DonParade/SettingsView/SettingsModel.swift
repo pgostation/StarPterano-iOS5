@@ -60,12 +60,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     
     // 5.操作表示設定
     private enum Control: String {
-        case theme = "SETTINGS_THEME" // テーマ切り替え、さらに各色もカスタムできる
+        case darkMode = "SETTINGS_DARKMODE" // ダームモード切り替え
         // 背景色 / ユーザ名表示色 / ID表示色(同一インスタンス, 別インスタンス) / テキスト表示色 / 時刻表示色
         case fontSize = "SETTINGS_FONTSIZE"
         //case wallPaper = "SETTINGS_WALLPAPER"// 壁紙設定
     }
-    private let controlList: [Control] = [.theme,
+    private let controlList: [Control] = [.darkMode,
                                           .fontSize]
     
     // 6.キャッシュ
@@ -143,6 +143,17 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             title = I18n.get(myPageList[indexPath.row].rawValue)
         case 4:
             title = I18n.get(controlList[indexPath.row].rawValue)
+            switch controlList[indexPath.row] {
+            case .darkMode:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isDarkMode)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.isDarkMode = isOn
+                }
+                return cell
+            case .fontSize:
+                break
+            }
         case 5:
             title = I18n.get(cacheList[indexPath.row].rawValue)
         case 6:
@@ -192,7 +203,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 3:
             break
         case 4:
-            break
+            switch controlList[indexPath.row] {
+            case .darkMode:
+                break
+            case .fontSize:
+                break
+            }
         case 5:
             break
         case 6:

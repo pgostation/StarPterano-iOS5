@@ -46,8 +46,8 @@ final class TimeLineViewController: MyViewController {
                 
             let closeButton = UIButton()
             closeButton.setTitle("CLOSE", for: .normal)
-            closeButton.setTitleColor(UIColor.blue, for: .normal)
-            closeButton.backgroundColor = UIColor.lightGray
+            closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+            closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
             closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
                                        y: UIScreen.main.bounds.height - 70,
                                        width: 50,

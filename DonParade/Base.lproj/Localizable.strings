@@ -63,7 +63,7 @@
 "SETTINGS_BLOCKLIST" = "Block list";
 
 // 設定画面(操作表示設定)
-"SETTINGS_THEME" = "Theme";
+"SETTINGS_DARKMODE" = "Dark theme";
 "SETTINGS_FONTSIZE" = "Font size";
 "SETTINGS_TAP_TOOT" = "Tap detail mode";
 

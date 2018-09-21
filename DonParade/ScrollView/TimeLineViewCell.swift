@@ -11,12 +11,6 @@
 import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
-    static let bgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
-    static let selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
-    static let sameAccountBgColor = UIColor(red: 0.86, green: 0.96, blue: 0.86, alpha: 1)
-    static let mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
-    static let mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
-    static let toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
     var id = ""
     
     // 基本ビュー
@@ -65,35 +59,37 @@ final class TimeLineViewCell: UITableViewCell {
         
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
-        // デフォルトのテキストァベルは不要
+        // デフォルトのテキストラベルは不要
         self.textLabel?.removeFromSuperview()
         self.detailTextLabel?.removeFromSuperview()
         
         // 固定プロパティは初期化時に設定
         self.clipsToBounds = true
-        self.backgroundColor = TimeLineViewCell.bgColor
+        self.backgroundColor = ThemeColor.cellBgColor
         self.isOpaque = true
+        self.selectionStyle = .none
         
         self.iconView.layer.cornerRadius = 5
         self.iconView.clipsToBounds = true
         
-        self.nameLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1)
+        self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        self.nameLabel.backgroundColor = TimeLineViewCell.bgColor
+        self.nameLabel.backgroundColor = ThemeColor.cellBgColor
         self.nameLabel.isOpaque = true
         
+        self.idLabel.textColor = ThemeColor.idColor
         self.idLabel.font = UIFont.systemFont(ofSize: 12)
-        self.idLabel.backgroundColor = TimeLineViewCell.bgColor
+        self.idLabel.backgroundColor = ThemeColor.cellBgColor
         self.idLabel.isOpaque = true
         
-        self.dateLabel.textColor = UIColor.darkGray
+        self.dateLabel.textColor = ThemeColor.dateColor
         self.dateLabel.font = UIFont.systemFont(ofSize: 12)
         self.dateLabel.textAlignment = .right
-        self.dateLabel.backgroundColor = TimeLineViewCell.bgColor
+        self.dateLabel.backgroundColor = ThemeColor.cellBgColor
         self.dateLabel.adjustsFontSizeToFitWidth = true
         self.dateLabel.isOpaque = true
         
-        self.lineLayer.backgroundColor = UIColor.lightGray.cgColor
+        self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
         
         // addする

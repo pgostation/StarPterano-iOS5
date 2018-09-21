@@ -14,14 +14,14 @@ final class SettingsViewController: MyViewController {
     override func viewDidLoad() {
         SettingsViewController.instance = self
         
-        self.view.backgroundColor = TimeLineViewCell.selectedBgColor
+        self.view.backgroundColor = ThemeColor.selectedBgColor
         
         let view = SettingsView()
         self.view.addSubview(view)
         
         let closeButton = UIButton()
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
-        closeButton.setTitleColor(UIColor.darkGray, for: .normal)
+        closeButton.setTitleColor(ThemeColor.messageColor, for: .normal)
         closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         closeButton.frame = CGRect(x: 10,
                                    y: UIUtils.statusBarHeight() + 3,

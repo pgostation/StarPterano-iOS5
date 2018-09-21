@@ -14,8 +14,25 @@ final class MainViewController: MyViewController {
     static weak var instance: MainViewController?
     var TimelineList: [String: TimeLineViewController] = [:]
     
+    
+    override var prefersStatusBarHidden: Bool {
+        return false
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if SettingsData.isDarkMode {
+            return UIStatusBarStyle.lightContent
+        } else {
+            return UIStatusBarStyle.default
+        }
+    }
+    
     override func loadView() {
         MainViewController.instance = self
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        ThemeColor.change()
         
         // 共通部分のビュー
         let view = MainView()
@@ -247,33 +264,33 @@ private final class MainView: UIView {
     }
     
     private func setProperties() {
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = ThemeColor.viewBgColor
         
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
-        tlButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        tlButton.setTitleColor(UIColor.blue, for: .normal)
+        tlButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        tlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-        ltlButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        ltlButton.setTitleColor(UIColor.blue, for: .normal)
+        ltlButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        ltlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
-        tootButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        tootButton.setTitleColor(UIColor.blue, for: .normal)
+        tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 20
         
         listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
-        listButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        listButton.setTitleColor(UIColor.blue, for: .normal)
+        listButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        listButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
-        notificationsButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        notificationsButton.setTitleColor(UIColor.blue, for: .normal)
+        notificationsButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        notificationsButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
-        accountButton.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
-        accountButton.setTitleColor(UIColor.blue, for: .normal)
+        accountButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         accountButton.clipsToBounds = true
         accountButton.layer.cornerRadius = 10
     }

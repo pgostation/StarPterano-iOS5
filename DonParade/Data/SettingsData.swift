@@ -142,4 +142,25 @@ final class SettingsData {
             }
         }
     }
+    
+    // ダークモードかどうか
+    static var isDarkMode: Bool {
+        get {
+            if let string = defaults.string(forKey: "isDarkMode") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "isDarkMode")
+            } else {
+                defaults.removeObject(forKey: "isDarkMode")
+            }
+            
+            ThemeColor.change()
+        }
+    }
+    
+    
 }

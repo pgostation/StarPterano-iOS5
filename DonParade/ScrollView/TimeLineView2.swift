@@ -29,6 +29,7 @@ final class TimeLineView: UITableView {
         self.delegate = model
         self.dataSource = model
         
+        self.backgroundColor = ThemeColor.viewBgColor
         self.separatorColor = UIColor.clear
         
         if type != .mensions {
@@ -101,13 +102,13 @@ final class TimeLineView: UITableView {
         try? MastodonRequest.get(url: requestUrl) { [weak self] (data, response, error) in
             guard let strongSelf = self else { return }
             
+            DispatchQueue.main.async {
+                self?.refreshCon.endRefreshing()
+                self?.waitIndicator?.removeFromSuperview()
+            }
+            
             if let data = data {
                 do {
-                    DispatchQueue.main.async {
-                        self?.refreshCon.endRefreshing()
-                        self?.waitIndicator?.removeFromSuperview()
-                    }
-                    
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
                         AnalyzeJson.analyseJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
                     } else if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {

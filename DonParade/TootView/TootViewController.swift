@@ -80,19 +80,19 @@ private final class TootView: UIView {
     }
     
     private func setProperties() {
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = ThemeColor.viewBgColor
         
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
-        closeButton.backgroundColor = UIColor.lightGray
-        closeButton.setTitleColor(UIColor.blue, for: .normal)
+        closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
-        tootButton.backgroundColor = UIColor.lightGray
-        tootButton.setTitleColor(UIColor.blue, for: .normal)
+        tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         textField.becomeFirstResponder()
         textField.isEditable = true
-        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderColor = ThemeColor.messageColor.cgColor
         textField.layer.borderWidth = 1 / UIScreen.main.scale
     }
     

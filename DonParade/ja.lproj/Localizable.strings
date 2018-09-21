@@ -63,7 +63,7 @@
 "SETTINGS_BLOCKLIST" = "ブロックリスト";
 
 // 設定画面(操作表示設定)
-"SETTINGS_THEME" = "テーマ";
+"SETTINGS_DARKMODE" = "ダークテーマ";
 "SETTINGS_FONTSIZE" = "フォントサイズ";
 "SETTINGS_TAP_TOOT" = "タップで詳細画面に移動";
 
