@@ -45,19 +45,19 @@ final class ThemeColor {
             separatorColor = UIColor.darkGray
             
             messageColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
-            nameColor = UIColor(red: 0.4, green: 0.7, blue: 0.4, alpha: 1)
+            nameColor = UIColor(red: 0.5, green: 0.8, blue: 0.3, alpha: 1)
             idColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
             dateColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
             
             detailButtonsColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
             detailButtonsHiliteColor = UIColor(red: 0.5, green: 1.0, blue: 0.6, alpha: 1)
-            mainButtonsBgColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
-            mainButtonsTitleColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 1)
-            buttonBorderColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 0.8)
+            mainButtonsBgColor = UIColor(red: 0.55, green: 0.55, blue: 0.5, alpha: 0.4)
+            mainButtonsTitleColor = UIColor(red: 0.7, green: 1.0, blue: 0.1, alpha: 1)
+            buttonBorderColor = UIColor(red: 0.7, green: 1.0, blue: 0.1, alpha: 0.8)
             opaqueButtonsBgColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             
-            selectedBgColor = UIColor(red: 0.00, green: 0.25, blue: 0.00, alpha: 1)
-            sameAccountBgColor = UIColor(red: 0.06, green: 0.16, blue: 0.06, alpha: 1)
+            selectedBgColor = UIColor(red: 0.20, green: 0.25, blue: 0.00, alpha: 1)
+            sameAccountBgColor = UIColor(red: 0.12, green: 0.16, blue: 0.06, alpha: 1)
             mentionedBgColor = UIColor(red: 0.3, green: 0.33, blue: 0.12, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.24, green: 0.21, blue: 0.16, alpha: 1)
             toMentionBgColor = UIColor(red: 0.15, green: 0.20, blue: 0.30, alpha: 1)

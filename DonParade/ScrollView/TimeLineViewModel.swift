@@ -450,6 +450,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
                 cell.addSubview(imageView)
                 cell.imageViews?.append(imageView)
+                
+                if data.sensitive == 1 {
+                    imageView.isHidden = true
+                }
             }
         }
         

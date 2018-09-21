@@ -197,6 +197,10 @@ final class TimeLineViewCell: UITableViewCell {
     // もっと見る
     @objc func showMoreAction() {
         self.messageView?.isHidden = false
+        for imageView in self.imageViews ?? [] {
+            imageView.isHidden = false
+        }
+        
         self.showMoreButton?.removeFromSuperview()
     }
     
@@ -245,7 +249,7 @@ final class TimeLineViewCell: UITableViewCell {
         self.nameLabel.frame = CGRect(x: isMiniView ? 42 : 50,
                                       y: isMiniView ? 3 : 7,
                                       width: self.nameLabel.frame.width,
-                                      height: SettingsData.fontSize)
+                                      height: SettingsData.fontSize + 1)
         
         let idWidth: CGFloat
         if self.detailDateLabel != nil {
