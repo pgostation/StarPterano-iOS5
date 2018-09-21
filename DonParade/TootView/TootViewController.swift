@@ -16,7 +16,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         TootViewController.isShown = true
         
-        self.modalPresentationStyle = .overCurrentContext
+        _ = EmojiData.getEmojiCache(host: SettingsData.hostName!)
     }
     
     deinit {
@@ -58,10 +58,16 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         guard let hostName = SettingsData.hostName else { return }
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
-        try? MastodonRequest.post(url: url, body: ["status": text]) { (data, response, error) in
+        
+        let bodyJson: [String: String] = [
+        "status": text,
+        "visibility": view.protectMode.rawValue,
+        ]
+        
+        try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
         }
         
-        self.dismiss(animated: false, completion: nil)
+        closeAction()
     }
     
     // 添付画像を追加する
@@ -96,6 +102,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // カスタム絵文字を入力する
     @objc func emojiAction() {
+        let emojiViewController = EmojiInputViewController()
     }
     
     // 画面を閉じる
