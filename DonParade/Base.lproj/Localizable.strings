@@ -36,25 +36,26 @@
 "DATETIME_%D_DAYS_AGO" = "%dd";
 "DATETIME_%D_YEARS_AGO" = "%dy";
 
+// 公開範囲
+"TITLE_PROTECTMODE" = "Privacy";
+"PROTECTMODE_PUBLIC" = "🌐 Public";
+"PROTECTMODE_UNLISTED" = "🔓 Unlisted";
+"PROTECTMODE_PRIVATE" = "🔐 Private";
+"PROTECTMODE_DIRECT" = "✉️ Direct";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 
 // 設定画面(カテゴリ)
 "SETTINGS_SELECT_ACCOUNT" = "Change account";
-"SETTINGS_ACCOUNT_SETTINGS" = "Account settings";
-"SETTINGS_ACCOUNT" = "Add and remove account";
+"SETTINGS_ACCOUNT" = "Add account";
 "SETTINGS_MASTODON" = "Mastodon settings";
-"SETTINGS_CONTROL" = "Control settings";
+"SETTINGS_APPLICATION" = "Application settings";
 "SETTINGS_CACHE" = "Cache";
 "SETTINGS_OTHER" = "Other";
 
-// 設定画面(アカウント設定)
-"SETTINGS_TOOT_PROTECT_DEFAULT" = "Default protect mode";
-"SETTINGS_ACCOUNT_BUTTON_VIEW" = "Account button view";
-
 // 設定画面(アカウントの追加と削除)
 "SETTINGS_ADD_ACCOUNT" = "Add account";
-"SETTINGS_REMOVE_ACCOUNT" = "Remove account";
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "Your Mastodon page";
@@ -62,7 +63,8 @@
 "SETTINGS_MUTELIST" = "Mute list";
 "SETTINGS_BLOCKLIST" = "Block list";
 
-// 設定画面(操作表示設定)
+// 設定画面(アプリ設定)
+"SETTINGS_TOOT_PROTECT_DEFAULT" = "Private mode";
 "SETTINGS_DARKMODE" = "Dark theme";
 "SETTINGS_FONTSIZE" = "Font size";
 "SETTINGS_TAP_TOOT" = "Tap detail mode";

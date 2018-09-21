@@ -180,4 +180,23 @@ final class SettingsData {
             defaults.set(newValue, forKey: "fontSize")
         }
     }
+    
+    // デフォルトの保護モード
+    enum ProtectMode: String {
+        case publicMode = "public"
+        case unlisted = "unlisted"
+        case privateMode = "private"
+        case direct = "direct"
+    }
+    static var protectMode: ProtectMode {
+        get {
+            if let value = ProtectMode(rawValue: defaults.string(forKey: "protectMode") ?? "") {
+                return value
+            }
+            return ProtectMode.publicMode
+        }
+        set(newValue) {
+            defaults.set(newValue.rawValue, forKey: "protectMode")
+        }
+    }
 }

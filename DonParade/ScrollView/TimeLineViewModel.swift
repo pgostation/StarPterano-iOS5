@@ -333,6 +333,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.repliedLabel!)
             if let replies_count = data.replies_count, replies_count > 0 {
                 cell.repliedLabel?.text = "\(replies_count)"
+                cell.repliedLabel?.textColor = ThemeColor.messageColor
                 cell.repliedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
@@ -356,6 +357,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostedLabel!)
             if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
                 cell.boostedLabel?.text = "\(reblogs_count)"
+                cell.boostedLabel?.textColor = ThemeColor.messageColor
                 cell.boostedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
@@ -375,6 +377,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.favoritedLabel!)
             if let favourites_count = data.favourites_count, favourites_count > 0 {
                 cell.favoritedLabel?.text = "\(favourites_count)"
+                cell.favoritedLabel?.textColor = ThemeColor.messageColor
                 cell.favoritedLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
             
@@ -588,6 +591,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if SettingsData.tapDetailMode || self.selectedRow == indexPath.row {
             if self.isDetailTimeline { return } // すでに詳細表示画面
+            if TootViewController.isShown { return } // トゥート画面表示中は移動しない
             
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)

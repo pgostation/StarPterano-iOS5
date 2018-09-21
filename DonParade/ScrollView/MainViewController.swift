@@ -94,6 +94,8 @@ final class MainViewController: MyViewController {
     }
     
     func swipeView(toRight: Bool) {
+        if TootViewController.isShown { return } // トゥート画面表示中は移動しない
+        
         let oldTimelineViewController = self.timelineViewController
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
@@ -212,9 +214,9 @@ final class MainViewController: MyViewController {
     // トゥート画面を開く
     @objc func tootAction(_ sender: UIButton?) {
         let tootViewController = TootViewController()
-        tootViewController.modalPresentationStyle = .overCurrentContext
         tootViewController.view.backgroundColor = UIColor.clear
-        self.present(tootViewController, animated: false, completion: nil)
+        self.addChildViewController(tootViewController)
+        self.view.addSubview(tootViewController.view)
     }
 }
 
@@ -254,26 +256,66 @@ private final class MainView: UIView {
         self.backgroundColor = ThemeColor.viewBgColor
         
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
+        tlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        tlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         tlButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        tlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        tlButton.clipsToBounds = true
+        tlButton.layer.cornerRadius = 10
+        if #available(iOS 11.0, *) {
+            tlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        }
         
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+        ltlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        ltlButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         ltlButton.backgroundColor = ThemeColor.mainButtonsBgColor
         ltlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        ltlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        ltlButton.clipsToBounds = true
+        ltlButton.layer.cornerRadius = 10
+        if #available(iOS 11.0, *) {
+            ltlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        }
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        tootButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        tootButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        tootButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        tootButton.layer.borderWidth = 1 / UIScreen.main.scale
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 20
         
         listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
+        listButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        listButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         listButton.backgroundColor = ThemeColor.mainButtonsBgColor
         listButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        listButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        listButton.layer.borderWidth = 1 / UIScreen.main.scale
+        listButton.clipsToBounds = true
+        listButton.layer.cornerRadius = 10
+        if #available(iOS 11.0, *) {
+            listButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        }
         
         notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
+        notificationsButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        notificationsButton.titleLabel?.shadowOffset = CGSize(width: 0.5, height: 0.5)
         notificationsButton.backgroundColor = ThemeColor.mainButtonsBgColor
         notificationsButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        notificationsButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        notificationsButton.layer.borderWidth = 1 / UIScreen.main.scale
+        notificationsButton.clipsToBounds = true
+        notificationsButton.layer.cornerRadius = 10
+        if #available(iOS 11.0, *) {
+            notificationsButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        }
         
         accountButton.setTitle(I18n.get("BUTTON_ACCOUNT"), for: .normal)
         accountButton.backgroundColor = ThemeColor.mainButtonsBgColor

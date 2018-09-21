@@ -27,6 +27,7 @@ final class ThemeColor {
     static var detailButtonsHiliteColor = UIColor.white
     static var mainButtonsBgColor = UIColor.white
     static var mainButtonsTitleColor = UIColor.white
+    static var buttonBorderColor = UIColor.white
     
     // セル選択色
     static var selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
@@ -51,6 +52,7 @@ final class ThemeColor {
             detailButtonsHiliteColor = UIColor(red: 0.5, green: 1.0, blue: 0.6, alpha: 1)
             mainButtonsBgColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
             mainButtonsTitleColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 1)
+            buttonBorderColor = UIColor(red: 0.2, green: 1.0, blue: 0.2, alpha: 0.5)
             
             selectedBgColor = UIColor(red: 0.00, green: 0.25, blue: 0.00, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.06, green: 0.16, blue: 0.06, alpha: 1)
@@ -69,9 +71,10 @@ final class ThemeColor {
             dateColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
             
             detailButtonsColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
-            detailButtonsHiliteColor = UIColor(red: 0.2, green: 1.0, blue: 0.4, alpha: 1)
+            detailButtonsHiliteColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1)
             mainButtonsBgColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
-            mainButtonsTitleColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1)
+            mainButtonsTitleColor = UIColor(red: 0.0, green: 0.4, blue: 0.0, alpha: 1)
+            buttonBorderColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.5)
             
             selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.86, green: 0.96, blue: 0.86, alpha: 1)

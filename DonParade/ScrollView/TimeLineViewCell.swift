@@ -11,7 +11,7 @@
 import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
-    var id = ""
+    var id = "" // トゥートのID
     
     // 基本ビュー
     let lineLayer = CALayer()
@@ -122,6 +122,8 @@ final class TimeLineViewCell: UITableViewCell {
     
     // アイコンか名前欄をタップした時の処理
     @objc func tapAccountAction() {
+        if TootViewController.isShown { return } // トゥート画面表示中は移動しない
+        
         if let accountId = self.accountId {
             let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
             MainViewController.instance?.addChildViewController(accountTimeLineViewController)

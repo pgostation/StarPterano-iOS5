@@ -12,41 +12,29 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // カテゴリー
     private enum Category: String {
         case selectAccount = "SETTINGS_SELECT_ACCOUNT"
-        case accountSettings = "SETTINGS_ACCOUNT_SETTINGS"
         case account = "SETTINGS_ACCOUNT"
         case mypage = "SETTINGS_MASTODON"
-        case control = "SETTINGS_CONTROL"
+        case application = "SETTINGS_APPLICATION"
         case cache = "SETTINGS_CACHE"
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
-                                            .accountSettings,
                                             .account,
                                             .mypage,
-                                            .control,
+                                            .application,
                                             .cache,
                                             .other]
     
     // 1.アカウントの切り替え
     //   SettingsDataに登録してあるアカウントを表示する
     
-    // 2.アカウントごとの設定
-    private enum AccountSettings: String {
-        case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
-        case accountButtonView = "SETTINGS_ACCOUNT_BUTTON_VIEW"
-    }
-    private let accountSettingsList: [AccountSettings] = [.tootProtectDefault,
-                                                          .accountButtonView]
-    
-    // 3.アカウントの追加と削除
+    // 2.アカウントの追加
     private enum Account: String {
         case add = "SETTINGS_ADD_ACCOUNT"
-        case remove = "SETTINGS_REMOVE_ACCOUNT"
     }
-    private let accountList: [Account] = [.add,
-                                          .remove]
+    private let accountList: [Account] = [.add]
     
-    // 4.マストドン設定
+    // 3.マストドン設定
     private enum MyPage: String {
         case mypage = "SETTINGS_MYPAGE"
         case favorite = "SETTINGS_FAVORITELIST"
@@ -58,33 +46,30 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                         .mute,
                                         .block]
     
-    // 5.操作表示設定
-    private enum Control: String {
-        case darkMode = "SETTINGS_DARKMODE" // ダームモード切り替え
-        // 背景色 / ユーザ名表示色 / ID表示色(同一インスタンス, 別インスタンス) / テキスト表示色 / 時刻表示色
+    // 4.アプリの設定
+    private enum Application: String {
+        case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
+        case darkMode = "SETTINGS_DARKMODE" // ダークモード切り替え
         case fontSize = "SETTINGS_FONTSIZE"
-        //case wallPaper = "SETTINGS_WALLPAPER"// 壁紙設定
     }
-    private let controlList: [Control] = [.darkMode,
-                                          .fontSize]
+    private let applicationList: [Application] = [.tootProtectDefault,
+                                                  .darkMode,
+                                                  .fontSize]
     
-    // 6.キャッシュ
+    // 5.キャッシュ
     private enum Cache: String {
         case clearCache = "SETTINGS_CLEAR_CACHE"
-        case showIcons = "SETTINGS_SHOW_ICONS"
+        //case showIcons = "SETTINGS_SHOW_ICONS"
     }
-    private let cacheList: [Cache] = [.clearCache,
-                                      .showIcons]
+    private let cacheList: [Cache] = [.clearCache]
     
-    // 7.その他
+    // 6.その他
     private enum Other: String {
-        case search = "SETTINGS_SEARCH" // 表示しているタイムラインから検索
-        case license = "SETTINGS_LICENSE"
+        //case search = "SETTINGS_SEARCH" // 表示しているタイムラインから検索
+        //case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
     }
-    private let otherList: [Other] = [.search,
-                                      .license,
-                                      .version]
+    private let otherList: [Other] = [.version]
     
     // セクションの数
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -102,16 +87,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 0:
             return SettingsData.accountList.count
         case 1:
-            return accountSettingsList.count
-        case 2:
             return accountList.count
-        case 3:
+        case 2:
             return myPageList.count
+        case 3:
+            return applicationList.count
         case 4:
-            return controlList.count
-        case 5:
             return cacheList.count
-        case 6:
+        case 5:
             return otherList.count
         default:
             return 0
@@ -122,11 +105,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuseIdentifier = "SettingsModel"
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: reuseIdentifier)
         
         cell.accessoryType = .none
         
         var title = ""
+        var subtitle: String? = nil
         switch indexPath.section {
         case 0:
             let data = SettingsData.accountList[indexPath.row]
@@ -136,14 +120,27 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.accessoryType = .checkmark
             }
         case 1:
-            title = I18n.get(accountSettingsList[indexPath.row].rawValue)
-        case 2:
             title = I18n.get(accountList[indexPath.row].rawValue)
-        case 3:
+            cell.accessoryType = .disclosureIndicator
+        case 2:
             title = I18n.get(myPageList[indexPath.row].rawValue)
-        case 4:
-            title = I18n.get(controlList[indexPath.row].rawValue)
-            switch controlList[indexPath.row] {
+            cell.accessoryType = .disclosureIndicator
+        case 3:
+            title = I18n.get(applicationList[indexPath.row].rawValue)
+            switch applicationList[indexPath.row] {
+            case .tootProtectDefault:
+                cell.accessoryType = .disclosureIndicator
+                
+                switch SettingsData.protectMode {
+                case .publicMode:
+                    subtitle = I18n.get("PROTECTMODE_PUBLIC")
+                case .unlisted:
+                    subtitle = I18n.get("PROTECTMODE_UNLISTED")
+                case .privateMode:
+                    subtitle = I18n.get("PROTECTMODE_PRIVATE")
+                case .direct:
+                    subtitle = I18n.get("PROTECTMODE_DIRECT")
+                }
             case .darkMode:
                 let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isDarkMode)
                 cell.textLabel?.text = title
@@ -164,15 +161,23 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
                 return cell
             }
-        case 5:
+        case 4:
             title = I18n.get(cacheList[indexPath.row].rawValue)
-        case 6:
+            cell.accessoryType = .disclosureIndicator
+        case 5:
             title = I18n.get(otherList[indexPath.row].rawValue)
+            switch otherList[indexPath.row] {
+            case .version:
+                let data = Bundle.main.infoDictionary
+                let version = data?["CFBundleShortVersionString"] as? String
+                subtitle = version
+            }
         default:
             break
         }
         
         cell.textLabel?.text = title
+        cell.detailTextLabel?.text = subtitle
         
         return cell
     }
@@ -186,13 +191,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             SettingsData.accessToken = data.1
             tableView.reloadData()
         case 1:
-            switch accountSettingsList[indexPath.row] {
-            case .accountButtonView:
-                break
-            case .tootProtectDefault:
-                break
-            }
-        case 2:
             switch accountList[indexPath.row] {
             case .add:
                 SettingsViewController.instance?.dismiss(animated: false, completion: nil)
@@ -207,24 +205,45 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                         UIUtils.getFrontViewController()?.present(loginViewController, animated: false, completion: nil)
                     }
                 }
-            case .remove:
-                break
             }
-        case 3:
+        case 2:
             break
-        case 4:
-            switch controlList[indexPath.row] {
+        case 3:
+            switch applicationList[indexPath.row] {
+            case .tootProtectDefault:
+                SettingsSelectProtectMode.showActionSheet() { mode in
+                    SettingsData.protectMode = mode
+                    tableView.reloadData()
+                }
             case .darkMode:
                 break
             case .fontSize:
                 break
             }
-        case 5:
+        case 4:
             break
-        case 6:
+        case 5:
             break
         default:
             break
+        }
+    }
+    
+    // セルが削除対応かどうかを決める
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if indexPath.section == 0 {
+            return UITableViewCellEditingStyle.delete
+        }
+        
+        return UITableViewCellEditingStyle.none
+    }
+    
+    // スワイプでの削除
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.section == 0 && indexPath.row < SettingsData.accountList.count {
+                
+            }
         }
     }
 }

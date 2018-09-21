@@ -36,25 +36,26 @@
 "DATETIME_%D_DAYS_AGO" = "%d日";
 "DATETIME_%D_YEARS_AGO" = "%d年";
 
+// 公開範囲
+"TITLE_PROTECTMODE" = "公開範囲";
+"PROTECTMODE_PUBLIC" = "🌐 公開";
+"PROTECTMODE_UNLISTED" = "🔓 未収載";
+"PROTECTMODE_PRIVATE" = "🔐 フォロワー限定";
+"PROTECTMODE_DIRECT" = "✉️ ダイレクト";
+
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";
 
 // 設定画面(カテゴリ)
 "SETTINGS_SELECT_ACCOUNT" = "アカウント切り替え";
-"SETTINGS_ACCOUNT_SETTINGS" = "アカウント設定";
-"SETTINGS_ACCOUNT" = "アカウントの追加と削除";
+"SETTINGS_ACCOUNT" = "アカウントの追加";
 "SETTINGS_MASTODON" = "マストドン設定";
-"SETTINGS_CONTROL" = "操作表示設定";
+"SETTINGS_APPLICATION" = "アプリ設定";
 "SETTINGS_CACHE" = "キャッシュ";
 "SETTINGS_OTHER" = "その他";
 
-// 設定画面(アカウント設定)
-"SETTINGS_TOOT_PROTECT_DEFAULT" = "トゥートの公開設定のデフォルト値";
-"SETTINGS_ACCOUNT_BUTTON_VIEW" = "アカウントボタンの見た目";
-
 // 設定画面(アカウントの追加と削除)
 "SETTINGS_ADD_ACCOUNT" = "アカウントを追加";
-"SETTINGS_REMOVE_ACCOUNT" = "アカウントを外す";
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "マストドンのWebサイトへ";
@@ -62,7 +63,8 @@
 "SETTINGS_MUTELIST" = "ミュートリスト";
 "SETTINGS_BLOCKLIST" = "ブロックリスト";
 
-// 設定画面(操作表示設定)
+// 設定画面(アプリ設定)
+"SETTINGS_TOOT_PROTECT_DEFAULT" = "公開範囲";
 "SETTINGS_DARKMODE" = "ダークテーマ";
 "SETTINGS_FONTSIZE" = "フォントサイズ";
 "SETTINGS_TAP_TOOT" = "タップで詳細画面に移動";
