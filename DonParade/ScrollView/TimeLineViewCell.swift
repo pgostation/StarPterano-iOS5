@@ -122,7 +122,7 @@ final class TimeLineViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // アイコンか名前欄をタップした時の処理
+    // アイコンをタップした時の処理
     @objc func tapAccountAction() {
         if TootViewController.isShown { return } // トゥート画面表示中は移動しない
         
@@ -162,6 +162,21 @@ final class TimeLineViewCell: UITableViewCell {
     // 「・・・」ボタンをタップした時の処理
     @objc func detailAction() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        if self.accountId == SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") {
+            // トゥートを削除
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_DELETE_TOOT"),
+                style: UIAlertActionStyle.default,
+                handler: { _ in
+                    guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(self.id)") else { return }
+                    try? MastodonRequest.delete(url: url, completionHandler: { (data, response, error) in
+                        if let error = error {
+                            Dialog.show(message: I18n.get("ALERT_DELETE_TOOT_FAILURE") + "\n " + error.localizedDescription)
+                        }
+                    })
+            }))
+        }
         
         // Safariで開く
         alertController.addAction(UIAlertAction(

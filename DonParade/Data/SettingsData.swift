@@ -102,6 +102,14 @@ final class SettingsData {
         defaults.set(value, forKey: "accountIconUrl_\(accessToken)")
     }
     
+    // アカウントの数値IDを保持
+    static func accountNumberID(accessToken: String) -> String? {
+        return defaults.string(forKey: "accountNumberID_\(accessToken)")
+    }
+    static func setAccountNumberID(accessToken: String, value: String) {
+        defaults.set(value, forKey: "accountNumberID_\(accessToken)")
+    }
+    
     // ログインがアプリ起動後初めてかどうか（ユーザ名を取得するかどうかを判定するために使う）
     static var loginedAccessTokenList: [String] = []
     

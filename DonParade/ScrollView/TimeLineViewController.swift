@@ -66,6 +66,9 @@ final class TimeLineViewController: MyViewController {
                                             }
                                         }
                                     }
+                                    if let id = accountData.id {
+                                        SettingsData.setAccountNumberID(accessToken: accessToken, value: id)
+                                    }
                                 }
                             } catch {
                             }

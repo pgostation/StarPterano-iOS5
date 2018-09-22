@@ -25,6 +25,8 @@
 "BOOSTED_BY_%@" = "🔁 %@";
 "THIS_TOOT_IS_DIRECT_MESSAGE" = "Direct Message";
 "ACTION_OPEN_WITH_SAFARI" = "Open with Safari";
+"ACTION_DELETE_TOOT" = "Delete this toot";
+"ALERT_DELETE_TOOT_FAILURE" = "Delete the toot failure.";
 "BUTTON_CANCEL" = "Cancel";
 
 // 何分前

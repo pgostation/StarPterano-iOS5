@@ -39,6 +39,18 @@ final class MastodonRequest {
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
     
+    // DELETEメソッド
+    static func delete(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        guard let accessToken = SettingsData.accessToken else { return }
+        
+        request.httpMethod = "DELETE"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
     // POSTメソッド (アクセストークンなし、認証前に使う)
     static func firstPost(url: URL, body: Dictionary<String, String>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
         var request: URLRequest = URLRequest(url: url)
