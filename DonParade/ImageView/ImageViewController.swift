@@ -11,6 +11,7 @@
 import UIKit
 
 final class ImageViewController: MyViewController {
+    static weak var instance: ImageViewController?
     private let imagesUrls: [String]
     private let previewUrls: [String]
     var index: Int
@@ -32,6 +33,8 @@ final class ImageViewController: MyViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.modalPresentationStyle = .overCurrentContext
+        
+        ImageViewController.instance = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,11 +48,6 @@ final class ImageViewController: MyViewController {
         // タップえボタンの表示非表示
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         view.addGestureRecognizer(tapGesture)
-        
-        // 横スワイプで左右移動
-        
-        // 上下スワイプで閉じる
-        
         
         view.closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         view.optionButton.addTarget(self, action: #selector(optionAction), for: .touchUpInside)
@@ -109,6 +107,78 @@ final class ImageViewController: MyViewController {
         }
     }
     
+    // 次の画像へ
+    @objc func leftAction() {
+        guard let view = self.view as? ImageView else { return }
+        
+        if index + 1 >= self.imagesUrls.count { return }
+        
+        index = index + 1
+        
+        let scrollView = ImageScrollView(imageUrl: self.imagesUrls[index], previewUrl: self.previewUrls[index], fromRect: nil, smallImage: nil)
+        self.view.insertSubview(scrollView, at: 0)
+        
+        let screenBounds = UIScreen.main.bounds
+        scrollView.frame = CGRect(x: screenBounds.width,
+                                  y: 0,
+                                  width: screenBounds.width,
+                                  height: screenBounds.height)
+        
+        let maxIndex = 20
+        for i in 0...maxIndex {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.015 * Double(i)) {
+                scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * screenBounds.width,
+                                          y: 0,
+                                          width: screenBounds.width,
+                                          height: screenBounds.height)
+                view.imageScrollView.frame = CGRect(x: CGFloat(i) / CGFloat(maxIndex) * -screenBounds.width,
+                                                    y: 0,
+                                                    width: screenBounds.width,
+                                                    height: screenBounds.height)
+                if i == maxIndex {
+                    view.imageScrollView.removeFromSuperview()
+                    view.imageScrollView = scrollView
+                }
+            }
+        }
+    }
+    
+    // 前の画像へ
+    @objc func rightAction() {
+        guard let view = self.view as? ImageView else { return }
+        
+        if index - 1 < 0 { return }
+        
+        index = index - 1
+        
+        let scrollView = ImageScrollView(imageUrl: self.imagesUrls[index], previewUrl: self.previewUrls[index], fromRect: nil, smallImage: nil)
+        self.view.insertSubview(scrollView, at: 0)
+        
+        let screenBounds = UIScreen.main.bounds
+        scrollView.frame = CGRect(x: -screenBounds.width,
+                                  y: 0,
+                                  width: screenBounds.width,
+                                  height: screenBounds.height)
+        
+        let maxIndex = 20
+        for i in 0...maxIndex {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.015 * Double(i)) {
+                scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * -screenBounds.width,
+                                          y: 0,
+                                          width: screenBounds.width,
+                                          height: screenBounds.height)
+                view.imageScrollView.frame = CGRect(x: CGFloat(i) / CGFloat(maxIndex) * screenBounds.width,
+                                                    y: 0,
+                                                    width: screenBounds.width,
+                                                    height: screenBounds.height)
+                if i == maxIndex {
+                    view.imageScrollView.removeFromSuperview()
+                    view.imageScrollView = scrollView
+                }
+            }
+        }
+    }
+    
     // 閉じる
     @objc func closeAction() {
         self.dismiss(animated: true, completion: nil)
@@ -140,9 +210,9 @@ private final class ImageView: UIView {
     let closeButton = UIButton()
     let optionButton = UIButton()
     let rotateButton = UIButton()
-    let imageScrollView: ImageScrollView
+    var imageScrollView: ImageScrollView
     
-    init(imageUrl: String, previewUrl: String, fromRect: CGRect, smallImage: UIImage?) {
+    init(imageUrl: String, previewUrl: String, fromRect: CGRect?, smallImage: UIImage?) {
         imageScrollView = ImageScrollView(imageUrl: imageUrl, previewUrl: imageUrl, fromRect: fromRect, smallImage: smallImage)
         
         super.init(frame: UIScreen.main.bounds)
@@ -162,7 +232,7 @@ private final class ImageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setProperties(fromRect: CGRect) {
+    private func setProperties(fromRect: CGRect?) {
         self.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.4)
         
         closeButton.setTitle("×", for: .normal)
@@ -187,7 +257,7 @@ private final class ImageView: UIView {
         rotateButton.clipsToBounds = true
         
         // 縦方向に長い画像の場合、閉じるボタンを表示させない
-        if fromRect.width < fromRect.height {
+        if let fromRect = fromRect, fromRect.width < fromRect.height {
             closeButton.alpha = 0
             optionButton.alpha = 0
             rotateButton.alpha = 0
@@ -217,17 +287,21 @@ private final class ImageView: UIView {
 private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     let imageView = UIImageView()
     
-    init(imageUrl: String, previewUrl: String, fromRect: CGRect, smallImage: UIImage?) {
+    init(imageUrl: String, previewUrl: String, fromRect: CGRect?, smallImage: UIImage?) {
         super.init(frame: UIScreen.main.bounds)
         
         self.addSubview(imageView)
         
         self.imageView.image = smallImage
-        self.imageView.frame = fromRect
+        if let fromRect = fromRect {
+            self.imageView.frame = fromRect
+        }
         
         self.delegate = self
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 8.0
+        self.alwaysBounceHorizontal = true
+        self.alwaysBounceVertical = true
         
         if let smallImage = smallImage {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -242,7 +316,11 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
             
             strongSelf.imageView.image = image
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                UIView.animate(withDuration: 0.2) {
+                if fromRect != nil {
+                    UIView.animate(withDuration: 0.2) {
+                        strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
+                    }
+                } else {
                     strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
                 }
             }
@@ -255,5 +333,25 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.zoomScale == 1 {
+            // 横スワイプで左右移動
+            if scrollView.contentOffset.x > 50 {
+                ImageViewController.instance?.leftAction()
+            }
+            else if scrollView.contentOffset.x < -50 {
+                ImageViewController.instance?.rightAction()
+            }
+            
+            // 上下スワイプで閉じる
+            if scrollView.contentOffset.y > 50 {
+                ImageViewController.instance?.closeAction()
+            }
+            else if scrollView.contentOffset.y < -50 {
+                ImageViewController.instance?.closeAction()
+            }
+        }
     }
 }
