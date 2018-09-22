@@ -47,7 +47,7 @@ final class TimeLineView: UITableView {
             self.addSubview(waitIndicator)
         } else {
             // 会話表示
-            self.model.showGrowlCell = false
+            self.model.showAutoPagerizeCell = false
             self.model.isDetailTimeline = true
             self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
             self.model.selectedRow = 0

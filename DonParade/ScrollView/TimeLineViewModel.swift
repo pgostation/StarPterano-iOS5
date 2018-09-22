@@ -14,7 +14,7 @@ import SafariServices
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
-    var showGrowlCell = true // 過去遡り用セルを表示するかどうか
+    var showAutoPagerizeCell = true // 過去遡り用セルを表示するかどうか
     var selectedRow: Int? = nil
     private var selectedAccountId: String?
     private var inReplyToTootId: String?
@@ -118,7 +118,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        return list.count + (showGrowlCell ? 1 : 0)
+        return list.count + (showAutoPagerizeCell ? 1 : 0)
     }
     
     // セルのだいたいの高さ(スクロールバーの表示用)
@@ -136,7 +136,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // セルの正確な高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == list.count {
-            // Growl用セルの高さ
+            // AutoPagerize用セルの高さ
             return 55
         }
         
@@ -244,7 +244,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // セルを返す
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= list.count {
-            if self.showGrowlCell, let timelineView = tableView as? TimeLineView {
+            if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
                 // 過去のトゥートに遡る
                 timelineView.refreshOld(id: list.last?.id)
             }
