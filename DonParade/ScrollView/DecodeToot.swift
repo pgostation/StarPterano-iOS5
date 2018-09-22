@@ -41,19 +41,20 @@ final class DecodeToot {
             let endIndex = text.index(endRange.lowerBound, offsetBy: 4)
             
             // href文字列を取り出す
-            let tmpHrefStr = text.suffix(text.count - startIndex.encodedOffset)
+            let tmpHrefStr = text.suffix(text.count - startIndex.encodedOffset).prefix(endIndex.encodedOffset - startIndex.encodedOffset - 4)
+            let tmpHrefStr2 = "\(tmpHrefStr)"
             var urlStr = ""
-            if let startHrefRange = tmpHrefStr.range(of: " href=\""), let endHrefRange = tmpHrefStr.range(of: "\" ") {
-                let hrefStartIndex = tmpHrefStr.index(startHrefRange.lowerBound, offsetBy: 7)
-                let hrefEndIndex = tmpHrefStr.index(endHrefRange.lowerBound, offsetBy: -1)
-                urlStr = String(text.suffix(text.count - hrefStartIndex.encodedOffset).prefix(hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset + 1))
+            if let startHrefRange = tmpHrefStr2.range(of: " href=\""), let endHrefRange = tmpHrefStr2.range(of: "\" ") {
+                let hrefStartIndex = tmpHrefStr2.index(startHrefRange.lowerBound, offsetBy: 7)
+                let hrefEndIndex = tmpHrefStr2.index(endHrefRange.lowerBound, offsetBy: -1)
+                urlStr = String(tmpHrefStr2.suffix(tmpHrefStr2.count - hrefStartIndex.encodedOffset).prefix(hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset + 1))
             }
             
             // 表示用文字列を取り出す
             var linkStr = ""
-            if let startLinkRange = tmpHrefStr.range(of: ">") {
-                let linkStartIndex = tmpHrefStr.index(startLinkRange.lowerBound, offsetBy: 1)
-                linkStr = String(text.suffix(text.count - linkStartIndex.encodedOffset).prefix(endIndex.encodedOffset - linkStartIndex.encodedOffset - 4))
+            if let startLinkRange = tmpHrefStr2.range(of: ">") {
+                let linkStartIndex = tmpHrefStr2.index(startLinkRange.lowerBound, offsetBy: 1)
+                linkStr = String(tmpHrefStr2.suffix(tmpHrefStr2.count - linkStartIndex.encodedOffset).prefix(endIndex.encodedOffset - linkStartIndex.encodedOffset - 4))
             }
             
             // リストに追加
@@ -65,6 +66,14 @@ final class DecodeToot {
         text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "'").replacingOccurrences(of: "&amp;", with: "&")
         
         let attributedText = NSMutableAttributedString(string: text)
+        
+        // リンクを追加
+        for link in linkList {
+            if link.0.encodedOffset + link.2.count > attributedText.length { continue }
+            attributedText.addAttribute(NSAttributedStringKey.link,
+                                        value: link.1,
+                                        range: NSRange(location: link.0.encodedOffset, length: link.2.count))
+        }
         
         // 絵文字に変える
         if let emojis = emojis {
@@ -97,23 +106,15 @@ final class DecodeToot {
             }
         }
         
-        // リンクを追加
-        for link in linkList {
-            if link.0.encodedOffset + link.2.count > attributedText.length { continue }
-            attributedText.addAttribute(NSAttributedStringKey.link,
-                                        value: link.1,
-                                        range: NSRange(location: link.0.encodedOffset, length: link.2.count))
-        }
-        
         return (attributedText, linkList.count > 0)
     }
     
     // 名前部分の絵文字解析
     static func decodeName(name: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
-        var text = name ?? ""
+        let text = name ?? ""
         
-        // 絵文字の位置をリストアップする
-        var emojiList: [(String.Index, NSAttributedString)] = []
+        let attributedText = NSMutableAttributedString(string: text)
+        
         if let emojis = emojis {
             for emoji in emojis {
                 guard let shortcode = emoji["shortcode"] as? String else { continue }
@@ -135,19 +136,13 @@ final class DecodeToot {
                 
                 let attrStr = NSAttributedString(attachment: attachment)
                 
-                while let range = text.range(of: ":\(shortcode):") {
-                    let index = text.index(range.lowerBound, offsetBy: 0)
-                    text = text.replacingOccurrences(of: ":\(shortcode):", with: "", options: String.CompareOptions.anchored, range: range)
-                    emojiList.append((index, attrStr))
+                while true {
+                    let nsStr = attributedText.string as NSString
+                    if !nsStr.contains(":\(shortcode):") { break }
+                    let range = nsStr.range(of: ":\(shortcode):")
+                    attributedText.replaceCharacters(in: range, with: attrStr)
                 }
             }
-        }
-        
-        let attributedText = NSMutableAttributedString(string: text)
-        
-        // 絵文字を追加
-        for emoji in emojiList {
-            attributedText.insert(emoji.1, at: emoji.0.encodedOffset)
         }
         
         return attributedText
