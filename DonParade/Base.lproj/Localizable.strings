@@ -48,6 +48,9 @@
 "PROTECTMODE_PRIVATE" = "🔐 Private";
 "PROTECTMODE_DIRECT" = "✉️ Direct";
 
+// 画像の全画面表示
+"ACTION_SAVE_IMAGE_TO_ALBUM" = "Save to an album";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 "BUTTON_REMOVE" = "Remove";

@@ -48,6 +48,9 @@
 "PROTECTMODE_PRIVATE" = "🔐 フォロワー限定";
 "PROTECTMODE_DIRECT" = "✉️ ダイレクト";
 
+// 画像の全画面表示
+"ACTION_SAVE_IMAGE_TO_ALBUM" = "アルバムに保存";
+
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";
 "BUTTON_REMOVE" = "削除";

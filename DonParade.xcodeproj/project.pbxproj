@@ -26,6 +26,7 @@
 		12CD0263214F49E000133A95 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0262214F49E000133A95 /* EmojiData.swift */; };
 		12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0264214FD37700133A95 /* AnalyzeJson.swift */; };
 		12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */; };
+		12F6602F215656890049AEE0 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6602E215656890049AEE0 /* ImageUtils.swift */; };
 		12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC77214CA35F00E9E508 /* AppDelegate.swift */; };
 		12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC79214CA35F00E9E508 /* ViewController.swift */; };
 		12F9AC7D214CA35F00E9E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F9AC7B214CA35F00E9E508 /* Main.storyboard */; };
@@ -64,6 +65,7 @@
 		12CD0262214F49E000133A95 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
 		12CD0264214FD37700133A95 /* AnalyzeJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeJson.swift; sourceTree = "<group>"; };
 		12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewCell.swift; sourceTree = "<group>"; };
+		12F6602E215656890049AEE0 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		12F9AC74214CA35F00E9E508 /* DonParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F9AC77214CA35F00E9E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F9AC79214CA35F00E9E508 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				12F9ACA0214CE18400E9E508 /* I18n.swift */,
 				12F9ACAB214D424D00E9E508 /* UIUtils.swift */,
 				12CD025C214EB24A00133A95 /* ImageCache.swift */,
+				12F6602E215656890049AEE0 /* ImageUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */,
 				1286DF6521551824008FFFAC /* TootView.swift in Sources */,
 				12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */,
+				12F6602F215656890049AEE0 /* ImageUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

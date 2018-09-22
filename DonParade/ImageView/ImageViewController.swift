@@ -62,43 +62,46 @@ final class ImageViewController: MyViewController {
         view.rotateButton.alpha = 1 - view.rotateButton.alpha
     }
     
-    // URLを開いたり、保存したりする
+    // 画像を保存する
     @objc func optionAction() {
-        // #### 工事中
+        guard let view = self.view as? ImageView else { return }
+        guard let image = view.imageScrollView.imageView.image else { return }
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        // アルバムに保存
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_SAVE_IMAGE_TO_ALBUM"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+        }))
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertActionStyle.cancel,
+            handler: { _ in
+        }))
+        
+        UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
     }
     
-    // 回転...ダメだうまく動かない
-    // http://d.hatena.ne.jp/RNatori/20100721/1279683273
-    private var angle: Int = 0
+    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError error: NSError!, contextInfo: UnsafeMutableRawPointer) {
+        
+    }
+    
+    // 回転
     @objc func rotateAction() {
         guard let view = self.view as? ImageView else { return }
         
         let imageView = view.imageScrollView.imageView
         
-        self.angle = (angle + 1) % 4
+        imageView.image = ImageUtils.rotateImage(image: imageView.image)
         
-        // 現在の拡大率を取得
-        let testSize = CGSize(width: 1, height: 1).applying(imageView.transform)
-        let scale = fabs(testSize.width)
-        
-        // 回転と拡大率を設定した新しいCGAffineTransformを作成
-        var newTransform = CGAffineTransform(rotationAngle: CGFloat.pi / 2.0 * CGFloat(angle))
-        newTransform = newTransform.scaledBy(x: scale, y: scale)
-        
-        //
-        let size = view.imageScrollView.initialSize
-        
-        var transformedSize = size.applying(newTransform)
-        transformedSize.width = fabs(transformedSize.width)
-        transformedSize.height = fabs(transformedSize.height)
-        
-        UIView.animate(withDuration: 0.2) {
-            view.imageScrollView.contentSize = transformedSize
-            imageView.transform = newTransform
-            imageView.center = CGPoint(x: transformedSize.width / 2.0, y: transformedSize.height / 2.0)
+        if let image = imageView.image {
+            imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
         }
-        
-        print("\(imageView.frame)")
     }
     
     // 閉じる
@@ -142,7 +145,10 @@ private final class ImageView: UIView {
         self.addSubview(imageScrollView)
         self.addSubview(closeButton)
         self.addSubview(optionButton)
-        self.addSubview(rotateButton)
+        
+        if #available(iOS 11.0, *) {
+            self.addSubview(rotateButton)
+        }
         
         setProperties(fromRect: fromRect)
     }
@@ -205,24 +211,23 @@ private final class ImageView: UIView {
 
 private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     let imageView = UIImageView()
-    let initialSize: CGSize
-    var rate: CGFloat = 1.0
     
     init(imageUrl: String, previewUrl: String, fromRect: CGRect, smallImage: UIImage?) {
-        self.initialSize = ImageViewController.getRect(size: fromRect.size, rate: 1).size
-        
         super.init(frame: UIScreen.main.bounds)
         
         self.addSubview(imageView)
         
         self.imageView.image = smallImage
         self.imageView.frame = fromRect
-        self.imageView.contentMode = .scaleAspectFit
+        
+        self.delegate = self
+        self.minimumZoomScale = 1.0
+        self.maximumZoomScale = 8.0
         
         if let smallImage = smallImage {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 UIView.animate(withDuration: 0.2) {
-                    self.imageView.frame = ImageViewController.getRect(size: smallImage.size, rate: self.rate)
+                    self.imageView.frame = ImageViewController.getRect(size: smallImage.size, rate: 1)
                 }
             }
         }
@@ -233,13 +238,7 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
             strongSelf.imageView.image = image
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 UIView.animate(withDuration: 0.2) {
-                    strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: strongSelf.rate)
-                    
-                    strongSelf.delegate = self
-                    strongSelf.minimumZoomScale = 1.0
-                    strongSelf.maximumZoomScale = 8.0
-                    
-                    strongSelf.setNeedsLayout()
+                    strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
                 }
             }
         }
