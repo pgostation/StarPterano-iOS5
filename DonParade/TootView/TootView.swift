@@ -114,6 +114,7 @@ final class TootView: UIView {
         textField.isEditable = true
         textField.layer.borderColor = ThemeColor.messageColor.cgColor
         textField.layer.borderWidth = 1 / UIScreen.main.scale
+        textField.tag = UIUtils.responderTag
         
         inputBar.backgroundColor = ThemeColor.cellBgColor
         

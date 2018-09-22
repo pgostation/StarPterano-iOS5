@@ -52,8 +52,10 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     @objc func tootAction() {
         guard let view = self.view as? TootView else { return }
         
-        guard let text = view.textField.text else { return }
-        if text.count == 0 { return }
+        guard let attributedText = view.textField.attributedText else { return }
+        if attributedText.length == 0 { return }
+        
+        let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: view.textField.textStorage)
         
         guard let hostName = SettingsData.hostName else { return }
         
@@ -102,7 +104,25 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // カスタム絵文字を入力する
     @objc func emojiAction() {
-        let emojiViewController = EmojiInputViewController()
+        guard let view = self.view as? TootView else { return }
+        
+        if view.textField.inputView is EmojiKeyboard {
+            // テキストフィールドのカスタムキーボードを解除
+            view.textField.inputView = nil
+            view.textField.resignFirstResponder()
+            view.textField.becomeFirstResponder()
+            
+            view.emojiButton.setTitle("😀", for: .normal)
+        } else {
+            let emojiView = EmojiKeyboard()
+            
+            // テキストフィールドのカスタムキーボードを変更
+            view.textField.inputView = emojiView
+            view.textField.resignFirstResponder()
+            view.textField.becomeFirstResponder()
+            
+            view.emojiButton.setTitle("🔠", for: .normal)
+        }
     }
     
     // 画面を閉じる
@@ -115,6 +135,21 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // テキストビューの高さを変化させる
     func textViewDidChange(_ textView: UITextView) {
+        guard let view = self.view as? TootView else { return }
+        
+        if view.textField.inputView is EmojiKeyboard {
+            var emojis: [[String: Any]] = []
+            
+            for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "") {
+                let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
+                                           "static_url": emoji.static_url ?? ""]
+                emojis.append(dict)
+            }
+            
+            let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
+            textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+        }
+        
         DispatchQueue.main.async {
             self.view.setNeedsLayout()
         }

@@ -17,7 +17,7 @@ final class ImageCache {
     private static let imageQueue = DispatchQueue(label: "ImageCache")
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
-    static func image(urlStr: String?, isTemp: Bool, callback: @escaping (UIImage)->Void) {
+    static func image(urlStr: String?, isTemp: Bool, shortcode: String? = nil, callback: @escaping (UIImage)->Void) {
         guard let urlStr = urlStr else { return }
         
         // メモリキャッシュにある場合
@@ -39,7 +39,8 @@ final class ImageCache {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
-                    if let image = UIImage(data: data) {
+                    if let image = EmojiImage(data: data) {
+                        image.shortcode = shortcode
                         DispatchQueue.main.async {
                             if !isTemp {
                                 memCache.updateValue(image, forKey: urlStr)
@@ -64,7 +65,8 @@ final class ImageCache {
         imageQueue.async {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
+                if let image = EmojiImage(data: data) {
+                    image.shortcode = shortcode
                     DispatchQueue.main.async {
                         if !isTemp {
                             memCache.updateValue(image, forKey: urlStr)

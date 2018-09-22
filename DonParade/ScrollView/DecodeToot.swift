@@ -83,7 +83,7 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, isTemp: false) { image in
+                ImageCache.image(urlStr: static_url, isTemp: false, shortcode: shortcode) { image in
                     if execCallback {
                         callback?()
                     } else {
@@ -122,7 +122,7 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, isTemp: false) { image in
+                ImageCache.image(urlStr: static_url, isTemp: false, shortcode: shortcode) { image in
                     if execCallback {
                         callback?()
                     } else {
@@ -159,4 +159,37 @@ final class DecodeToot {
     static func decodeTime(text: String) -> Date {
         return dateFormatter.date(from: text) ?? Date()
     }
+    
+    // 絵文字から元の文字列に戻す
+    // https://stackoverflow.com/questions/36465761/can-nsattributedstring-which-contains-nstextattachment-be-storedor-restored
+    static func encodeEmoji(attributedText: NSAttributedString, textStorage: NSTextStorage) -> String {
+        // 絵文字のある場所をリストにする
+        var list: [(NSRange, String)] = []
+        let range = NSRange(location: 0, length: attributedText.length)
+        if (textStorage.containsAttachments(in: range)) {
+            let attrString = attributedText
+            var location = 0
+            while location < range.length {
+                var r = NSRange()
+                let attrDictionary = attrString.attributes(at: location, effectiveRange: &r)
+                let attachment = attrDictionary[NSAttributedStringKey.attachment] as? NSTextAttachment
+                if let image = attachment?.image {
+                    list.append((r, (image as? EmojiImage)?.shortcode ?? ""))
+                }
+                location += r.length
+            }
+        }
+        
+        // 絵文字から元のコードに置き換える
+        let attributedStr = NSMutableAttributedString(attributedString: attributedText)
+        for data in list.reversed() {
+            attributedStr.replaceCharacters(in: data.0, with: ":" + data.1 + ":")
+        }
+        
+        return attributedStr.string
+    }
+}
+
+class EmojiImage: UIImage {
+    var shortcode: String? = nil
 }

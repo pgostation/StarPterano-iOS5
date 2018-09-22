@@ -33,7 +33,7 @@ final class EmojiData {
                             var list: [EmojiStruct] = []
                             
                             for json in responseJson {
-                                let short_code = json["short_code"] as? String
+                                let short_code = json["shortcode"] as? String
                                 let static_url = json["static_url"] as? String
                                 let url = json["url"] as? String
                                 let visible_in_picker = json["visible_in_picker"] as? Int
@@ -53,31 +53,6 @@ final class EmojiData {
                     print(error)
                 }
             }
-        }
-        
-        // ローカルキャッシュにある場合
-        let userDefaults = UserDefaults(suiteName: "Emoji")
-        if let cachedArray = userDefaults?.array(forKey: host) {
-            var list: [EmojiStruct] = []
-            
-            for cache in cachedArray {
-                if let cache = cache as? Data {
-                    if let obj = try? JSONSerialization.jsonObject(with: cache, options: .allowFragments), let json = obj as? [String: Any] {
-                        let short_code = json["short_code"] as? String
-                        let static_url = json["static_url"] as? String
-                        let url = json["url"] as? String
-                        let visible_in_picker = json["visible_in_picker"] as? Int
-                        
-                        let data = EmojiStruct(short_code: short_code,
-                                               static_url: static_url,
-                                               url: url,
-                                               visible_in_picker: visible_in_picker)
-                        list.append(data)
-                    }
-                }
-            }
-            
-            return list
         }
         
         return []

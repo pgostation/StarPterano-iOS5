@@ -36,6 +36,11 @@
 "DATETIME_%D_DAYS_AGO" = "%d日";
 "DATETIME_%D_YEARS_AGO" = "%d年";
 
+// トゥート画面
+"BUTTON_BACKKEY" = "🔙";
+"BUTTON_RETURNKEY" = "改行";
+"BUTTON_SPACEKEY" = "空白";
+
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";
 "PROTECTMODE_PUBLIC" = "🌐 公開";

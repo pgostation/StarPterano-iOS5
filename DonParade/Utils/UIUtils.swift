@@ -11,6 +11,8 @@
 import UIKit
 
 final class UIUtils {
+    static let responderTag: Int = 12345 // キー入力可能なビューを見つけるための任意の番号
+    
     // iPhone Xのようなノッチ付き画面かどうか
     static var isIphoneX: Bool = {
         let size = UIScreen.main.bounds.size
