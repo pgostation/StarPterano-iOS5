@@ -40,7 +40,7 @@ final class ImageUtils {
         UIGraphicsEndImageContext()
         
         if let resizedImage = resizedImage {
-            if let data = UIImageJPEGRepresentation(resizedImage, 1) {
+            if let data = UIImagePNGRepresentation(resizedImage) {
                 return EmojiImage(data: data) ?? image
             }
         }
