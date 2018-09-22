@@ -42,6 +42,8 @@
 "BUTTON_BACKKEY" = "🔙";
 "BUTTON_RETURNKEY" = "改行";
 "BUTTON_SPACEKEY" = "空白";
+"ALERT_SEND_TOOT_FAILURE" = "トゥートの投稿に失敗しました";
+"ALERT_TEXT_EXISTS" = "すでにテキストが入力されています";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";

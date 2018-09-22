@@ -42,6 +42,8 @@
 "BUTTON_BACKKEY" = "🔙";
 "BUTTON_RETURNKEY" = "Return";
 "BUTTON_SPACEKEY" = "Space";
+"ALERT_SEND_TOOT_FAILURE" = "Send a toot failure.";
+"ALERT_TEXT_EXISTS" = "text is not empty.";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "Privacy";

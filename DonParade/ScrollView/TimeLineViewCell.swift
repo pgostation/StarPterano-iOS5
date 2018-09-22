@@ -142,7 +142,24 @@ final class TimeLineViewCell: UITableViewCell {
     
     // リプライボタンをタップした時の処理
     @objc func replyAction() {
-    
+        if TootViewController.isShown, let vc = TootViewController.instance, let view = vc.view as? TootView, let text = view.textField.text, text.count > 0 {
+            Dialog.show(message: I18n.get("ALERT_TEXT_EXISTS"))
+        } else {
+            // 返信先を設定
+            TootViewController.inReplyToId = self.id
+            
+            // トゥート画面を開いていなければ開く
+            if !TootViewController.isShown {
+                MainViewController.instance?.tootAction(nil)
+            }
+            
+            // @IDを入力する
+            DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 0.0 : 0.2)) {
+                if let vc = TootViewController.instance, let view = vc.view as? TootView {
+                    view.textField.text = "@\(self.idLabel.text ?? "") "
+                }
+            }
+        }
     }
     
     // ブーストボタンをタップした時の処理

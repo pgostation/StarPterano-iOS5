@@ -10,10 +10,13 @@ import UIKit
 
 final class TootViewController: UIViewController, UITextViewDelegate {
     static var isShown = false // 現在表示中かどうか
+    static weak var instance: TootViewController?
+    static var inReplyToId: String? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
         
+        TootViewController.instance = self
         TootViewController.isShown = true
         
         _ = EmojiData.getEmojiCache(host: SettingsData.hostName!)
@@ -21,6 +24,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     deinit {
         TootViewController.isShown = false
+        TootViewController.inReplyToId = nil
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,12 +65,19 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
         
-        let bodyJson: [String: String] = [
+        var bodyJson: [String: String] = [
             "status": text,
             "visibility": view.protectMode.rawValue,
             ]
+        if let inReplyToId = TootViewController.inReplyToId {
+            bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
+            TootViewController.inReplyToId = nil
+        }
         
         try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
+            if let error = error {
+                Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\n" + error.localizedDescription)
+            }
         }
         
         closeAction()
@@ -131,6 +142,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         self.removeFromParentViewController()
         
         TootViewController.isShown = false
+        TootViewController.inReplyToId = nil
     }
     
     // テキストビューの高さを変化させる
@@ -148,6 +160,11 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             
             let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
             textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+        }
+        
+        // テキストを全削除するとin_reply_toをクリアする
+        if textView.text == nil || textView.text!.count == 0 {
+            TootViewController.inReplyToId = nil
         }
         
         DispatchQueue.main.async {
