@@ -118,7 +118,7 @@ final class MainViewController: MyViewController {
                 }
                 
                 if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
-                    ImageCache.image(urlStr: iconStr, isTemp: false) { image in
+                    ImageCache.image(urlStr: iconStr, isTemp: false, isSmall: true) { image in
                         if accessToken != SettingsData.accessToken { return }
                         view.accountButton.setImage(image, for: .normal)
                     }

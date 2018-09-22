@@ -83,7 +83,7 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, isTemp: false, shortcode: shortcode) { image in
+                ImageCache.image(urlStr: static_url, isTemp: false, isSmall: true, shortcode: shortcode) { image in
                     if execCallback {
                         callback?()
                     } else {
@@ -122,7 +122,7 @@ final class DecodeToot {
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, isTemp: false, shortcode: shortcode) { image in
+                ImageCache.image(urlStr: static_url, isTemp: false, isSmall: true, shortcode: shortcode) { image in
                     if execCallback {
                         callback?()
                     } else {

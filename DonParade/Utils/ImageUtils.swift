@@ -6,10 +6,13 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 画像関連
+
 import UIKit
 import CoreImage
 
 final class ImageUtils {
+    // 画像を回転させる
     static func rotateImage(image: UIImage?) -> UIImage? {
         guard let image = image else { return nil }
         guard let ciImage = image.ciImage ?? CIImage(image: image) else { return nil }
@@ -20,5 +23,28 @@ final class ImageUtils {
         }
         
         return nil
+    }
+    
+    // 正方形の画像を縮小する
+    // アイコンは36pt, 絵文字は40ptくらいにしたい
+    static func small(image: EmojiImage, size: CGFloat) -> EmojiImage {
+        if image.size.width < size * UIScreen.main.scale { return image }
+        
+        let rate = max(size / image.size.width, size / image.size.height)
+        
+        let resizedSize = CGSize(width: image.size.width * rate, height: image.size.height * rate)
+        
+        UIGraphicsBeginImageContextWithOptions(resizedSize, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: resizedSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if let resizedImage = resizedImage {
+            if let data = UIImageJPEGRepresentation(resizedImage, 1) {
+                return EmojiImage(data: data) ?? image
+            }
+        }
+        
+        return image
     }
 }

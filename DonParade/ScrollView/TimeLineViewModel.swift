@@ -402,7 +402,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             setCellColor(cell: cell)
         }
         
-        ImageCache.image(urlStr: account?.avatar_static, isTemp: false) { image in
+        ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
             cell.iconView.image = image
         }
         
@@ -446,7 +446,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             for media in mediaData {
                 let imageView = UIImageView()
-                ImageCache.image(urlStr: media.preview_url, isTemp: true) { image in
+                ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false) { image in
                     imageView.image = image
                     cell.setNeedsLayout()
                     

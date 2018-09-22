@@ -42,9 +42,14 @@ final class ImageViewController: MyViewController {
         let view = ImageView(imageUrl: self.imagesUrls[index], previewUrl: self.previewUrls[index], fromRect: fromRect, smallImage: smallImage)
         self.view = view
         
-        // タップ処理
+        // タップえボタンの表示非表示
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         view.addGestureRecognizer(tapGesture)
+        
+        // 横スワイプで左右移動
+        
+        // 上下スワイプで閉じる
+        
         
         view.closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         view.optionButton.addTarget(self, action: #selector(optionAction), for: .touchUpInside)
@@ -232,7 +237,7 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
             }
         }
         
-        ImageCache.image(urlStr: previewUrl, isTemp: true) { [weak self] (image) in
+        ImageCache.image(urlStr: previewUrl, isTemp: true, isSmall: false) { [weak self] (image) in
             guard let strongSelf = self else { return }
             
             strongSelf.imageView.image = image

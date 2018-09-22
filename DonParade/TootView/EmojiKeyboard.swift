@@ -110,7 +110,7 @@ private final class EmojiInputScrollView: UIScrollView {
         // 絵文字ボタンの追加
         for emoji in self.emojiList {
             let button = EmojiButton(key: emoji.short_code ?? "")
-            ImageCache.image(urlStr: emoji.static_url, isTemp: false, shortcode: emoji.short_code) { (image) in
+            ImageCache.image(urlStr: emoji.static_url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { (image) in
                 button.setImage(image, for: .normal)
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)

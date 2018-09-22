@@ -58,13 +58,13 @@ final class TimeLineViewController: MyViewController {
                                     if let icon = accountData.avatar_static, SettingsData.accountIconUrl(accessToken: accessToken) != icon {
                                         SettingsData.setAccountIconUrl(accessToken: accessToken, value: icon)
                                         
-                                        ImageCache.image(urlStr: icon, isTemp: false, callback: { image in
+                                        ImageCache.image(urlStr: icon, isTemp: false, isSmall: true) { image in
                                             if accessToken != SettingsData.accessToken { return }
                                             
                                             if let view = MainViewController.instance?.view as? MainView {
                                                 view.accountButton.setImage(image, for: .normal)
                                             }
-                                        })
+                                        }
                                     }
                                 }
                             } catch {
@@ -75,13 +75,13 @@ final class TimeLineViewController: MyViewController {
             }
             
             if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
-                ImageCache.image(urlStr: iconStr, isTemp: false, callback: { image in
+                ImageCache.image(urlStr: iconStr, isTemp: false, isSmall: true) { image in
                     if accessToken != SettingsData.accessToken { return }
                     
                     if let view = MainViewController.instance?.view as? MainView {
                         view.accountButton.setImage(image, for: .normal)
                     }
-                })
+                }
             }
         }
     }
