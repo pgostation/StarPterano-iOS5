@@ -246,8 +246,6 @@ final class TimeLineView: UITableView {
     
     // ミニビューにする
     func enterMiniView() {
-        if SettingsData.isMiniView == true { return }
-        
         SettingsData.isMiniView = true
         
         self.reloadData()
@@ -255,8 +253,6 @@ final class TimeLineView: UITableView {
     
     // ミニビューを解除する
     func exitMiniView() {
-        if SettingsData.isMiniView == false { return }
-        
         SettingsData.isMiniView = false
         
         self.reloadData()
