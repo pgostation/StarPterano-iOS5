@@ -62,9 +62,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
         
         let bodyJson: [String: String] = [
-        "status": text,
-        "visibility": view.protectMode.rawValue,
-        ]
+            "status": text,
+            "visibility": view.protectMode.rawValue,
+            ]
         
         try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
         }

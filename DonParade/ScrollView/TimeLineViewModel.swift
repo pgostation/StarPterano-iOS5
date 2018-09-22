@@ -441,12 +441,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // 画像や動画ありの場合
         if let mediaData = data.mediaData {
             cell.imageViews = []
+            cell.previewUrls = []
+            cell.imageUrls = []
             
             for media in mediaData {
                 let imageView = UIImageView()
                 ImageCache.image(urlStr: media.preview_url, isTemp: true) { image in
                     imageView.image = image
                     cell.setNeedsLayout()
+                    
+                    // タップで全画面表示
+                    let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))
+                    imageView.addGestureRecognizer(tapGesture)
+                    imageView.isUserInteractionEnabled = true
                 }
                 cell.addSubview(imageView)
                 cell.imageViews?.append(imageView)
@@ -454,6 +461,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if data.sensitive == 1 {
                     imageView.isHidden = true
                 }
+                
+                cell.previewUrls.append(media.preview_url ?? "")
+                cell.imageUrls.append(media.url ?? "")
             }
         }
         

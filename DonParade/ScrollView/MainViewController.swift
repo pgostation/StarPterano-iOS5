@@ -177,7 +177,7 @@ final class MainViewController: MyViewController {
     
     // 一時的にボタンを隠す
     private var buttonTimer: Timer?
-    func hideButtons() {
+    func hideButtons(force: Bool = false) {
         guard let view = self.view as? MainView else { return }
         
         UIView.animate(withDuration: 0.1) {
@@ -216,6 +216,46 @@ final class MainViewController: MyViewController {
         }
         
         self.buttonTimer = nil
+    }
+    
+    func hideButtonsForce() {
+        guard let view = self.view as? MainView else { return }
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            view.tlButton.alpha = 0
+            view.ltlButton.alpha = 0
+            view.tootButton.alpha = 0
+            view.listButton.alpha = 0
+            view.notificationsButton.alpha = 0
+            view.accountButton.alpha = 0
+        }, completion: { _ in
+            view.tlButton.isHidden = true
+            view.ltlButton.isHidden = true
+            view.tootButton.isHidden = true
+            view.listButton.isHidden = true
+            view.notificationsButton.isHidden = true
+            view.accountButton.isHidden = true
+        })
+    }
+    
+    func showButtonsForce() {
+        guard let view = self.view as? MainView else { return }
+        
+        UIView.animate(withDuration: 0.5) {
+            view.tlButton.alpha = 1
+            view.ltlButton.alpha = 1
+            view.tootButton.alpha = 1
+            view.listButton.alpha = 1
+            view.notificationsButton.alpha = 1
+            view.accountButton.alpha = 1
+        }
+        
+        view.tlButton.isHidden = false
+        view.ltlButton.isHidden = false
+        view.tootButton.isHidden = false
+        view.listButton.isHidden = false
+        view.notificationsButton.isHidden = false
+        view.accountButton.isHidden = false
     }
     
     // アカウントボタンをタップ（設定画面に移動）

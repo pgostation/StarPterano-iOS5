@@ -49,6 +49,8 @@ final class TimeLineViewCell: UITableViewCell {
     var urlStr: String = ""
     var mensionsList: [AnalyzeJson.MensionData]?
     var isMiniView = false
+    var imageUrls: [String] = []
+    var previewUrls: [String] = []
     
     var isFaved = false
     var isBoosted = false
@@ -202,6 +204,23 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         self.showMoreButton?.removeFromSuperview()
+    }
+    
+    // 画像をタップ
+    @objc func imageTapAction(_ gesture: UITapGestureRecognizer) {
+        for (index, imageView) in (self.imageViews ?? []).enumerated() {
+            if imageView == gesture.view {
+                let fromRect = imageView.convert(imageView.bounds, to: UIUtils.getFrontViewController()?.view ?? imageView)
+                let vc = ImageViewController(imagesUrls: self.imageUrls, previewUrls: self.previewUrls, index: index, fromRect: fromRect, smallImage: imageView.image)
+                vc.modalTransitionStyle = .crossDissolve
+                UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
+                
+                // ボタンを隠す
+                MainViewController.instance?.hideButtonsForce()
+                
+                break
+            }
+        }
     }
     
     // 日時表示を更新

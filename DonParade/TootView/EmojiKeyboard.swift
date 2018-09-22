@@ -131,7 +131,6 @@ private final class EmojiInputScrollView: UIScrollView {
         
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
         
-        print(button.key)
         (textView as? UITextView)?.insertText(" :" + button.key + ": ")
     }
     
