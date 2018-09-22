@@ -123,23 +123,28 @@ final class SettingsData {
     }
     
     // ミニビューかどうか
-    private static var _isMiniView: Bool?
-    static var isMiniView: Bool {
+    enum MiniView: String {
+        case superMini = "superMini"
+        case miniView = "miniView"
+        case normal = "normal"
+    }
+    private static var _isMiniView: MiniView?
+    static var isMiniView: MiniView {
         get {
             if let cache = self._isMiniView {
                 return cache
             }
             if let string = defaults.string(forKey: "isMiniView") {
-                self._isMiniView = (string == "ON")
-                return (string == "ON")
+                self._isMiniView = MiniView(rawValue: string) ?? MiniView.normal
+                return self._isMiniView!
             }
-            self._isMiniView = false
-            return false
+            self._isMiniView = MiniView.normal
+            return MiniView.normal
         }
         set(newValue) {
             self._isMiniView = newValue
-            if newValue {
-                defaults.set("ON", forKey: "isMiniView")
+            if newValue != MiniView.normal {
+                defaults.set(newValue.rawValue, forKey: "isMiniView")
             } else {
                 defaults.removeObject(forKey: "isMiniView")
             }
@@ -174,8 +179,10 @@ final class SettingsData {
             }
             let value = defaults.double(forKey: "fontSize")
             if value > 0 {
+                self._fontSize = CGFloat(value)
                 return CGFloat(value)
             }
+            self._fontSize = 16
             return 16
         }
         set(newValue) {

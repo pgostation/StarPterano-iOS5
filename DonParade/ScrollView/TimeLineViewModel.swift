@@ -123,10 +123,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルのだいたいの高さ(スクロールバーの表示用)
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if SettingsData.isMiniView {
-            return 44
-        } else {
+        switch SettingsData.isMiniView {
+        case .normal:
             return 60
+        case .miniView:
+            return 44
+        case .superMini:
+            return 30
         }
     }
     
@@ -139,8 +142,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
         
-        if SettingsData.isMiniView && !isSelected {
+        if SettingsData.isMiniView == .miniView && !isSelected {
             return 23 + SettingsData.fontSize * 1.5
+        }
+        if SettingsData.isMiniView == .superMini && !isSelected {
+            return 10 + SettingsData.fontSize
         }
         
         // セルを拡大表示するかどうか
@@ -186,7 +192,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // プロパティ設定
         let messageView: UIView
-        if hasLink {
+        if hasLink, SettingsData.isMiniView == .normal {
             let msgView = UITextView()
             msgView.attributedText = attributedText
             if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
@@ -220,7 +226,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView ? 50 : 66)
+        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView != .normal ? 50 : 66)
         messageView.sizeToFit()
         var isContinue = false
         if self.selectedRow == indexPath.row {
@@ -261,6 +267,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     cell?.messageView = messageView
                     cell?.insertSubview(messageView, at: 2)
                     self?.setCellColor(cell: cell)
+                    if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
+                        (messageView as? UILabel)?.numberOfLines = 1
+                        messageView.frame.size.height = SettingsData.fontSize + 2
+                    }
                 }
             }
         })
@@ -276,6 +286,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.contentData = data.content ?? ""
         cell.urlStr = data.url ?? ""
         cell.isMiniView = SettingsData.isMiniView
+        
+        if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
+            (messageView as? UILabel)?.numberOfLines = 1
+            messageView.sizeToFit()
+        }
         
         cell.isFaved = (data.favourited == 1)
         cell.isBoosted = (data.reblogged == 1)
@@ -434,7 +449,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             } else {
                 cell.date = date
                 cell.refreshDate()
-                cell.dateLabel.isHidden = false
+                if cell.isMiniView != .superMini {
+                    cell.dateLabel.isHidden = false
+                }
             }
         }
         
@@ -597,6 +614,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.applicationLabel?.removeFromSuperview()
         }
         cell.iconView.image = nil
+        
+        if SettingsData.isMiniView == .superMini {
+            cell.nameLabel.isHidden = true
+            cell.idLabel.isHidden = true
+            cell.dateLabel.isHidden = true
+        } else {
+            cell.nameLabel.isHidden = false
+            cell.idLabel.isHidden = false
+            cell.dateLabel.isHidden = false
+        }
         
         return cell
     }

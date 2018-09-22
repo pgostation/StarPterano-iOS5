@@ -188,12 +188,20 @@ final class TimeLineViewController: MyViewController {
     }
     
     // ピンチインでミニビューへ
+    private var pinchFlag = false
     @objc func pinchAction(_ gesture: UIPinchGestureRecognizer) {
         guard let view = self.view as? TimeLineView else { return }
         
+        if gesture.state == .began {
+            pinchFlag = false
+        }
+        if pinchFlag { return }
+        
         if gesture.scale < 0.9 {
+            pinchFlag = true
             view.enterMiniView()
         } else if gesture.scale > 1.1 {
+            pinchFlag = true
             view.exitMiniView()
         }
     }
