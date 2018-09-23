@@ -35,6 +35,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
     }
     
     // セルの正確な高さ
+    private let dummyLabel = UILabel()
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row >= list.count {
             return 100
@@ -42,9 +43,21 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         
         let data = list[indexPath.row]
         if data.type == "follow" {
-            return 44 + SettingsData.fontSize * 2
+            return 15 + SettingsData.fontSize * 2
         } else {
-            return 44 + SettingsData.fontSize * 3
+            if let status = data.status {
+                let attibutedText = DecodeToot.decodeContent(content: status.content, emojis: status.emojis) {
+                }
+                self.dummyLabel.attributedText = attibutedText.0
+                self.dummyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
+                self.dummyLabel.numberOfLines = 0
+                self.dummyLabel.lineBreakMode = .byCharWrapping
+                self.dummyLabel.frame.size.width = UIScreen.main.bounds.width - 55
+                self.dummyLabel.sizeToFit()
+                
+                return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20
+            }
+            return SettingsData.fontSize * 2
         }
     }
     

@@ -168,14 +168,14 @@ final class NotificationTableCell: UITableViewCell {
                                       height: SettingsData.fontSize)
         
         self.notificationLabel.frame = CGRect(x: 50,
-                                              y: 8 + SettingsData.fontSize,
+                                              y: 10 + SettingsData.fontSize,
                                               width: screenBounds.width - 50,
                                               height: SettingsData.fontSize + 2)
         
         self.statusLabel.frame.size.width = screenBounds.width - 55
         self.statusLabel.sizeToFit()
         self.statusLabel.frame = CGRect(x: 50,
-                                        y: self.notificationLabel.frame.maxY + 4,
+                                        y: self.notificationLabel.frame.maxY + 6,
                                         width: self.statusLabel.frame.width,
                                         height: self.statusLabel.frame.height)
     }
