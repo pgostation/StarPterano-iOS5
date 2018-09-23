@@ -120,7 +120,11 @@ final class TootView: UIView {
         
         imagesButton.setTitle("🏞", for: .normal)
         
-        imagesCountButton.setTitle(nil, for: .normal)
+        if TootViewController.imagesList.count == 0 {
+            imagesCountButton.setTitle(nil, for: .normal)
+        } else {
+            imagesCountButton.setTitle("[\(TootViewController.imagesList.count)]", for: .normal)
+        }
         imagesCountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         switch self.protectMode {

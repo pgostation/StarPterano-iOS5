@@ -102,7 +102,7 @@ final class WaitIndicator: UIView {
                                                        y: top + length * cos(angle) - size / 2,
                                                        width: size,
                                                        height: size))
-            UIColor.green.setFill() // 色をセット
+            UIColor(red: 0.8, green: 1, blue: 0, alpha: 1).setFill() // 色をセット
             ballPath.fill()
         }
     }

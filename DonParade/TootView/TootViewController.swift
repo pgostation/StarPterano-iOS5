@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Photos
 
 final class TootViewController: UIViewController, UITextViewDelegate {
     static var isShown = false // 現在表示中かどうか
     static weak var instance: TootViewController?
     static var inReplyToId: String? = nil
+    static var imagesList: [URL] = []
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -85,6 +87,32 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // 添付画像を追加する
     @objc func addImageAction() {
+        PHPhotoLibrary.requestAuthorization { authStatus in
+            switch authStatus {
+            case .authorized:
+                DispatchQueue.main.async {
+                    // 画像ピッカーを表示
+                    MyImagePickerController.show(callback: { url in
+                        if let url = url {
+                            TootViewController.imagesList.append(url)
+                            if let view = self.view as? TootView {
+                                view.refresh()
+                            }
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            if let view = self.view as? TootView {
+                                view.textField.becomeFirstResponder()
+                            }
+                        }
+                    })
+                }
+            case .denied, .notDetermined, .restricted:
+                DispatchQueue.main.async {
+                    Dialog.show(message: "許可されていません")
+                }
+            }
+        }
     }
     
     // 添付画像を確認、削除する
