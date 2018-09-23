@@ -17,6 +17,7 @@
 // タイムライン
 "BUTTON_TL" = "Home";
 "BUTTON_LTL" = "Local";
+"BUTTON_GTL" = "FTL";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_LIST" = "List";
 "BUTTON_NOTIFY" = "Notify";

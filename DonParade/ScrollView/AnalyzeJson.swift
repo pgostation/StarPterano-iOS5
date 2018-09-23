@@ -12,14 +12,14 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyseJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject]) {
+    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject]) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
         for json in jsonList {
             guard let json = json as? [String: Any] else { continue }
             
-            let data = analyseJson(view: view, model: model, json: json, acct: &acct)
+            let data = analyzeJson(view: view, model: model, json: json, acct: &acct)
             
             contentList.append(data)
         }
@@ -27,11 +27,11 @@ final class AnalyzeJson {
         model.change(tableView: view, addList: contentList, accountList: view.accountList)
     }
     
-    static func analyseJson(view: TimeLineView, model: TimeLineViewModel, json: [String: Any], acct: inout String) -> ContentData {
+    static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String) -> ContentData {
         if let account = json["account"] as? [String: Any] {
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)
-            view.accountList.updateValue(data, forKey: acct)
+            view?.accountList.updateValue(data, forKey: acct)
         }
         let reblog = json["reblog"] as? [String: Any]
         var reblog_acct: String? = nil
@@ -39,7 +39,7 @@ final class AnalyzeJson {
             reblog_acct = acct
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)
-            view.accountList.updateValue(data, forKey: acct)
+            view?.accountList.updateValue(data, forKey: acct)
         }
         var mediaData: [MediaData]? = nil
         if let media_attachments = json["media_attachments"] as? [[String: Any]] {
@@ -230,5 +230,19 @@ final class AnalyzeJson {
         let id: String? // 数値のID
         let url: String?
         let username: String?
+    }
+    
+    // 通知
+    struct NotificationData {
+        let id: String?
+        let type: String?
+        let created_at: String?
+        let account: AccountData?
+        let status: ContentData?
+    }
+    
+    // リスト
+    struct ListData {
+        
     }
 }

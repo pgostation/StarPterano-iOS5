@@ -9,8 +9,11 @@
 /* Begin PBXBuildFile section */
 		121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0D92152955F00928DCC /* TootViewController.swift */; };
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
-		121DC0DE2153CF7F00928DCC /* TimeLineView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */; };
+		121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView.swift */; };
 		121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0E12153E32500928DCC /* WaitIndicator.swift */; };
+		127A37B221570B5600347880 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B121570B5600347880 /* NotificationViewController.swift */; };
+		127A37B52157250700347880 /* ListSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B42157250700347880 /* ListSelectViewController.swift */; };
+		127A37B7215733B400347880 /* NotificatinTableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B6215733B400347880 /* NotificatinTableModel.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
 		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
@@ -48,8 +51,11 @@
 /* Begin PBXFileReference section */
 		121DC0D92152955F00928DCC /* TootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootViewController.swift; sourceTree = "<group>"; };
 		121DC0DB2153C64F00928DCC /* MyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWindow.swift; sourceTree = "<group>"; };
-		121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView2.swift; sourceTree = "<group>"; };
+		121DC0DD2153CF7F00928DCC /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		121DC0E12153E32500928DCC /* WaitIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitIndicator.swift; sourceTree = "<group>"; };
+		127A37B121570B5600347880 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		127A37B42157250700347880 /* ListSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectViewController.swift; sourceTree = "<group>"; };
+		127A37B6215733B400347880 /* NotificatinTableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificatinTableModel.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
 		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
@@ -98,6 +104,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		127A37B021570B0B00347880 /* NotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				127A37B121570B5600347880 /* NotificationViewController.swift */,
+				127A37B6215733B400347880 /* NotificatinTableModel.swift */,
+			);
+			path = NotificationView;
+			sourceTree = "<group>";
+		};
+		127A37B3215724E600347880 /* ListView */ = {
+			isa = PBXGroup;
+			children = (
+				127A37B42157250700347880 /* ListSelectViewController.swift */,
+			);
+			path = ListView;
+			sourceTree = "<group>";
+		};
 		1286DF662155E6F4008FFFAC /* ImageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +156,8 @@
 				1286DF662155E6F4008FFFAC /* ImageView */,
 				12F9AC95214CA73800E9E508 /* ProfileView */,
 				12F9AC94214CA6C500E9E508 /* TootView */,
+				127A37B3215724E600347880 /* ListView */,
+				127A37B021570B0B00347880 /* NotificationView */,
 				12F9AC92214CA57E00E9E508 /* SettingsView */,
 				12F9AC96214CA74A00E9E508 /* LoginView */,
 				12F9AC77214CA35F00E9E508 /* AppDelegate.swift */,
@@ -195,7 +220,7 @@
 			children = (
 				12F9ACA7214D1C0900E9E508 /* MainViewController.swift */,
 				12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */,
-				121DC0DD2153CF7F00928DCC /* TimeLineView2.swift */,
+				121DC0DD2153CF7F00928DCC /* TimeLineView.swift */,
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
 				12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */,
 				12CD0264214FD37700133A95 /* AnalyzeJson.swift */,
@@ -311,11 +336,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				127A37B7215733B400347880 /* NotificatinTableModel.swift in Sources */,
 				1286DF612154DCA8008FFFAC /* EmojiKeyboard.swift in Sources */,
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
 				1286DF632154F2DA008FFFAC /* SettingsSelectProtectMode.swift in Sources */,
-				121DC0DE2153CF7F00928DCC /* TimeLineView2.swift in Sources */,
+				121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */,
 				12F9AC91214CA4AA00E9E508 /* LoginSafari.swift in Sources */,
 				12CD0261214F367100133A95 /* DecodeToot.swift in Sources */,
 				12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */,
@@ -333,7 +359,9 @@
 				12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */,
 				12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */,
 				12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */,
+				127A37B52157250700347880 /* ListSelectViewController.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
+				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,

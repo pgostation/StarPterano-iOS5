@@ -51,7 +51,7 @@ final class ThemeColor {
             
             detailButtonsColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
             detailButtonsHiliteColor = UIColor(red: 0.5, green: 1.0, blue: 0.6, alpha: 1)
-            mainButtonsBgColor = UIColor(red: 0.55, green: 0.55, blue: 0.5, alpha: 0.4)
+            mainButtonsBgColor = UIColor(red: 0.20, green: 0.25, blue: 0.0, alpha: 0.4)
             mainButtonsTitleColor = UIColor(red: 0.7, green: 1.0, blue: 0.1, alpha: 1)
             buttonBorderColor = UIColor(red: 0.7, green: 1.0, blue: 0.1, alpha: 0.8)
             opaqueButtonsBgColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
@@ -74,13 +74,13 @@ final class ThemeColor {
             
             detailButtonsColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             detailButtonsHiliteColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1)
-            mainButtonsBgColor = UIColor(red: 0.6, green: 1.0, blue: 0.0, alpha: 0.4)
+            mainButtonsBgColor = UIColor(red: 0.88, green: 1.0, blue: 0.68, alpha: 0.4)
             mainButtonsTitleColor = UIColor(red: 0.2, green: 0.4, blue: 0.0, alpha: 1)
             buttonBorderColor = UIColor(red: 0.2, green: 0.4, blue: 0.0, alpha: 0.8)
             opaqueButtonsBgColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
             
-            selectedBgColor = UIColor(red: 0.88, green: 1.0, blue: 0.78, alpha: 1)
-            sameAccountBgColor = UIColor(red: 0.92, green: 0.96, blue: 0.86, alpha: 1)
+            selectedBgColor = UIColor(red: 0.88, green: 1.0, blue: 0.68, alpha: 1)
+            sameAccountBgColor = UIColor(red: 0.92, green: 0.96, blue: 0.82, alpha: 1)
             mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
             toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)

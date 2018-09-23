@@ -25,12 +25,20 @@ final class MainViewController: MyViewController {
         let view = MainView()
         self.view = view
         
+        // ボタンのaddTarget
         view.tlButton.addTarget(self, action: #selector(tlAction(_:)), for: .touchUpInside)
         view.ltlButton.addTarget(self, action: #selector(ltlAction(_:)), for: .touchUpInside)
         
         view.tootButton.addTarget(self, action: #selector(tootAction(_:)), for: .touchUpInside)
         
+        view.listButton.addTarget(self, action: #selector(listAction(_:)), for: .touchUpInside)
+        view.notificationsButton.addTarget(self, action: #selector(notificationsAction(_:)), for: .touchUpInside)
+        
         view.accountButton.addTarget(self, action: #selector(accountAction(_:)), for: .touchUpInside)
+        
+        // 長押し
+        let ltlPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(gtlAction(_:)))
+        view.ltlButton.addGestureRecognizer(ltlPressGesture)
         
         // 起動時はTLを表示する
         tlAction(nil)
@@ -61,6 +69,7 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
+            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
             view.tlButton.layer.borderWidth = 2
             view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
         }
@@ -88,9 +97,50 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         
         if let view = self.view as? MainView {
+            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
             view.ltlButton.layer.borderWidth = 2
             view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
         }
+    }
+    
+    // 長押しで連合タイムラインへ移動
+    @objc func gtlAction(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state != .began { return }
+        
+        // 前のビューを外す
+        removeOldView()
+        
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            let key = "\(hostName)_\(accessToken)_GTL"
+            if let vc = self.TimelineList[key] {
+                self.timelineViewController = vc
+            } else {
+                self.timelineViewController = TimeLineViewController(type: .global)
+                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+        }
+        
+        // 一番下にタイムラインビューを入れる
+        self.addChildViewController(self.timelineViewController!)
+        self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        
+        if let view = self.view as? MainView {
+            view.ltlButton.setTitle(I18n.get("BUTTON_GTL"), for: .normal)
+            view.ltlButton.layer.borderWidth = 2
+            view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        }
+    }
+    
+    // リスト画面に移動
+    @objc func listAction(_ sender: UIButton?) {
+        let vc = ListSelectViewController()
+        self.present(vc, animated: false, completion: nil)
+    }
+    
+    // 通知画面に移動
+    @objc func notificationsAction(_ sender: UIButton?) {
+        let vc = NotificationViewController()
+        self.present(vc, animated: false, completion: nil)
     }
     
     func swipeView(toRight: Bool) {

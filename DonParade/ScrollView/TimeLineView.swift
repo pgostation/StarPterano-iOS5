@@ -110,10 +110,10 @@ final class TimeLineView: UITableView {
             if let data = data {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
-                        AnalyzeJson.analyseJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
+                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
                     } else if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         var acct = ""
-                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
                         strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
                         
@@ -176,7 +176,7 @@ final class TimeLineView: UITableView {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject>
                     
                     if let responseJson = responseJson {
-                        AnalyzeJson.analyseJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
+                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson)
                     }
                 } catch {
                 }
@@ -204,7 +204,7 @@ final class TimeLineView: UITableView {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         var acct = ""
-                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
                         strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
                     }
@@ -233,7 +233,7 @@ final class TimeLineView: UITableView {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         var acct = ""
-                        let contentData = AnalyzeJson.analyseJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
                         strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
                     }
