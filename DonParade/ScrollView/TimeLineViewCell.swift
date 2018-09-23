@@ -11,6 +11,8 @@
 import UIKit
 
 final class TimeLineViewCell: UITableViewCell {
+    static var showMoreList: [String] = []
+    
     var id = "" // トゥートのID
     
     // 基本ビュー
@@ -262,6 +264,8 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         self.showMoreButton?.removeFromSuperview()
+        
+        TimeLineViewCell.showMoreList.append(self.id)
     }
     
     // 画像をタップ

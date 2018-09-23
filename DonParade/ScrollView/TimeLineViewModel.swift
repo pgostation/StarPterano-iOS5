@@ -511,6 +511,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
             cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
             cell.addSubview(cell.showMoreButton!)
+            
+            if let id = data.id, TimeLineViewCell.showMoreList.contains(id) {
+                // すでに解除済み
+                cell.showMoreAction()
+            }
         }
         
         // DMの場合
