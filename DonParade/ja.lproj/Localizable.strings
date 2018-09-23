@@ -19,7 +19,7 @@
 "BUTTON_LTL" = "ローカル";
 "BUTTON_GTL" = "連合";
 "BUTTON_TOOT" = "Toot!";
-"BUTTON_LIST" = "リスト";
+"BUTTON_SEARCH" = "検索";
 "BUTTON_NOTIFY" = "通知";
 "BUTTON_SHOW_MORE" = "もっと見る";
 "REFRESH_TIMELINE" = "更新";
@@ -80,6 +80,8 @@
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "マストドンのWebサイトへ";
+"SETTINGS_LIST"= "リスト";
+"SETTINGS_DMLIST"= "DMリスト";
 "SETTINGS_FAVORITELIST"= "お気に入りリスト";
 "SETTINGS_MUTELIST" = "ミュートリスト";
 "SETTINGS_BLOCKLIST" = "ブロックリスト";

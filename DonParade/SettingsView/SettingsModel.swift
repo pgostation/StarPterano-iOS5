@@ -37,11 +37,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 3.マストドン設定
     private enum MyPage: String {
         case mypage = "SETTINGS_MYPAGE"
+        //case list = "SETTINGS_LIST"
+        case dm = "SETTINGS_DMLIST"
         case favorite = "SETTINGS_FAVORITELIST"
         case mute = "SETTINGS_MUTELIST"
         case block = "SETTINGS_BLOCKLIST"
     }
     private let myPageList: [MyPage] = [.mypage,
+                                        .dm,
                                         .favorite,
                                         .mute,
                                         .block]

@@ -15,6 +15,7 @@
 		127A37B52157250700347880 /* ListSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B42157250700347880 /* ListSelectViewController.swift */; };
 		127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B6215733B400347880 /* NotificationTableModel.swift */; };
 		127A37B921573FE900347880 /* NotificationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B821573FE900347880 /* NotificationTableCell.swift */; };
+		127A37BC2157649600347880 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BB2157649600347880 /* SearchViewController.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
 		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
@@ -58,6 +59,7 @@
 		127A37B42157250700347880 /* ListSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectViewController.swift; sourceTree = "<group>"; };
 		127A37B6215733B400347880 /* NotificationTableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableModel.swift; sourceTree = "<group>"; };
 		127A37B821573FE900347880 /* NotificationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableCell.swift; sourceTree = "<group>"; };
+		127A37BB2157649600347880 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
 		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
@@ -124,6 +126,14 @@
 			path = ListView;
 			sourceTree = "<group>";
 		};
+		127A37BA2157648000347880 /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				127A37BB2157649600347880 /* SearchViewController.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
 		1286DF662155E6F4008FFFAC /* ImageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,8 +169,9 @@
 				1286DF662155E6F4008FFFAC /* ImageView */,
 				12F9AC95214CA73800E9E508 /* ProfileView */,
 				12F9AC94214CA6C500E9E508 /* TootView */,
-				127A37B3215724E600347880 /* ListView */,
+				127A37BA2157648000347880 /* SearchView */,
 				127A37B021570B0B00347880 /* NotificationView */,
+				127A37B3215724E600347880 /* ListView */,
 				12F9AC92214CA57E00E9E508 /* SettingsView */,
 				12F9AC96214CA74A00E9E508 /* LoginView */,
 				12F9AC77214CA35F00E9E508 /* AppDelegate.swift */,
@@ -365,6 +376,7 @@
 				127A37B52157250700347880 /* ListSelectViewController.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
 				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
+				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,

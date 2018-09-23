@@ -19,7 +19,7 @@
 "BUTTON_LTL" = "Local";
 "BUTTON_GTL" = "FTL";
 "BUTTON_TOOT" = "Toot!";
-"BUTTON_LIST" = "List";
+"BUTTON_SEARCH" = "Search";
 "BUTTON_NOTIFY" = "Notify";
 "BUTTON_SHOW_MORE" = "Show More";
 "REFRESH_TIMELINE" = "Refresh";
@@ -80,6 +80,8 @@
 
 // 設定画面(マイページ)
 "SETTINGS_MYPAGE" = "Your Mastodon page";
+"SETTINGS_LIST"= "List";
+"SETTINGS_DMLIST"= "DM list";
 "SETTINGS_FAVORITELIST"= "Favorite list";
 "SETTINGS_MUTELIST" = "Mute list";
 "SETTINGS_BLOCKLIST" = "Block list";

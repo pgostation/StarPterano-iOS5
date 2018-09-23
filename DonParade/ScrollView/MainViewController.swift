@@ -31,7 +31,7 @@ final class MainViewController: MyViewController {
         
         view.tootButton.addTarget(self, action: #selector(tootAction(_:)), for: .touchUpInside)
         
-        view.listButton.addTarget(self, action: #selector(listAction(_:)), for: .touchUpInside)
+        view.searchButton.addTarget(self, action: #selector(searchAction(_:)), for: .touchUpInside)
         view.notificationsButton.addTarget(self, action: #selector(notificationsAction(_:)), for: .touchUpInside)
         
         view.accountButton.addTarget(self, action: #selector(accountAction(_:)), for: .touchUpInside)
@@ -131,9 +131,9 @@ final class MainViewController: MyViewController {
         }
     }
     
-    // リスト画面に移動
-    @objc func listAction(_ sender: UIButton?) {
-        let vc = ListSelectViewController()
+    // 検索画面に移動
+    @objc func searchAction(_ sender: UIButton?) {
+        let vc = SearchViewController()
         self.addChildViewController(vc)
         self.view.addSubview(vc.view)
         
@@ -252,7 +252,7 @@ final class MainViewController: MyViewController {
             view.tlButton.alpha = 0
             view.ltlButton.alpha = 0
             view.tootButton.alpha = 0
-            view.listButton.alpha = 0
+            view.searchButton.alpha = 0
             view.notificationsButton.alpha = 0
             view.accountButton.alpha = 0
         }
@@ -273,7 +273,7 @@ final class MainViewController: MyViewController {
             view.tlButton.alpha = 1
             view.ltlButton.alpha = 1
             view.tootButton.alpha = 1
-            view.listButton.alpha = 1
+            view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
             view.accountButton.alpha = 1
         }
@@ -293,14 +293,14 @@ final class MainViewController: MyViewController {
             view.tlButton.alpha = 0
             view.ltlButton.alpha = 0
             view.tootButton.alpha = 0
-            view.listButton.alpha = 0
+            view.searchButton.alpha = 0
             view.notificationsButton.alpha = 0
             view.accountButton.alpha = 0
         }, completion: { _ in
             view.tlButton.isHidden = true
             view.ltlButton.isHidden = true
             view.tootButton.isHidden = true
-            view.listButton.isHidden = true
+            view.searchButton.isHidden = true
             view.notificationsButton.isHidden = true
             view.accountButton.isHidden = true
         })
@@ -313,7 +313,7 @@ final class MainViewController: MyViewController {
             view.tlButton.alpha = 1
             view.ltlButton.alpha = 1
             view.tootButton.alpha = 1
-            view.listButton.alpha = 1
+            view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
             view.accountButton.alpha = 1
         }
@@ -321,7 +321,7 @@ final class MainViewController: MyViewController {
         view.tlButton.isHidden = false
         view.ltlButton.isHidden = false
         view.tootButton.isHidden = false
-        view.listButton.isHidden = false
+        view.searchButton.isHidden = false
         view.notificationsButton.isHidden = false
         view.accountButton.isHidden = false
     }
@@ -350,7 +350,7 @@ final class MainView: UIView {
     let tootButton = UIButton()
     
     // 右下
-    let listButton = UIButton()
+    let searchButton = UIButton()
     let notificationsButton = UIButton()
     
     // 右上
@@ -362,7 +362,7 @@ final class MainView: UIView {
         self.addSubview(tlButton)
         self.addSubview(ltlButton)
         self.addSubview(tootButton)
-        self.addSubview(listButton)
+        //self.addSubview(searchButton)
         self.addSubview(notificationsButton)
         self.addSubview(accountButton)
         
@@ -418,19 +418,19 @@ final class MainView: UIView {
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 35
         
-        listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
-        listButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        listButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        listButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        listButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        listButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        listButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        listButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        listButton.layer.borderWidth = 1 / UIScreen.main.scale
-        listButton.clipsToBounds = true
-        listButton.layer.cornerRadius = 10
+        searchButton.setTitle(I18n.get("BUTTON_SEARCH"), for: .normal)
+        searchButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        searchButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        searchButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
+        searchButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        searchButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        searchButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        searchButton.layer.borderWidth = 1 / UIScreen.main.scale
+        searchButton.clipsToBounds = true
+        searchButton.layer.cornerRadius = 10
         if #available(iOS 11.0, *) {
-            listButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+            searchButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
         
         notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
@@ -476,10 +476,10 @@ final class MainView: UIView {
                                   width: 70,
                                   height: 70)
         
-        listButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
-                                  y: screenBounds.height - 100 - bottomOffset,
-                                  width: buttonWidth,
-                                  height: buttonHeight)
+        searchButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
+                                    y: screenBounds.height - 100 - bottomOffset,
+                                    width: buttonWidth,
+                                    height: buttonHeight)
         
         notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
                                            y: screenBounds.height - 50 - bottomOffset,
