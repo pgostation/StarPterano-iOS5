@@ -134,13 +134,31 @@ final class MainViewController: MyViewController {
     // リスト画面に移動
     @objc func listAction(_ sender: UIButton?) {
         let vc = ListSelectViewController()
-        self.present(vc, animated: false, completion: nil)
+        self.addChildViewController(vc)
+        self.view.addSubview(vc.view)
+        
+        vc.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                               y: 0,
+                               width: UIScreen.main.bounds.width,
+                               height: UIScreen.main.bounds.height)
+        UIView.animate(withDuration: 0.3) {
+            vc.view.frame.origin.x = 0
+        }
     }
     
     // 通知画面に移動
     @objc func notificationsAction(_ sender: UIButton?) {
         let vc = NotificationViewController()
-        self.present(vc, animated: false, completion: nil)
+        self.addChildViewController(vc)
+        self.view.addSubview(vc.view)
+        
+        vc.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                               y: 0,
+                               width: UIScreen.main.bounds.width,
+                               height: UIScreen.main.bounds.height)
+        UIView.animate(withDuration: 0.3) {
+            vc.view.frame.origin.x = 0
+        }
     }
     
     func swipeView(toRight: Bool) {

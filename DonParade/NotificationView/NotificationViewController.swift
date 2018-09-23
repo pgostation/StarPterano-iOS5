@@ -25,6 +25,11 @@ final class NotificationViewController: MyViewController {
         
         view.closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
         
+        // 右スワイプで閉じる
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
+        swipeGesture.direction = .right
+        self.view?.addGestureRecognizer(swipeGesture)
+        
         guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/notifications?limit=20") else { return }
         try? MastodonRequest.get(url: url, completionHandler: { [weak self] (data, response, error) in
             if let data = data {
@@ -61,8 +66,12 @@ final class NotificationViewController: MyViewController {
                             list.append(data)
                         }
                         
-                        // 表示を更新
-                        (self?.view as? NotificationView)?.tableView.model.change(addList: list)
+                        DispatchQueue.main.async {
+                            guard let view = self?.view as? NotificationView else { return }
+                            // 表示を更新
+                            view.tableView.model.change(addList: list)
+                            view.tableView.reloadData()
+                        }
                     }
                 } catch {
                 }
@@ -74,12 +83,20 @@ final class NotificationViewController: MyViewController {
     }
     
     @objc func closeAction() {
-        self.dismiss(animated: false, completion: nil)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                     y: 0,
+                                     width: UIScreen.main.bounds.width,
+                                     height: UIScreen.main.bounds.height)
+        }, completion: { _ in
+            self.removeFromParentViewController()
+            self.view.removeFromSuperview()
+        })
     }
 }
 
 private final class NotificationView: UIView {
-    let tableView = NotificatinTableView()
+    let tableView = NotificationTableView()
     let closeButton = UIButton()
     
     init() {
@@ -109,8 +126,8 @@ private final class NotificationView: UIView {
     }
 }
 
-private final class NotificatinTableView: UITableView {
-    let model = NotificatinTableModel()
+private final class NotificationTableView: UITableView {
+    let model = NotificationTableModel()
     
     init() {
         super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)

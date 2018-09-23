@@ -13,7 +13,8 @@
 		121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0E12153E32500928DCC /* WaitIndicator.swift */; };
 		127A37B221570B5600347880 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B121570B5600347880 /* NotificationViewController.swift */; };
 		127A37B52157250700347880 /* ListSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B42157250700347880 /* ListSelectViewController.swift */; };
-		127A37B7215733B400347880 /* NotificatinTableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B6215733B400347880 /* NotificatinTableModel.swift */; };
+		127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B6215733B400347880 /* NotificationTableModel.swift */; };
+		127A37B921573FE900347880 /* NotificationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B821573FE900347880 /* NotificationTableCell.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
 		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
@@ -55,7 +56,8 @@
 		121DC0E12153E32500928DCC /* WaitIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitIndicator.swift; sourceTree = "<group>"; };
 		127A37B121570B5600347880 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		127A37B42157250700347880 /* ListSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectViewController.swift; sourceTree = "<group>"; };
-		127A37B6215733B400347880 /* NotificatinTableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificatinTableModel.swift; sourceTree = "<group>"; };
+		127A37B6215733B400347880 /* NotificationTableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableModel.swift; sourceTree = "<group>"; };
+		127A37B821573FE900347880 /* NotificationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableCell.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
 		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
@@ -108,7 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				127A37B121570B5600347880 /* NotificationViewController.swift */,
-				127A37B6215733B400347880 /* NotificatinTableModel.swift */,
+				127A37B6215733B400347880 /* NotificationTableModel.swift */,
+				127A37B821573FE900347880 /* NotificationTableCell.swift */,
 			);
 			path = NotificationView;
 			sourceTree = "<group>";
@@ -336,7 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				127A37B7215733B400347880 /* NotificatinTableModel.swift in Sources */,
+				127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */,
 				1286DF612154DCA8008FFFAC /* EmojiKeyboard.swift in Sources */,
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
@@ -365,6 +368,7 @@
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
+				127A37B921573FE900347880 /* NotificationTableCell.swift in Sources */,
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,
 				121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */,
 				12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */,

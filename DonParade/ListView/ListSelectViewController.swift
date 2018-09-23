@@ -24,10 +24,23 @@ final class ListSelectViewController: MyViewController {
         self.view = view
         
         view.closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
+        
+        // 右スワイプで閉じる
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
+        swipeGesture.direction = .right
+        self.view?.addGestureRecognizer(swipeGesture)
     }
     
     @objc func closeAction() {
-        self.dismiss(animated: false, completion: nil)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                     y: 0,
+                                     width: UIScreen.main.bounds.width,
+                                     height: UIScreen.main.bounds.height)
+        }, completion: { _ in
+            self.removeFromParentViewController()
+            self.view.removeFromSuperview()
+        })
     }
 }
 
@@ -95,6 +108,6 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
     }
 }

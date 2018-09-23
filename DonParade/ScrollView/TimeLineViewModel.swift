@@ -209,7 +209,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             msgView.delegate = self // URLタップ用
             
             // URL以外の場所タップ用
-            let tapGensture = UITapGestureRecognizer.init(target: self, action: #selector(tapTextViewAction(_:)))
+            let tapGensture = UITapGestureRecognizer(target: self, action: #selector(tapTextViewAction(_:)))
             msgView.addGestureRecognizer(tapGensture)
             
             messageView = msgView

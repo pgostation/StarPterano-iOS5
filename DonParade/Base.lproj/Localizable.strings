@@ -56,6 +56,12 @@
 // 画像の全画面表示
 "ACTION_SAVE_IMAGE_TO_ALBUM" = "Save to an album";
 
+// 通知画面
+"NOTIFICATION_MENTION" = "is Mentioned";
+"NOTIFICATION_BOOST" = "is Boosted";
+"NOTIFICATION_FAV" = "is Favorited";
+"NOTIFICATION_FOLLOW" = "is Followed";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 "BUTTON_REMOVE" = "Remove";
