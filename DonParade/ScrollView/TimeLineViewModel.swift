@@ -158,7 +158,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // メッセージのビューを一度作り、高さを求める
         let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
         
-        if data.sensitive == 1 { // もっと見る
+        if data.sensitive == 1 || data.spoiler_text != "" { // もっと見る
             detailOffset += 20
         }
         
@@ -299,7 +299,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.insertSubview(messageView, at: 2)
         
         // 「もっと見る」の場合
-        if data.sensitive == 1 {
+        if data.sensitive == 1 || data.spoiler_text != "" {
             messageView.isHidden = true
             cell.spolerTextLabel = UILabel()
             cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
@@ -475,7 +475,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.addSubview(imageView)
                 cell.imageViews?.append(imageView)
                 
-                if data.sensitive == 1 {
+                if data.sensitive == 1 || data.spoiler_text != "" {
                     imageView.isHidden = true
                 }
                 
@@ -505,18 +505,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // もっと見るの場合
-        if data.sensitive == 1 {
+        if data.sensitive == 1 || data.spoiler_text != "" {
             cell.showMoreButton = UIButton()
             cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
             cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
             cell.addSubview(cell.showMoreButton!)
             
-            if let id = data.id, TimeLineViewCell.showMoreList.contains(id) {
+            if let id = data.id, id != "" && TimeLineViewCell.showMoreList.contains(id) {
                 // すでに解除済み
                 cell.showMoreAction()
             }
         }
+        
+        print("\(data)")
         
         // DMの場合
         if data.visibility == "direct" {
