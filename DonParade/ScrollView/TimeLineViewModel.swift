@@ -118,7 +118,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        return list.count + (showAutoPagerizeCell ? 1 : 0)
+        return list.count + 1
     }
     
     // セルのだいたいの高さ(スクロールバーの表示用)
@@ -137,7 +137,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == list.count {
             // AutoPagerize用セルの高さ
-            return 55
+            return 100
         }
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
