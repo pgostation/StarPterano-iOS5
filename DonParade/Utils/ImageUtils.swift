@@ -13,12 +13,12 @@ import CoreImage
 
 final class ImageUtils {
     // 画像を回転させる
-    static func rotateImage(image: UIImage?) -> UIImage? {
+    static func rotateImage(image: UIImage?, isRight: Bool) -> UIImage? {
         guard let image = image else { return nil }
         guard let ciImage = image.ciImage ?? CIImage(image: image) else { return nil }
         
         if #available(iOS 11.0, *) {
-            let orientedImage = ciImage.oriented(CGImagePropertyOrientation.right)
+            let orientedImage = ciImage.oriented(isRight ? CGImagePropertyOrientation.right : CGImagePropertyOrientation.left)
             return UIImage(ciImage: orientedImage)
         }
         

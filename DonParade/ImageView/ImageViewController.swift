@@ -45,13 +45,17 @@ final class ImageViewController: MyViewController {
         let view = ImageView(imageUrl: self.imagesUrls[index], previewUrl: self.previewUrls[index], fromRect: fromRect, smallImage: smallImage)
         self.view = view
         
-        // タップえボタンの表示非表示
+        // タップでボタンの表示/非表示
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         view.addGestureRecognizer(tapGesture)
         
+        // 回転ジェスチャー
+        let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateAction(_:)))
+        view.addGestureRecognizer(rotateGesture)
+        
         view.closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         view.optionButton.addTarget(self, action: #selector(optionAction), for: .touchUpInside)
-        view.rotateButton.addTarget(self, action: #selector(rotateAction), for: .touchUpInside)
+        view.rotateButton.addTarget(self, action: #selector(rotateAction(_:)), for: .touchUpInside)
         
         self.setNeedsStatusBarAppearanceUpdate()
     }
@@ -95,12 +99,20 @@ final class ImageViewController: MyViewController {
     }
     
     // 回転
-    @objc func rotateAction() {
+    @objc func rotateAction(_ sender: Any) {
         guard let view = self.view as? ImageView else { return }
+        
+        let isRight: Bool
+        if let gesture = sender as? UIRotationGestureRecognizer {
+            if gesture.state != .began { return }
+            isRight = gesture.rotation > 0
+        } else {
+            isRight = true
+        }
         
         let imageView = view.imageScrollView.imageView
         
-        imageView.image = ImageUtils.rotateImage(image: imageView.image)
+        imageView.image = ImageUtils.rotateImage(image: imageView.image, isRight: isRight)
         
         if let image = imageView.image {
             imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
