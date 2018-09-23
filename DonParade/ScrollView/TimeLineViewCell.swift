@@ -112,10 +112,14 @@ final class TimeLineViewCell: UITableViewCell {
             })
         }
         
-        //
+        // アイコンのタップジェスチャー
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
         self.iconView.addGestureRecognizer(tapGesture)
         self.iconView.isUserInteractionEnabled = true
+        
+        // アイコンの長押しジェスチャー
+        let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressAccountAction(_:)))
+        self.iconView.addGestureRecognizer(pressGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -136,6 +140,28 @@ final class TimeLineViewCell: UITableViewCell {
                                                               height: UIScreen.main.bounds.height)
             UIView.animate(withDuration: 0.3) {
                 accountTimeLineViewController.view.frame.origin.x = 0
+            }
+        }
+    }
+    
+    // アイコンを長押しした時の処理
+    @objc func pressAccountAction(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state != .began { return }
+        
+        // トゥート画面を開いていなければ開く
+        if !TootViewController.isShown {
+            MainViewController.instance?.tootAction(nil)
+        }
+        
+        // @IDを入力する
+        DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 0.0 : 0.2)) {
+            if let vc = TootViewController.instance, let view = vc.view as? TootView {
+                if let text = view.textField.text, text.count > 0 {
+                    let spaceString = text.last == " " ? "" : " "
+                    view.textField.text = text + spaceString + "@\(self.idLabel.text ?? "") "
+                } else {
+                    view.textField.text = "@\(self.idLabel.text ?? "") "
+                }
             }
         }
     }
