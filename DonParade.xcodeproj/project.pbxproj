@@ -17,6 +17,7 @@
 		127A37B921573FE900347880 /* NotificationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B821573FE900347880 /* NotificationTableCell.swift */; };
 		127A37BC2157649600347880 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BB2157649600347880 /* SearchViewController.swift */; };
 		127A37BE2157B45100347880 /* MyImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BD2157B45100347880 /* MyImagePickerController.swift */; };
+		127A37C02157C63500347880 /* ImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BF2157C63500347880 /* ImageUpload.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
 		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
@@ -62,6 +63,7 @@
 		127A37B821573FE900347880 /* NotificationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableCell.swift; sourceTree = "<group>"; };
 		127A37BB2157649600347880 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		127A37BD2157B45100347880 /* MyImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImagePickerController.swift; sourceTree = "<group>"; };
+		127A37BF2157C63500347880 /* ImageUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUpload.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
 		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				1286DF6421551824008FFFAC /* TootView.swift */,
 				1286DF602154DCA8008FFFAC /* EmojiKeyboard.swift */,
 				127A37BD2157B45100347880 /* MyImagePickerController.swift */,
+				127A37BF2157C63500347880 /* ImageUpload.swift */,
 			);
 			path = TootView;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */,
 				121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */,
 				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
+				127A37C02157C63500347880 /* ImageUpload.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
 				12CD0263214F49E000133A95 /* EmojiData.swift in Sources */,
 				12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */,

@@ -110,7 +110,7 @@ final class TootView: UIView {
         }
         textField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         textField.textColor = ThemeColor.messageColor
-        textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
+        textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
         textField.isEditable = true
         textField.layer.borderColor = ThemeColor.messageColor.cgColor
         textField.layer.borderWidth = 1 / UIScreen.main.scale
@@ -166,7 +166,7 @@ final class TootView: UIView {
         textField.frame = CGRect(x: 1,
                                  y: 40,
                                  width: screenBounds.width - 2,
-                                 height: max(20, textField.frame.height))
+                                 height: max(25, textField.frame.height))
         
         inputBar.frame = CGRect(x: 0,
                                 y: 40 + textField.frame.height,

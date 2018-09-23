@@ -62,18 +62,58 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         if attributedText.length == 0 { return }
         
         let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: view.textField.textStorage)
+        let visibility = view.protectMode.rawValue
         
+        if TootViewController.imagesList.count > 0 {
+            // 画像をアップロードしてから投稿
+            let group = DispatchGroup()
+            
+            var idList: [String] = []
+            for url in TootViewController.imagesList {
+                group.enter()
+                ImageUpload.upload(imageUrl: url, callback: { json in
+                    if let json = json {
+                        if let id = json["id"] as? String {
+                            idList.append(id)
+                        }
+                        group.leave()
+                    } else {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            group.leave()
+                        }
+                    }
+                })
+            }
+            TootViewController.imagesList = []
+            
+            // 画像を全てアップロードし終わったら投稿
+            group.notify(queue: DispatchQueue.main) {
+                let addJson: [String: Any] = ["media_ids": idList]
+                self.toot(text: text, visibility: visibility, addJson: addJson)
+            }
+        } else {
+            // テキストだけなのですぐに投稿
+            toot(text: text, visibility: visibility, addJson: [:])
+        }
+        
+        closeAction()
+    }
+    
+    private func toot(text: String, visibility: String, addJson: [String: Any]) {
         guard let hostName = SettingsData.hostName else { return }
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
         
-        var bodyJson: [String: String] = [
+        var bodyJson: [String: Any] = [
             "status": text,
-            "visibility": view.protectMode.rawValue,
+            "visibility": visibility,
             ]
         if let inReplyToId = TootViewController.inReplyToId {
             bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
             TootViewController.inReplyToId = nil
+        }
+        for data in addJson {
+            bodyJson.updateValue(data.value, forKey: data.key)
         }
         
         try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
@@ -81,8 +121,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\n" + error.localizedDescription)
             }
         }
-        
-        closeAction()
     }
     
     // 添付画像を追加する
