@@ -54,8 +54,8 @@ final class WaitIndicator: UIView {
         
         self.animationTimer = Timer.scheduledTimer(timeInterval: 1 / 60, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
         
-        let randIndex = Int(arc4random()) % ballLocsList.count
-        self.ballLocs = ballLocsList[randIndex]
+        let randIndex = arc4random_uniform(UInt32(ballLocsList.count))
+        self.ballLocs = ballLocsList[Int(randIndex)]
     }
     
     required init?(coder aDecoder: NSCoder) {
