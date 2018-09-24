@@ -47,4 +47,18 @@ final class ImageUtils {
         
         return image
     }
+    
+    // 指定色のUIImageを作成
+    static func colorImage(color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0.0)
+        do {
+            let context = UIGraphicsGetCurrentContext()
+            context?.setFillColor(color.cgColor)
+            context?.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+    }
 }

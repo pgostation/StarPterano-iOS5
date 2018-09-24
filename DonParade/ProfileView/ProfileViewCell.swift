@@ -82,7 +82,11 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         guard let data = data else { return }
         
         // ヘッダ画像
+        headerImageView.image = ImageUtils.colorImage(color: ThemeColor.mainButtonsBgColor)
+        headerImageView.contentMode = .scaleAspectFill
+        headerImageView.clipsToBounds = true
         ImageCache.image(urlStr: data.header_static, isTemp: true, isSmall: false) { [weak self] image in
+            if image.size.width <= 1 && image.size.height <= 1 { return }
             self?.headerImageView.image = image
             self?.setNeedsLayout()
         }
@@ -118,7 +122,13 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         noteLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.2)
         noteLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         
-        dateLabel.text = data.created_at
+        if let created_at = data.created_at {
+            let date = DecodeToot.decodeTime(text: created_at)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .none
+            dateLabel.text = "since " + dateFormatter.string(from: date)
+        }
         dateLabel.textColor = ThemeColor.idColor
         dateLabel.shadowColor = ThemeColor.viewBgColor
         dateLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
@@ -218,7 +228,6 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                  height: 24)
         
         // ヘッダ画像
-        headerImageView.contentMode = .scaleAspectFill
         headerImageView.frame = CGRect(x: 0,
                                        y: 0,
                                        width: screenBounds.width,
