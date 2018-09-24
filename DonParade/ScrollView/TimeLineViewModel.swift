@@ -14,6 +14,7 @@ import SafariServices
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
     private var accountList: [String: AnalyzeJson.AccountData] = [:]
+    private var accountIdDict: [String: String] = [:]
     var showAutoPagerizeCell = true // 過去遡り用セルを表示するかどうか
     var selectedRow: Int? = nil
     private var selectedAccountId: String?
@@ -102,6 +103,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // アカウント情報を更新
             for account in accountList {
                 self.accountList.updateValue(account.value, forKey: account.key)
+            }
+            
+            // アカウントID情報を更新
+            for data in addList {
+                if let mensions = data.mentions {
+                    for mension in mensions {
+                        if let acct = mension.acct, let id = mension.id {
+                            self.accountIdDict.updateValue(id, forKey: acct)
+                        }
+                    }
+                }
             }
             
             tableView.reloadData()
@@ -749,9 +761,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // UITextViewのリンクタップ時の処理
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        print("#### " + URL.path)
-        
-        if URL.path.hasPrefix("/tags/") {
+        if URL.host == SettingsData.hostName && URL.path.hasPrefix("/tags/") {
             // ハッシュタグの場合
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
                                                         option: String(URL.path.suffix(URL.path.count - 6)))
@@ -767,10 +777,51 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return false
         }
         
+        if URL.path.hasPrefix("/@") {
+            let host: String?
+            if URL.host == SettingsData.hostName {
+                host = nil
+            } else {
+                host = URL.host
+            }
+            let accountId = String(URL.path.suffix(URL.path.count - 2))
+            if let id = convertAccountToId(host: host, accountId: accountId) {
+                // @でのIDコール
+                let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user,
+                                                            option: id)
+                let acct = accountId + (host != nil ? "@\(host!)" : "")
+                if let timelineView = viewController.view as? TimeLineView, let accountData = self.accountList[acct] {
+                    timelineView.accountList.updateValue(accountData, forKey: id)
+                }
+                MainViewController.instance?.addChildViewController(viewController)
+                MainViewController.instance?.view.addSubview(viewController.view)
+                viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                   y: 0,
+                                                   width: UIScreen.main.bounds.width,
+                                                   height: UIScreen.main.bounds.height)
+                UIView.animate(withDuration: 0.3) {
+                    viewController.view.frame.origin.x = 0
+                }
+                return false
+            }
+        }
+        
         let controller = SFSafariViewController(url: URL)
         MainViewController.instance?.present(controller, animated: true)
         
         return false
+    }
+    
+    // アカウント文字列から数値IDに変換
+    private func convertAccountToId(host: String?, accountId: String) -> String? {
+        let key: String
+        if let host = host {
+            key = accountId + "@" + host
+        } else {
+            key = accountId
+        }
+        
+        return accountIdDict[key]
     }
     
     // UITextViewのリンク以外タップ時の処理
