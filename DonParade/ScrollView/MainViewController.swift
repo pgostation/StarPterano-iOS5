@@ -339,6 +339,26 @@ final class MainViewController: MyViewController {
         self.addChildViewController(tootViewController)
         self.view.addSubview(tootViewController.view)
     }
+    
+    // 一時的お知らせを更新
+    func showNotify(text: String) {
+        DispatchQueue.main.async {
+            guard let view = self.view as? MainView else { return }
+            
+            view.notifyLabel.text = text
+            view.setNeedsLayout()
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                view.notifyLabel.alpha = 1
+            })
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                UIView.animate(withDuration: 0.2, animations: {
+                    view.notifyLabel.alpha = 0
+                })
+            }
+        }
+    }
 }
 
 final class MainView: UIView {
@@ -356,6 +376,9 @@ final class MainView: UIView {
     // 右上
     let accountButton = UIButton()
     
+    // 上側の一時メッセージ表示
+    let notifyLabel = UILabel()
+    
     init() {
         super.init(frame: UIScreen.main.bounds)
         
@@ -365,6 +388,7 @@ final class MainView: UIView {
         //self.addSubview(searchButton)
         self.addSubview(notificationsButton)
         self.addSubview(accountButton)
+        self.addSubview(notifyLabel)
         
         setProperties()
     }
@@ -453,6 +477,16 @@ final class MainView: UIView {
         accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         accountButton.clipsToBounds = true
         accountButton.layer.cornerRadius = 10
+        
+        notifyLabel.backgroundColor = ThemeColor.idColor.withAlphaComponent(0.8)
+        notifyLabel.textColor = ThemeColor.viewBgColor
+        notifyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+        notifyLabel.textAlignment = .center
+        notifyLabel.numberOfLines = 0
+        notifyLabel.lineBreakMode = .byCharWrapping
+        notifyLabel.layer.cornerRadius = 4
+        notifyLabel.clipsToBounds = true
+        notifyLabel.alpha = 0
     }
     
     override func layoutSubviews() {
@@ -490,5 +524,13 @@ final class MainView: UIView {
                                      y: 30 + bottomOffset / 2,
                                      width: 40,
                                      height: 40)
+        
+        notifyLabel.frame.size.width = screenBounds.width - 50
+        notifyLabel.sizeToFit()
+        notifyLabel.frame.size.width += 10
+        notifyLabel.frame = CGRect(x: screenBounds.width / 2 - notifyLabel.frame.width / 2,
+                                   y: 30 + bottomOffset / 2,
+                                   width: notifyLabel.frame.width,
+                                   height: notifyLabel.frame.height + 2)
     }
 }

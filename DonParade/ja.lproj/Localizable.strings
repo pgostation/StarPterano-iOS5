@@ -29,6 +29,7 @@
 "ACTION_DELETE_TOOT" = "このトゥートを削除";
 "ALERT_DELETE_TOOT_FAILURE" = "トゥートの削除に失敗しました";
 "BUTTON_CANCEL" = "キャンセル";
+"NOTIFY_COUNT_%D" = "新着: %d件";
 
 // 何分前
 "DATETIME_NOW" = "今";

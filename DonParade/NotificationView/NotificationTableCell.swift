@@ -24,6 +24,7 @@ final class NotificationTableCell: UITableViewCell {
     
     var followButton: UIButton?
     
+    var accountId: String?
     var date: Date = Date()
     var timer: Timer?
     
@@ -108,6 +109,27 @@ final class NotificationTableCell: UITableViewCell {
                 
                 self?.refreshDate()
             })
+        }
+        
+        // アイコンのタップジェスチャー
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+        self.iconView.addGestureRecognizer(tapGesture)
+        self.iconView.isUserInteractionEnabled = true
+    }
+    
+    // アイコンをタップした時の処理
+    @objc func tapAccountAction() {
+        if let accountId = self.accountId {
+            let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
+            MainViewController.instance?.addChildViewController(accountTimeLineViewController)
+            MainViewController.instance?.view.addSubview(accountTimeLineViewController.view)
+            accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                              y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height)
+            UIView.animate(withDuration: 0.3) {
+                accountTimeLineViewController.view.frame.origin.x = 0
+            }
         }
     }
     

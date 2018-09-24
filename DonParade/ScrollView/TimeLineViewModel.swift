@@ -418,7 +418,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
-            cell.iconView.image = image
+            if cell.id == id {
+                cell.iconView.image = image
+            }
         }
         
         cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
@@ -517,8 +519,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.showMoreAction()
             }
         }
-        
-        print("\(data)")
         
         // DMの場合
         if data.visibility == "direct" {

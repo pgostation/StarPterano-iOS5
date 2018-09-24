@@ -12,7 +12,7 @@
 import UIKit
 
 final class TimeLineView: UITableView {
-    private let type: TimeLineViewController.TimeLineType
+    let type: TimeLineViewController.TimeLineType
     private let option: String?
     private let model = TimeLineViewModel()
     private let refreshCon = UIRefreshControl()

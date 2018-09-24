@@ -29,6 +29,7 @@
 "ACTION_DELETE_TOOT" = "Delete this toot";
 "ALERT_DELETE_TOOT_FAILURE" = "Delete the toot failure.";
 "BUTTON_CANCEL" = "Cancel";
+"NOTIFY_COUNT_%D" = "New %d toots";
 
 // 何分前
 "DATETIME_NOW" = "now";

@@ -24,6 +24,14 @@ final class AnalyzeJson {
             contentList.append(data)
         }
         
+        // 更新した数を一時的に表示
+        if model.getFirstTootId() != nil && contentList.count > 0 {
+            if view.type != .user && view.type != .mensions {
+                let count = contentList.count
+                MainViewController.instance?.showNotify(text: String(format: I18n.get("NOTIFY_COUNT_%D"), count))
+            }
+        }
+        
         model.change(tableView: view, addList: contentList, accountList: view.accountList)
     }
     

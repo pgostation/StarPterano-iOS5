@@ -11,7 +11,7 @@
 import Foundation
 
 final class EmojiData {
-    static var cacheData: [String: [EmojiStruct]] = [:]
+    private static var cacheData: [String: [EmojiStruct]] = [:]
     private static var waitingList: [String] = []
     
     static func getEmojiCache(host: String) -> [EmojiStruct] {
