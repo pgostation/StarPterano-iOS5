@@ -10,8 +10,9 @@
 //  ここにプロフィールが表示され、フォローしたりブロックやミュートできる
 
 import UIKit
+import SafariServices
 
-final class ProfileViewCell: UITableViewCell {
+final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     // ヘッダ画像
     let headerImageView = UIImageView()
     
@@ -19,13 +20,12 @@ final class ProfileViewCell: UITableViewCell {
     let iconView = UIImageView()
     let nameLabel = UILabel()
     let idLabel = UILabel()
-    let noteLabel = UILabel()
+    let noteLabel = UITextView()
     let dateLabel = UILabel()
-    let urlLabel = UILabel()
     
     // 追加分の表示
     var serviceLabels: [UILabel] = []
-    var urlLabels: [UILabel] = []
+    var urlLabels: [UITextView] = []
     
     // 数の表示
     let followingCountTitle = UILabel()
@@ -55,7 +55,6 @@ final class ProfileViewCell: UITableViewCell {
         self.addSubview(idLabel)
         self.addSubview(noteLabel)
         self.addSubview(dateLabel)
-        self.addSubview(urlLabel)
         
         // 数の表示
         self.addSubview(followingCountTitle)
@@ -110,13 +109,14 @@ final class ProfileViewCell: UITableViewCell {
         idLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         idLabel.adjustsFontSizeToFitWidth = true
         
+        noteLabel.delegate = self
         noteLabel.attributedText = DecodeToot.decodeContent(content: data.note, emojis: data.emojis, callback: nil).0
         noteLabel.textColor = ThemeColor.idColor
-        noteLabel.shadowColor = ThemeColor.viewBgColor
-        noteLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        noteLabel.isSelectable = true
+        noteLabel.isEditable = false
+        noteLabel.isScrollEnabled = false
+        noteLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.2)
         noteLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-        noteLabel.numberOfLines = 0
-        noteLabel.lineBreakMode = .byCharWrapping
         
         dateLabel.text = data.created_at
         dateLabel.textColor = ThemeColor.idColor
@@ -124,35 +124,25 @@ final class ProfileViewCell: UITableViewCell {
         dateLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
         dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         
-        urlLabel.text = data.url
-        urlLabel.textColor = ThemeColor.idColor
-        urlLabel.shadowColor = ThemeColor.viewBgColor
-        urlLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
-        urlLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-        urlLabel.numberOfLines = 0
-        urlLabel.lineBreakMode = .byCharWrapping
-        
         // 追加分の表示
         for field in data.fields ?? [] {
             let nameLabel = UILabel()
             nameLabel.text = field["name"] as? String
             nameLabel.textColor = ThemeColor.idColor
-            nameLabel.shadowColor = ThemeColor.viewBgColor
-            nameLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
             nameLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             nameLabel.numberOfLines = 0
             nameLabel.lineBreakMode = .byCharWrapping
             serviceLabels.append(nameLabel)
             self.addSubview(nameLabel)
             
-            let valueLabel = UILabel()
+            let valueLabel = UITextView()
+            valueLabel.delegate = self
             valueLabel.attributedText = DecodeToot.decodeContent(content: field["value"] as? String, emojis: nil, callback: nil).0
             valueLabel.textColor = ThemeColor.idColor
-            valueLabel.shadowColor = ThemeColor.viewBgColor
-            valueLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
             valueLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-            valueLabel.numberOfLines = 0
-            valueLabel.lineBreakMode = .byCharWrapping
+            valueLabel.isSelectable = true
+            valueLabel.isEditable = false
+            valueLabel.isScrollEnabled = false
             urlLabels.append(valueLabel)
             self.addSubview(valueLabel)
         }
@@ -186,6 +176,14 @@ final class ProfileViewCell: UITableViewCell {
         statusCountLabel.textAlignment = .center
     }
     
+    // UITextViewのリンクタップ時の処理
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        let controller = SFSafariViewController(url: URL)
+        MainViewController.instance?.present(controller, animated: true)
+        
+        return false
+    }
+    
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         
@@ -214,15 +212,8 @@ final class ProfileViewCell: UITableViewCell {
                                  width: noteLabel.frame.width,
                                  height: noteLabel.frame.height)
         
-        urlLabel.frame.size.width = screenBounds.width - 80
-        urlLabel.sizeToFit()
-        urlLabel.frame = CGRect(x: 80,
-                                y: noteLabel.frame.maxY + 5,
-                                width: urlLabel.frame.width,
-                                height: urlLabel.frame.height)
-        
         dateLabel.frame = CGRect(x: 80,
-                                 y: urlLabel.frame.maxY + 5,
+                                 y: noteLabel.frame.maxY + 5,
                                  width: screenBounds.width - 80,
                                  height: 24)
         
@@ -235,21 +226,29 @@ final class ProfileViewCell: UITableViewCell {
         
         // 追加分の表示
         var top: CGFloat = headerImageView.frame.maxY
-        for label in serviceLabels {
+        for index in 0..<serviceLabels.count {
+            let label = serviceLabels[index]
+            let textView = urlLabels[index]
+            
+            label.frame.size.width = screenBounds.width * 0.4
+            label.sizeToFit()
             label.frame = CGRect(x: 0,
-                                     y: top,
-                                     width: screenBounds.width / 2,
-                                     height: SettingsData.fontSize * 2)
-            top += SettingsData.fontSize * 2
-        }
-        
-        top = headerImageView.frame.maxY
-        for label in urlLabels {
-            label.frame = CGRect(x: screenBounds.width / 2,
                                  y: top,
-                                 width: screenBounds.width / 2,
-                                 height: SettingsData.fontSize * 2)
-            top += SettingsData.fontSize * 2
+                                 width: screenBounds.width * 0.4,
+                                 height: label.frame.height)
+            
+            textView.frame.size.width = screenBounds.width * 0.6
+            textView.sizeToFit()
+            textView.frame = CGRect(x: screenBounds.width * 0.4,
+                                    y: top,
+                                    width: screenBounds.width * 0.6,
+                                    height: textView.frame.height)
+            
+            let height = max(label.frame.height, textView.frame.height)
+            label.frame.size.height = height
+            textView.frame.size.height = height
+            
+            top = max(label.frame.maxY, textView.frame.maxY) + 4
         }
         
         // 数の表示
@@ -280,6 +279,6 @@ final class ProfileViewCell: UITableViewCell {
                                           width: screenBounds.width / 3,
                                           height: SettingsData.fontSize)
         
-        self.frame.size.height = top + SettingsData.fontSize * 2 + 4
+        self.frame.size.height = top + SettingsData.fontSize * 2 + 8
     }
 }

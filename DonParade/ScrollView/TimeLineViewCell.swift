@@ -131,7 +131,11 @@ final class TimeLineViewCell: UITableViewCell {
     
     // アイコンをタップした時の処理
     @objc func tapAccountAction() {
-        if TootViewController.isShown { return } // トゥート画面表示中は移動しない
+        if TootViewController.isShown {
+            // トゥート画面表示中は移動せず、@IDを入力する
+            pressAccountAction(nil)
+            return
+        }
         
         if let accountId = self.accountId {
             let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
@@ -151,8 +155,8 @@ final class TimeLineViewCell: UITableViewCell {
     }
     
     // アイコンを長押しした時の処理
-    @objc func pressAccountAction(_ gesture: UILongPressGestureRecognizer) {
-        if gesture.state != .began { return }
+    @objc func pressAccountAction(_ gesture: UILongPressGestureRecognizer?) {
+        if let gesture = gesture, gesture.state != .began { return }
         
         // トゥート画面を開いていなければ開く
         if !TootViewController.isShown {

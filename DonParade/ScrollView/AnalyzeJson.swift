@@ -12,7 +12,7 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject]) {
+    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
@@ -24,8 +24,8 @@ final class AnalyzeJson {
             contentList.append(data)
         }
         
-        // 更新した数を一時的に表示
-        if model.getFirstTootId() != nil && contentList.count > 0 {
+        // 新着の場合、更新した数を一時的に表示
+        if isNew && model.getFirstTootId() != nil && contentList.count > 0 {
             if view.type != .user && view.type != .mensions {
                 let count = contentList.count
                 MainViewController.instance?.showNotify(text: String(format: I18n.get("NOTIFY_COUNT_%D"), count))
