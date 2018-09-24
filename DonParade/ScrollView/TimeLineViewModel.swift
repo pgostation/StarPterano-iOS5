@@ -749,6 +749,24 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // UITextViewのリンクタップ時の処理
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        print("#### " + URL.path)
+        
+        if URL.path.hasPrefix("/tags/") {
+            // ハッシュタグの場合
+            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
+                                                        option: String(URL.path.suffix(URL.path.count - 6)))
+            MainViewController.instance?.addChildViewController(viewController)
+            MainViewController.instance?.view.addSubview(viewController.view)
+            viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                               y: 0,
+                                               width: UIScreen.main.bounds.width,
+                                               height: UIScreen.main.bounds.height)
+            UIView.animate(withDuration: 0.3) {
+                viewController.view.frame.origin.x = 0
+            }
+            return false
+        }
+        
         let controller = SFSafariViewController(url: URL)
         MainViewController.instance?.present(controller, animated: true)
         
