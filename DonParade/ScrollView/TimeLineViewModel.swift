@@ -149,7 +149,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if index < 0 {
                     // プロフィール表示用セルの高さ
                     let accountData = timelineView.accountList[timelineView.option ?? ""]
-                    let cell = ProfileViewCell(accountData: accountData)
+                    let cell = ProfileViewCell(accountData: accountData, isTemp: true)
                     cell.layoutSubviews()
                     return cell.frame.height
                 }
@@ -272,10 +272,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if index < 0 {
                     // プロフィール表示用セルの高さ
                     let accountData = timelineView.accountList[timelineView.option ?? ""]
-                    print("option \(timelineView.option ?? "nil")")
-                    print(accountData)
-                    print(timelineView.accountList.keys)
-                    let cell = ProfileViewCell(accountData: accountData)
+                    let cell = ProfileViewCell(accountData: accountData, isTemp: false)
                     return cell
                 }
             }

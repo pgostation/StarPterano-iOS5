@@ -101,12 +101,17 @@ final class TimeLineViewController: MyViewController {
             // 閉じるボタンを追加
             let closeButton = UIButton()
             closeButton.setTitle("×", for: .normal)
+            closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
             closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
             closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
-            closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
-                                       y: UIScreen.main.bounds.height - 70,
-                                       width: 50,
-                                       height: 50)
+            closeButton.clipsToBounds = true
+            closeButton.layer.cornerRadius = 10
+            closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+            closeButton.layer.borderWidth = 1
+            closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 60 / 2,
+                                       y: UIScreen.main.bounds.height - 80,
+                                       width: 60,
+                                       height: 60)
             closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
             self.view?.addSubview(closeButton)
             TimeLineViewController.closeButtons.append(closeButton)

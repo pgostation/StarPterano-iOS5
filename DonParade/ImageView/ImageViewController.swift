@@ -245,7 +245,7 @@ private final class ImageView: UIView {
     }
     
     private func setProperties(fromRect: CGRect?) {
-        self.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.4)
+        self.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.6)
         
         closeButton.setTitle("×", for: .normal)
         closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 36)

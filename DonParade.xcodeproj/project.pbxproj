@@ -219,6 +219,8 @@
 			children = (
 				12F9AC90214CA4AA00E9E508 /* LoginSafari.swift */,
 				12F9AC8E214CA41200E9E508 /* MastodonRequest.swift */,
+				12CD0264214FD37700133A95 /* AnalyzeJson.swift */,
+				12CD0260214F367100133A95 /* DecodeToot.swift */,
 			);
 			path = Mastodon;
 			sourceTree = "<group>";
@@ -243,8 +245,6 @@
 				121DC0DD2153CF7F00928DCC /* TimeLineView.swift */,
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
 				12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */,
-				12CD0264214FD37700133A95 /* AnalyzeJson.swift */,
-				12CD0260214F367100133A95 /* DecodeToot.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";

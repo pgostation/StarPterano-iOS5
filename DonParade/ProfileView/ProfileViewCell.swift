@@ -13,6 +13,9 @@ import UIKit
 import SafariServices
 
 final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
+    private var id = ""
+    private var relationshipData: AnalyzeJson.RelationshipData? = nil
+    
     // ヘッダ画像
     let headerImageView = UIImageView()
     
@@ -35,16 +38,22 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     let statusCountTitle = UILabel()
     let statusCountLabel = UILabel()
     
-    // フォローしているか、フォローされているかの表示
-    let isFollowingLabel = UILabel()
-    let isFollowedLabel = UILabel()
+    // フォローしているか、フォローされているか、ミュート、ブロック状態の表示
+    let relationshipLabel = UILabel()
     
     // アクションボタン
     //  フォローしたり、アンフォローしたり、ブロックしたり、ミュートしたり、リストに入れたり、ブラウザで開いたりする
     let actionButton = UIButton()
     
-    init(accountData: AnalyzeJson.AccountData?) {
+    init(accountData: AnalyzeJson.AccountData?, isTemp: Bool) {
         super.init(style: .default, reuseIdentifier: nil)
+        
+        self.id = accountData?.id ?? ""
+        
+        if !isTemp {
+            // フォロー関係かどうかを取得
+            getRelationship()
+        }
         
         // ヘッダ画像
         self.addSubview(headerImageView)
@@ -65,8 +74,8 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         self.addSubview(statusCountLabel)
         
         // フォローしているか、フォローされているかの表示
-        self.addSubview(isFollowingLabel)
-        self.addSubview(isFollowedLabel)
+        self.addSubview(relationshipLabel)
+        self.addSubview(actionButton)
         
         setProperties(data: accountData)
     }
@@ -89,6 +98,25 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             if image.size.width <= 1 && image.size.height <= 1 { return }
             self?.headerImageView.image = image
             self?.setNeedsLayout()
+            
+            // 視差効果
+            do {
+                let min: CGFloat = -30.0
+                let max: CGFloat = 30.0
+                
+                let xAxis = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+                xAxis.minimumRelativeValue = min
+                xAxis.maximumRelativeValue = max
+                
+                let yAxis = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+                yAxis.minimumRelativeValue = min
+                yAxis.maximumRelativeValue = max
+                
+                let group = UIMotionEffectGroup()
+                group.motionEffects = [xAxis, yAxis]
+                
+                self?.headerImageView.addMotionEffect(group)
+            }
         }
         
         // メインの表示
@@ -184,6 +212,99 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         statusCountLabel.textColor = ThemeColor.idColor
         statusCountLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         statusCountLabel.textAlignment = .center
+        
+        // フォロー関連
+        actionButton.setTitle("…", for: .normal)
+        actionButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
+        actionButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        actionButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        actionButton.clipsToBounds = true
+        actionButton.layer.cornerRadius = 10
+        actionButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        actionButton.layer.borderWidth = 1
+        actionButton.alpha = 0
+        actionButton.addTarget(self, action: #selector(tapActionButton), for: .touchUpInside)
+        
+        relationshipLabel.textColor = ThemeColor.idColor
+        relationshipLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
+        relationshipLabel.shadowColor = ThemeColor.viewBgColor
+        relationshipLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        relationshipLabel.numberOfLines = 0
+        relationshipLabel.lineBreakMode = .byCharWrapping
+    }
+    
+    // フォロー関係かどうかを取得
+    private func getRelationship() {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url = URL(string: "https://\(hostName)/api/v1/accounts/relationships?id=\(self.id)")!
+        
+        try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
+            if let data = data {
+                do {
+                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]]
+                    
+                    if let responseJson = responseJson?.first {
+                        self?.relationshipData = AnalyzeJson.analyzeRelationshipJson(json: responseJson)
+                        
+                        if let relationshipData = self?.relationshipData {
+                            DispatchQueue.main.async {
+                                var text = ""
+                                
+                                // フォロー関連
+                                if relationshipData.following == 1 && relationshipData.followed_by == 1 {
+                                    text += "相互フォロー\n"
+                                }
+                                else if relationshipData.following == 1 {
+                                    text += "フォロー中\n"
+                                }
+                                else if relationshipData.followed_by == 1 {
+                                    text += "フォローされています\n"
+                                }
+                                if relationshipData.requested == 1 {
+                                    text += "フォローリクエストされています\n"
+                                }
+                                if relationshipData.endorsed == 1 {
+                                    text += "承認済み\n"
+                                }
+                                
+                                // ミュート
+                                if relationshipData.muting == 1 {
+                                    text += "ミュート中\n"
+                                }
+                                if relationshipData.muting_notifications == 1 {
+                                    text += "通知ミュート中\n"
+                                }
+                                
+                                // ブロック
+                                if relationshipData.domain_blocking == 1 {
+                                    text += "ドメインブロック中\n"
+                                }
+                                if relationshipData.blocking == 1 {
+                                    text += "ブロック中\n"
+                                }
+                                
+                                // 最後の改行を取り除く
+                                if text.count > 0 {
+                                    text = String(text.prefix(text.count - 1))
+                                }
+                                
+                                self?.relationshipLabel.text = text
+                                
+                                self?.actionButton.alpha = 1
+                                
+                                self?.setNeedsLayout()
+                            }
+                        }
+                    }
+                } catch {
+                }
+            }
+        }
+    }
+    
+    @objc func tapActionButton() {
+        
     }
     
     // UITextViewのリンクタップ時の処理
@@ -227,11 +348,24 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                  width: screenBounds.width - 80,
                                  height: 24)
         
+        // フォロー関係表示
+        actionButton.frame = CGRect(x: 15,
+                                    y: 80,
+                                    width: 50,
+                                    height: 50)
+        
+        relationshipLabel.frame.size.width = 75
+        relationshipLabel.sizeToFit()
+        relationshipLabel.frame = CGRect(x: 5,
+                                         y: 135,
+                                         width: relationshipLabel.frame.width,
+                                         height: relationshipLabel.frame.height)
+        
         // ヘッダ画像
-        headerImageView.frame = CGRect(x: 0,
+        headerImageView.frame = CGRect(x: -5,
                                        y: 0,
-                                       width: screenBounds.width,
-                                       height: dateLabel.frame.maxY + 5)
+                                       width: screenBounds.width + 10,
+                                       height: max(160, relationshipLabel.frame.maxY, dateLabel.frame.maxY + 5))
         
         // 追加分の表示
         var top: CGFloat = headerImageView.frame.maxY

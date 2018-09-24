@@ -174,6 +174,31 @@ final class AnalyzeJson {
         return data
     }
     
+    static func analyzeRelationshipJson(json: [String: Any]) -> RelationshipData {
+        let id = json["id"] as? String
+        let following = json["following"] as? Int
+        let followed_by = json["followed_by"] as? Int
+        let blocking = json["blocking"] as? Int
+        let muting = json["muting"] as? Int
+        let muting_notifications = json["muting_notifications"] as? Int
+        let requested = json["requested"] as? Int
+        let domain_blocking = json["domain_blocking"] as? Int
+        let showing_reblogs = json["showing_reblogs"] as? Int
+        let endorsed = json["endorsed"] as? Int
+        
+        let data = RelationshipData(id: id,
+                                    following: following,
+                                    followed_by: followed_by,
+                                    blocking: blocking,
+                                    muting: muting,
+                                    muting_notifications: muting_notifications,
+                                    requested: requested,
+                                    domain_blocking: domain_blocking,
+                                    showing_reblogs: showing_reblogs,
+                                    endorsed: endorsed)
+        return data
+    }
+    
     // トゥートした人の情報 (あるいはブーストした人)
     struct AccountData {
         let acct: String?
@@ -252,5 +277,19 @@ final class AnalyzeJson {
     // リスト
     struct ListData {
         
+    }
+    
+    // フォロー関係
+    struct RelationshipData {
+        let id: String?
+        let following: Int?
+        let followed_by: Int?
+        let blocking: Int?
+        let muting: Int?
+        let muting_notifications: Int?
+        let requested: Int?
+        let domain_blocking: Int?
+        let showing_reblogs: Int?
+        let endorsed: Int?
     }
 }
