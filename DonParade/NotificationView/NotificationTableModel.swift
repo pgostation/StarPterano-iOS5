@@ -75,7 +75,8 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         let id = data.id ?? ""
         
         cell.id = id
-        cell.accountId = data.account?.id
+        cell.accountId = account?.id
+        cell.accountData = account
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
             cell.iconView.image = image

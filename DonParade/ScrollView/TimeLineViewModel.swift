@@ -118,7 +118,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        return list.count + 1
+        if let timelineView = tableView as? TimeLineView {
+            if timelineView.type == .user {
+                return list.count + 2 // プロフィール表示とオートページャライズ用のセル
+            }
+        }
+        
+        return list.count + 1 // オートページャライズ用のセル
     }
     
     // セルのだいたいの高さ(スクロールバーの表示用)
@@ -135,7 +141,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルの正確な高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == list.count {
+        var index = indexPath.row
+        
+        if let timelineView = tableView as? TimeLineView {
+            if timelineView.type == .user {
+                index -= 1
+                if index < 0 {
+                    // プロフィール表示用セルの高さ
+                    let accountData = timelineView.accountList[timelineView.option ?? ""]
+                    let cell = ProfileViewCell(accountData: accountData)
+                    cell.layoutSubviews()
+                    return cell.frame.height
+                }
+            }
+        }
+        
+        if index == list.count {
             // AutoPagerize用セルの高さ
             return 100
         }
@@ -156,7 +177,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
             
         // メッセージのビューを一度作り、高さを求める
-        let (messageView, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
+        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
         
         if data.sensitive == 1 || data.spoiler_text != "" { // もっと見る
             detailOffset += 20
@@ -177,8 +198,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // メッセージのビューとデータを返す
-    private func getMessageViewAndData(indexPath: IndexPath, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
-        let data = list[indexPath.row]
+    private func getMessageViewAndData(index: Int, indexPath: IndexPath, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
+        let data = list[index]
         
         // content解析
         let (attributedText, hasLink) = DecodeToot.decodeContent(content: data.content, emojis: data.emojis, callback: callback)
@@ -243,7 +264,24 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルを返す
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row >= list.count {
+        var index = indexPath.row
+        
+        if let timelineView = tableView as? TimeLineView {
+            if timelineView.type == .user {
+                index -= 1
+                if index < 0 {
+                    // プロフィール表示用セルの高さ
+                    let accountData = timelineView.accountList[timelineView.option ?? ""]
+                    print("option \(timelineView.option ?? "nil")")
+                    print(accountData)
+                    print(timelineView.accountList.keys)
+                    let cell = ProfileViewCell(accountData: accountData)
+                    return cell
+                }
+            }
+        }
+        
+        if index >= list.count {
             if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
                 // 過去のトゥートに遡る
                 timelineView.refreshOld(id: list.last?.id)
@@ -257,10 +295,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         var id: String = ""
         
         // 表示用のデータを取得
-        let (messageView, data, isContinue) = getMessageViewAndData(indexPath: indexPath, callback: { [weak self] in
+        let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, callback: { [weak self] in
             // あとから絵文字が読み込めた場合の更新処理
             if cell.id == id {
-                if let (messageView, _, _) = self?.getMessageViewAndData(indexPath: indexPath, callback: nil) {
+                if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
                     let isHidden = cell?.messageView?.isHidden ?? false
                     messageView.isHidden = isHidden
                     cell?.messageView?.removeFromSuperview()
@@ -286,6 +324,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.contentData = data.content ?? ""
         cell.urlStr = data.url ?? ""
         cell.isMiniView = SettingsData.isMiniView
+        cell.accountData = account
         
         if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
             (messageView as? UILabel)?.numberOfLines = 1
@@ -465,6 +504,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             for media in mediaData {
                 let imageView = UIImageView()
+                imageView.clipsToBounds = true
+                
                 ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false) { image in
                     imageView.image = image
                     cell.setNeedsLayout()
@@ -637,12 +678,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セル選択時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var index = indexPath.row
+        
+        if let timelineView = tableView as? TimeLineView {
+            if timelineView.type == .user {
+                index -= 1
+                if index < 0 {
+                    return
+                }
+            }
+        }
+        
         if SettingsData.tapDetailMode || self.selectedRow == indexPath.row {
             if self.isDetailTimeline { return } // すでに詳細表示画面
             if TootViewController.isShown { return } // トゥート画面表示中は移動しない
             
             // トゥート詳細画面に移動
-            let (_, data, _) = getMessageViewAndData(indexPath: indexPath, callback: nil)
+            let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
             let mensionsData = getMensionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mensions, option: nil, mensions: (mensionsData, accountList))
             MainViewController.instance?.addChildViewController(viewController)
