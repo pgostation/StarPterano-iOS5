@@ -106,16 +106,13 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             
             // 視差効果
             do {
-                let min: CGFloat = -30.0
-                let max: CGFloat = 30.0
-                
                 let xAxis = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
-                xAxis.minimumRelativeValue = min
-                xAxis.maximumRelativeValue = max
+                xAxis.minimumRelativeValue = -200
+                xAxis.maximumRelativeValue = 200
                 
                 let yAxis = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
-                yAxis.minimumRelativeValue = min
-                yAxis.maximumRelativeValue = max
+                yAxis.minimumRelativeValue = -20
+                yAxis.maximumRelativeValue = 20
                 
                 let group = UIMotionEffectGroup()
                 group.motionEffects = [xAxis, yAxis]
@@ -476,9 +473,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                          height: relationshipLabel.frame.height)
         
         // ヘッダ画像
-        headerImageView.frame = CGRect(x: -5,
+        headerImageView.frame = CGRect(x: -200,
                                        y: 0,
-                                       width: screenBounds.width + 10,
+                                       width: screenBounds.width + 400,
                                        height: max(200, relationshipLabel.frame.maxY, dateLabel.frame.maxY + 5))
         
         // 追加分の表示
