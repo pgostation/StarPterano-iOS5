@@ -46,7 +46,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
             return 15 + SettingsData.fontSize * 2
         } else {
             if let status = data.status {
-                let attibutedText = DecodeToot.decodeContent(content: status.content, emojis: status.emojis) {
+                let attibutedText = DecodeToot.decodeContentFast(content: status.content, emojis: status.emojis) {
                 }
                 self.dummyLabel.attributedText = attibutedText.0
                 self.dummyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
@@ -113,7 +113,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         }
         
         if let status = data.status {
-            let attibutedText = DecodeToot.decodeContent(content: status.content, emojis: status.emojis) {
+            let attibutedText = DecodeToot.decodeContentFast(content: status.content, emojis: status.emojis) {
             }
             cell.statusLabel.attributedText = attibutedText.0
         }

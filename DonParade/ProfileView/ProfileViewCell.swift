@@ -148,7 +148,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         idLabel.adjustsFontSizeToFitWidth = true
         
         noteLabel.delegate = self
-        noteLabel.attributedText = DecodeToot.decodeContent(content: data.note, emojis: data.emojis, callback: nil).0
+        noteLabel.attributedText = DecodeToot.decodeContentFast(content: data.note, emojis: data.emojis, callback: nil).0
         noteLabel.textColor = ThemeColor.contrastColor
         noteLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
         noteLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
@@ -188,7 +188,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             
             let valueLabel = UITextView()
             valueLabel.delegate = self
-            valueLabel.attributedText = DecodeToot.decodeContent(content: field["value"] as? String, emojis: nil, callback: nil).0
+            valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: nil, callback: nil).0
             valueLabel.textColor = ThemeColor.idColor
             valueLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             valueLabel.isSelectable = true

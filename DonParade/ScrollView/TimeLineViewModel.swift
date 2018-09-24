@@ -214,7 +214,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let data = list[index]
         
         // content解析
-        let (attributedText, hasLink) = DecodeToot.decodeContent(content: data.content, emojis: data.emojis, callback: callback)
+        let (attributedText, hasLink) = DecodeToot.decodeContentFast(content: data.content, emojis: data.emojis, callback: callback)
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
@@ -261,7 +261,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // ビューの高さを決める
         messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView != .normal ? 50 : 66)
         messageView.sizeToFit()
-        messageView.frame.size.height -= SettingsData.fontSize - 4
         var isContinue = false
         if self.selectedRow == indexPath.row {
             // 詳細表示の場合
