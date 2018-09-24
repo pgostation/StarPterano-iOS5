@@ -13,6 +13,7 @@ import UIKit
 final class ThemeColor {
     // 基本の背景色
     static var viewBgColor = UIColor.white
+    static var contrastColor = UIColor.white
     static var cellBgColor = UIColor.white
     static var separatorColor = UIColor.white
     
@@ -41,6 +42,7 @@ final class ThemeColor {
         if SettingsData.isDarkMode {
             // ダークモード
             viewBgColor = UIColor.black
+            contrastColor = UIColor.white
             cellBgColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
             separatorColor = UIColor.darkGray
             
@@ -64,6 +66,7 @@ final class ThemeColor {
         } else {
             // 通常モード
             viewBgColor = UIColor.white
+            contrastColor = UIColor.black
             cellBgColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
             separatorColor = UIColor.lightGray
             

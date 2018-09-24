@@ -63,6 +63,27 @@
 "NOTIFICATION_FAV" = "is Favorited";
 "NOTIFICATION_FOLLOW" = "is Followed";
 
+// フォロー状態表示
+"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "Following.\nFollowed by.\n";
+"RELATIONSHIP_FOLLOWING" = "Following.\n";
+"RELATIONSHIP_FOLLOWED" = "Followed by.\n";
+"RELATIONSHIP_REQUESTED" = "Requested.\n";
+"RELATIONSHIP_ENDORSED" = "Endorsed.\n";
+"RELATIONSHIP_MUTING" = "Muting.\n";
+"RELATIONSHIP_MUTING_NOTIFICATION" = "Muting boost.\n";
+"RELATIONSHIP_DOMAIN_BLOCKING" = "Domain blocking.\n";
+"RELATIONSHIP_BLOCKING" = "Blocking.\n";
+
+// フォローアクション
+"ACTION_UNFOLLOW" = "Unfollow";
+"ACTION_FOLLOW" = "Follow";
+"ACTION_REMOTE_FOLLOW" = "Remote follow";
+"ACTION_UNBLOCK" = "Unblock";
+"ACTION_BLOCK" = "Block";
+"ACTION_UNMUTE" = "Unmute";
+"ACTION_MUTE" = "Mute";
+"ACTION_WEB_BROWSER" = "Open with browser";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 "BUTTON_REMOVE" = "Remove";

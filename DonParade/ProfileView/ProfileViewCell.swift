@@ -13,8 +13,11 @@ import UIKit
 import SafariServices
 
 final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
+    weak var timelineView: TimeLineView? = nil
     private var id = ""
+    private var uri = ""
     private var relationshipData: AnalyzeJson.RelationshipData? = nil
+    private var urlStr = ""
     
     // ヘッダ画像
     let headerImageView = UIImageView()
@@ -49,6 +52,8 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         super.init(style: .default, reuseIdentifier: nil)
         
         self.id = accountData?.id ?? ""
+        self.uri = accountData?.acct ?? ""
+        self.urlStr = accountData?.url ?? ""
         
         if !isTemp {
             // フォロー関係かどうかを取得
@@ -128,26 +133,35 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         
         nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) { }
         nameLabel.textColor = ThemeColor.nameColor
-        nameLabel.shadowColor = ThemeColor.viewBgColor
-        nameLabel.shadowOffset = CGSize(width: 0.6, height: 0.6)
+        nameLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        nameLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        nameLabel.layer.shadowOpacity = 1.0
+        nameLabel.layer.shadowRadius = 1.0
         nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize + 2)
         nameLabel.numberOfLines = 0
         nameLabel.lineBreakMode = .byCharWrapping
         
-        idLabel.text = data.acct
-        idLabel.textColor = ThemeColor.idColor
-        idLabel.shadowColor = ThemeColor.viewBgColor
-        idLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        idLabel.text = "@" + (data.acct ?? "")
+        idLabel.textColor = ThemeColor.contrastColor
+        idLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        idLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        idLabel.layer.shadowOpacity = 1.0
+        idLabel.layer.shadowRadius = 1.0
         idLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         idLabel.adjustsFontSizeToFitWidth = true
         
         noteLabel.delegate = self
         noteLabel.attributedText = DecodeToot.decodeContent(content: data.note, emojis: data.emojis, callback: nil).0
-        noteLabel.textColor = ThemeColor.idColor
+        noteLabel.textColor = ThemeColor.contrastColor
+        noteLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        noteLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        noteLabel.layer.shadowOpacity = 1.0
+        noteLabel.layer.shadowRadius = 1.0
+        noteLabel.layer.backgroundColor = UIColor.clear.cgColor
         noteLabel.isSelectable = true
         noteLabel.isEditable = false
         noteLabel.isScrollEnabled = false
-        noteLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.2)
+        noteLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.1)
         noteLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         
         if let created_at = data.created_at {
@@ -158,8 +172,10 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             dateLabel.text = "since " + dateFormatter.string(from: date)
         }
         dateLabel.textColor = ThemeColor.idColor
-        dateLabel.shadowColor = ThemeColor.viewBgColor
-        dateLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        dateLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        dateLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        dateLabel.layer.shadowOpacity = 1.0
+        dateLabel.layer.shadowRadius = 1.0
         dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         
         // 追加分の表示
@@ -181,6 +197,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             valueLabel.isSelectable = true
             valueLabel.isEditable = false
             valueLabel.isScrollEnabled = false
+            valueLabel.backgroundColor = UIColor.clear
             urlLabels.append(valueLabel)
             self.addSubview(valueLabel)
         }
@@ -225,10 +242,12 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         actionButton.alpha = 0
         actionButton.addTarget(self, action: #selector(tapActionButton), for: .touchUpInside)
         
-        relationshipLabel.textColor = ThemeColor.idColor
+        relationshipLabel.textColor = ThemeColor.contrastColor
         relationshipLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
-        relationshipLabel.shadowColor = ThemeColor.viewBgColor
-        relationshipLabel.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        relationshipLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        relationshipLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        relationshipLabel.layer.shadowOpacity = 1.0
+        relationshipLabel.layer.shadowRadius = 1.0
         relationshipLabel.numberOfLines = 0
         relationshipLabel.lineBreakMode = .byCharWrapping
     }
@@ -253,35 +272,35 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                 
                                 // フォロー関連
                                 if relationshipData.following == 1 && relationshipData.followed_by == 1 {
-                                    text += "相互フォロー\n"
+                                    text += I18n.get("RELATIONSHIP_FOLLOWING_AND_FOLLOWED")
                                 }
                                 else if relationshipData.following == 1 {
-                                    text += "フォロー中\n"
+                                    text += I18n.get("RELATIONSHIP_FOLLOWING")
                                 }
                                 else if relationshipData.followed_by == 1 {
-                                    text += "フォローされています\n"
+                                    text += I18n.get("RELATIONSHIP_FOLLOWED")
                                 }
-                                if relationshipData.requested == 1 {
-                                    text += "フォローリクエストされています\n"
+                                /*if relationshipData.requested == 1 {
+                                    text += I18n.get("RELATIONSHIP_REQUESTED")
                                 }
                                 if relationshipData.endorsed == 1 {
-                                    text += "承認済み\n"
-                                }
+                                    text += I18n.get("RELATIONSHIP_ENDORSED")
+                                }*/
                                 
                                 // ミュート
                                 if relationshipData.muting == 1 {
-                                    text += "ミュート中\n"
+                                    text += I18n.get("RELATIONSHIP_MUTING")
                                 }
-                                if relationshipData.muting_notifications == 1 {
-                                    text += "通知ミュート中\n"
-                                }
+                                /*if relationshipData.muting_notifications == 1 {
+                                    text += I18n.get("RELATIONSHIP_MUTING_NOTIFICATION")
+                                }*/
                                 
                                 // ブロック
                                 if relationshipData.domain_blocking == 1 {
-                                    text += "ドメインブロック中\n"
+                                    text += I18n.get("RELATIONSHIP_DOMAIN_BLOCKING")
                                 }
                                 if relationshipData.blocking == 1 {
-                                    text += "ブロック中\n"
+                                    text += I18n.get("RELATIONSHIP_BLOCKING")
                                 }
                                 
                                 // 最後の改行を取り除く
@@ -303,8 +322,103 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }
     }
     
+    // 「...」ボタンを押した時の処理
     @objc func tapActionButton() {
+        guard let relationshipData = self.relationshipData else { return }
         
+        ProfileAction.timelineView = self.timelineView
+        
+        let id = self.id
+        let uri = self.uri
+        
+        let myUserName = SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? ""
+        let alertController = UIAlertController(title: nil, message: myUserName + "@" + (SettingsData.hostName ?? ""), preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        if relationshipData.following == 1 {
+            // アンフォローする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_UNFOLLOW"),
+                style: UIAlertActionStyle.destructive,
+                handler: { _ in
+                    ProfileAction.unfollow(id: id)
+            }))
+        } else {
+            if id.suffix(id.count - 1).contains("@") {
+                // リモートフォローする
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("ACTION_REMOTE_FOLLOW"),
+                    style: UIAlertActionStyle.default,
+                    handler: { _ in
+                        ProfileAction.remoteFollow(uri: uri)
+                }))
+            } else {
+                // フォローする
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("ACTION_FOLLOW"),
+                    style: UIAlertActionStyle.default,
+                    handler: { _ in
+                        ProfileAction.follow(id: id)
+                }))
+            }
+        }
+        
+        if relationshipData.blocking == 1 {
+            // アンブロックする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_UNBLOCK"),
+                style: UIAlertActionStyle.destructive,
+                handler: { _ in
+                    ProfileAction.unblock(id: id)
+            }))
+        } else {
+            // ブロックする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_BLOCK"),
+                style: UIAlertActionStyle.destructive,
+                handler: { _ in
+                    ProfileAction.block(id: id)
+            }))
+        }
+        
+        if relationshipData.muting == 1 {
+            // アンミュートする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_UNMUTE"),
+                style: UIAlertActionStyle.destructive,
+                handler: { _ in
+                    ProfileAction.unmute(id: id)
+            }))
+        } else {
+            // ミュートする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_MUTE"),
+                style: UIAlertActionStyle.destructive,
+                handler: { _ in
+                    ProfileAction.mute(id: id)
+            }))
+        }
+        
+        // 内蔵ブラウザで表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_WEB_BROWSER"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                guard let url = URL(string: self.urlStr) else { return }
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+        }))
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertActionStyle.cancel,
+            handler: { _ in
+        }))
+        
+        UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
     }
     
     // UITextViewのリンクタップ時の処理
@@ -365,7 +479,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         headerImageView.frame = CGRect(x: -5,
                                        y: 0,
                                        width: screenBounds.width + 10,
-                                       height: max(160, relationshipLabel.frame.maxY, dateLabel.frame.maxY + 5))
+                                       height: max(200, relationshipLabel.frame.maxY, dateLabel.frame.maxY + 5))
         
         // 追加分の表示
         var top: CGFloat = headerImageView.frame.maxY

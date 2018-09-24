@@ -270,9 +270,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if timelineView.type == .user {
                 index -= 1
                 if index < 0 {
-                    // プロフィール表示用セルの高さ
+                    // プロフィール表示用セル
                     let accountData = timelineView.accountList[timelineView.option ?? ""]
                     let cell = ProfileViewCell(accountData: accountData, isTemp: false)
+                    cell.timelineView = tableView as? TimeLineView
                     return cell
                 }
             }

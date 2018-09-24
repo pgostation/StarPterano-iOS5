@@ -63,6 +63,27 @@
 "NOTIFICATION_FAV" = "☆お気に入りしました";
 "NOTIFICATION_FOLLOW" = "フォローしました";
 
+// フォロー状態表示
+"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "フォロー中\nフォローされています\n";
+"RELATIONSHIP_FOLLOWING" = "フォロー中\n";
+"RELATIONSHIP_FOLLOWED" = "フォローされています\n";
+"RELATIONSHIP_REQUESTED" = "申請されています\n";
+"RELATIONSHIP_ENDORSED" = "承認済み\n";
+"RELATIONSHIP_MUTING" = "ミュート中\n";
+"RELATIONSHIP_MUTING_NOTIFICATION" = "ブースト非表示\n";
+"RELATIONSHIP_DOMAIN_BLOCKING" = "ドメインブロック中\n";
+"RELATIONSHIP_BLOCKING" = "ブロック中\n";
+
+// フォローアクション
+"ACTION_UNFOLLOW" = "フォロー解除する";
+"ACTION_FOLLOW" = "フォローする";
+"ACTION_REMOTE_FOLLOW" = "リモートフォローする";
+"ACTION_UNBLOCK" = "ブロック解除する";
+"ACTION_BLOCK" = "ブロックする";
+"ACTION_UNMUTE" = "ミュート解除する";
+"ACTION_MUTE" = "ミュートする";
+"ACTION_WEB_BROWSER" = "ブラウザで表示";
+
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";
 "BUTTON_REMOVE" = "削除";

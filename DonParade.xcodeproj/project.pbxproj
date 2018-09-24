@@ -19,6 +19,7 @@
 		127A37BE2157B45100347880 /* MyImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BD2157B45100347880 /* MyImagePickerController.swift */; };
 		127A37C02157C63500347880 /* ImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37BF2157C63500347880 /* ImageUpload.swift */; };
 		127A37C221583DC700347880 /* ProfileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37C121583DC700347880 /* ProfileViewCell.swift */; };
+		127A37C62158F41A00347880 /* ProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37C52158F41A00347880 /* ProfileAction.swift */; };
 		1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5A215488CB008FFFAC /* ThemeColor.swift */; };
 		1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */; };
 		1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */; };
@@ -66,6 +67,7 @@
 		127A37BD2157B45100347880 /* MyImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyImagePickerController.swift; sourceTree = "<group>"; };
 		127A37BF2157C63500347880 /* ImageUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUpload.swift; sourceTree = "<group>"; };
 		127A37C121583DC700347880 /* ProfileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewCell.swift; sourceTree = "<group>"; };
+		127A37C52158F41A00347880 /* ProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAction.swift; sourceTree = "<group>"; };
 		1286DF5A215488CB008FFFAC /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1286DF5C21549A81008FFFAC /* SettingsSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchCell.swift; sourceTree = "<group>"; };
 		1286DF5E2154A9CA008FFFAC /* SettingsStepperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStepperCell.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 			isa = PBXGroup;
 			children = (
 				127A37C121583DC700347880 /* ProfileViewCell.swift */,
+				127A37C52158F41A00347880 /* ProfileAction.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */,
 				1286DF612154DCA8008FFFAC /* EmojiKeyboard.swift in Sources */,
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
+				127A37C62158F41A00347880 /* ProfileAction.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
 				1286DF632154F2DA008FFFAC /* SettingsSelectProtectMode.swift in Sources */,
 				121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */,
