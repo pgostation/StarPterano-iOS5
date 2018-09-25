@@ -138,6 +138,12 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         if let accountId = self.accountId {
+            if let timelineView = self.superview as? TimeLineView {
+                if timelineView.option == accountId {
+                    return
+                }
+            }
+            
             let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
             if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                 timelineView.accountList.updateValue(accountData, forKey: accountId)
