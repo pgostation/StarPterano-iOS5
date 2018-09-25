@@ -350,12 +350,12 @@ final class MainViewController: MyViewController {
             view.notifyLabel.text = text
             view.setNeedsLayout()
             
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 view.notifyLabel.alpha = 1
             })
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                UIView.animate(withDuration: 0.2, animations: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                UIView.animate(withDuration: 0.3, animations: {
                     view.notifyLabel.alpha = 0
                 })
             }
