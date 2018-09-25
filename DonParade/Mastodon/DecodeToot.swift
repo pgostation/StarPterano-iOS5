@@ -76,6 +76,37 @@ final class DecodeToot {
                                         range: NSRange(location: link.0.encodedOffset, length: link.2.count))
         }
         
+        // 絵文字に変える
+        if let emojis = emojis {
+            for emoji in emojis {
+                guard let shortcode = emoji["shortcode"] as? String else { continue }
+                let static_url = emoji["static_url"] as? String
+                
+                let attachment = NSTextAttachment()
+                var execCallback = false
+                ImageCache.image(urlStr: static_url, isTemp: false, isSmall: true, shortcode: shortcode) { image in
+                    if execCallback {
+                        callback?()
+                    } else {
+                        attachment.image = image
+                    }
+                }
+                if attachment.image == nil {
+                    execCallback = true
+                }
+                attachment.bounds = CGRect(x: 0, y: 0, width: SettingsData.fontSize + 4, height: SettingsData.fontSize + 4)
+                
+                let attrStr = NSAttributedString(attachment: attachment)
+                
+                while true {
+                    let nsStr = attributedText.string as NSString
+                    if !nsStr.contains(":\(shortcode):") { break }
+                    let range = nsStr.range(of: ":\(shortcode):")
+                    attributedText.replaceCharacters(in: range, with: attrStr)
+                }
+            }
+        }
+        
         return (attributedText, linkList.count > 0)
     }
     
