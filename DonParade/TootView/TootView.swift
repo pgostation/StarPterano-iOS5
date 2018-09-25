@@ -203,7 +203,7 @@ final class TootView: UIView {
         
         let viewHeight = 80 + textField.frame.height
         self.frame = CGRect(x: 0,
-                            y: screenBounds.height - keyBoardHeight - viewHeight,
+                            y: max(0, screenBounds.height - keyBoardHeight - viewHeight),
                             width: screenBounds.width,
                             height: viewHeight)
         
