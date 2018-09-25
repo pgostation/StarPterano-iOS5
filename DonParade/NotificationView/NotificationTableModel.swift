@@ -64,7 +64,9 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
     // セルの中身を設定して返す
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= list.count {
-            return UITableViewCell(style: .default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.backgroundColor = ThemeColor.viewBgColor
+            return cell
         }
         
         let reuseIdentifier = "NotificationTable"

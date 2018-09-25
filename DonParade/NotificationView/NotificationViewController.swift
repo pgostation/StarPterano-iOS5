@@ -115,6 +115,8 @@ private final class NotificationView: UIView {
     private func setProperties() {
         self.backgroundColor = ThemeColor.viewBgColor
         
+        self.tableView.backgroundColor = ThemeColor.viewBgColor
+        
         // 閉じるボタン
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
