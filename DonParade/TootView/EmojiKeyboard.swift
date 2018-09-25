@@ -131,7 +131,13 @@ private final class EmojiInputScrollView: UIScrollView {
         
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
         
-        (textView as? UITextView)?.insertText(" :" + button.key + ": ")
+        if let textView = textView as? UITextView {
+            textView.insertText(" :" + button.key + ": ")
+            
+            // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
+            textView.textColor = ThemeColor.messageColor
+            textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+        }
     }
     
     private final class EmojiButton: UIButton {
