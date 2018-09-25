@@ -30,6 +30,8 @@ final class TimeLineViewCell: UITableViewCell {
     var showMoreButton: UIButton? // もっと見る
     var spolerTextLabel: UILabel?
     var detailDateLabel: UILabel?
+    var DMBarLeft: UIView?
+    var DMBarRight: UIView?
     
     // 詳細ビュー
     var showDetail = false
@@ -392,6 +394,10 @@ final class TimeLineViewCell: UITableViewCell {
                                             y: self.spolerTextLabel?.frame.maxY ?? 20,
                                             width: screenBounds.width - 66,
                                             height: 20)
+        
+        self.DMBarLeft?.frame = CGRect(x: 0, y: 0, width: 5, height: 300)
+        
+        self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 300)
         
         for (index, imageView) in (self.imageViews ?? []).enumerated() {
             if isDetailMode {

@@ -405,6 +405,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.boostButton = UIButton()
             if data.visibility == "direct" || data.visibility == "private" {
                 cell.boostButton?.setTitle("🔐", for: .normal)
+                if data.visibility == "direct" {
+                    cell.DMBarLeft = UIView()
+                    cell.DMBarLeft?.backgroundColor = UIColor.red
+                    cell.addSubview(cell.DMBarLeft!)
+                    cell.DMBarRight = UIView()
+                    cell.DMBarRight?.backgroundColor = UIColor.red
+                    cell.addSubview(cell.DMBarRight!)
+                }
             } else {
                 cell.boostButton?.setTitle("⇄", for: .normal)
                 if data.reblogged == 1 {
@@ -657,6 +665,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.spolerTextLabel = nil
         cell.detailDateLabel?.removeFromSuperview()
         cell.detailDateLabel = nil
+        cell.DMBarLeft?.removeFromSuperview()
+        cell.DMBarLeft = nil
+        cell.DMBarRight?.removeFromSuperview()
+        cell.DMBarRight = nil
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
         }
