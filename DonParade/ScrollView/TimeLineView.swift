@@ -18,6 +18,7 @@ final class TimeLineView: UITableView {
     private let refreshCon = UIRefreshControl()
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
+    private static var isBusy = false
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -103,9 +104,15 @@ final class TimeLineView: UITableView {
                                 var acct = ""
                                 let statusData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: json, acct: &acct)
                                 strongSelf.model.change(tableView: strongSelf, addList: [statusData], accountList: strongSelf.accountList)
+                                
+                                if TimeLineView.isBusy {
+                                    return
+                                }
+                                TimeLineView.isBusy = true
                                 DispatchQueue.main.sync {
                                     strongSelf.refresh() // #### １つずつ追加するようにしたい
                                 }
+                                TimeLineView.isBusy = false
                             }
                         }
                     case "notification":
