@@ -761,7 +761,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // UITextViewのリンクタップ時の処理
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        if URL.host == SettingsData.hostName && URL.path.hasPrefix("/tags/") {
+        if URL.path.hasPrefix("/tags/") {
             // ハッシュタグの場合
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
                                                         option: String(URL.path.suffix(URL.path.count - 6)))
