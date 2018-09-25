@@ -760,11 +760,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // UITextViewのリンクタップ時の処理
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        if URL.path.hasPrefix("/tags/") {
+    func textView(_ textView: UITextView, shouldInteractWith Url: URL, in characterRange: NSRange) -> Bool {
+        if Url.path.hasPrefix("/tags/") {
             // ハッシュタグの場合
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
-                                                        option: String(URL.path.suffix(URL.path.count - 6)))
+                                                        option: String(Url.path.suffix(Url.path.count - 6)))
             MainViewController.instance?.addChildViewController(viewController)
             MainViewController.instance?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
@@ -777,36 +777,60 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return false
         }
         
-        if URL.path.hasPrefix("/@") {
+        if Url.path.hasPrefix("/@") {
             let host: String?
-            if URL.host == SettingsData.hostName {
+            if Url.host == SettingsData.hostName {
                 host = nil
             } else {
-                host = URL.host
+                host = Url.host
             }
-            let accountId = String(URL.path.suffix(URL.path.count - 2))
+            let accountId = String(Url.path.suffix(Url.path.count - 2))
             if let id = convertAccountToId(host: host, accountId: accountId) {
                 // @でのIDコール
                 let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user,
                                                             option: id)
-                let acct = accountId + (host != nil ? "@\(host!)" : "")
-                if let timelineView = viewController.view as? TimeLineView, let accountData = self.accountList[acct] {
-                    timelineView.accountList.updateValue(accountData, forKey: id)
+                
+                func show() {
+                    MainViewController.instance?.addChildViewController(viewController)
+                    MainViewController.instance?.view.addSubview(viewController.view)
+                    viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                       y: 0,
+                                                       width: UIScreen.main.bounds.width,
+                                                       height: UIScreen.main.bounds.height)
+                    UIView.animate(withDuration: 0.3) {
+                        viewController.view.frame.origin.x = 0
+                    }
                 }
-                MainViewController.instance?.addChildViewController(viewController)
-                MainViewController.instance?.view.addSubview(viewController.view)
-                viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
-                                                   y: 0,
-                                                   width: UIScreen.main.bounds.width,
-                                                   height: UIScreen.main.bounds.height)
-                UIView.animate(withDuration: 0.3) {
-                    viewController.view.frame.origin.x = 0
+                
+                let acct = accountId + (host != nil ? "@\(host!)" : "")
+                if let timelineView = viewController.view as? TimeLineView {
+                    if let accountData = self.accountList[acct] {
+                        // すぐに表示
+                        timelineView.accountList.updateValue(accountData, forKey: id)
+                        show()
+                    } else {
+                        // 情報を取得してから表示
+                        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/\(id)") else { return false }
+                        try? MastodonRequest.get(url: url) { (data, response, error) in
+                            if let data = data {
+                                do {
+                                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                                        let accountData = AnalyzeJson.analyzeAccountJson(account: responseJson)
+                                        timelineView.accountList.updateValue(accountData, forKey: id)
+                                    }
+                                } catch { }
+                            }
+                            DispatchQueue.main.async {
+                                show()
+                            }
+                        }
+                    }
                 }
                 return false
             }
         }
         
-        let controller = SFSafariViewController(url: URL)
+        let controller = SFSafariViewController(url: Url)
         MainViewController.instance?.present(controller, animated: true)
         
         return false

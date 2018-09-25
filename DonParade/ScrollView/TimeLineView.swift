@@ -74,24 +74,24 @@ final class TimeLineView: UITableView {
         let url: URL?
         switch self.type {
         case .home:
-            url = URL(string: "https://\(hostName)/api/v1/timelines/home?limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/home?limit=100\(sinceIdStr)")
         case .local:
-            url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=1&limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=1&limit=100\(sinceIdStr)")
         case .global:
-            url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=100\(sinceIdStr)")
         case .user:
             guard let option = option else { return }
-            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=100\(sinceIdStr)")
         case .favorites:
             url = URL(string: "https://\(hostName)/api/v1/favourites?limit=50\(sinceIdStr)")
         case .localTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
-            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=1&limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=1&limit=100\(sinceIdStr)")
         case .globalTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
-            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=200\(sinceIdStr)")
+            url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=100\(sinceIdStr)")
         case .mensions:
             guard let lastInReplyToId = model.getLastInReplyToId() else { return }
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
