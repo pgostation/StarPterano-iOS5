@@ -177,6 +177,8 @@ final class MainViewController: MyViewController {
             }
             
             if let view = self.view as? MainView {
+                view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+                
                 if isLTL {
                     view.ltlButton.layer.borderWidth = 2
                     view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
