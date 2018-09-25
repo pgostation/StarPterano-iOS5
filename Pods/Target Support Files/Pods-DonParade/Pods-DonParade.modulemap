@@ -1,0 +1,6 @@
+framework module Pods_DonParade {
+  umbrella header "Pods-DonParade-umbrella.h"
+
+  export *
+  module * { export * }
+}
