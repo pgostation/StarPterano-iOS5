@@ -17,7 +17,7 @@ final class EmojiKeyboard: UIView {
     private let emojiScrollView = EmojiInputScrollView()
     
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 250 : 200))
         
         self.addSubview(spaceButton)
         self.addSubview(returnButton)
@@ -150,10 +150,11 @@ private final class EmojiInputScrollView: UIScrollView {
     
     override func layoutSubviews() {
         let buttonSize: CGFloat = 24 + SettingsData.fontSize
+        let margin: CGFloat = 2
         let screenBounds = UIScreen.main.bounds
-        let xCount = floor(screenBounds.width / buttonSize) // ボタンの横に並ぶ数
+        let xCount = floor(screenBounds.width / (buttonSize + margin)) // ボタンの横に並ぶ数
         let yCount = ceil(CGFloat(self.emojiList.count) / xCount) // ボタンの縦に並ぶ数
-        let viewHeight = buttonSize * yCount
+        let viewHeight = (buttonSize + margin) * yCount
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
         
@@ -162,8 +163,8 @@ private final class EmojiInputScrollView: UIScrollView {
                 let index = y * Int(xCount) + x
                 if index >= self.emojiList.count { break }
                 let button = self.emojiButtons[index]
-                button.frame = CGRect(x: CGFloat(x) * buttonSize,
-                                      y: CGFloat(y) * buttonSize,
+                button.frame = CGRect(x: CGFloat(x) * (buttonSize + margin),
+                                      y: CGFloat(y) * (buttonSize + margin),
                                       width: buttonSize,
                                       height: buttonSize)
             }
