@@ -69,10 +69,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 6.その他
     private enum Other: String {
         //case search = "SETTINGS_SEARCH" // 表示しているタイムラインから検索
-        //case license = "SETTINGS_LICENSE"
+        case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
     }
-    private let otherList: [Other] = [.version]
+    private let otherList: [Other] = [.license,
+                                      .version]
     
     // セクションの数
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -170,6 +171,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 5:
             title = I18n.get(otherList[indexPath.row].rawValue)
             switch otherList[indexPath.row] {
+            case .license:
+                cell.accessoryType = .disclosureIndicator
             case .version:
                 let data = Bundle.main.infoDictionary
                 let version = data?["CFBundleShortVersionString"] as? String
@@ -226,10 +229,20 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 4:
             break
         case 5:
-            break
+            switch otherList[indexPath.row] {
+            case .license:
+                guard let path = Bundle.main.path(forResource: "License", ofType: "text") else { return }
+                guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return }
+                guard let licenseStr = String(data: data, encoding: String.Encoding.utf8) else { return }
+                Dialog.show(message: licenseStr)
+            case .version:
+                break
+            }
         default:
             break
         }
+        
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     // セルが削除対応かどうかを決める
