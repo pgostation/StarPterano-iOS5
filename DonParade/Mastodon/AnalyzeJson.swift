@@ -88,7 +88,14 @@ final class AnalyzeJson {
         let application = json["application"] as? [String: Any]
         let content = json["content"] as? String
         let created_at = json["created_at"] as? String
-        let emojis = json["emojis"] as? [[String: Any]]
+        
+        let emojis: [[String: Any]]?
+        if reblog_acct == nil {
+            emojis = json["emojis"] as? [[String: Any]]
+        } else {
+            emojis = reblog?["emojis"] as? [[String: Any]]
+        }
+        
         let favourited = json["favourited"] as? Int
         let favourites_count = json["favourites_count"] as? Int
         let id = json["id"] as? String

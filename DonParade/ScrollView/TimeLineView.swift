@@ -228,6 +228,7 @@ final class TimeLineView: UITableView {
                     // 通知ボタンにマークをつけるだけ
                     MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
                 case "delete":
+                    // waitingStatusListも考慮すること ####
                     break
                 case "filters_changed":
                     break
