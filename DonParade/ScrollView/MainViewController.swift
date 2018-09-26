@@ -159,6 +159,8 @@ final class MainViewController: MyViewController {
         UIView.animate(withDuration: 0.3) {
             vc.view.frame.origin.x = 0
         }
+        
+        markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: false)
     }
     
     func swipeView(toRight: Bool) {
@@ -235,6 +237,8 @@ final class MainViewController: MyViewController {
             oldTimelineViewController?.removeFromParentViewController()
             oldTimelineViewController?.view.removeFromSuperview()
         })
+        
+        refreshNotificationButton()
     }
     
     // 前のビューを外す
@@ -359,6 +363,34 @@ final class MainViewController: MyViewController {
                     view.notifyLabel.alpha = 0
                 })
             }
+        }
+    }
+    
+    // 通知ボタンにマークをつける
+    private var markNotificationDict: [String: Bool] = [:]
+    func markNotificationButton(accessToken: String, to: Bool) {
+        markNotificationDict.updateValue(to, forKey: accessToken)
+        
+        if SettingsData.accessToken == accessToken {
+            DispatchQueue.main.async {
+                guard let view = self.view as? MainView else { return }
+                
+                if to {
+                    view.notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY_MARK"), for: .normal)
+                } else {
+                    view.notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
+                }
+            }
+        }
+    }
+    
+    func refreshNotificationButton() {
+        guard let view = self.view as? MainView else { return }
+        
+        if markNotificationDict[SettingsData.accessToken ?? ""] == true {
+            view.notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY_MARK"), for: .normal)
+        } else {
+            view.notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
         }
     }
 }

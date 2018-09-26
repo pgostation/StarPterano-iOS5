@@ -18,6 +18,7 @@ final class TimeLineView: UITableView {
     private let refreshCon = UIRefreshControl()
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
+    private let accessToken = SettingsData.accessToken
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -224,7 +225,8 @@ final class TimeLineView: UITableView {
                         }
                     }
                 case "notification":
-                    break
+                    // 通知ボタンにマークをつけるだけ
+                    MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
                 case "delete":
                     break
                 case "filters_changed":

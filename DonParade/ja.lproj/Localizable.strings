@@ -20,7 +20,8 @@
 "BUTTON_GTL" = "連合";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_SEARCH" = "検索";
-"BUTTON_NOTIFY" = "通知";
+"BUTTON_NOTIFY" = " 通知";
+"BUTTON_NOTIFY_MARK" = "🔔通知";
 "BUTTON_SHOW_MORE" = "もっと見る";
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";

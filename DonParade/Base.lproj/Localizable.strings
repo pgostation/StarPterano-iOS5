@@ -20,7 +20,8 @@
 "BUTTON_GTL" = "FTL";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_SEARCH" = "Search";
-"BUTTON_NOTIFY" = "Notify";
+"BUTTON_NOTIFY" = " Notify";
+"BUTTON_NOTIFY_MARK" = "🔔Notify";
 "BUTTON_SHOW_MORE" = "Show More";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
