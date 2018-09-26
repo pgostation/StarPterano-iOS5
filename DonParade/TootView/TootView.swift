@@ -16,6 +16,7 @@ final class TootView: UIView {
     let closeButton = UIButton()
     
     // トゥート
+    let spoilerTextField = UITextView()
     let textField = UITextView()
     let tootButton = UIButton()
     
@@ -27,7 +28,6 @@ final class TootView: UIView {
     let cwButton = UIButton()
     //let saveButton = UIButton()
     let emojiButton = UIButton()
-    //let idButton = UIButton()
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -52,6 +52,7 @@ final class TootView: UIView {
         self.addSubview(closeButton)
         self.addSubview(tootButton)
         
+        self.addSubview(spoilerTextField)
         self.addSubview(textField)
         
         self.addSubview(inputBar)
@@ -61,7 +62,6 @@ final class TootView: UIView {
         inputBar.addSubview(cwButton)
         //inputBar.addSubview(saveButton)
         inputBar.addSubview(emojiButton)
-        //inputBar.addSubview(idButton)
         
         refresh()
         
@@ -105,6 +105,15 @@ final class TootView: UIView {
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 12
         
+        spoilerTextField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
+        spoilerTextField.textColor = ThemeColor.messageColor
+        spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+        spoilerTextField.isEditable = true
+        spoilerTextField.layer.borderColor = ThemeColor.messageColor.cgColor
+        spoilerTextField.layer.borderWidth = 1 / UIScreen.main.scale
+        spoilerTextField.tag = UIUtils.responderTag2
+        spoilerTextField.isHidden = true
+        
         DispatchQueue.main.async {
             self.textField.becomeFirstResponder()
         }
@@ -144,9 +153,6 @@ final class TootView: UIView {
         //saveButton.setTitle("📄", for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
-        
-        //idButton.setTitle("@", for: .normal)
-        //idButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
     }
     
     override func layoutSubviews() {
@@ -162,14 +168,24 @@ final class TootView: UIView {
                                   width: 80,
                                   height: 40)
         
+        var top: CGFloat = 40
+        if spoilerTextField.isHidden == false {
+            spoilerTextField.sizeToFit()
+            spoilerTextField.frame = CGRect(x: 1,
+                                            y: 40,
+                                            width: screenBounds.width - 2,
+                                            height: max(25, spoilerTextField.frame.height))
+            top = spoilerTextField.frame.maxY + 2
+        }
+        
         textField.sizeToFit()
         textField.frame = CGRect(x: 1,
-                                 y: 40,
+                                 y: top,
                                  width: screenBounds.width - 2,
                                  height: max(25, textField.frame.height))
         
         inputBar.frame = CGRect(x: 0,
-                                y: 40 + textField.frame.height,
+                                y: top + textField.frame.height,
                                 width: screenBounds.width,
                                 height: 40)
         
@@ -201,7 +217,7 @@ final class TootView: UIView {
                                    width: 40,
                                    height: 40)
         
-        let viewHeight = 80 + textField.frame.height
+        let viewHeight = textField.frame.maxY + 40
         self.frame = CGRect(x: 0,
                             y: max(0, screenBounds.height - keyBoardHeight - viewHeight),
                             width: screenBounds.width,

@@ -111,7 +111,13 @@ final class AnalyzeJson {
         let reblogged = json["reblogged"] as? Int
         let reblogs_count = json["reblogs_count"] as? Int
         let replies_count = json["replies_count"] as? Int
-        let sensitive = json["sensitive"] as? Int
+        
+        let sensitive: Int?
+        if reblog_acct == nil {
+            sensitive = json["sensitive"] as? Int
+        } else {
+            sensitive = reblog?["sensitive"] as? Int
+        }
         
         let spoiler_text: String?
         if reblog_acct == nil {

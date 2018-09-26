@@ -39,6 +39,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         // メッセージフィールドのデリゲートを設定
         view.textField.delegate = self
+        view.spoilerTextField.delegate = self
         
         // ボタン
         view.closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
@@ -50,7 +51,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         view.protectButton.addTarget(self, action: #selector(protectAction), for: .touchUpInside)
         view.cwButton.addTarget(self, action: #selector(cwAction), for: .touchUpInside)
         //view.saveButton.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
-        //view.idButton.addTarget(self, action: #selector(idAction), for: .touchUpInside)
         view.emojiButton.addTarget(self, action: #selector(emojiAction), for: .touchUpInside)
     }
     
@@ -58,10 +58,21 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     @objc func tootAction() {
         guard let view = self.view as? TootView else { return }
         
+        // 通常テキスト
         guard let attributedText = view.textField.attributedText else { return }
         if attributedText.length == 0 { return }
         
         let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: view.textField.textStorage)
+        
+        // 保護テキスト
+        let spoilerText: String?
+        if view.spoilerTextField.isHidden {
+            spoilerText = nil
+        } else {
+            spoilerText = DecodeToot.encodeEmoji(attributedText: view.textField.attributedText, textStorage: view.spoilerTextField.textStorage)
+        }
+        
+        // 公開範囲
         let visibility = view.protectMode.rawValue
         
         if TootViewController.imagesList.count > 0 {
@@ -89,17 +100,17 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             // 画像を全てアップロードし終わったら投稿
             group.notify(queue: DispatchQueue.main) {
                 let addJson: [String: Any] = ["media_ids": idList]
-                self.toot(text: text, visibility: visibility, addJson: addJson)
+                self.toot(text: text, spoilerText: spoilerText, visibility: visibility, addJson: addJson)
             }
         } else {
             // テキストだけなのですぐに投稿
-            toot(text: text, visibility: visibility, addJson: [:])
+            toot(text: text, spoilerText: spoilerText, visibility: visibility, addJson: [:])
         }
         
         closeAction()
     }
     
-    private func toot(text: String, visibility: String, addJson: [String: Any]) {
+    private func toot(text: String, spoilerText: String?, visibility: String, addJson: [String: Any]) {
         guard let hostName = SettingsData.hostName else { return }
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
@@ -108,6 +119,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             "status": text,
             "visibility": visibility,
             ]
+        if let spoilerText = spoilerText {
+            bodyJson.updateValue(spoilerText, forKey: "spoiler_text")
+        }
         if let inReplyToId = TootViewController.inReplyToId {
             bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
             TootViewController.inReplyToId = nil
@@ -169,14 +183,20 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // センシティブなトゥートにする
     @objc func cwAction() {
+        guard let view = self.view as? TootView else { return }
+        
+        view.spoilerTextField.isHidden = !view.spoilerTextField.isHidden
+        view.setNeedsLayout()
+        
+        if view.spoilerTextField.isHidden {
+            view.textField.becomeFirstResponder()
+        } else {
+            view.spoilerTextField.becomeFirstResponder()
+        }
     }
     
     // 下書きにする / 下書きを復帰する
     @objc func saveAction() {
-    }
-    
-    // idを補完入力する
-    @objc func idAction() {
     }
     
     // カスタム絵文字を入力する
@@ -186,8 +206,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         if view.textField.inputView is EmojiKeyboard {
             // テキストフィールドのカスタムキーボードを解除
             view.textField.inputView = nil
-            view.textField.resignFirstResponder()
-            view.textField.becomeFirstResponder()
+            view.spoilerTextField.inputView = nil
             
             view.emojiButton.setTitle("😀", for: .normal)
         } else {
@@ -195,11 +214,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             
             // テキストフィールドのカスタムキーボードを変更
             view.textField.inputView = emojiView
-            view.textField.resignFirstResponder()
-            view.textField.becomeFirstResponder()
+            view.spoilerTextField.inputView = emojiView
             
             view.emojiButton.setTitle("🔠", for: .normal)
         }
+        
+        let firstResponder = view.spoilerTextField.isFirstResponder ? view.spoilerTextField : view.textField
+        firstResponder.resignFirstResponder()
+        firstResponder.becomeFirstResponder()
     }
     
     // 画面を閉じる
@@ -213,9 +235,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // テキストビューの高さを変化させる
     func textViewDidChange(_ textView: UITextView) {
-        guard let view = self.view as? TootView else { return }
-        
-        if view.textField.inputView is EmojiKeyboard {
+        if textView.inputView is EmojiKeyboard {
             var emojis: [[String: Any]] = []
             
             for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "") {
@@ -226,6 +246,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             
             let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
             textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+            textView.textColor = ThemeColor.messageColor
+            textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
         }
         
         // テキストを全削除するとin_reply_toをクリアする

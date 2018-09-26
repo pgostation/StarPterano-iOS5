@@ -61,19 +61,34 @@ final class EmojiKeyboard: UIView {
     
     @objc func spaceAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
+        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
         
+        if textView2.isFirstResponder {
+            (textView2 as? UITextView)?.insertText(" ")
+            return
+        }
         (textView as? UITextView)?.insertText(" ")
     }
     
     @objc func returnAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
+        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
         
+        if textView2.isFirstResponder {
+            (textView2 as? UITextView)?.insertText("\n")
+            return
+        }
         (textView as? UITextView)?.insertText("\n")
     }
     
     @objc func deleteAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
+        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
         
+        if textView2.isFirstResponder {
+            (textView2 as? UITextView)?.deleteBackward()
+            return
+        }
         (textView as? UITextView)?.deleteBackward()
     }
     
@@ -130,6 +145,18 @@ private final class EmojiInputScrollView: UIScrollView {
         guard let button = button as? EmojiButton else { return }
         
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
+        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
+        
+        if textView2.isFirstResponder {
+            if let textView2 = textView2 as? UITextView {
+                textView2.insertText(" :" + button.key + ": ")
+                
+                // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
+                textView2.textColor = ThemeColor.messageColor
+                textView2.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+            }
+            return
+        }
         
         if let textView = textView as? UITextView {
             textView.insertText(" :" + button.key + ": ")
