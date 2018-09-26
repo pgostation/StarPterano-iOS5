@@ -47,6 +47,8 @@
 "BUTTON_SPACEKEY" = "空白";
 "ALERT_SEND_TOOT_FAILURE" = "トゥートの投稿に失敗しました";
 "ALERT_TEXT_EXISTS" = "すでにテキストが入力されています";
+"BUTTON_DELETE_IMAGE" = "削除";
+"SWITCH_NSFW" = "閲覧注意(NSFW)";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";

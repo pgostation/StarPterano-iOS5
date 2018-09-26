@@ -13,7 +13,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     static var isShown = false // 現在表示中かどうか
     static weak var instance: TootViewController?
     static var inReplyToId: String? = nil
-    static var imagesList: [URL] = []
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -74,13 +73,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         // 公開範囲
         let visibility = view.protectMode.rawValue
+        let nsfw = view.imageCheckView.nsfwSw.isOn
         
-        if TootViewController.imagesList.count > 0 {
+        if view.imageCheckView.urls.count > 0 {
             // 画像をアップロードしてから投稿
             let group = DispatchGroup()
             
             var idList: [String] = []
-            for url in TootViewController.imagesList {
+            for url in view.imageCheckView.urls {
                 group.enter()
                 ImageUpload.upload(imageUrl: url, callback: { json in
                     if let json = json {
@@ -95,22 +95,21 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                     }
                 })
             }
-            TootViewController.imagesList = []
             
             // 画像を全てアップロードし終わったら投稿
             group.notify(queue: DispatchQueue.main) {
                 let addJson: [String: Any] = ["media_ids": idList]
-                self.toot(text: text, spoilerText: spoilerText, visibility: visibility, addJson: addJson)
+                self.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson)
             }
         } else {
             // テキストだけなのですぐに投稿
-            toot(text: text, spoilerText: spoilerText, visibility: visibility, addJson: [:])
+            toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: [:])
         }
         
         closeAction()
     }
     
-    private func toot(text: String, spoilerText: String?, visibility: String, addJson: [String: Any]) {
+    private func toot(text: String, spoilerText: String?, nsfw: Bool, visibility: String, addJson: [String: Any]) {
         guard let hostName = SettingsData.hostName else { return }
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
@@ -121,6 +120,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             ]
         if let spoilerText = spoilerText {
             bodyJson.updateValue(spoilerText, forKey: "spoiler_text")
+        }
+        if nsfw {
+            bodyJson.updateValue(1, forKey: "sensitive")
         }
         if let inReplyToId = TootViewController.inReplyToId {
             bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
@@ -139,6 +141,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // 添付画像を追加する
     @objc func addImageAction() {
+        guard let view = self.view as? TootView else { return }
+        
         PHPhotoLibrary.requestAuthorization { authStatus in
             switch authStatus {
             case .authorized:
@@ -146,16 +150,17 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                     // 画像ピッカーを表示
                     MyImagePickerController.show(callback: { url in
                         if let url = url {
-                            TootViewController.imagesList.append(url)
-                            if let view = self.view as? TootView {
-                                view.refresh()
+                            view.imageCheckView.add(imageUrl: url)
+                            for i in 1...3 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25 * Double(i)) {
+                                    view.refresh()
+                                    view.setNeedsLayout()
+                                }
                             }
                         }
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            if let view = self.view as? TootView {
-                                view.textField.becomeFirstResponder()
-                            }
+                            view.textField.becomeFirstResponder()
                         }
                     })
                 }
@@ -169,6 +174,11 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // 添付画像を確認、削除する
     @objc func showImagesAction() {
+        guard let view = self.view as? TootView else { return }
+        
+        view.imageCheckView.isHidden = false
+        
+        view.textField.resignFirstResponder()
     }
     
     // 公開範囲を設定する
@@ -258,5 +268,13 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         DispatchQueue.main.async {
             self.view.setNeedsLayout()
         }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        // 画像表示を隠す
+        guard let view = self.view as? TootView else { return }
+        
+        view.imageCheckView.isHidden = true
+        view.setNeedsLayout()
     }
 }

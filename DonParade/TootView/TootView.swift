@@ -29,6 +29,9 @@ final class TootView: UIView {
     //let saveButton = UIButton()
     let emojiButton = UIButton()
     
+    // 画像チェック画面
+    let imageCheckView = ImageCheckView()
+    
     init() {
         super.init(frame: UIScreen.main.bounds)
         
@@ -62,6 +65,8 @@ final class TootView: UIView {
         inputBar.addSubview(cwButton)
         //inputBar.addSubview(saveButton)
         inputBar.addSubview(emojiButton)
+        
+        self.addSubview(imageCheckView)
         
         refresh()
         
@@ -114,8 +119,10 @@ final class TootView: UIView {
         spoilerTextField.tag = UIUtils.responderTag2
         spoilerTextField.isHidden = true
         
-        DispatchQueue.main.async {
-            self.textField.becomeFirstResponder()
+        if imageCheckView.isHidden {
+            DispatchQueue.main.async {
+                self.textField.becomeFirstResponder()
+            }
         }
         textField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         textField.textColor = ThemeColor.messageColor
@@ -129,12 +136,13 @@ final class TootView: UIView {
         
         imagesButton.setTitle("🏞", for: .normal)
         
-        if TootViewController.imagesList.count == 0 {
-            imagesCountButton.setTitle(nil, for: .normal)
+        if imageCheckView.urls.count == 0 {
+            imagesCountButton.isHidden = true
         } else {
-            imagesCountButton.setTitle("[\(TootViewController.imagesList.count)]", for: .normal)
+            imagesCountButton.isHidden = false
+            imagesCountButton.setTitle("[\(imageCheckView.urls.count)]", for: .normal)
         }
-        imagesCountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        imagesCountButton.setTitleColor(ThemeColor.messageColor, for: .normal)
         
         switch self.protectMode {
         case .publicMode:
@@ -153,6 +161,8 @@ final class TootView: UIView {
         //saveButton.setTitle("📄", for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
+        
+        imageCheckView.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -217,7 +227,16 @@ final class TootView: UIView {
                                    width: 40,
                                    height: 40)
         
-        let viewHeight = textField.frame.maxY + 40
+        let viewHeight: CGFloat
+        if imageCheckView.isHidden {
+            viewHeight = textField.frame.maxY + 40
+        } else {
+            imageCheckView.layoutSubviews()
+            imageCheckView.frame.origin.y = textField.frame.maxY + 40
+            
+            viewHeight = imageCheckView.frame.maxY
+        }
+        
         self.frame = CGRect(x: 0,
                             y: max(0, screenBounds.height - keyBoardHeight - viewHeight),
                             width: screenBounds.width,

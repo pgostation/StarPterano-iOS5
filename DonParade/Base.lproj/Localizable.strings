@@ -47,6 +47,8 @@
 "BUTTON_SPACEKEY" = "Space";
 "ALERT_SEND_TOOT_FAILURE" = "Send a toot failure.";
 "ALERT_TEXT_EXISTS" = "text is not empty.";
+"BUTTON_DELETE_IMAGE" = "Delete";
+"SWITCH_NSFW" = "NSFW";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "Privacy";
