@@ -41,7 +41,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // トゥートの追加
-    func change(tableView: UITableView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData]) {
+    func change(tableView: UITableView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false) {
         DispatchQueue.main.async {
             if self.list.count == 0 {
                 self.list = addList
@@ -57,8 +57,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.selectedRow = self.selectedRow! + addList.count
                     }
                     
-                    if tableView.contentOffset.y <= 3 {
-                        // 一番上の場合、スクロールさせない
+                    if addList.count <= 5 && tableView.contentOffset.y <= 60 {
+                        // 一番上の場合、ずれさせる
                     } else {
                         // スクロールして、表示していたツイートがあまりずれないようにする
                         let oldOffsetY = tableView.contentOffset.y
@@ -112,7 +112,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             }
             
-            tableView.reloadData()
+            if !isStreaming {
+                tableView.reloadData()
+            }
         }
     }
     

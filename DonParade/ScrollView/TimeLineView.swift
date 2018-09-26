@@ -18,7 +18,6 @@ final class TimeLineView: UITableView {
     private let refreshCon = UIRefreshControl()
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
-    private static var isBusy = false
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -66,6 +65,18 @@ final class TimeLineView: UITableView {
     
     // タイムラインを初回取得/手動更新
     @objc func refresh() {
+        if self.waitingStatusList.count > 0 {
+            DispatchQueue.main.async {
+                self.refreshCon.endRefreshing()
+                self.waitIndicator?.removeFromSuperview()
+            }
+            
+            DispatchQueue.main.async {
+                self.analyzeStremingData(string: nil)
+            }
+            return
+        }
+        
         guard let hostName = SettingsData.hostName else { return }
         
         var sinceIdStr = ""
@@ -161,52 +172,70 @@ final class TimeLineView: UITableView {
     // ストリーミングを受信
     //   ホーム(通知含む)、ローカル、連合のみ
     private var streamingObject: MastodonStreaming?
+    private var waitingStatusList: [AnalyzeJson.ContentData] = []
     @objc func streaming(streamingType: String) {
         guard let hostName = SettingsData.hostName else { return }
         guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(SettingsData.accessToken!)&stream=\(streamingType)") else { return }
         
-        self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] (string) in
-            guard let strongSelf = self else { return }
-            
-            if let data = string?.data(using: String.Encoding.utf8) {
-                do {
-                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-                    
-                    guard let event = responseJson?["event"] as? String else { return }
-                    let payload = responseJson?["payload"]
-                    
-                    switch event {
-                    case "update":
-                        if let string = payload as? String {
-                            guard let json = try JSONSerialization.jsonObject(with: string.data(using: String.Encoding.utf8)!, options: .allowFragments) as? [String: Any] else { return }
-                            TimeLineView.tableDispatchQueue.async {
-                                var acct = ""
-                                let statusData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: json, acct: &acct)
-                                strongSelf.model.change(tableView: strongSelf, addList: [statusData], accountList: strongSelf.accountList)
-                                
-                                if TimeLineView.isBusy {
-                                    // 忙しい場合
-                                    return
-                                }
-                                TimeLineView.isBusy = true
-                                DispatchQueue.main.sync {
-                                    strongSelf.reloadData()
-                                }
-                                TimeLineView.isBusy = false
-                            }
-                        }
-                    case "notification":
-                        break
-                    case "delete":
-                        break
-                    case "filters_changed":
-                        break
-                    default:
-                        break
-                    }
-                } catch { }
-            }
+        self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] string in
+            self?.analyzeStremingData(string: string)
         })
+    }
+    
+    //
+    private func analyzeStremingData(string: String?) {
+        func update() {
+            self.model.change(tableView: self, addList: self.waitingStatusList, accountList: self.accountList, isStreaming: true)
+            self.waitingStatusList = []
+            
+            DispatchQueue.main.async {
+                self.reloadData()
+            }
+        }
+        
+        if let data = string?.data(using: String.Encoding.utf8) {
+            do {
+                let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+                
+                guard let event = responseJson?["event"] as? String else { return }
+                let payload = responseJson?["payload"]
+                
+                switch event {
+                case "update":
+                    if let string = payload as? String {
+                        guard let json = try JSONSerialization.jsonObject(with: string.data(using: String.Encoding.utf8)!, options: .allowFragments) as? [String: Any] else { return }
+                        TimeLineView.tableDispatchQueue.async {
+                            var acct = ""
+                            let statusData = AnalyzeJson.analyzeJson(view: self, model: self.model, json: json, acct: &acct)
+                            
+                            self.waitingStatusList.insert(statusData, at: 0)
+                            
+                            var offsetY: CGFloat = 0
+                            DispatchQueue.main.sync {
+                                offsetY = self.contentOffset.y
+                            }
+                            
+                            if offsetY > 60 {
+                                // スクロール位置が一番上でない場合、テーブルビューには反映せず裏に持っておく
+                                return
+                            }
+                            
+                            update()
+                        }
+                    }
+                case "notification":
+                    break
+                case "delete":
+                    break
+                case "filters_changed":
+                    break
+                default:
+                    break
+                }
+            } catch { }
+        } else {
+            update()
+        }
     }
     
     // タイムラインに古いトゥートを追加
