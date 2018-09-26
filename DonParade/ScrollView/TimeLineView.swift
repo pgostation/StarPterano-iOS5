@@ -58,78 +58,13 @@ final class TimeLineView: UITableView {
                 self.refresh()
             }
         }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            if type == .home {
-                // ストリーミング開始
-                self?.streaming(streamingType: "user")
-            }
-            else if type == .local {
-                // ストリーミング開始
-                self?.streaming(streamingType: "public:local")
-            }
-            else if type == .global {
-                // ストリーミング開始
-                self?.streaming(streamingType: "public")
-            }
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // ストリーミングを受信
-    //   ホーム(通知含む)、ローカル、連合のみ
-    private var streamingObject: MastodonStreaming?
-    @objc func streaming(streamingType: String) {
-        guard let hostName = SettingsData.hostName else { return }
-        guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(SettingsData.accessToken!)&stream=\(streamingType)") else { return }
-        
-        self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] (string) in
-            guard let strongSelf = self else { return }
-            
-            if let data = string?.data(using: String.Encoding.utf8) {
-                do {
-                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-                    
-                    guard let event = responseJson?["event"] as? String else { return }
-                    let payload = responseJson?["payload"]
-                    
-                    switch event {
-                    case "update":
-                        if let string = payload as? String {
-                            guard let json = try JSONSerialization.jsonObject(with: string.data(using: String.Encoding.utf8)!, options: .allowFragments) as? [String: Any] else { return }
-                            TimeLineView.tableDispatchQueue.async {
-                                var acct = ""
-                                let statusData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: json, acct: &acct)
-                                strongSelf.model.change(tableView: strongSelf, addList: [statusData], accountList: strongSelf.accountList)
-                                
-                                if TimeLineView.isBusy {
-                                    return
-                                }
-                                TimeLineView.isBusy = true
-                                DispatchQueue.main.sync {
-                                    strongSelf.refresh() // #### １つずつ追加するようにしたい
-                                }
-                                TimeLineView.isBusy = false
-                            }
-                        }
-                    case "notification":
-                        break
-                    case "delete":
-                        break
-                    case "filters_changed":
-                        break
-                    default:
-                        break
-                    }
-                } catch { }
-            }
-        })
-    }
-    
-    // タイムラインを手動更新
+    // タイムラインを初回取得/手動更新
     @objc func refresh() {
         guard let hostName = SettingsData.hostName else { return }
         
@@ -188,6 +123,8 @@ final class TimeLineView: UITableView {
                             
                             // 続きを取得
                             DispatchQueue.main.sync {
+                                strongSelf.reloadData()
+                                
                                 if self?.type == .mensions && contentData.in_reply_to_id == nil {
                                     return // ループ防止
                                 }
@@ -201,6 +138,75 @@ final class TimeLineView: UITableView {
                 print(error)
             }
         }
+        
+        // ストリーミングを受信
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if self.streamingObject?.isConnect != true {
+                if self.type == .home {
+                    // ストリーミング開始
+                    self.streaming(streamingType: "user")
+                }
+                else if self.type == .local {
+                    // ストリーミング開始
+                    self.streaming(streamingType: "public:local")
+                }
+                else if self.type == .global {
+                    // ストリーミング開始
+                    self.streaming(streamingType: "public")
+                }
+            }
+        }
+    }
+    
+    // ストリーミングを受信
+    //   ホーム(通知含む)、ローカル、連合のみ
+    private var streamingObject: MastodonStreaming?
+    @objc func streaming(streamingType: String) {
+        guard let hostName = SettingsData.hostName else { return }
+        guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(SettingsData.accessToken!)&stream=\(streamingType)") else { return }
+        
+        self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] (string) in
+            guard let strongSelf = self else { return }
+            
+            if let data = string?.data(using: String.Encoding.utf8) {
+                do {
+                    let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+                    
+                    guard let event = responseJson?["event"] as? String else { return }
+                    let payload = responseJson?["payload"]
+                    
+                    switch event {
+                    case "update":
+                        if let string = payload as? String {
+                            guard let json = try JSONSerialization.jsonObject(with: string.data(using: String.Encoding.utf8)!, options: .allowFragments) as? [String: Any] else { return }
+                            TimeLineView.tableDispatchQueue.async {
+                                var acct = ""
+                                let statusData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: json, acct: &acct)
+                                strongSelf.model.change(tableView: strongSelf, addList: [statusData], accountList: strongSelf.accountList)
+                                
+                                if TimeLineView.isBusy {
+                                    // 忙しい場合
+                                    return
+                                }
+                                TimeLineView.isBusy = true
+                                DispatchQueue.main.sync {
+                                    strongSelf.reloadData()
+                                }
+                                TimeLineView.isBusy = false
+                            }
+                        }
+                    case "notification":
+                        break
+                    case "delete":
+                        break
+                    case "filters_changed":
+                        break
+                    default:
+                        break
+                    }
+                } catch { }
+            }
+        })
     }
     
     // タイムラインに古いトゥートを追加

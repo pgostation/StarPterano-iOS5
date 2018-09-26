@@ -14,6 +14,7 @@ import Starscream
 final class MastodonStreaming: NSObject, WebSocketDelegate {
     private var socket: WebSocket
     private var callback: (String?)->Void
+    var isConnect = false
     
     init(url: URL, callback: @escaping (String?)->Void) {
         self.socket = WebSocket(url: url)
@@ -28,10 +29,12 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     
     func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected")
+        self.isConnect = true
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected. error=\(error?.localizedDescription)")
+        self.isConnect = false
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {

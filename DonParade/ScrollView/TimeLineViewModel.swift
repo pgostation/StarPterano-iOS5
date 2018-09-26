@@ -45,11 +45,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         DispatchQueue.main.async {
             if self.list.count == 0 {
                 self.list = addList
-            } else if addList.count >= 2, let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+            } else if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at, let date3 = self.list.last?.created_at, let date4 = addList.last?.created_at {
                 // 前か後に付ければ良い
                 if date1 > date2 {
                     self.list = self.list + addList
-                } else {
+                } else if date3 < date4 {
                     self.list = addList + self.list
                     
                     // 選択位置がずれないようにする
@@ -57,14 +57,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.selectedRow = self.selectedRow! + addList.count
                     }
                     
-                    // スクロールして、表示していたツイートがあまりずれないようにする
-                    if tableView.contentOffset.y <= 0 {
-                        DispatchQueue.main.async {
-                            tableView.scrollToRow(at: IndexPath(row: addList.count, section: 0),
-                                                  at: UITableViewScrollPosition.top,
-                                                  animated: false)
-                        }
+                    if tableView.contentOffset.y <= 3 {
+                        // 一番上の場合、スクロールさせない
                     } else {
+                        // スクロールして、表示していたツイートがあまりずれないようにする
                         let oldOffsetY = tableView.contentOffset.y
                         DispatchQueue.main.async {
                             tableView.scrollToRow(at: IndexPath(row: addList.count, section: 0),
@@ -73,28 +69,28 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
                         }
                     }
-                }
-            } else {
-                // すでにあるデータを更新する
-                for newContent in addList {
-                    var flag = false
-                    for (index, listData) in self.list.enumerated() {
-                        if listData.id == newContent.id {
-                            self.list[index] = newContent
-                            flag = true
-                            break
+                } else {
+                    // すでにあるデータを更新する
+                    for newContent in addList {
+                        var flag = false
+                        for (index, listData) in self.list.enumerated() {
+                            if listData.id == newContent.id {
+                                self.list[index] = newContent
+                                flag = true
+                                break
+                            }
                         }
-                    }
-                    if !flag {
-                        // なかったので前か後ろに追加する
-                        if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
-                            if date1 > date2 {
-                                self.list.append(newContent)
+                        if !flag {
+                            // なかったので前か後ろに追加する
+                            if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
+                                if date1 > date2 {
+                                    self.list.append(newContent)
+                                } else {
+                                    self.list.insert(newContent, at: 0)
+                                }
                             } else {
                                 self.list.insert(newContent, at: 0)
                             }
-                        } else {
-                            self.list.insert(newContent, at: 0)
                         }
                     }
                 }
