@@ -349,6 +349,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if data.sensitive == 1 || data.spoiler_text != "" {
             messageView.isHidden = true
             cell.spolerTextLabel = UILabel()
+            cell.spolerTextLabel?.textColor = ThemeColor.messageColor
             cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: {
                 if cell.id == id {

@@ -370,7 +370,7 @@ final class TimeLineViewCell: UITableViewCell {
                                              height: 18)
         
         self.spolerTextLabel?.frame = CGRect(x: 50,
-                                             y: self.detailDateLabel?.frame.maxY ?? 19,
+                                             y: isMiniView == .superMini ? 2 : self.detailDateLabel?.frame.maxY ?? SettingsData.fontSize + 8,
                                              width: self.spolerTextLabel?.frame.width ?? 0,
                                              height: self.spolerTextLabel?.frame.height ?? 0)
         

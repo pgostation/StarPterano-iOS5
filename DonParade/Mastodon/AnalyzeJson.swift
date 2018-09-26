@@ -87,7 +87,12 @@ final class AnalyzeJson {
         }
         let application = json["application"] as? [String: Any]
         let content = json["content"] as? String
-        let created_at = json["created_at"] as? String
+        let created_at: String?
+        if reblog_acct == nil {
+            created_at = json["created_at"] as? String
+        } else {
+            created_at = reblog?["created_at"] as? String
+        }
         
         let emojis: [[String: Any]]?
         if reblog_acct == nil {
@@ -107,7 +112,14 @@ final class AnalyzeJson {
         let reblogs_count = json["reblogs_count"] as? Int
         let replies_count = json["replies_count"] as? Int
         let sensitive = json["sensitive"] as? Int
-        let spoiler_text = json["spoiler_text"] as? String
+        
+        let spoiler_text: String?
+        if reblog_acct == nil {
+            spoiler_text = json["spoiler_text"] as? String
+        } else {
+            spoiler_text = reblog?["spoiler_text"] as? String
+        }
+        
         let tags = json["tags"] as? [String]
         let uri = json["uri"] as? String
         let url = json["url"] as? String
