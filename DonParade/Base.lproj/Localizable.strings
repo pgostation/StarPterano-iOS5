@@ -116,6 +116,10 @@
 "SETTINGS_DARKMODE" = "Dark theme";
 "SETTINGS_FONTSIZE" = "Font size";
 "SETTINGS_TAP_TOOT" = "Tap detail mode";
+"SETTINGS_STREAMING" = "Streaming";
+"SETTINGS_ICONSIZE" = "Icon size";
+"SETTINGS_LOADPREVIEW" = "Load preview image";
+"SETTINGS_NAMETAPPABLE" = "Tappable name";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

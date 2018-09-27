@@ -17,7 +17,7 @@ final class ImageCache {
     private static let imageQueue = DispatchQueue(label: "ImageCache")
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
-    static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, callback: @escaping (UIImage)->Void) {
+    static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, isPreview: Bool = false, callback: @escaping (UIImage)->Void) {
         guard let urlStr = urlStr else { return }
         
         // メモリキャッシュにある場合
@@ -51,6 +51,10 @@ final class ImageCache {
                     }
                 }
             }
+            return
+        }
+        
+        if isPreview && !SettingsData.isLoadPreviewImage {
             return
         }
         

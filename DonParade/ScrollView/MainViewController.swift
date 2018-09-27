@@ -554,10 +554,10 @@ final class MainView: UIView {
                                            width: buttonWidth,
                                            height: buttonHeight)
         
-        accountButton.frame = CGRect(x: screenBounds.width - 50,
-                                     y: 30 + bottomOffset / 2,
-                                     width: 40,
-                                     height: 40)
+        accountButton.frame = CGRect(x: screenBounds.width - SettingsData.iconSize - 10,
+                                     y: UIUtils.statusBarHeight() + 10,
+                                     width: SettingsData.iconSize,
+                                     height: SettingsData.iconSize)
         
         notifyLabel.frame.size.width = screenBounds.width - 50
         notifyLabel.sizeToFit()

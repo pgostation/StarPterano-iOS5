@@ -19,7 +19,7 @@ class SettingsSwitchCell: UITableViewCell {
         let sw = UISwitch()
         sw.isOn = isOn
         sw.addTarget(self, action: #selector(swChanged(_:)), for: .valueChanged)
-        sw.frame = CGRect(x: UIScreen.main.bounds.width - 80, y: 7, width: 51, height: 31)
+        sw.frame = CGRect(x: UIScreen.main.bounds.width - 70, y: 8, width: 51, height: 31)
         self.addSubview(sw)
     }
     

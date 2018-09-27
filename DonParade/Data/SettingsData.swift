@@ -217,4 +217,76 @@ final class SettingsData {
             defaults.set(newValue.rawValue, forKey: "protectMode")
         }
     }
+    
+    // ストリーミングを使用するかどうか
+    static var isStreamingMode: Bool {
+        get {
+            if let string = defaults.string(forKey: "isStreamingMode") {
+                return (string == "ON")
+            }
+            return true
+        }
+        set(newValue) {
+            if newValue {
+                defaults.removeObject(forKey: "isStreamingMode")
+            } else {
+                defaults.set("OFF", forKey: "isStreamingMode")
+            }
+        }
+    }
+    
+    // プレビュー画像を読み込むかどうか
+    static var isLoadPreviewImage: Bool {
+        get {
+            if let string = defaults.string(forKey: "isLoadPreviewImage") {
+                return (string == "ON")
+            }
+            return true
+        }
+        set(newValue) {
+            if newValue {
+                defaults.removeObject(forKey: "isLoadPreviewImage")
+            } else {
+                defaults.set("OFF", forKey: "isLoadPreviewImage")
+            }
+        }
+    }
+    
+    // アカウント名タップでアイコンタップと同じ処理をするかどうか
+    static var isNameTappable: Bool {
+        get {
+            if let string = defaults.string(forKey: "isNameTappable") {
+                return (string == "ON")
+            }
+            return true
+        }
+        set(newValue) {
+            if newValue {
+                defaults.removeObject(forKey: "isNameTappable")
+            } else {
+                defaults.set("OFF", forKey: "isNameTappable")
+            }
+        }
+    }
+    
+    // 基準アイコンサイズ
+    private static var _iconSize: CGFloat?
+    static var iconSize: CGFloat {
+        get {
+            if let cache = self._iconSize {
+                return cache
+            }
+            let value = defaults.double(forKey: "iconSize")
+            if value > 0 {
+                self._iconSize = CGFloat(value)
+                return CGFloat(value)
+            }
+            self._iconSize = 40
+            return 40
+        }
+        set(newValue) {
+            self._iconSize = newValue
+            defaults.set(newValue, forKey: "iconSize")
+        }
+    }
 }

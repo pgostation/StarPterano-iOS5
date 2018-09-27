@@ -116,6 +116,10 @@
 "SETTINGS_DARKMODE" = "ダークテーマ";
 "SETTINGS_FONTSIZE" = "フォントサイズ";
 "SETTINGS_TAP_TOOT" = "タップで詳細画面に移動";
+"SETTINGS_STREAMING" = "ストリーミング";
+"SETTINGS_ICONSIZE" = "アイコンサイズ";
+"SETTINGS_LOADPREVIEW" = "プレビュー画像を読み込む";
+"SETTINGS_NAMETAPPABLE" = "名前欄タップで移動";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

@@ -52,12 +52,20 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // 4.アプリの設定
     private enum Application: String {
         case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
-        case darkMode = "SETTINGS_DARKMODE" // ダークモード切り替え
+        case darkMode = "SETTINGS_DARKMODE"
         case fontSize = "SETTINGS_FONTSIZE"
+        case streaming = "SETTINGS_STREAMING"
+        case iconSize = "SETTINGS_ICONSIZE"
+        case loadPreviewImage = "SETTINGS_LOADPREVIEW"
+        case nameTappable = "SETTINGS_NAMETAPPABLE" // アカウント名をタップできるか
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
-                                                  .fontSize]
+                                                  .fontSize,
+                                                  .streaming,
+                                                  .iconSize,
+                                                  .loadPreviewImage,
+                                                  .nameTappable]
     
     // 5.キャッシュ
     private enum Cache: String {
@@ -164,6 +172,39 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.fontSize))pt"
                 }
                 return cell
+            case .streaming:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isStreamingMode)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.isStreamingMode = isOn
+                }
+                return cell
+            case .loadPreviewImage:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isLoadPreviewImage)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.isLoadPreviewImage = isOn
+                }
+                return cell
+            case .nameTappable:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isNameTappable)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.isNameTappable = isOn
+                }
+                return cell
+            case .iconSize:
+                let cell = SettingsStepperCell(style: .default,
+                                               value: Double(SettingsData.iconSize),
+                                               minValue: 24,
+                                               maxValue: 50,
+                                               step: 2)
+                cell.textLabel?.text = title + " : " + "\(Int(SettingsData.iconSize))pt"
+                cell.callback = { [weak cell] value in
+                    SettingsData.iconSize = CGFloat(value)
+                    cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.iconSize))pt"
+                }
+                return cell
             }
         case 4:
             title = I18n.get(cacheList[indexPath.row].rawValue)
@@ -221,9 +262,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     SettingsData.protectMode = mode
                     tableView.reloadData()
                 }
-            case .darkMode:
-                break
-            case .fontSize:
+            default:
                 break
             }
         case 4:

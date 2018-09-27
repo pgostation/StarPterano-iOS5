@@ -163,6 +163,8 @@ final class TimeLineView: UITableView {
     
     // ストリーミングを開始
     func startStreaming() {
+        if !SettingsData.isStreamingMode { return }
+        
         if self.streamingObject?.isConnect != true {
             if self.type == .home {
                 self.streaming(streamingType: "user")

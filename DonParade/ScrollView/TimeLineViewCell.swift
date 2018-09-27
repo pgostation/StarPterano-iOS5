@@ -122,6 +122,13 @@ final class TimeLineViewCell: UITableViewCell {
         self.iconView.addGestureRecognizer(tapGesture)
         self.iconView.isUserInteractionEnabled = true
         
+        if SettingsData.isNameTappable {
+            // アカウント名のタップジェスチャー
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+            self.nameLabel.addGestureRecognizer(tapGesture)
+            self.nameLabel.isUserInteractionEnabled = true
+        }
+        
         // アイコンの長押しジェスチャー
         let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressAccountAction(_:)))
         self.iconView.addGestureRecognizer(pressGesture)
@@ -332,6 +339,7 @@ final class TimeLineViewCell: UITableViewCell {
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         let isDetailMode = !SettingsData.tapDetailMode && self.showDetail
+        let iconSize = isMiniView != .normal ? SettingsData.iconSize - 4 : SettingsData.iconSize
         
         self.lineLayer.frame = CGRect(x: 0,
                                       y: 0,
@@ -339,22 +347,23 @@ final class TimeLineViewCell: UITableViewCell {
                                       height: 1 / UIScreen.main.scale)
         
         self.iconView.frame = CGRect(x: isMiniView != .normal ? 4 : 8,
-                                     y: isMiniView == .superMini ? -6 : (isMiniView != .normal ? 6 : 10),
-                                     width: isMiniView != .normal ? 32 : 36,
-                                     height: isMiniView != .normal ? 32 : 36)
+                                     y: isMiniView == .superMini ? 12 - iconSize / 2 : (isMiniView != .normal ? 6 : 10),
+                                     width: iconSize,
+                                     height: iconSize)
         
-        self.nameLabel.frame = CGRect(x: isMiniView != .normal ? 42 : 50,
+        let nameLeft = iconSize + (isMiniView != .normal ? 10 : 14)
+        self.nameLabel.frame = CGRect(x: nameLeft,
                                       y: isMiniView != .normal ? 3 : 7,
                                       width: self.nameLabel.frame.width,
                                       height: SettingsData.fontSize + 1)
         
         let idWidth: CGFloat
         if self.detailDateLabel != nil {
-            idWidth = screenBounds.width - (self.nameLabel.frame.width + (isMiniView != .normal ? 42 : 50))
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + nameLeft)
         } else {
-            idWidth = screenBounds.width - (self.nameLabel.frame.width + (isMiniView != .normal ? 42 : 50) + 45 + 5)
+            idWidth = screenBounds.width - (self.nameLabel.frame.width + nameLeft + 45 + 5)
         }
-        self.idLabel.frame = CGRect(x: (isMiniView != .normal ? 42 : 50) + self.nameLabel.frame.width + 5,
+        self.idLabel.frame = CGRect(x: nameLeft + self.nameLabel.frame.width + 5,
                                     y: isMiniView != .normal ? 3 : 7,
                                     width: idWidth,
                                     height: SettingsData.fontSize)
@@ -374,7 +383,7 @@ final class TimeLineViewCell: UITableViewCell {
                                              width: self.spolerTextLabel?.frame.width ?? 0,
                                              height: self.spolerTextLabel?.frame.height ?? 0)
         
-        self.messageView?.frame = CGRect(x: isMiniView != .normal ? 42 : 50,
+        self.messageView?.frame = CGRect(x: nameLeft,
                                          y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
                                          width: self.messageView?.frame.width ?? 0,
                                          height: self.messageView?.frame.height ?? 0)
@@ -385,7 +394,7 @@ final class TimeLineViewCell: UITableViewCell {
                                           height: 18)
         
         let imagesOffset = CGFloat((self.imageViews?.count ?? 0) * 90)
-        self.boostView?.frame = CGRect(x: 40,
+        self.boostView?.frame = CGRect(x: nameLeft - 12,
                                        y: (self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
                                        width: screenBounds.width - 56,
                                        height: 20)
@@ -400,7 +409,7 @@ final class TimeLineViewCell: UITableViewCell {
         self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 300)
         
         for (index, imageView) in (self.imageViews ?? []).enumerated() {
-            if isDetailMode {
+            if isDetailMode && SettingsData.isLoadPreviewImage {
                 imageView.contentMode = .scaleAspectFit
                 var imageWidth: CGFloat = 0
                 var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
@@ -414,7 +423,7 @@ final class TimeLineViewCell: UITableViewCell {
                         imageHeight = size.height * newRate
                     }
                 }
-                imageView.frame = CGRect(x: 50,
+                imageView.frame = CGRect(x: nameLeft,
                                          y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
                                          width: imageWidth,
                                          height: imageHeight)
@@ -422,7 +431,7 @@ final class TimeLineViewCell: UITableViewCell {
                 let imageWidth: CGFloat = screenBounds.width - 80
                 let imageHeight: CGFloat = 80
                 imageView.contentMode = .scaleAspectFill
-                imageView.frame = CGRect(x: 50,
+                imageView.frame = CGRect(x: nameLeft,
                                          y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
                                          width: imageWidth,
                                          height: imageHeight)

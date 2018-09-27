@@ -531,16 +531,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             for media in mediaData {
                 let imageView = UIImageView()
+                if !SettingsData.isLoadPreviewImage {
+                    imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+                }
                 imageView.clipsToBounds = true
                 
-                ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false) { image in
+                // タップで全画面表示
+                let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))
+                imageView.addGestureRecognizer(tapGesture)
+                imageView.isUserInteractionEnabled = true
+                
+                ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false, isPreview: true) { image in
                     imageView.image = image
                     cell.setNeedsLayout()
-                    
-                    // タップで全画面表示
-                    let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))
-                    imageView.addGestureRecognizer(tapGesture)
-                    imageView.isUserInteractionEnabled = true
                 }
                 cell.addSubview(imageView)
                 cell.imageViews?.append(imageView)
