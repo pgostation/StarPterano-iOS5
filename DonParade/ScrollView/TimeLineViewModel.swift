@@ -49,6 +49,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 // 前か後に付ければ良い
                 if date1 > date2 {
                     self.list = self.list + addList
+                    
+                    if self.list.count > 100000 {
+                        // 10万トゥートを超えると流石に削除する
+                        self.list.removeFirst(self.list.count - 100000)
+                    }
                 } else if date3 < date4 {
                     self.list = addList + self.list
                     
@@ -68,6 +73,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                                   animated: false)
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
                         }
+                    }
+                    
+                    if self.list.count > 100000 {
+                        // 10万トゥートを超えると流石に削除する
+                        self.list.removeLast(self.list.count - 100000)
                     }
                 } else {
                     // すでにあるデータを更新する
