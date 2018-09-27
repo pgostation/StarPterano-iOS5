@@ -49,6 +49,11 @@ final class ImageViewController: MyViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         view.addGestureRecognizer(tapGesture)
         
+        // ダブルタップジェスチャー
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction))
+        doubleTapGesture.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTapGesture)
+        
         // 回転ジェスチャー
         let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateAction(_:)))
         view.addGestureRecognizer(rotateGesture)
@@ -67,6 +72,17 @@ final class ImageViewController: MyViewController {
         view.closeButton.alpha = 1 - view.closeButton.alpha
         view.optionButton.alpha = 1 - view.optionButton.alpha
         view.rotateButton.alpha = 1 - view.rotateButton.alpha
+    }
+    
+    // ダブルタップで拡大/戻す
+    @objc func doubleTapAction() {
+        guard let view = self.view as? ImageView else { return }
+        
+        if view.imageScrollView.zoomScale == 1 {
+            view.imageScrollView.zoomScale = 2
+        } else {
+            view.imageScrollView.zoomScale = 1
+        }
     }
     
     // 画像を保存する
