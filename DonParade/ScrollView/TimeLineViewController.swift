@@ -141,6 +141,13 @@ final class TimeLineViewController: MyViewController {
         self.view?.addGestureRecognizer(pinchInGesture)
     }
     
+    // 表示時にストリーミングを開始する
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        (self.view as? TimeLineView)?.startStreaming()
+    }
+    
     // ユーザータイムライン/詳細トゥートを閉じる
     @objc func closeAction() {
         UIView.animate(withDuration: 0.3, animations: {

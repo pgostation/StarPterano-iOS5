@@ -17,6 +17,8 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     var isConnect = false
     
     init(url: URL, callback: @escaping (String?)->Void) {
+        self.isConnect = true
+        
         self.socket = WebSocket(url: url)
         
         self.callback = callback
@@ -25,6 +27,12 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
         
         self.socket.delegate = self
         self.socket.connect()
+    }
+    
+    deinit {
+        if self.isConnect {
+            self.socket.disconnect()
+        }
     }
     
     func websocketDidConnect(socket: WebSocketClient) {

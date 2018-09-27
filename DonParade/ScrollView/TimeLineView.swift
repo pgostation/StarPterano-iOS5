@@ -75,6 +75,10 @@ final class TimeLineView: UITableView {
             DispatchQueue.main.async {
                 self.analyzeStremingData(string: nil)
             }
+            
+            // ストリーミングが停止していれば再開
+            self.startStreaming()
+            
             return
         }
         
@@ -151,21 +155,23 @@ final class TimeLineView: UITableView {
             }
         }
         
-        // ストリーミングを受信
+        // ストリーミングが停止していれば再開
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            if self.streamingObject?.isConnect != true {
-                if self.type == .home {
-                    // ストリーミング開始
-                    self.streaming(streamingType: "user")
-                }
-                else if self.type == .local {
-                    // ストリーミング開始
-                    self.streaming(streamingType: "public:local")
-                }
-                else if self.type == .global {
-                    // ストリーミング開始
-                    self.streaming(streamingType: "public")
-                }
+            self.startStreaming()
+        }
+    }
+    
+    // ストリーミングを開始
+    func startStreaming() {
+        if self.streamingObject?.isConnect != true {
+            if self.type == .home {
+                self.streaming(streamingType: "user")
+            }
+            else if self.type == .local {
+                self.streaming(streamingType: "public:local")
+            }
+            else if self.type == .global {
+                self.streaming(streamingType: "public")
             }
         }
     }
