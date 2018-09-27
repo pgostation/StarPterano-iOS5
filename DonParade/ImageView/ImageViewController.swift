@@ -366,18 +366,18 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.zoomScale == 1 {
             // 横スワイプで左右移動
-            if scrollView.contentOffset.x > 50 {
+            if scrollView.contentOffset.x > 30 {
                 ImageViewController.instance?.leftAction()
             }
-            else if scrollView.contentOffset.x < -50 {
+            else if scrollView.contentOffset.x < -30 {
                 ImageViewController.instance?.rightAction()
             }
             
             // 上下スワイプで閉じる
-            if scrollView.contentOffset.y > 50 {
+            if scrollView.contentOffset.y > 30 {
                 ImageViewController.instance?.closeAction()
             }
-            else if scrollView.contentOffset.y < -50 {
+            else if scrollView.contentOffset.y < -30 {
                 ImageViewController.instance?.closeAction()
             }
         }
