@@ -20,6 +20,7 @@ final class TimeLineViewController: MyViewController {
         case localTag
         case globalTag
         case mensions // 単一トゥート(と会話)
+        case direct // ダイレクトメッセージ
         // 会話の場合、@の相手全てのTimelineを取得して表示する。まず過去、それから未来。関係ないのは非表示
     }
     
@@ -94,7 +95,7 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user || self.type == .mensions || self.type == .localTag || self.type == .globalTag {
+        if self.type == .user || self.type == .mensions || self.type == .localTag || self.type == .globalTag || self.type == .direct {
             let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
             self.view = view
             
@@ -102,6 +103,7 @@ final class TimeLineViewController: MyViewController {
             let closeButton = UIButton()
             closeButton.setTitle("×", for: .normal)
             closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
+            closeButton.titleLabel?.adjustsFontSizeToFitWidth = true
             closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
             closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
             closeButton.clipsToBounds = true

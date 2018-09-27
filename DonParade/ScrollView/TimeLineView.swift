@@ -113,6 +113,8 @@ final class TimeLineView: UITableView {
         case .mensions:
             guard let lastInReplyToId = model.getLastInReplyToId() else { return }
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
+        case .direct:
+            url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(sinceIdStr)")
         }
         
         guard let requestUrl = url else { return }
@@ -141,10 +143,12 @@ final class TimeLineView: UITableView {
                             DispatchQueue.main.sync {
                                 strongSelf.reloadData()
                                 
-                                if self?.type == .mensions && contentData.in_reply_to_id == nil {
-                                    return // ループ防止
+                                if self?.type == .mensions {
+                                    if contentData.in_reply_to_id == nil {
+                                        return // ループ防止
+                                    }
+                                    strongSelf.refresh()
                                 }
-                                strongSelf.refresh()
                             }
                         }
                     }
@@ -280,6 +284,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50\(maxIdStr)")
         case .mensions:
             return
+        case .direct:
+            url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(maxIdStr)")
         }
         
         guard let requestUrl = url else { return }
@@ -293,7 +299,13 @@ final class TimeLineView: UITableView {
                     
                     if let responseJson = responseJson {
                         TimeLineView.tableDispatchQueue.async {
+                            // ループ防止
+                            if responseJson.count == 0 {
+                                strongSelf.model.showAutoPagerizeCell = false
+                            }
+                            
                             AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: false)
+                            
                         }
                     }
                 } catch {

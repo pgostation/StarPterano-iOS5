@@ -104,7 +104,8 @@
 "DIALOG_REMOVE_ACCOUNT" = "アカウントを削除します";
 
 // 設定画面(マイページ)
-"SETTINGS_MYPAGE" = "マストドンのWebサイトへ";
+"SETTINGS_MASTODON_SITE" = "マストドンのWebサイトへ";
+"SETTINGS_MYPAGE" = "あなたのアカウントへ";
 "SETTINGS_LIST"= "リスト";
 "SETTINGS_DMLIST"= "DMリスト";
 "SETTINGS_FAVORITELIST"= "お気に入りリスト";

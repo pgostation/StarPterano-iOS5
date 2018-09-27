@@ -104,7 +104,8 @@
 "DIALOG_REMOVE_ACCOUNT" = "Remove account";
 
 // 設定画面(マイページ)
-"SETTINGS_MYPAGE" = "Your Mastodon page";
+"SETTINGS_MASTODON_SITE" = "Mastodon Web";
+"SETTINGS_MYPAGE" = "Go to your page";
 "SETTINGS_LIST"= "List";
 "SETTINGS_DMLIST"= "DM list";
 "SETTINGS_FAVORITELIST"= "Favorite list";

@@ -15,14 +15,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case account = "SETTINGS_ACCOUNT"
         case mypage = "SETTINGS_MASTODON"
         case application = "SETTINGS_APPLICATION"
-        case cache = "SETTINGS_CACHE"
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
                                             .account,
                                             .mypage,
                                             .application,
-                                            .cache,
                                             .other]
     
     // 1.アカウントの切り替え
@@ -36,18 +34,22 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     
     // 3.マストドン設定
     private enum MyPage: String {
+        case mastodonSite = "SETTINGS_MASTODON_SITE"
         case mypage = "SETTINGS_MYPAGE"
         //case list = "SETTINGS_LIST"
         case dm = "SETTINGS_DMLIST"
         case favorite = "SETTINGS_FAVORITELIST"
         case mute = "SETTINGS_MUTELIST"
         case block = "SETTINGS_BLOCKLIST"
+        case searchAccount = "SETTINGS_SEARCH_ACCOUNT"
     }
-    private let myPageList: [MyPage] = [.mypage,
+    private let myPageList: [MyPage] = [.mastodonSite,
+                                        .mypage,
                                         .dm,
                                         .favorite,
                                         .mute,
-                                        .block]
+                                        .block,
+                                        .searchAccount]
     
     // 4.アプリの設定
     private enum Application: String {
@@ -105,8 +107,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 3:
             return applicationList.count
         case 4:
-            return cacheList.count
-        case 5:
             return otherList.count
         default:
             return 0
@@ -207,9 +207,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 return cell
             }
         case 4:
-            title = I18n.get(cacheList[indexPath.row].rawValue)
-            cell.accessoryType = .disclosureIndicator
-        case 5:
             title = I18n.get(otherList[indexPath.row].rawValue)
             switch otherList[indexPath.row] {
             case .license:
@@ -254,7 +251,27 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
             }
         case 2:
-            break
+            switch myPageList[indexPath.row] {
+            case .mastodonSite:
+                guard let url = URL(string: "https://\(SettingsData.hostName ?? "")") else { return }
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+            case .mypage:
+                ShowMyAnyList.showMyPage(rootVc: SettingsViewController.instance!)
+            case .dm:
+                ShowMyAnyList.showDMList(rootVc: SettingsViewController.instance!)
+            case .favorite:
+                ShowMyAnyList.showFavoriteList(rootVc: SettingsViewController.instance!)
+            case .block:
+                ShowMyAnyList.showBlockList(rootVc: SettingsViewController.instance!)
+            case .mute:
+                ShowMyAnyList.showMuteList(rootVc: SettingsViewController.instance!)
+            case .searchAccount:
+                break
+            }
         case 3:
             switch applicationList[indexPath.row] {
             case .tootProtectDefault:
@@ -266,8 +283,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 break
             }
         case 4:
-            break
-        case 5:
             switch otherList[indexPath.row] {
             case .license:
                 guard let path = Bundle.main.path(forResource: "License", ofType: "text") else { return }

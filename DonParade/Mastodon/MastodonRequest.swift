@@ -15,6 +15,8 @@ final class MastodonRequest {
     
     // GETメソッド
     static func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        print("get \(url.path)")
+        
         var request: URLRequest = URLRequest(url: url)
         
         guard let accessToken = SettingsData.accessToken else { return }
@@ -27,6 +29,8 @@ final class MastodonRequest {
     
     // POSTメソッド
     static func post(url: URL, body: Dictionary<String, Any>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        print("post \(url.path)")
+        
         var request: URLRequest = URLRequest(url: url)
         
         guard let accessToken = SettingsData.accessToken else { return }
