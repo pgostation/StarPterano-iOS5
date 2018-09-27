@@ -68,6 +68,8 @@ final class TootView: UIView {
         
         self.addSubview(imageCheckView)
         
+        imageCheckView.isHidden = true
+        
         refresh()
         
         self.layoutSubviews()
@@ -161,8 +163,6 @@ final class TootView: UIView {
         //saveButton.setTitle("📄", for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
-        
-        imageCheckView.isHidden = true
     }
     
     override func layoutSubviews() {
