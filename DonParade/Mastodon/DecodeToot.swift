@@ -26,14 +26,18 @@ final class DecodeToot {
         
         // 改行
         text = text.replacingOccurrences(of: "</p><p>", with: "\n\n")
-        text = text.replacingOccurrences(of: "<br />", with: "\n")
-        text = text.replacingOccurrences(of: "<br>", with: "\n")
-        text = text.replacingOccurrences(of: "<span>", with: "")
-        text = text.replacingOccurrences(of: "<span class=\"\">", with: "")
-        text = text.replacingOccurrences(of: "<span class=\"invisible\">", with: "")
-        text = text.replacingOccurrences(of: "<span class=\"ellipsis\">", with: "")
-        text = text.replacingOccurrences(of: "<span class=\"h-card\">", with: "")
-        text = text.replacingOccurrences(of: "</span>", with: "")
+        if text.contains("<") {
+            text = text.replacingOccurrences(of: "<br />", with: "\n")
+            text = text.replacingOccurrences(of: "<br>", with: "\n")
+            if text.contains("<span") {
+                text = text.replacingOccurrences(of: "<span>", with: "")
+                text = text.replacingOccurrences(of: "<span class=\"\">", with: "")
+                text = text.replacingOccurrences(of: "<span class=\"invisible\">", with: "")
+                text = text.replacingOccurrences(of: "<span class=\"ellipsis\">", with: "")
+                text = text.replacingOccurrences(of: "<span class=\"h-card\">", with: "")
+                text = text.replacingOccurrences(of: "</span>", with: "")
+            }
+        }
         
         // リンク
         var linkList: [(String.Index, String, String)] = []

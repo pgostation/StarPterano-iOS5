@@ -259,6 +259,7 @@ final class TimeLineViewCell: UITableViewCell {
                 }
         }))
         
+        /*
         // 生データを表示
         alertController.addAction(UIAlertAction(
             title: "生データを表示",
@@ -267,7 +268,7 @@ final class TimeLineViewCell: UITableViewCell {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     Dialog.show(message: self.contentData)
                 }
-        }))
+        }))*/
         
         // キャンセル
         alertController.addAction(UIAlertAction(

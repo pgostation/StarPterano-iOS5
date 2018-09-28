@@ -105,7 +105,7 @@
 
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "マストドンのWebサイトへ";
-"SETTINGS_MYPAGE" = "あなたのアカウントへ";
+"SETTINGS_MYPAGE" = "自分のページへ";
 "SETTINGS_LIST"= "リスト";
 "SETTINGS_DMLIST"= "DMリスト";
 "SETTINGS_FAVORITELIST"= "お気に入りリスト";

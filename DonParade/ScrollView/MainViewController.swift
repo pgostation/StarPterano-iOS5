@@ -40,6 +40,9 @@ final class MainViewController: MyViewController {
         let ltlPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(gtlAction(_:)))
         view.ltlButton.addGestureRecognizer(ltlPressGesture)
         
+        let accountPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(accountPressAction(_:)))
+        view.accountButton.addGestureRecognizer(accountPressGesture)
+        
         // 起動時はTLを表示する
         tlAction(nil)
     }
@@ -161,6 +164,49 @@ final class MainViewController: MyViewController {
         }
         
         markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: false)
+    }
+    
+    // アカウントボタンの長押し
+    @objc func accountPressAction(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state != .began { return }
+        
+        let title = (SettingsData.hostName ?? "") + " - " + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
+        let alertController = UIAlertController(title: title,
+                                                message: nil,
+                                                preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        // DMを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_DMLIST"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                ShowMyAnyList.showDMList(rootVc: self)
+        }))
+        
+        // お気に入りを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_FAVORITELIST"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                ShowMyAnyList.showFavoriteList(rootVc: self)
+        }))
+        
+        // 自分のページを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_MYPAGE"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                ShowMyAnyList.showMyPage(rootVc: self)
+        }))
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertActionStyle.cancel,
+            handler: { _ in
+        }))
+        
+        UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
     }
     
     func swipeView(toRight: Bool) {
