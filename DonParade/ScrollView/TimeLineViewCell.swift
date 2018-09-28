@@ -417,10 +417,17 @@ final class TimeLineViewCell: UITableViewCell {
                                              width: self.spolerTextLabel?.frame.width ?? 0,
                                              height: self.spolerTextLabel?.frame.height ?? 0)
         
-        self.messageView?.frame = CGRect(x: nameLeft,
-                                         y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
-                                         width: self.messageView?.frame.width ?? 0,
-                                         height: self.messageView?.frame.height ?? 0)
+        if let messageView = self.messageView as? UILabel {
+            messageView.frame = CGRect(x: nameLeft,
+                                       y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
+                                       width: messageView.frame.width,
+                                       height: messageView.frame.height)
+        } else if let messageView = self.messageView as? UITextView {
+            messageView.frame = CGRect(x: nameLeft,
+                                       y: isMiniView == .superMini ? -9 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
+                                       width: messageView.frame.width,
+                                       height: messageView.frame.height)
+        }
         
         self.continueView?.frame = CGRect(x: screenBounds.width / 2 - 40 / 2,
                                           y: (self.messageView?.frame.maxY ?? 0) - 6,

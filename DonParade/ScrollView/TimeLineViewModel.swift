@@ -248,7 +248,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // プロパティ設定
         let messageView: UIView
-        if hasLink, SettingsData.isMiniView == .normal {
+        if hasLink/*, SettingsData.isMiniView == .normal*/ {
             let msgView = UITextView()
             msgView.attributedText = attributedText
             msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
