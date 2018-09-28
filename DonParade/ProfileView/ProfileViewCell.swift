@@ -58,6 +58,13 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         if !isTemp {
             // フォロー関係かどうかを取得
             getRelationship()
+        } else {
+            // トゥート数0の人の場合、アクションボタンが表示されない問題対策
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                if self?.actionButton.alpha == 0 {
+                    self?.getRelationship()
+                }
+            }
         }
         
         // ヘッダ画像
