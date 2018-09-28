@@ -26,7 +26,7 @@ final class SettingsData {
     // 現在選択中のアクセストークン
     static var accessToken: String? {
         get {
-            if let newValue = defaults.string(forKey: "accessToken") { //#### てきとう
+            if let newValue = defaults.string(forKey: "accessToken") {
                 if let hostName = self.hostName {
                     for account in self.accountList {
                         if account.0 == hostName && account.1 == newValue {

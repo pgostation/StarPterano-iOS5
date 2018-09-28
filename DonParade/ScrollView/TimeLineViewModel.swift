@@ -128,6 +128,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    // トゥートの削除
+    func delete(tableView: UITableView, deleteId: String) {
+        DispatchQueue.main.async {
+            for (index, data) in self.list.enumerated() {
+                if index >= 500 { break }
+                
+                if deleteId == data.id {
+                    self.list.remove(at: index)
+                    tableView.reloadData()
+                    break
+                }
+            }
+        }
+    }
+    
     // セルの数
     private var isFirstView = true
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

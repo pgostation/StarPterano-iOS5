@@ -240,8 +240,18 @@ final class TimeLineView: UITableView {
                     // 通知ボタンにマークをつけるだけ
                     MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
                 case "delete":
-                    // waitingStatusListも考慮すること ####
-                    break
+                    if let deleteId = payload as? String {
+                        // waitingStatusListからの削除
+                        for (index, data) in waitingStatusList.enumerated() {
+                            if deleteId == data.id {
+                                waitingStatusList.remove(at: index)
+                                return
+                            }
+                        }
+                        
+                        // 表示中のリストからの削除
+                        self.model.delete(tableView: self, deleteId: deleteId)
+                    }
                 case "filters_changed":
                     break
                 default:
