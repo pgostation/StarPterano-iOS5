@@ -135,6 +135,10 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
             if let error = error {
                 Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\n" + error.localizedDescription)
+            } else {
+                TootView.savedText = nil
+                TootView.savedSpoilerText = nil
+                TootView.savedImages = []
             }
         }
     }

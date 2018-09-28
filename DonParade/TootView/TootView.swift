@@ -9,6 +9,13 @@
 import UIKit
 
 final class TootView: UIView {
+    // 下書き保存
+    static var savedText: String?
+    static var savedSpoilerText: String?
+    static var savedImages: [URL] = []
+    
+    //----
+    
     private var keyBoardHeight: CGFloat = 0
     var protectMode = SettingsData.protectMode
     
@@ -34,6 +41,11 @@ final class TootView: UIView {
     
     init() {
         super.init(frame: UIScreen.main.bounds)
+        
+        // 下書きを復帰
+        self.textField.text = TootView.savedText
+        self.spoilerTextField.text = TootView.savedSpoilerText
+        self.imageCheckView.urls = TootView.savedImages
         
         // キーボードの高さを監視
         NotificationCenter.default.addObserver(
@@ -77,6 +89,13 @@ final class TootView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        // 閉じる時に下書きに保存
+        TootView.savedText = self.textField.text
+        TootView.savedSpoilerText = self.spoilerTextField.text
+        TootView.savedImages = self.imageCheckView.urls
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
