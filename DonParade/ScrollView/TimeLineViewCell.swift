@@ -246,6 +246,26 @@ final class TimeLineViewCell: UITableViewCell {
             }))
         }
         
+        // ペーストボードにコピー
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_COPY_TOOT"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                let spoilerText = self.spolerTextLabel?.text ?? ""
+                let text = (self.messageView as? UILabel)?.text ?? (self.messageView as? UITextView)?.text ?? ""
+                
+                let finalText: String
+                if spoilerText != "" && text != "" {
+                    finalText = spoilerText + "\n" + text
+                } else if spoilerText != "" {
+                    finalText = spoilerText
+                } else {
+                    finalText = text
+                }
+                
+                UIPasteboard.general.string = finalText
+        }))
+        
         // Safariで開く
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_OPEN_WITH_SAFARI"),

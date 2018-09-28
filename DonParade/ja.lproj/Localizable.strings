@@ -26,11 +26,14 @@
 "REFRESH_TIMELINE" = "更新";
 "BOOSTED_BY_%@" = "🔁 %@";
 "THIS_TOOT_IS_DIRECT_MESSAGE" = "ダイレクトメッセージ";
+"BUTTON_CANCEL" = "キャンセル";
+"NOTIFY_COUNT_%D" = "新着: %d件";
+
+// 詳細アクション
 "ACTION_OPEN_WITH_SAFARI" = "Safariで開く";
 "ACTION_DELETE_TOOT" = "このトゥートを削除";
 "ALERT_DELETE_TOOT_FAILURE" = "トゥートの削除に失敗しました";
-"BUTTON_CANCEL" = "キャンセル";
-"NOTIFY_COUNT_%D" = "新着: %d件";
+"ACTION_COPY_TOOT" = "トゥートをコピー";
 
 // 何分前
 "DATETIME_NOW" = "今";

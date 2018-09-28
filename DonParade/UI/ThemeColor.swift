@@ -38,6 +38,10 @@ final class ThemeColor {
     static var mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
     static var toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
     
+    // DM、プライベート警告バー
+    static var directBar = UIColor.white
+    static var privateBar = UIColor.white
+    
     static func change() {
         if SettingsData.isDarkMode {
             // ダークモード
@@ -63,6 +67,9 @@ final class ThemeColor {
             mentionedBgColor = UIColor(red: 0.3, green: 0.33, blue: 0.12, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.24, green: 0.21, blue: 0.16, alpha: 1)
             toMentionBgColor = UIColor(red: 0.15, green: 0.20, blue: 0.30, alpha: 1)
+            
+            directBar = UIColor(red: 0.6, green: 0, blue: 0, alpha: 1)
+            privateBar = UIColor(red: 0.4, green: 0.4, blue: 0, alpha: 1)
         } else {
             // 通常モード
             viewBgColor = UIColor.white
@@ -87,6 +94,9 @@ final class ThemeColor {
             mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
             toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
+            
+            directBar = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
+            privateBar = UIColor(red: 1, green: 1, blue: 0, alpha: 1)
         }
         
         if !SettingsData.useColoring {

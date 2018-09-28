@@ -390,6 +390,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.spolerTextLabel!)
         }
         
+        if data.visibility == "direct" || data.visibility == "private" {
+            // ダイレクトメッセージは赤、プライベートメッセージはオレンジ
+            let color = (data.visibility == "direct") ? ThemeColor.directBar: ThemeColor.privateBar
+            cell.DMBarLeft = UIView()
+            cell.DMBarLeft?.backgroundColor = color
+            cell.addSubview(cell.DMBarLeft!)
+            cell.DMBarRight = UIView()
+            cell.DMBarRight?.backgroundColor = color
+            cell.addSubview(cell.DMBarRight!)
+        }
+        
         // 詳細表示の場合
         if self.selectedRow == indexPath.row {
             cell.showDetail = true
@@ -431,14 +442,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.boostButton = UIButton()
             if data.visibility == "direct" || data.visibility == "private" {
                 cell.boostButton?.setTitle("🔐", for: .normal)
-                if data.visibility == "direct" {
-                    cell.DMBarLeft = UIView()
-                    cell.DMBarLeft?.backgroundColor = UIColor.red
-                    cell.addSubview(cell.DMBarLeft!)
-                    cell.DMBarRight = UIView()
-                    cell.DMBarRight?.backgroundColor = UIColor.red
-                    cell.addSubview(cell.DMBarRight!)
-                }
             } else {
                 cell.boostButton?.setTitle("⇄", for: .normal)
                 if data.reblogged == 1 {
