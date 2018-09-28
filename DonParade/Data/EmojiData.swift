@@ -14,7 +14,24 @@ final class EmojiData {
     private static var cacheData: [String: [EmojiStruct]] = [:]
     private static var waitingList: [String] = []
     
-    static func getEmojiCache(host: String) -> [EmojiStruct] {
+    static func getEmojiCache(host: String, showHiddenEmoji: Bool) -> [EmojiStruct] {
+        var list = getEmojiCacheAll(host: host)
+        
+        if showHiddenEmoji {
+            return list
+        }
+        
+        // 隠し絵文字を省く
+        for (index, data) in list.enumerated().reversed() {
+            if data.visible_in_picker != 1 {
+                list.remove(at: index)
+            }
+        }
+        
+        return list
+    }
+    
+    private static func getEmojiCacheAll(host: String) -> [EmojiStruct] {
         // メモリキャッシュにある場合それを返す
         if let list = cacheData[host] {
             return list

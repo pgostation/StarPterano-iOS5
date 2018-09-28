@@ -116,12 +116,26 @@ final class EmojiKeyboard: UIView {
 }
 
 private final class EmojiInputScrollView: UIScrollView {
-    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!)
+    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
     private var emojiButtons: [EmojiButton] = []
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         
+        if self.emojiList.count > 0 {
+            addEmojis()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.addEmojis()
+            }
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addEmojis() {
         // 絵文字ボタンの追加
         for emoji in self.emojiList {
             let button = EmojiButton(key: emoji.short_code ?? "")
@@ -134,10 +148,6 @@ private final class EmojiInputScrollView: UIScrollView {
             
             emojiButtons.append(button)
         }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // テキスト入力欄にテキストを追加

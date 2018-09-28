@@ -30,9 +30,7 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     }
     
     deinit {
-        if self.isConnect {
-            self.socket.disconnect()
-        }
+        print("websocket is disposed")
     }
     
     func websocketDidConnect(socket: WebSocketClient) {
@@ -41,7 +39,7 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("websocket is disconnected. error=\(error?.localizedDescription)")
+        print("websocket is disconnected. error=\(error?.localizedDescription ?? "")")
         self.isConnect = false
     }
     
@@ -51,5 +49,11 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         //
+    }
+    
+    func disconnect() {
+        if self.isConnect {
+            self.socket.disconnect()
+        }
     }
 }

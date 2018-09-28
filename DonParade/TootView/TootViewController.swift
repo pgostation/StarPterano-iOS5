@@ -20,7 +20,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         TootViewController.instance = self
         TootViewController.isShown = true
         
-        _ = EmojiData.getEmojiCache(host: SettingsData.hostName!)
+        _ = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
     }
     
     deinit {
@@ -248,7 +248,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         if textView.inputView is EmojiKeyboard {
             var emojis: [[String: Any]] = []
             
-            for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "") {
+            for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
                 let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
                                            "static_url": emoji.static_url ?? ""]
                 emojis.append(dict)
