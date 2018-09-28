@@ -47,14 +47,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 self.list = addList
             } else if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at, let date3 = self.list.last?.created_at, let date4 = addList.last?.created_at {
                 // 前か後に付ければ良い
-                if date2 > date1 {
+                if date1 > date4 {
                     self.list = self.list + addList
                     
                     if self.list.count > 100000 {
                         // 10万トゥートを超えると流石に削除する
                         self.list.removeFirst(self.list.count - 100000)
                     }
-                } else if date3 < date4 {
+                } else if date2 > date3 {
                     self.list = addList + self.list
                     
                     // 選択位置がずれないようにする
