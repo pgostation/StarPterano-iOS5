@@ -115,6 +115,7 @@
 // 設定画面(アプリ設定)
 "SETTINGS_TOOT_PROTECT_DEFAULT" = "公開範囲";
 "SETTINGS_DARKMODE" = "ダークテーマ";
+"SETTINGS_CELLCOLORING" = "セルに色をつける";
 "SETTINGS_FONTSIZE" = "フォントサイズ";
 "SETTINGS_TAP_TOOT" = "タップで詳細画面に移動";
 "SETTINGS_STREAMING" = "ストリーミング";

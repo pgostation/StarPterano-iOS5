@@ -88,5 +88,13 @@ final class ThemeColor {
             mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
             toMentionBgColor = UIColor(red: 0.85, green: 0.90, blue: 1.00, alpha: 1)
         }
+        
+        if !SettingsData.useColoring {
+            selectedBgColor = cellBgColor
+            sameAccountBgColor = cellBgColor
+            mentionedBgColor = cellBgColor
+            mentionedSameBgColor = cellBgColor
+            toMentionBgColor = cellBgColor
+        }
     }
 }

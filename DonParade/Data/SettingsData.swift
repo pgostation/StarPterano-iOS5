@@ -289,4 +289,29 @@ final class SettingsData {
             defaults.set(newValue, forKey: "iconSize")
         }
     }
+    
+    // セルのカラー化を行うかどうか
+    private static var _useColoring: Bool?
+    static var useColoring: Bool {
+        get {
+            if let cache = self._useColoring {
+                return cache
+            }
+            if let string = defaults.string(forKey: "useColoring") {
+                let value = (string == "ON")
+                self._useColoring = value
+                return value
+            }
+            self._useColoring = true
+            return true
+        }
+        set(newValue) {
+            self._useColoring = newValue
+            if newValue {
+                defaults.removeObject(forKey: "useColoring")
+            } else {
+                defaults.set("OFF", forKey: "useColoring")
+            }
+        }
+    }
 }

@@ -55,6 +55,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private enum Application: String {
         case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
         case darkMode = "SETTINGS_DARKMODE"
+        case coloring = "SETTINGS_CELLCOLORING"
         case fontSize = "SETTINGS_FONTSIZE"
         case streaming = "SETTINGS_STREAMING"
         case iconSize = "SETTINGS_ICONSIZE"
@@ -63,6 +64,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
+                                                  .coloring,
                                                   .fontSize,
                                                   .iconSize,
                                                   .loadPreviewImage,
@@ -158,6 +160,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.isDarkMode = isOn
+                }
+                return cell
+            case .coloring:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.useColoring)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.useColoring = isOn
                 }
                 return cell
             case .fontSize:
