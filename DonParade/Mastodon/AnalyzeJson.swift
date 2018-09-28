@@ -85,7 +85,14 @@ final class AnalyzeJson {
                 mentions?.append(data)
             }
         }
-        let application = json["application"] as? [String: Any]
+        
+        let application: [String: Any]?
+        if reblog_acct == nil {
+            application = json["application"] as? [String: Any]
+        } else {
+            application = reblog?["application"] as? [String: Any]
+        }
+        
         let content = json["content"] as? String
         let created_at: String?
         if reblog_acct == nil {
@@ -101,16 +108,53 @@ final class AnalyzeJson {
             emojis = reblog?["emojis"] as? [[String: Any]]
         }
         
-        let favourited = json["favourited"] as? Int
-        let favourites_count = json["favourites_count"] as? Int
+        let favourited: Int?
+        if reblog_acct == nil {
+            favourited = json["favourited"] as? Int
+        } else {
+            favourited = reblog?["favourited"] as? Int
+        }
+        
+        let favourites_count: Int?
+        if reblog_acct == nil {
+            favourites_count = json["favourites_count"] as? Int
+        } else {
+            favourites_count = reblog?["favourites_count"] as? Int
+        }
+        
         let id = json["id"] as? String
         let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
-        let in_reply_to_id = json["in_reply_to_id"] as? String
+        
+        let in_reply_to_id: String?
+        if reblog_acct == nil {
+            in_reply_to_id = json["in_reply_to_id"] as? String
+        } else {
+            in_reply_to_id = reblog?["in_reply_to_id"] as? String
+        }
+        
         let language = json["language"] as? String
         let muted = json["muted"] as? Int
-        let reblogged = json["reblogged"] as? Int
-        let reblogs_count = json["reblogs_count"] as? Int
-        let replies_count = json["replies_count"] as? Int
+        
+        let reblogged: Int?
+        if reblog_acct == nil {
+            reblogged = json["reblogged"] as? Int
+        } else {
+            reblogged = reblog?["reblogged"] as? Int
+        }
+        
+        let reblogs_count: Int?
+        if reblog_acct == nil {
+            reblogs_count = json["reblogs_count"] as? Int
+        } else {
+            reblogs_count = reblog?["reblogs_count"] as? Int
+        }
+        
+        let replies_count: Int?
+        if reblog_acct == nil {
+            replies_count = json["replies_count"] as? Int
+        } else {
+            replies_count = reblog?["replies_count"] as? Int
+        }
         
         let sensitive: Int?
         if reblog_acct == nil {
@@ -128,8 +172,20 @@ final class AnalyzeJson {
         
         let tags = json["tags"] as? [String]
         let uri = json["uri"] as? String
-        let url = json["url"] as? String
-        let visibility = json["visibility"] as? String
+        
+        let url: String?
+        if reblog_acct == nil {
+            url = json["url"] as? String
+        } else {
+            url = reblog?["url"] as? String
+        }
+        
+        let visibility: String?
+        if reblog_acct == nil {
+            visibility = json["visibility"] as? String
+        } else {
+            visibility = reblog?["visibility"] as? String
+        }
         
         let data = ContentData(accountId: acct,
                                application: application,

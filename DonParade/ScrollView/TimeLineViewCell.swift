@@ -44,6 +44,12 @@ final class TimeLineViewCell: UITableViewCell {
     var detailButton: UIButton?
     var applicationLabel: UILabel?
     
+    // お気に入りした人やブーストした人の名前表示
+    var rebologerLabels: [UILabel] = []
+    var rebologerList: [String]?
+    var favoriterLabels: [UILabel] = []
+    var favoriterList: [String]?
+    
     weak var tableView: TimeLineView?
     var indexPath: IndexPath?
     var date: Date
@@ -480,7 +486,7 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         if self.replyButton != nil {
-            let top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews?.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+            var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews?.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
             self.replyButton?.frame = CGRect(x: 50,
                                              y: top,
@@ -522,6 +528,25 @@ final class TimeLineViewCell: UITableViewCell {
                                                   y: top - 5,
                                                   width: applicationLabelWidth,
                                                   height: 20)
+            
+            top += 48
+            for label in self.rebologerLabels {
+                label.frame = CGRect(x: 50,
+                                     y: top,
+                                     width: screenBounds.width - 50,
+                                     height: SettingsData.fontSize)
+                
+                top += SettingsData.fontSize + 4
+            }
+            
+            for label in self.favoriterLabels {
+                label.frame = CGRect(x: 50,
+                                     y: top,
+                                     width: screenBounds.width - 50,
+                                     height: SettingsData.fontSize)
+                
+                top += SettingsData.fontSize + 4
+            }
         }
     }
 }

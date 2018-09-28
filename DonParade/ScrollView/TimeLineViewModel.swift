@@ -193,7 +193,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if index == list.count {
             // AutoPagerize用セルの高さ
-            return 100
+            return UIUtils.isIphoneX ? 150 : 100
         }
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
@@ -205,14 +205,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             return 10 + SettingsData.fontSize
         }
         
+        // メッセージのビューを一度作り、高さを求める
+        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
+        
         // セルを拡大表示するかどうか
         var detailOffset: CGFloat = isSelected ? 40 : 0
         if isDetailTimeline && indexPath.row == selectedRow { // 詳細拡大表示
             detailOffset += 20
-        }
             
-        // メッセージのビューを一度作り、高さを求める
-        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
+            // ブーストした人の名前を表示
+            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+                detailOffset += (SettingsData.fontSize + 4) * CGFloat(min(10, reblogs_count)) + 4
+            }
+            // お気に入りした人の名前を表示
+            if let favourites_count = data.favourites_count, favourites_count > 0 {
+                detailOffset += (SettingsData.fontSize + 4) * CGFloat(min(10, favourites_count)) + 4
+            }
+        }
         
         if data.sensitive == 1 || data.spoiler_text != "" { // もっと見る
             detailOffset += 20
@@ -622,6 +631,74 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.boostView!)
         }
         
+        // お気に入りした人やブーストした人の名前表示
+        if isDetailTimeline && indexPath.row == selectedRow { // 詳細拡大表示
+            // ブーストした人の名前を表示
+            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+                for _ in 0..<min(10, reblogs_count) {
+                    let label = UILabel()
+                    cell.rebologerLabels.append(label)
+                    label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                    label.textColor = ThemeColor.idColor
+                    cell.addSubview(label)
+                }
+                
+                if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/reblogged_by?limit=10") {
+                    try? MastodonRequest.get(url: url) { (data, response, error) in
+                        if cell.id != id { return }
+                        if let data = data {
+                            do {
+                                if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
+                                    DispatchQueue.main.async {
+                                        var count = 0
+                                        for json in responseJson {
+                                            let accountData = AnalyzeJson.analyzeAccountJson(account: json)
+                                            if count >= cell.rebologerLabels.count { break }
+                                            let label = cell.rebologerLabels[count]
+                                            label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                            count += 1
+                                        }
+                                    }
+                                }
+                            } catch { }
+                        }
+                    }
+                }
+            }
+            // お気に入りした人の名前を表示
+            if let favourites_count = data.favourites_count, favourites_count > 0 {
+                for _ in 0..<min(10, favourites_count) {
+                    let label = UILabel()
+                    cell.favoriterLabels.append(label)
+                    label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                    label.textColor = ThemeColor.idColor
+                    cell.addSubview(label)
+                }
+                
+                if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/favourited_by?limit=10") {
+                    try? MastodonRequest.get(url: url) { (data, response, error) in
+                        if cell.id != id { return }
+                        if let data = data {
+                            do {
+                                if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
+                                    DispatchQueue.main.async {
+                                        var count = 0
+                                        for json in responseJson {
+                                            let accountData = AnalyzeJson.analyzeAccountJson(account: json)
+                                            if count >= cell.favoriterLabels.count { break }
+                                            let label = cell.favoriterLabels[count]
+                                            label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                            count += 1
+                                        }
+                                    }
+                                }
+                            } catch { }
+                        }
+                    }
+                }
+            }
+        }
+        
         return cell
     }
     
@@ -703,6 +780,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.DMBarLeft = nil
         cell.DMBarRight?.removeFromSuperview()
         cell.DMBarRight = nil
+        for label in cell.rebologerLabels {
+            label.removeFromSuperview()
+        }
+        cell.rebologerLabels = []
+        cell.rebologerList = nil
+        for label in cell.favoriterLabels {
+            label.removeFromSuperview()
+        }
+        cell.favoriterLabels = []
+        cell.favoriterList = nil
         for imageView in cell.imageViews ?? [] {
             imageView.removeFromSuperview()
         }
