@@ -251,8 +251,21 @@ final class TimeLineViewCell: UITableViewCell {
             title: I18n.get("ACTION_COPY_TOOT"),
             style: UIAlertActionStyle.default,
             handler: { _ in
-                let spoilerText = self.spolerTextLabel?.text ?? ""
-                let text = (self.messageView as? UILabel)?.text ?? (self.messageView as? UITextView)?.text ?? ""
+                let spoilerText: String
+                if let attrtext = self.spolerTextLabel?.attributedText {
+                    spoilerText = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
+                } else {
+                    spoilerText = ""
+                }
+                
+                let text: String
+                if let label = self.messageView as? UILabel, let attrtext = label.attributedText {
+                    text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
+                } else if let textView = self.messageView as? UITextView, let attrtext = textView.attributedText {
+                    text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: textView.textStorage)
+                } else {
+                    text = ""
+                }
                 
                 let finalText: String
                 if spoilerText != "" && text != "" {
