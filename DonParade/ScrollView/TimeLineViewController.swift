@@ -95,7 +95,7 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user || self.type == .mensions || self.type == .localTag || self.type == .globalTag || self.type == .direct {
+        if self.type == .user || self.type == .mensions || self.type == .localTag || self.type == .globalTag || self.type == .direct || self.type == .favorites {
             let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
             self.view = view
             

@@ -14,8 +14,18 @@ final class MastodonRequest {
     static let session = URLSession.shared
     
     // GETメソッド
+    private static var lastRequestStr = "" // GETメソッドをループして呼ぶのを防ぐ
+    private static var lastReqestDate = Date()
     static func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        if lastRequestStr == url.path && Date().timeIntervalSince(lastReqestDate) <= 1 {
+            print("1秒以内に同一URLへのGETがありました \(url.path)")
+            return
+        }
+        
         print("get \(url.path)")
+        
+        lastRequestStr = url.path
+        lastReqestDate = Date()
         
         var request: URLRequest = URLRequest(url: url)
         

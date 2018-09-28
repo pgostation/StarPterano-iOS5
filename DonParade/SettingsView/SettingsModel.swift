@@ -46,10 +46,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private let myPageList: [MyPage] = [.mastodonSite,
                                         .mypage,
                                         .dm,
-                                        .favorite,
-                                        .mute,
-                                        .block,
-                                        .searchAccount]
+                                        .favorite]
+                                        //.mute,
+                                        //.block,
+                                        //.searchAccount]
     
     // 4.アプリの設定
     private enum Application: String {
@@ -64,10 +64,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
                                                   .fontSize,
-                                                  .streaming,
                                                   .iconSize,
                                                   .loadPreviewImage,
-                                                  .nameTappable]
+                                                  .nameTappable,
+                                                  .streaming]
     
     // 5.キャッシュ
     private enum Cache: String {
