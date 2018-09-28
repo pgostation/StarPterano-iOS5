@@ -66,6 +66,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         if indexPath.row >= list.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
+            cell.selectionStyle = .none
             return cell
         }
         

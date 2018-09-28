@@ -306,6 +306,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
             let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
+            cell.selectionStyle = .none
             return cell
         }
         
