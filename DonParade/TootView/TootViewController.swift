@@ -12,7 +12,6 @@ import Photos
 final class TootViewController: UIViewController, UITextViewDelegate {
     static var isShown = false // 現在表示中かどうか
     static weak var instance: TootViewController?
-    static var inReplyToId: String? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -25,7 +24,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     deinit {
         TootViewController.isShown = false
-        TootViewController.inReplyToId = nil
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -124,9 +122,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         if nsfw {
             bodyJson.updateValue(1, forKey: "sensitive")
         }
-        if let inReplyToId = TootViewController.inReplyToId {
+        if let inReplyToId = TootView.inReplyToId {
             bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
-            TootViewController.inReplyToId = nil
         }
         for data in addJson {
             bodyJson.updateValue(data.value, forKey: data.key)
@@ -139,6 +136,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 TootView.savedText = nil
                 TootView.savedSpoilerText = nil
                 TootView.savedImages = []
+                TootView.inReplyToId = nil
             }
         }
     }
@@ -244,7 +242,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         self.removeFromParentViewController()
         
         TootViewController.isShown = false
-        TootViewController.inReplyToId = nil
     }
     
     // テキストビューの高さを変化させる
@@ -266,7 +263,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         // テキストを全削除するとin_reply_toをクリアする
         if textView.text == nil || textView.text!.count == 0 {
-            TootViewController.inReplyToId = nil
+            TootView.inReplyToId = nil
         }
         
         DispatchQueue.main.async {

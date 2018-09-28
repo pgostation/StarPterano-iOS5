@@ -13,6 +13,7 @@ final class TootView: UIView {
     static var savedText: String?
     static var savedSpoilerText: String?
     static var savedImages: [URL] = []
+    static var inReplyToId: String? = nil
     
     //----
     
