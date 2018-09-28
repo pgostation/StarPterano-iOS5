@@ -292,7 +292,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if index < 0 {
                     // プロフィール表示用セル
                     let accountData = timelineView.accountList[timelineView.option ?? ""]
-                    let cell = ProfileViewCell(accountData: accountData, isTemp: false)
+                    let isTemp = (self.list.count == 0)
+                    let cell = ProfileViewCell(accountData: accountData, isTemp: isTemp)
                     cell.timelineView = tableView as? TimeLineView
                     return cell
                 }

@@ -48,8 +48,6 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     //  フォローしたり、アンフォローしたり、ブロックしたり、ミュートしたり、リストに入れたり、ブラウザで開いたりする
     let actionButton = UIButton()
     
-    private static var lastRequestDate = Date()
-    
     init(accountData: AnalyzeJson.AccountData?, isTemp: Bool) {
         super.init(style: .default, reuseIdentifier: nil)
         
@@ -57,9 +55,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         self.uri = accountData?.acct ?? ""
         self.urlStr = accountData?.url ?? ""
         
-        if !isTemp && Date().timeIntervalSince(ProfileViewCell.lastRequestDate) >= 2 {
-            ProfileViewCell.lastRequestDate = Date()
-            
+        if !isTemp {
             // フォロー関係かどうかを取得
             getRelationship()
         }

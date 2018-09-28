@@ -197,7 +197,7 @@ final class TimeLineViewCell: UITableViewCell {
             Dialog.show(message: I18n.get("ALERT_TEXT_EXISTS"))
         } else {
             // 返信先を設定
-            TootViewController.inReplyToId = self.id
+            TootView.inReplyToId = self.id
             
             // トゥート画面を開いていなければ開く
             if !TootViewController.isShown {
