@@ -47,6 +47,10 @@ final class ImageCache {
                                 memCache.updateValue(smallImage, forKey: urlStr)
                             }
                             callback(image)
+                            
+                            if memCache.count >= 2000 { // メモリの使いすぎを防ぐ
+                                memCache = [:]
+                            }
                         }
                     }
                 }
@@ -84,6 +88,10 @@ final class ImageCache {
                         }
                         
                         waitingDict.removeValue(forKey: urlStr)
+                        
+                        if memCache.count >= 2000 { // メモリの使いすぎを防ぐ
+                            memCache = [:]
+                        }
                     }
                     
                     // ストレージにキャッシュする
