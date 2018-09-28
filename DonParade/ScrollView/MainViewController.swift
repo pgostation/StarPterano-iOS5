@@ -52,6 +52,14 @@ final class MainViewController: MyViewController {
     
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
+        if let oldViewController = self.timelineViewController {
+            if oldViewController.type == .home {
+                // 一番上までスクロール
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                return
+            }
+        }
+        
         // 前のビューを外す
         removeOldView()
         
@@ -80,6 +88,14 @@ final class MainViewController: MyViewController {
     
     // LTLへの切り替え
     @objc func ltlAction(_ sender: UIButton?) {
+        if let oldViewController = self.timelineViewController {
+            if oldViewController.type == .local {
+                // 一番上までスクロール
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                return
+            }
+        }
+        
         // 前のビューを外す
         removeOldView()
         
@@ -109,6 +125,14 @@ final class MainViewController: MyViewController {
     // 長押しで連合タイムラインへ移動
     @objc func gtlAction(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state != .began { return }
+        
+        if let oldViewController = self.timelineViewController {
+            if oldViewController.type == .global {
+                // 一番上までスクロール
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                return
+            }
+        }
         
         // 前のビューを外す
         removeOldView()
