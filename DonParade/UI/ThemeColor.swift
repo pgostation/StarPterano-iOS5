@@ -22,6 +22,7 @@ final class ThemeColor {
     static var nameColor = UIColor.white
     static var idColor = UIColor.white
     static var dateColor = UIColor.white
+    static var linkTextColor = UIColor.blue
     
     // 各種ボタンの色
     static var detailButtonsColor = UIColor.white
@@ -54,6 +55,7 @@ final class ThemeColor {
             nameColor = UIColor(red: 0.5, green: 0.8, blue: 0.3, alpha: 1)
             idColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1)
             dateColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+            linkTextColor = UIColor(red: 0.3, green: 0.5, blue: 1, alpha: 1)
             
             detailButtonsColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
             detailButtonsHiliteColor = UIColor(red: 0.5, green: 1.0, blue: 0.6, alpha: 1)
@@ -81,6 +83,7 @@ final class ThemeColor {
             nameColor = UIColor(red: 0.3, green: 0.7, blue: 0.1, alpha: 1)
             idColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
             dateColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+            linkTextColor = UIColor.blue
             
             detailButtonsColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             detailButtonsHiliteColor = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1)

@@ -44,6 +44,7 @@ final class NotificationTableCell: UITableViewCell {
         self.addSubview(dateLabel)
         self.addSubview(notificationLabel)
         self.addSubview(statusLabel)
+        self.layer.addSublayer(self.lineLayer)
         
         setProperties()
     }
@@ -94,13 +95,6 @@ final class NotificationTableCell: UITableViewCell {
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
         
-        // addする
-        self.addSubview(self.iconView)
-        self.addSubview(self.idLabel)
-        self.addSubview(self.dateLabel)
-        self.addSubview(self.nameLabel)
-        self.layer.addSublayer(self.lineLayer)
-        
         // タイマーで5秒ごとに時刻を更新
         if #available(iOS 10.0, *) {
             self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [weak self] timer in
@@ -116,6 +110,12 @@ final class NotificationTableCell: UITableViewCell {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
         self.iconView.addGestureRecognizer(tapGesture)
         self.iconView.isUserInteractionEnabled = true
+        
+        if SettingsData.isNameTappable {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
+            self.nameLabel.addGestureRecognizer(tapGesture)
+            self.nameLabel.isUserInteractionEnabled = true
+        }
         
         // アイコンの長押しジェスチャー
         let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressAccountAction(_:)))

@@ -251,6 +251,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if hasLink, SettingsData.isMiniView == .normal {
             let msgView = UITextView()
             msgView.attributedText = attributedText
+            msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
             if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
                 msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
             } else {

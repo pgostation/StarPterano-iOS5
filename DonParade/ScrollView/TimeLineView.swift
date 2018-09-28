@@ -32,7 +32,7 @@ final class TimeLineView: UITableView {
         self.dataSource = model
         
         self.backgroundColor = ThemeColor.viewBgColor
-        self.separatorColor = UIColor.clear
+        self.separatorStyle = .none
         
         if type != .mensions {
             // 引っ張って更新するやつを追加

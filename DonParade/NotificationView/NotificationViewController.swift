@@ -136,6 +136,8 @@ private final class NotificationTableView: UITableView {
         
         self.delegate = model
         self.dataSource = model
+        
+        self.separatorStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {

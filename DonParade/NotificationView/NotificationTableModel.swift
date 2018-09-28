@@ -82,7 +82,9 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         cell.accountData = account
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
-            cell.iconView.image = image
+            if cell.id == id {
+                cell.iconView.image = image
+            }
         }
         
         cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {

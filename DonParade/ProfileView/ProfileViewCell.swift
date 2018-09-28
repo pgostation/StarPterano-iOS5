@@ -90,6 +90,15 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         self.addSubview(actionButton)
         
         setProperties(data: accountData)
+        
+        // タップジェスチャー
+        let followingTapGesture = UITapGestureRecognizer(target: self, action: #selector(followingTapAction))
+        followingCountLabel.addGestureRecognizer(followingTapGesture)
+        followingCountLabel.isUserInteractionEnabled = true
+        
+        let followersTapGesture = UITapGestureRecognizer(target: self, action: #selector(followersTapAction))
+        followerCountLabel.addGestureRecognizer(followersTapGesture)
+        followerCountLabel.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -157,6 +166,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         noteLabel.delegate = self
         noteLabel.attributedText = DecodeToot.decodeContentFast(content: data.note, emojis: data.emojis, callback: nil).0
         noteLabel.textColor = ThemeColor.contrastColor
+        noteLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         noteLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
         noteLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         noteLabel.layer.shadowOpacity = 1.0
@@ -197,6 +207,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             valueLabel.delegate = self
             valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: nil, callback: nil).0
             valueLabel.textColor = ThemeColor.idColor
+            valueLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
             valueLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             valueLabel.isSelectable = true
             valueLabel.isEditable = false
@@ -212,7 +223,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         followingCountTitle.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         
         followingCountLabel.text = "\(data.following_count ?? 0)"
-        followingCountLabel.textColor = ThemeColor.idColor
+        followingCountLabel.textColor = ThemeColor.nameColor
         followingCountLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         followingCountLabel.textAlignment = .center
         
@@ -221,7 +232,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         followerCountTitle.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         
         followerCountLabel.text = "\(data.followers_count ?? 0)"
-        followerCountLabel.textColor = ThemeColor.idColor
+        followerCountLabel.textColor = ThemeColor.nameColor
         followerCountLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         followerCountLabel.textAlignment = .center
         
@@ -423,6 +434,16 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }))
         
         UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func followingTapAction() {
+        let vc = FollowingViewController(type: "accounts/\(self.id)/following")
+        UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
+    }
+    
+    @objc func followersTapAction() {
+        let vc = FollowingViewController(type: "accounts/\(self.id)/followers")
+        UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
     }
     
     // UITextViewのリンクタップ時の処理
