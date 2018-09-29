@@ -257,7 +257,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // プロパティ設定
         let messageView: UIView
-        if hasLink/*, SettingsData.isMiniView == .normal*/ {
+        if hasLink {
             let msgView = UITextView()
             msgView.attributedText = attributedText
             msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
@@ -289,6 +289,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             msgView.backgroundColor = ThemeColor.cellBgColor
             msgView.isOpaque = true
             messageView = msgView
+        }
+        
+        if SettingsData.useAnimation, let emojis = data.emojis {
+            for emoji in emojis {
+                let url = emoji["url"] as? String
+                if url?.hasSuffix(".gif") == true {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        for layer in messageView.layer.sublayers ?? [] {
+                            print(String(describing: type(of: layer)))
+                        }
+                    }
+                    break
+                }
+            }
         }
         
         // ビューの高さを決める

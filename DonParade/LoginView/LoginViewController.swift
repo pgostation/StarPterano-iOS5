@@ -157,7 +157,7 @@ final class LoginView: UIView {
         hostField.placeholder = I18n.get("PLACEHOLDER_INPUT_DOMAIN")
         hostField.layer.borderColor = UIColor.gray.cgColor
         hostField.layer.borderWidth = 0.5
-        hostField.keyboardType = .alphabet
+        hostField.keyboardType = .URL
         
         authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
         authButton.backgroundColor = UIColor.lightGray

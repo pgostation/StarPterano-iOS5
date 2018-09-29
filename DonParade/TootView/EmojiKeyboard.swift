@@ -9,6 +9,7 @@
 // 絵文字入力用のカスタムキーボードを表示する
 
 import UIKit
+import SwiftyGif
 
 final class EmojiKeyboard: UIView {
     private let spaceButton = UIButton()
@@ -17,7 +18,7 @@ final class EmojiKeyboard: UIView {
     private let emojiScrollView = EmojiInputScrollView()
     
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 250 : 200))
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 300 : 240))
         
         self.addSubview(spaceButton)
         self.addSubview(returnButton)
@@ -94,30 +95,31 @@ final class EmojiKeyboard: UIView {
     
     override func layoutSubviews() {
         self.spaceButton.frame = CGRect(x: 10,
-                                        y: 0,
+                                        y: 1,
                                         width: 80,
                                         height: 40)
         
         self.returnButton.frame = CGRect(x: 100,
-                                         y: 0,
+                                         y: 1,
                                          width: 80,
                                          height: 40)
         
         self.deleteButton.frame = CGRect(x: 190,
-                                         y: 0,
+                                         y: 1,
                                          width: 80,
                                          height: 40)
         
         self.emojiScrollView.frame = CGRect(x: 0,
-                                            y: 40,
+                                            y: 44,
                                             width: self.frame.width,
-                                            height: self.frame.height - 40)
+                                            height: self.frame.height - 44)
     }
 }
 
 private final class EmojiInputScrollView: UIScrollView {
     private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
     private var emojiButtons: [EmojiButton] = []
+    private let gifManager = SwiftyGifManager(memoryLimit: 20)
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -139,8 +141,19 @@ private final class EmojiInputScrollView: UIScrollView {
         // 絵文字ボタンの追加
         for emoji in self.emojiList {
             let button = EmojiButton(key: emoji.short_code ?? "")
-            ImageCache.image(urlStr: emoji.static_url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { (image) in
-                button.setImage(image, for: .normal)
+            ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { (image) in
+                print(emoji.url)
+                if emoji.url?.hasSuffix(".gif") == true {
+                    let imageView = UIImageView(gifImage: image, manager: self.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    let buttonSize: CGFloat = 24 + SettingsData.fontSize
+                    imageView.frame = CGRect(x: 0,
+                                             y: 0,
+                                             width: buttonSize,
+                                             height: buttonSize)
+                    button.addSubview(imageView)
+                } else {
+                    button.setImage(image, for: .normal)
+                }
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
             
