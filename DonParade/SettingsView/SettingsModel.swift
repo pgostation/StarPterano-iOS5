@@ -61,6 +61,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case iconSize = "SETTINGS_ICONSIZE"
         case loadPreviewImage = "SETTINGS_LOADPREVIEW"
         case nameTappable = "SETTINGS_NAMETAPPABLE" // アカウント名をタップできるか
+        case useAnimation = "SETTINGS_USEANIMATION"
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
@@ -69,7 +70,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .iconSize,
                                                   .loadPreviewImage,
                                                   .nameTappable,
-                                                  .streaming]
+                                                  .streaming,
+                                                  .useAnimation]
     
     // 5.キャッシュ
     private enum Cache: String {
@@ -212,6 +214,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.callback = { [weak cell] value in
                     SettingsData.iconSize = CGFloat(value)
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.iconSize))pt"
+                }
+                return cell
+            case .useAnimation:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.useAnimation)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.useAnimation = isOn
                 }
                 return cell
             }

@@ -10,6 +10,7 @@
 // 各種タイムラインやお気に入りなどを表示するUITableView
 
 import UIKit
+import SwiftyGif
 
 final class TimeLineView: UITableView {
     let type: TimeLineViewController.TimeLineType
@@ -19,6 +20,7 @@ final class TimeLineView: UITableView {
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
     private let accessToken = SettingsData.accessToken
+    let gifManager = SwiftyGifManager(memoryLimit: 20)
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     

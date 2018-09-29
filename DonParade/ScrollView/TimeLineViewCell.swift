@@ -17,7 +17,7 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 基本ビュー
     let lineLayer = CALayer()
-    let iconView = UIImageView()
+    var iconView: UIImageView?
     let nameLabel = UILabel()
     let idLabel = UILabel()
     let dateLabel = UILabel()
@@ -82,9 +82,6 @@ final class TimeLineViewCell: UITableViewCell {
         self.isOpaque = true
         self.selectionStyle = .none
         
-        self.iconView.layer.cornerRadius = 5
-        self.iconView.clipsToBounds = true
-        
         self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         self.nameLabel.backgroundColor = ThemeColor.cellBgColor
@@ -106,7 +103,6 @@ final class TimeLineViewCell: UITableViewCell {
         self.lineLayer.isOpaque = true
         
         // addする
-        self.addSubview(self.iconView)
         self.addSubview(self.idLabel)
         self.addSubview(self.dateLabel)
         self.addSubview(self.nameLabel)
@@ -123,21 +119,12 @@ final class TimeLineViewCell: UITableViewCell {
             })
         }
         
-        // アイコンのタップジェスチャー
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
-        self.iconView.addGestureRecognizer(tapGesture)
-        self.iconView.isUserInteractionEnabled = true
-        
         if SettingsData.isNameTappable {
             // アカウント名のタップジェスチャー
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))
             self.nameLabel.addGestureRecognizer(tapGesture)
             self.nameLabel.isUserInteractionEnabled = true
         }
-        
-        // アイコンの長押しジェスチャー
-        let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressAccountAction(_:)))
-        self.iconView.addGestureRecognizer(pressGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -386,10 +373,10 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: screenBounds.width,
                                       height: 1 / UIScreen.main.scale)
         
-        self.iconView.frame = CGRect(x: isMiniView != .normal ? 4 : 8,
-                                     y: isMiniView == .superMini ? 12 - iconSize / 2 : (isMiniView != .normal ? 6 : 10),
-                                     width: iconSize,
-                                     height: iconSize)
+        self.iconView?.frame = CGRect(x: isMiniView != .normal ? 4 : 8,
+                                      y: isMiniView == .superMini ? 12 - iconSize / 2 : (isMiniView != .normal ? 6 : 10),
+                                      width: iconSize,
+                                      height: iconSize)
         
         let nameLeft = iconSize + (isMiniView != .normal ? 10 : 14)
         self.nameLabel.frame = CGRect(x: nameLeft,

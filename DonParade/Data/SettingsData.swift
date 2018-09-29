@@ -314,4 +314,29 @@ final class SettingsData {
             }
         }
     }
+    
+    // GIFアニメーションを行うかどうか
+    private static var _useAnimation: Bool?
+    static var useAnimation: Bool {
+        get {
+            if let cache = self._useAnimation {
+                return cache
+            }
+            if let string = defaults.string(forKey: "useAnimation") {
+                let value = (string == "ON")
+                self._useAnimation = value
+                return value
+            }
+            self._useAnimation = true
+            return true
+        }
+        set(newValue) {
+            self._useAnimation = newValue
+            if newValue {
+                defaults.removeObject(forKey: "useAnimation")
+            } else {
+                defaults.set("OFF", forKey: "useAnimation")
+            }
+        }
+    }
 }

@@ -84,11 +84,11 @@ final class DecodeToot {
         if let emojis = emojis {
             for emoji in emojis {
                 guard let shortcode = emoji["shortcode"] as? String else { continue }
-                let static_url = emoji["static_url"] as? String
+                let url = emoji["url"] as? String
                 
                 let attachment = NSTextAttachment()
                 var execCallback = false
-                ImageCache.image(urlStr: static_url, isTemp: false, isSmall: true, shortcode: shortcode) { image in
+                ImageCache.image(urlStr: url, isTemp: false, isSmall: true, shortcode: shortcode) { image in
                     if execCallback {
                         callback?()
                     } else {

@@ -9,6 +9,7 @@
 // アイコンやカスタム絵文字データのキャッシュ（インメモリ、ストレージ）、なければネットワークから取得
 
 import UIKit
+import SwiftyGif
 
 final class ImageCache {
     private static var memCache: [String: UIImage] = [:]
@@ -39,7 +40,16 @@ final class ImageCache {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
-                    if let image = EmojiImage(data: data) {
+                    if url.absoluteString.hasSuffix(".gif") {
+                        let image = EmojiImage(gifData: data)
+                        image.shortcode = shortcode
+                        DispatchQueue.main.async {
+                            if !isTemp {
+                                memCache.updateValue(image, forKey: urlStr)
+                            }
+                            callback(image)
+                        }
+                    } else if let image = EmojiImage(data: data) {
                         let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
                         smallImage.shortcode = shortcode
                         DispatchQueue.main.async {
@@ -74,7 +84,20 @@ final class ImageCache {
         imageQueue.async {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
-                if let image = EmojiImage(data: data) {
+                if url.absoluteString.hasSuffix(".gif") {
+                    let image = EmojiImage(gifData: data)
+                    image.shortcode = shortcode
+                    DispatchQueue.main.async {
+                        if !isTemp {
+                            memCache.updateValue(image, forKey: urlStr)
+                        }
+                        callback(image)
+                    }
+                    
+                    // ストレージにキャッシュする
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    try? data.write(to: fileUrl)
+                } else if let image = EmojiImage(data: data) {
                     let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
                     smallImage.shortcode = shortcode
                     DispatchQueue.main.async {

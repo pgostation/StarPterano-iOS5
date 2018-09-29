@@ -7,23 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0771303F9E70B8A663F5337C0669553D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
-		217C6846C9F3160B875B0F5536801B27 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55365038245EB43AE2A59C80C01FD23 /* SSLSecurity.swift */; };
-		23A634D60C75E997207E479CD18305D3 /* Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A04D8C3C1516E1A02A46FCEB72236FA /* Compression.swift */; };
-		73811C500F79FBEBB19EC8D47AE05B9F /* Starscream-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1661B72F0A274473D9147AAE8A3E06F1 /* Starscream-dummy.m */; };
-		ADE591A4A661822703E86082EDEE6CC9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
-		AF9D6929AD4CF88AD99A02F69AC51E1A /* Pods-DonParade-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 795376FBB7A86BF81EF0FA8AAC0E8E47 /* Pods-DonParade-dummy.m */; };
-		C03DCC283B8C535DE5AF3387DC5113F9 /* Starscream-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D996E17FD79A681D5829532F50CF07C /* Starscream-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C539095267C1693BA226344C0FC3385C /* Pods-DonParade-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ACBBF8FE94810E8C2C57F9781A662D1 /* Pods-DonParade-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F15BE4C51BA69ABC2A4522FB979F18F2 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF79A3A1C6FEF108CF16DE0537B0431 /* WebSocket.swift */; };
+		44E7E0D73FCA64B851E72CC64AFD980E /* Starscream-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A5887FACB7172AEA523DEE84C9DA473 /* Starscream-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		59DE8A91DFB61E324A5EAC7399845143 /* SwiftyGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158751E32153CE4535795991C444E8CA /* SwiftyGifManager.swift */; };
+		5AD740E32697D1BC0163213429345062 /* Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3A531AB46B2CAC0B7CFF26DBB024DB /* Compression.swift */; };
+		5C9704406F86038C1CE1742697D1E3DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
+		65C02CF7807CE88A6719CC8F0C522505 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773A7D34B6D5C245996E0DE0E785A036 /* WebSocket.swift */; };
+		6CB0F8450EA90FB79E0F5B4A620FDD1F /* SwiftyGif-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F28B144D41417F8D42390A622387EDEA /* SwiftyGif-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		70977C645A09C1F60D5669BEABAA79E6 /* SwiftyGif.h in Headers */ = {isa = PBXBuildFile; fileRef = D58C9159531B483668E0D9C0C2056D82 /* SwiftyGif.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7658B20B85A5CD6CF0C723949FF9C992 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
+		7C0B6FFEF51E3982B83F1ED7CADEA36B /* SwiftyGif-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B34DFC7F2EEC04676A416F18978E51D /* SwiftyGif-dummy.m */; };
+		945A87B41463D892275E685FF8BF36A4 /* UIImageView+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECA6BA4D60E738447E227C64730A7A5 /* UIImageView+SwiftyGif.swift */; };
+		B96FD7B2B1BEB3236D5063D67AFE4A1A /* Pods-DonParade-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 795376FBB7A86BF81EF0FA8AAC0E8E47 /* Pods-DonParade-dummy.m */; };
+		BDC1C1FE1F3B210E641705C11049B1BF /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72AD1F5CD88E4B51EEDC15C39C12B73 /* SSLSecurity.swift */; };
+		C0F847913EE56325822F0BCEBA563BF8 /* Starscream-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C2A6941129479EDF32EA6A70B6F3304B /* Starscream-dummy.m */; };
+		E2D7F8EC715E184E38D9BE5FCC3E2B6F /* UIImage+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793C76F22CD2022B0E71637079C92BB1 /* UIImage+SwiftyGif.swift */; };
+		EA309760C33C7A67A39CFB1A94BAE563 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
+		EF833DD261649CCB25982420A09A603F /* Pods-DonParade-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ACBBF8FE94810E8C2C57F9781A662D1 /* Pods-DonParade-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6E6843FC765A8DB4502DA2C29EB00381 /* PBXContainerItemProxy */ = {
+		82A5694B38FDF3F42FBC644D897372F9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 446419D91332C6AE4DC242165FEC75F2;
+			remoteGlobalIDString = 8AB64C989C07400446345DF5AD5DADCF;
+			remoteInfo = SwiftyGif;
+		};
+		BBD9EE5FABBB1C69DA64C460EA6A7338 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D942652EB5978534B072D8D83503A1FC;
 			remoteInfo = Starscream;
 		};
 /* End PBXContainerItemProxy section */
@@ -31,55 +45,80 @@
 /* Begin PBXFileReference section */
 		04694B61B8DDFB916C65B5A7DBAB9CB5 /* Pods-DonParade-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-DonParade-frameworks.sh"; sourceTree = "<group>"; };
 		0BEDA0BAD5630AC9F542EAA33099AA84 /* Pods-DonParade.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-DonParade.modulemap"; sourceTree = "<group>"; };
-		1661B72F0A274473D9147AAE8A3E06F1 /* Starscream-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Starscream-dummy.m"; sourceTree = "<group>"; };
-		174CF1F36A2E7DDD43B08865CD0A3FEE /* Pods_DonParade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DonParade.framework; path = "Pods-DonParade.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		158751E32153CE4535795991C444E8CA /* SwiftyGifManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyGifManager.swift; path = SwiftyGif/SwiftyGifManager.swift; sourceTree = "<group>"; };
+		1B34DFC7F2EEC04676A416F18978E51D /* SwiftyGif-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyGif-dummy.m"; sourceTree = "<group>"; };
 		2015F4967B52CB77591DBD625A3D76A4 /* Pods-DonParade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DonParade.debug.xcconfig"; sourceTree = "<group>"; };
-		24CD1CF8C67430D7697078621E8DFD65 /* Starscream.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Starscream.modulemap; sourceTree = "<group>"; };
+		2A5887FACB7172AEA523DEE84C9DA473 /* Starscream-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-umbrella.h"; sourceTree = "<group>"; };
+		2C15BAB04591F7AEC805D74E3934403C /* Starscream.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Starscream.modulemap; sourceTree = "<group>"; };
 		33BF9B51BE1A224770FBC6FD8F796336 /* Pods-DonParade-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-DonParade-resources.sh"; sourceTree = "<group>"; };
-		3A89F29E62024F23802960B4656EAB90 /* Starscream.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Starscream.xcconfig; sourceTree = "<group>"; };
-		3BF79A3A1C6FEF108CF16DE0537B0431 /* WebSocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebSocket.swift; path = Sources/WebSocket.swift; sourceTree = "<group>"; };
+		495067B32BD397C238C4A1B50AA5021C /* Starscream-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-prefix.pch"; sourceTree = "<group>"; };
+		496DD0E0ED33DF3AB015BA2E27106CFC /* SwiftyGif.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyGif.xcconfig; sourceTree = "<group>"; };
+		50A484AC626127EB1836EAB6723929E2 /* Pods_DonParade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DonParade.framework; path = "Pods-DonParade.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52AA2E33669BE331D408BC432632E57E /* Pods-DonParade-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DonParade-acknowledgements.markdown"; sourceTree = "<group>"; };
+		5696400985FB3AA1402679FE46F4D7DB /* SwiftyGif.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyGif.framework; path = SwiftyGif.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		66F39275B43554B44FED746EED7FF9E9 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		773A7D34B6D5C245996E0DE0E785A036 /* WebSocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebSocket.swift; path = Sources/WebSocket.swift; sourceTree = "<group>"; };
+		77B171164185D07DAB9FC6A289EA2BEA /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		793C76F22CD2022B0E71637079C92BB1 /* UIImage+SwiftyGif.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+SwiftyGif.swift"; path = "SwiftyGif/UIImage+SwiftyGif.swift"; sourceTree = "<group>"; };
 		795376FBB7A86BF81EF0FA8AAC0E8E47 /* Pods-DonParade-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DonParade-dummy.m"; sourceTree = "<group>"; };
-		8A04D8C3C1516E1A02A46FCEB72236FA /* Compression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compression.swift; path = Sources/Compression.swift; sourceTree = "<group>"; };
+		7E748C8CC5D17A58A5D1332EF50A11EF /* Starscream.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Starscream.xcconfig; sourceTree = "<group>"; };
+		7ECA6BA4D60E738447E227C64730A7A5 /* UIImageView+SwiftyGif.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImageView+SwiftyGif.swift"; path = "SwiftyGif/UIImageView+SwiftyGif.swift"; sourceTree = "<group>"; };
 		8ACBBF8FE94810E8C2C57F9781A662D1 /* Pods-DonParade-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-DonParade-umbrella.h"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9D996E17FD79A681D5829532F50CF07C /* Starscream-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-umbrella.h"; sourceTree = "<group>"; };
-		A55365038245EB43AE2A59C80C01FD23 /* SSLSecurity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSLSecurity.swift; path = Sources/SSLSecurity.swift; sourceTree = "<group>"; };
+		AC73D78A5062ED31F66BF9E9DC35138A /* SwiftyGif-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyGif-prefix.pch"; sourceTree = "<group>"; };
 		BDF9BA3E44C2C23AA1D4C40897F7CCB3 /* Pods-DonParade-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DonParade-acknowledgements.plist"; sourceTree = "<group>"; };
+		C2A6941129479EDF32EA6A70B6F3304B /* Starscream-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Starscream-dummy.m"; sourceTree = "<group>"; };
 		C87A1A65BD6D6EDE5169089A5E8BD81B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D81F63893E234525A4008CE1A18359F7 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE3A531AB46B2CAC0B7CFF26DBB024DB /* Compression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compression.swift; path = Sources/Compression.swift; sourceTree = "<group>"; };
+		D58C9159531B483668E0D9C0C2056D82 /* SwiftyGif.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SwiftyGif.h; path = SwiftyGif/SwiftyGif.h; sourceTree = "<group>"; };
+		D72AD1F5CD88E4B51EEDC15C39C12B73 /* SSLSecurity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSLSecurity.swift; path = Sources/SSLSecurity.swift; sourceTree = "<group>"; };
+		DD3754D036E3ADC5A328AA025659BC2F /* SwiftyGif.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftyGif.modulemap; sourceTree = "<group>"; };
 		E0BC7565A984D02E785A441118C41417 /* Pods-DonParade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DonParade.release.xcconfig"; sourceTree = "<group>"; };
-		E30CD6AEB67F8F272DEAB957F7021909 /* Starscream-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-prefix.pch"; sourceTree = "<group>"; };
+		E1B645FC56E8B3EDC2D17BC188E5BCBA /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2E0F3CF6EF9D894C54D84821C93FCF9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F28B144D41417F8D42390A622387EDEA /* SwiftyGif-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyGif-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C6E9638729E1BEAF2D86D97033C99F08 /* Frameworks */ = {
+		873E61CC0C41BEFA12736AFB0C735AE2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0771303F9E70B8A663F5337C0669553D /* Foundation.framework in Frameworks */,
+				EA309760C33C7A67A39CFB1A94BAE563 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C81168E86A48493333E2E6A60D1C7049 /* Frameworks */ = {
+		B368D51270346ECB30C42800C30D0DC5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADE591A4A661822703E86082EDEE6CC9 /* Foundation.framework in Frameworks */,
+				7658B20B85A5CD6CF0C723949FF9C992 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA5D73961290AFB5BA70FE235CB6EDDA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C9704406F86038C1CE1742697D1E3DB /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3472A81D0DB31608B2D83C2463248903 /* Pods */ = {
+		044A64D8538EECFA02F3DA4015F068AA /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				CB62A5E4B3983660FF962BD54E1FC6E7 /* Starscream */,
+				77B171164185D07DAB9FC6A289EA2BEA /* Info.plist */,
+				DD3754D036E3ADC5A328AA025659BC2F /* SwiftyGif.modulemap */,
+				496DD0E0ED33DF3AB015BA2E27106CFC /* SwiftyGif.xcconfig */,
+				1B34DFC7F2EEC04676A416F18978E51D /* SwiftyGif-dummy.m */,
+				AC73D78A5062ED31F66BF9E9DC35138A /* SwiftyGif-prefix.pch */,
+				F28B144D41417F8D42390A622387EDEA /* SwiftyGif-umbrella.h */,
 			);
-			name = Pods;
+			name = "Support Files";
+			path = "../Target Support Files/SwiftyGif";
 			sourceTree = "<group>";
 		};
 		5E0D919E635D23B70123790B8308F8EF /* iOS */ = {
@@ -90,13 +129,48 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		6FB283727D3A718F3364D42E825F89B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				50A484AC626127EB1836EAB6723929E2 /* Pods_DonParade.framework */,
+				E1B645FC56E8B3EDC2D17BC188E5BCBA /* Starscream.framework */,
+				5696400985FB3AA1402679FE46F4D7DB /* SwiftyGif.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		796E771835F5B7D2BDD943226536265F /* Starscream */ = {
+			isa = PBXGroup;
+			children = (
+				CE3A531AB46B2CAC0B7CFF26DBB024DB /* Compression.swift */,
+				D72AD1F5CD88E4B51EEDC15C39C12B73 /* SSLSecurity.swift */,
+				773A7D34B6D5C245996E0DE0E785A036 /* WebSocket.swift */,
+				AD1E3286E0FEA35A2A6D572009D38245 /* Support Files */,
+			);
+			name = Starscream;
+			path = Starscream;
+			sourceTree = "<group>";
+		};
+		797147FFF32DE6142B3845CDD62FB28F /* SwiftyGif */ = {
+			isa = PBXGroup;
+			children = (
+				D58C9159531B483668E0D9C0C2056D82 /* SwiftyGif.h */,
+				158751E32153CE4535795991C444E8CA /* SwiftyGifManager.swift */,
+				793C76F22CD2022B0E71637079C92BB1 /* UIImage+SwiftyGif.swift */,
+				7ECA6BA4D60E738447E227C64730A7A5 /* UIImageView+SwiftyGif.swift */,
+				044A64D8538EECFA02F3DA4015F068AA /* Support Files */,
+			);
+			name = SwiftyGif;
+			path = SwiftyGif;
+			sourceTree = "<group>";
+		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
-				3472A81D0DB31608B2D83C2463248903 /* Pods */,
-				B0CE888DFB08A913643EA5612085D9E5 /* Products */,
+				D5BFB7EE4632DBE4C4B764D0F1CE289C /* Pods */,
+				6FB283727D3A718F3364D42E825F89B7 /* Products */,
 				D3565837F217D0D13406C0E17A4C1C18 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
@@ -119,13 +193,18 @@
 			path = "Target Support Files/Pods-DonParade";
 			sourceTree = "<group>";
 		};
-		B0CE888DFB08A913643EA5612085D9E5 /* Products */ = {
+		AD1E3286E0FEA35A2A6D572009D38245 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				174CF1F36A2E7DDD43B08865CD0A3FEE /* Pods_DonParade.framework */,
-				66F39275B43554B44FED746EED7FF9E9 /* Starscream.framework */,
+				E2E0F3CF6EF9D894C54D84821C93FCF9 /* Info.plist */,
+				2C15BAB04591F7AEC805D74E3934403C /* Starscream.modulemap */,
+				7E748C8CC5D17A58A5D1332EF50A11EF /* Starscream.xcconfig */,
+				C2A6941129479EDF32EA6A70B6F3304B /* Starscream-dummy.m */,
+				495067B32BD397C238C4A1B50AA5021C /* Starscream-prefix.pch */,
+				2A5887FACB7172AEA523DEE84C9DA473 /* Starscream-umbrella.h */,
 			);
-			name = Products;
+			name = "Support Files";
+			path = "../Target Support Files/Starscream";
 			sourceTree = "<group>";
 		};
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
@@ -136,18 +215,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CB62A5E4B3983660FF962BD54E1FC6E7 /* Starscream */ = {
-			isa = PBXGroup;
-			children = (
-				8A04D8C3C1516E1A02A46FCEB72236FA /* Compression.swift */,
-				A55365038245EB43AE2A59C80C01FD23 /* SSLSecurity.swift */,
-				3BF79A3A1C6FEF108CF16DE0537B0431 /* WebSocket.swift */,
-				E54986408F60ECB036498154E2A5488B /* Support Files */,
-			);
-			name = Starscream;
-			path = Starscream;
-			sourceTree = "<group>";
-		};
 		D3565837F217D0D13406C0E17A4C1C18 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,50 +223,92 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		E54986408F60ECB036498154E2A5488B /* Support Files */ = {
+		D5BFB7EE4632DBE4C4B764D0F1CE289C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D81F63893E234525A4008CE1A18359F7 /* Info.plist */,
-				24CD1CF8C67430D7697078621E8DFD65 /* Starscream.modulemap */,
-				3A89F29E62024F23802960B4656EAB90 /* Starscream.xcconfig */,
-				1661B72F0A274473D9147AAE8A3E06F1 /* Starscream-dummy.m */,
-				E30CD6AEB67F8F272DEAB957F7021909 /* Starscream-prefix.pch */,
-				9D996E17FD79A681D5829532F50CF07C /* Starscream-umbrella.h */,
+				796E771835F5B7D2BDD943226536265F /* Starscream */,
+				797147FFF32DE6142B3845CDD62FB28F /* SwiftyGif */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/Starscream";
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		050274D3203853718AD620F7EE94C6E1 /* Headers */ = {
+		0FC91265DAB3C37A80DAA748A5720FA3 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C539095267C1693BA226344C0FC3385C /* Pods-DonParade-umbrella.h in Headers */,
+				EF833DD261649CCB25982420A09A603F /* Pods-DonParade-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		16FE0DBCF269210D166576E50BB86346 /* Headers */ = {
+		B080876EC69693FABDB1F26D5B026721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C03DCC283B8C535DE5AF3387DC5113F9 /* Starscream-umbrella.h in Headers */,
+				44E7E0D73FCA64B851E72CC64AFD980E /* Starscream-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8A5446CF65BF7F4924D3765AE79E93 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CB0F8450EA90FB79E0F5B4A620FDD1F /* SwiftyGif-umbrella.h in Headers */,
+				70977C645A09C1F60D5669BEABAA79E6 /* SwiftyGif.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		446419D91332C6AE4DC242165FEC75F2 /* Starscream */ = {
+		8AB64C989C07400446345DF5AD5DADCF /* SwiftyGif */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4EFE014BE2F063BF9BA9551A26447A3B /* Build configuration list for PBXNativeTarget "Starscream" */;
+			buildConfigurationList = 1A0B5D07027CF50F6D10F6A2F1E6E44C /* Build configuration list for PBXNativeTarget "SwiftyGif" */;
 			buildPhases = (
-				16FE0DBCF269210D166576E50BB86346 /* Headers */,
-				7E2210DEE6DC4F3D9744D30457B5F587 /* Sources */,
-				C81168E86A48493333E2E6A60D1C7049 /* Frameworks */,
-				9FBA7C9652C133EE3DC2317AB0D8DD19 /* Resources */,
+				CE8A5446CF65BF7F4924D3765AE79E93 /* Headers */,
+				39AFA87A00BB9AFE30A642AB4F3E8605 /* Sources */,
+				BA5D73961290AFB5BA70FE235CB6EDDA /* Frameworks */,
+				E0BE5BF868C98030DECB273C18D29F43 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftyGif;
+			productName = SwiftyGif;
+			productReference = 5696400985FB3AA1402679FE46F4D7DB /* SwiftyGif.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CCA96A8240A33507695450979806B202 /* Pods-DonParade */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 461EFA7EF88BE4C027565AB782064799 /* Build configuration list for PBXNativeTarget "Pods-DonParade" */;
+			buildPhases = (
+				0FC91265DAB3C37A80DAA748A5720FA3 /* Headers */,
+				0034E7CEE1891C4157D03A2F6678C9A4 /* Sources */,
+				B368D51270346ECB30C42800C30D0DC5 /* Frameworks */,
+				6F6402758DE298FBF97CD2C3A7962E7F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FD2A183AC5B01A81BEE8A756EECE1889 /* PBXTargetDependency */,
+				C1CC50915BAB1EE1341E9398FCD6B617 /* PBXTargetDependency */,
+			);
+			name = "Pods-DonParade";
+			productName = "Pods-DonParade";
+			productReference = 50A484AC626127EB1836EAB6723929E2 /* Pods_DonParade.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D942652EB5978534B072D8D83503A1FC /* Starscream */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E08B75274BF74237AEC011A9CFB7C5B /* Build configuration list for PBXNativeTarget "Starscream" */;
+			buildPhases = (
+				B080876EC69693FABDB1F26D5B026721 /* Headers */,
+				1931829A96FFFFF82CF11F1C401D6BA5 /* Sources */,
+				873E61CC0C41BEFA12736AFB0C735AE2 /* Frameworks */,
+				D89384BD4509E68793901BCE7290489A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -207,26 +316,7 @@
 			);
 			name = Starscream;
 			productName = Starscream;
-			productReference = 66F39275B43554B44FED746EED7FF9E9 /* Starscream.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		B35F4BB613A3478F44A654F4D4D2F5DE /* Pods-DonParade */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C4D8538405E7722A057381259028470D /* Build configuration list for PBXNativeTarget "Pods-DonParade" */;
-			buildPhases = (
-				050274D3203853718AD620F7EE94C6E1 /* Headers */,
-				DA1BE25AEEA2A207E7E86CBD75B67A07 /* Sources */,
-				C6E9638729E1BEAF2D86D97033C99F08 /* Frameworks */,
-				548BFE49FCA849E12CFC7B5040A7308C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D8B3BA640BFC0F13763D78D703031188 /* PBXTargetDependency */,
-			);
-			name = "Pods-DonParade";
-			productName = "Pods-DonParade";
-			productReference = 174CF1F36A2E7DDD43B08865CD0A3FEE /* Pods_DonParade.framework */;
+			productReference = E1B645FC56E8B3EDC2D17BC188E5BCBA /* Starscream.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -246,25 +336,33 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = B0CE888DFB08A913643EA5612085D9E5 /* Products */;
+			productRefGroup = 6FB283727D3A718F3364D42E825F89B7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B35F4BB613A3478F44A654F4D4D2F5DE /* Pods-DonParade */,
-				446419D91332C6AE4DC242165FEC75F2 /* Starscream */,
+				CCA96A8240A33507695450979806B202 /* Pods-DonParade */,
+				D942652EB5978534B072D8D83503A1FC /* Starscream */,
+				8AB64C989C07400446345DF5AD5DADCF /* SwiftyGif */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		548BFE49FCA849E12CFC7B5040A7308C /* Resources */ = {
+		6F6402758DE298FBF97CD2C3A7962E7F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9FBA7C9652C133EE3DC2317AB0D8DD19 /* Resources */ = {
+		D89384BD4509E68793901BCE7290489A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0BE5BF868C98030DECB273C18D29F43 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -274,40 +372,133 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7E2210DEE6DC4F3D9744D30457B5F587 /* Sources */ = {
+		0034E7CEE1891C4157D03A2F6678C9A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23A634D60C75E997207E479CD18305D3 /* Compression.swift in Sources */,
-				217C6846C9F3160B875B0F5536801B27 /* SSLSecurity.swift in Sources */,
-				73811C500F79FBEBB19EC8D47AE05B9F /* Starscream-dummy.m in Sources */,
-				F15BE4C51BA69ABC2A4522FB979F18F2 /* WebSocket.swift in Sources */,
+				B96FD7B2B1BEB3236D5063D67AFE4A1A /* Pods-DonParade-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA1BE25AEEA2A207E7E86CBD75B67A07 /* Sources */ = {
+		1931829A96FFFFF82CF11F1C401D6BA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF9D6929AD4CF88AD99A02F69AC51E1A /* Pods-DonParade-dummy.m in Sources */,
+				5AD740E32697D1BC0163213429345062 /* Compression.swift in Sources */,
+				BDC1C1FE1F3B210E641705C11049B1BF /* SSLSecurity.swift in Sources */,
+				C0F847913EE56325822F0BCEBA563BF8 /* Starscream-dummy.m in Sources */,
+				65C02CF7807CE88A6719CC8F0C522505 /* WebSocket.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39AFA87A00BB9AFE30A642AB4F3E8605 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C0B6FFEF51E3982B83F1ED7CADEA36B /* SwiftyGif-dummy.m in Sources */,
+				59DE8A91DFB61E324A5EAC7399845143 /* SwiftyGifManager.swift in Sources */,
+				E2D7F8EC715E184E38D9BE5FCC3E2B6F /* UIImage+SwiftyGif.swift in Sources */,
+				945A87B41463D892275E685FF8BF36A4 /* UIImageView+SwiftyGif.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D8B3BA640BFC0F13763D78D703031188 /* PBXTargetDependency */ = {
+		C1CC50915BAB1EE1341E9398FCD6B617 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftyGif;
+			target = 8AB64C989C07400446345DF5AD5DADCF /* SwiftyGif */;
+			targetProxy = 82A5694B38FDF3F42FBC644D897372F9 /* PBXContainerItemProxy */;
+		};
+		FD2A183AC5B01A81BEE8A756EECE1889 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Starscream;
-			target = 446419D91332C6AE4DC242165FEC75F2 /* Starscream */;
-			targetProxy = 6E6843FC765A8DB4502DA2C29EB00381 /* PBXContainerItemProxy */;
+			target = D942652EB5978534B072D8D83503A1FC /* Starscream */;
+			targetProxy = BBD9EE5FABBB1C69DA64C460EA6A7338 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		1A4798D165E813C1D7A3E92ABA81BF6D /* Release */ = {
+		120705F1651EDFB79C42332054BFB5B7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A89F29E62024F23802960B4656EAB90 /* Starscream.xcconfig */;
+			baseConfigurationReference = E0BC7565A984D02E785A441118C41417 /* Pods-DonParade.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-DonParade/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-DonParade/Pods-DonParade.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3FDBBF55FD48E663081DF75A68B6FCEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 496DD0E0ED33DF3AB015BA2E27106CFC /* SwiftyGif.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftyGif/SwiftyGif-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftyGif/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SwiftyGif/SwiftyGif.modulemap";
+				PRODUCT_MODULE_NAME = SwiftyGif;
+				PRODUCT_NAME = SwiftyGif;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		44E3C3E6E5AFA408F21AF46F02D93E1D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E748C8CC5D17A58A5D1332EF50A11EF /* Starscream.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -407,11 +598,10 @@
 			};
 			name = Debug;
 		};
-		B7184953F6D226E430085C00FEE51816 /* Release */ = {
+		66717CDC43A8CC1841F1CABD56DE9B6C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E0BC7565A984D02E785A441118C41417 /* Pods-DonParade.release.xcconfig */;
+			baseConfigurationReference = 7E748C8CC5D17A58A5D1332EF50A11EF /* Starscream.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -421,65 +611,23 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-DonParade/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/Starscream/Starscream-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Starscream/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-DonParade/Pods-DonParade.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				MODULEMAP_FILE = "Target Support Files/Starscream/Starscream.modulemap";
+				PRODUCT_MODULE_NAME = Starscream;
+				PRODUCT_NAME = Starscream;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		C0F355A330A1E9D5AA4AF090C4FE76DF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2015F4967B52CB77591DBD625A3D76A4 /* Pods-DonParade.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-DonParade/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-DonParade/Pods-DonParade.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -545,9 +693,9 @@
 			};
 			name = Release;
 		};
-		F6FBF7E85EC27373D43F3883A509168E /* Debug */ = {
+		D96A54ECEED5EECE1475574A2ABCB01B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A89F29E62024F23802960B4656EAB90 /* Starscream.xcconfig */;
+			baseConfigurationReference = 496DD0E0ED33DF3AB015BA2E27106CFC /* SwiftyGif.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -558,8 +706,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/Starscream/Starscream-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Starscream/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/SwiftyGif/SwiftyGif-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwiftyGif/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -567,14 +715,55 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MODULEMAP_FILE = "Target Support Files/Starscream/Starscream.modulemap";
-				PRODUCT_MODULE_NAME = Starscream;
-				PRODUCT_NAME = Starscream;
+				MODULEMAP_FILE = "Target Support Files/SwiftyGif/SwiftyGif.modulemap";
+				PRODUCT_MODULE_NAME = SwiftyGif;
+				PRODUCT_NAME = SwiftyGif;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FD19068E707C07A6246DB7BAED1E9B80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2015F4967B52CB77591DBD625A3D76A4 /* Pods-DonParade.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-DonParade/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-DonParade/Pods-DonParade.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -584,6 +773,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1A0B5D07027CF50F6D10F6A2F1E6E44C /* Build configuration list for PBXNativeTarget "SwiftyGif" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FDBBF55FD48E663081DF75A68B6FCEA /* Debug */,
+				D96A54ECEED5EECE1475574A2ABCB01B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -593,20 +791,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4EFE014BE2F063BF9BA9551A26447A3B /* Build configuration list for PBXNativeTarget "Starscream" */ = {
+		461EFA7EF88BE4C027565AB782064799 /* Build configuration list for PBXNativeTarget "Pods-DonParade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F6FBF7E85EC27373D43F3883A509168E /* Debug */,
-				1A4798D165E813C1D7A3E92ABA81BF6D /* Release */,
+				FD19068E707C07A6246DB7BAED1E9B80 /* Debug */,
+				120705F1651EDFB79C42332054BFB5B7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C4D8538405E7722A057381259028470D /* Build configuration list for PBXNativeTarget "Pods-DonParade" */ = {
+		9E08B75274BF74237AEC011A9CFB7C5B /* Build configuration list for PBXNativeTarget "Starscream" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C0F355A330A1E9D5AA4AF090C4FE76DF /* Debug */,
-				B7184953F6D226E430085C00FEE51816 /* Release */,
+				66717CDC43A8CC1841F1CABD56DE9B6C /* Debug */,
+				44E3C3E6E5AFA408F21AF46F02D93E1D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

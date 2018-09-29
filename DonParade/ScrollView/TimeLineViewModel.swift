@@ -45,16 +45,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         DispatchQueue.main.async {
             if self.list.count == 0 {
                 self.list = addList
-            } else if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at, let date3 = self.list.last?.created_at, let date4 = addList.last?.created_at {
+            } else if let firstDate1 = self.list.first?.created_at, let firstDate2 = addList.first?.created_at, let lastDate1 = self.list.last?.created_at, let lastDate2 = addList.last?.created_at {
                 // 前か後に付ければ良い
-                if date1 > date4 {
+                if lastDate1 > firstDate2 {
                     self.list = self.list + addList
                     
                     if self.list.count > 100000 {
                         // 10万トゥートを超えると流石に削除する
                         self.list.removeFirst(self.list.count - 100000)
                     }
-                } else if date2 > date3 {
+                } else if lastDate2 > firstDate1 {
                     self.list = addList + self.list
                     
                     // 選択位置がずれないようにする
@@ -311,17 +311,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var index = indexPath.row
         
-        if let timelineView = tableView as? TimeLineView {
-            if timelineView.type == .user {
-                index -= 1
-                if index < 0 {
-                    // プロフィール表示用セル
-                    let accountData = timelineView.accountList[timelineView.option ?? ""]
-                    let isTemp = (self.list.count == 0)
-                    let cell = ProfileViewCell(accountData: accountData, isTemp: isTemp)
-                    cell.timelineView = tableView as? TimeLineView
-                    return cell
-                }
+        guard let timelineView = tableView as? TimeLineView else {
+            return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        }
+        
+        if timelineView.type == .user {
+            index -= 1
+            if index < 0 {
+                // プロフィール表示用セル
+                let accountData = timelineView.accountList[timelineView.option ?? ""]
+                let isTemp = (self.list.count == 0)
+                let cell = ProfileViewCell(accountData: accountData, isTemp: isTemp)
+                cell.timelineView = tableView as? TimeLineView
+                return cell
             }
         }
         
@@ -513,9 +515,34 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             setCellColor(cell: cell)
         }
         
-        ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
+        ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in
             if cell.id == id {
-                cell.iconView.image = image
+                if image.imageCount != nil {
+                    // GIFアニメーション
+                    cell.iconView = UIImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                } else {
+                    cell.iconView = UIImageView()
+                }
+                
+                cell.addSubview(cell.iconView!)
+                cell.iconView?.image = image
+                cell.iconView?.layer.cornerRadius = 5
+                cell.iconView?.clipsToBounds = true
+                
+                // アイコンのタップジェスチャー
+                let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.tapAccountAction))
+                cell.iconView?.addGestureRecognizer(tapGesture)
+                cell.iconView?.isUserInteractionEnabled = true
+                
+                // アイコンの長押しジェスチャー
+                let pressGesture = UILongPressGestureRecognizer(target: cell, action: #selector(cell.pressAccountAction(_:)))
+                cell.iconView?.addGestureRecognizer(pressGesture)
+                let iconSize = SettingsData.iconSize
+                
+                cell.iconView?.frame = CGRect(x: cell.isMiniView != .normal ? 4 : 8,
+                                              y: cell.isMiniView == .superMini ? 12 - iconSize / 2 : (cell.isMiniView != .normal ? 6 : 10),
+                                              width: iconSize,
+                                              height: iconSize)
             }
         }
         
@@ -804,7 +831,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.detailButton?.removeFromSuperview()
             cell.applicationLabel?.removeFromSuperview()
         }
-        cell.iconView.image = nil
+        cell.iconView?.removeFromSuperview()
+        cell.iconView?.image = nil
         
         if SettingsData.isMiniView == .superMini {
             cell.nameLabel.isHidden = true

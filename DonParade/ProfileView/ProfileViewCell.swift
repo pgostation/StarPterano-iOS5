@@ -23,7 +23,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     let headerImageView = UIImageView()
     
     // メインの表示
-    let iconView = UIImageView()
+    var iconView: UIImageView?
     let nameLabel = UILabel()
     let idLabel = UILabel()
     let noteLabel = UITextView()
@@ -71,7 +71,6 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         self.addSubview(headerImageView)
         
         // メインの表示
-        self.addSubview(iconView)
         self.addSubview(nameLabel)
         self.addSubview(idLabel)
         self.addSubview(noteLabel)
@@ -138,11 +137,26 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }
         
         // メインの表示
-        ImageCache.image(urlStr: data.avatar_static, isTemp: false, isSmall: true) { [weak self] image in
-            self?.iconView.image = image
+        DispatchQueue.main.async {
+            ImageCache.image(urlStr: data.avatar ?? data.avatar_static, isTemp: false, isSmall: true) { [weak self] image in
+                if self == nil { return }
+                if image.imageCount != nil, let manager = self?.timelineView?.gifManager {
+                    // GIFアニメーション
+                    self?.iconView = UIImageView(gifImage: image, manager: manager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                } else {
+                    self?.iconView = UIImageView()
+                }
+                self?.iconView?.image = image
+                self?.iconView?.clipsToBounds = true
+                self?.iconView?.layer.cornerRadius = 8
+                self?.addSubview(self!.iconView!)
+                
+                self?.iconView?.frame = CGRect(x: 5,
+                                               y: 5,
+                                               width: 70,
+                                               height: 70)
+            }
         }
-        iconView.clipsToBounds = true
-        iconView.layer.cornerRadius = 8
         
         nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) { }
         nameLabel.textColor = ThemeColor.nameColor
@@ -458,10 +472,10 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         let screenBounds = UIScreen.main.bounds
         
         // メインの表示
-        iconView.frame = CGRect(x: 5,
-                                y: 5,
-                                width: 70,
-                                height: 70)
+        iconView?.frame = CGRect(x: 5,
+                                 y: 5,
+                                 width: 70,
+                                 height: 70)
         
         nameLabel.frame.size.width = screenBounds.width - 80
         nameLabel.sizeToFit()

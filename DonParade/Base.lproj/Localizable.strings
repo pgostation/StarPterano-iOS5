@@ -126,6 +126,7 @@
 "SETTINGS_ICONSIZE" = "Icon size";
 "SETTINGS_LOADPREVIEW" = "Load preview image";
 "SETTINGS_NAMETAPPABLE" = "Tappable name";
+"SETTINGS_USEANIMATION" = "Icon animation";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

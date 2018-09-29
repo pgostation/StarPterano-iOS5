@@ -126,6 +126,7 @@
 "SETTINGS_ICONSIZE" = "アイコンサイズ";
 "SETTINGS_LOADPREVIEW" = "プレビュー画像を読み込む";
 "SETTINGS_NAMETAPPABLE" = "名前欄タップで移動";
+"SETTINGS_USEANIMATION" = "画像アニメーション";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

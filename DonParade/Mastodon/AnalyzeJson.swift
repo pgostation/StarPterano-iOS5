@@ -216,7 +216,7 @@ final class AnalyzeJson {
     
     static func analyzeAccountJson(account: [String: Any]) -> AccountData {
         let acct = account["acct"] as? String ?? ""
-        let avatar = account["acct"] as? String
+        let avatar = account["avatar"] as? String
         let avatar_static = account["avatar_static"] as? String
         let bot = account["bot"] as? Int
         let created_at = account["created_at"] as? String
