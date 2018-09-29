@@ -63,7 +63,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.selectedRow = self.selectedRow! + addList.count
                     }
                     
-                    if addList.count <= 5 && tableView.contentOffset.y <= 60 {
+                    if addList.count <= 3 && tableView.contentOffset.y <= 60 {
                         // 一番上の場合、ずれさせる
                     } else {
                         // スクロールして、表示していたツイートがあまりずれないようにする
@@ -82,26 +82,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     }
                 } else {
                     // すでにあるデータを更新する
+                    var index = 0
                     for newContent in addList {
-                        var flag = false
-                        for (index, listData) in self.list.enumerated() {
+                        while index < self.list.count {
+                            let listData = self.list[index]
                             if listData.id == newContent.id {
                                 self.list[index] = newContent
-                                flag = true
                                 break
                             }
-                        }
-                        if !flag {
-                            // なかったので前か後ろに追加する
-                            if let date1 = self.list.first?.created_at, let date2 = addList.first?.created_at {
-                                if date1 > date2 {
-                                    self.list.append(newContent)
-                                } else {
-                                    self.list.insert(newContent, at: 0)
-                                }
-                            } else {
-                                self.list.insert(newContent, at: 0)
+                            // タイムラインの方が古いので、その前に追加する
+                            if (listData.id ?? "") < (newContent.id ?? "") {
+                                self.list.insert(newContent, at: index)
+                                break
                             }
+                            index += 1
                         }
                     }
                 }
@@ -292,20 +286,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             messageView = msgView
         }
         
-        if SettingsData.useAnimation, let emojis = data.emojis {
-            for emoji in emojis {
-                let url = emoji["url"] as? String
-                if url?.hasSuffix(".gif") == true {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        for layer in messageView.layer.sublayers ?? [] {
-                            print(String(describing: type(of: layer)))
-                        }
-                    }
-                    break
-                }
-            }
-        }
-        
         // ビューの高さを決める
         messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView != .normal ? 50 : 66)
         messageView.sizeToFit()
@@ -363,18 +343,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
                     let isHidden = cell?.messageView?.isHidden ?? false
                     messageView.isHidden = isHidden
-                    let oldFrame = cell?.messageView?.frame
                     cell?.messageView?.removeFromSuperview()
                     cell?.messageView = messageView
-                    cell?.insertSubview(messageView, at: 2)
+                    cell?.insertSubview(messageView, at: 1)
                     self?.setCellColor(cell: cell)
                     if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
                         (messageView as? UILabel)?.numberOfLines = 1
-                        messageView.frame.size.height = SettingsData.fontSize + 2
+                        //messageView.frame.size.height = SettingsData.fontSize + 2
+                        messageView.sizeToFit()
                     }
-                    if let oldFrame = oldFrame {
-                        messageView.frame = oldFrame
-                    }
+                    let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
+                        messageView.frame.origin.y = y
                 }
             }
         })
@@ -395,7 +374,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     for emoji in emojis {
                         if emoji["shortcode"] as? String == data.1 {
                             APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
-                                print(image.frameCount)
                                 if image.frameCount <= 1 { return }
                                 let apngView = APNGImageView(image: image)
                                 apngView.tag = 5555
@@ -439,7 +417,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.isBoosted = (data.reblogged == 1)
         
         cell.messageView = messageView
-        cell.insertSubview(messageView, at: 2)
+        cell.insertSubview(messageView, at: 1)
         
         // 「もっと見る」の場合
         if data.sensitive == 1 || data.spoiler_text != "" {
