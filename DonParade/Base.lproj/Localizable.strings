@@ -21,7 +21,7 @@
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_SEARCH" = "Search";
 "BUTTON_NOTIFY" = " Notify";
-"BUTTON_NOTIFY_MARK" = "🔔Notify";
+"BUTTON_NOTIFY_MARK" = "* Notify";
 "BUTTON_SHOW_MORE" = "Show More";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
@@ -89,6 +89,7 @@
 "ACTION_UNMUTE" = "Unmute";
 "ACTION_MUTE" = "Mute";
 "ACTION_WEB_BROWSER" = "Open with browser";
+"ALERT_UNFOLLOW" = "Confirm";
 
 // 設定画面
 "BUTTON_CLOSE" = "Close";

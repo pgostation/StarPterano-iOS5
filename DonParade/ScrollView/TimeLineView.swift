@@ -15,7 +15,7 @@ final class TimeLineView: UITableView {
     let type: TimeLineViewController.TimeLineType
     let option: String?
     private let model = TimeLineViewModel()
-    private let refreshCon = UIRefreshControl()
+    private let refreshCon: UIRefreshControl
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
     private let accessToken = SettingsData.accessToken
@@ -25,6 +25,7 @@ final class TimeLineView: UITableView {
     init(type: TimeLineViewController.TimeLineType, option: String?, mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])?) {
         self.type = type
         self.option = option
+        self.refreshCon = UIRefreshControl()
         
         super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
         

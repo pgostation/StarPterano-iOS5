@@ -6,6 +6,8 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
+// 指定ユーザーのFollowing/Followers一覧を表示する画面
+
 import UIKit
 
 final class FollowingViewController: MyViewController {
@@ -80,9 +82,36 @@ final class FollowingViewController: MyViewController {
                     }
                     
                     // フォロー関係を取得
-                    //if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/\(idStr)") {
-                    //
-                    //}
+                    var idStr = ""
+                    for accountData in list {
+                        if let id = accountData.id {
+                            if idStr != "" {
+                                idStr += "&"
+                            }
+                            idStr += "id[]=" + id
+                        }
+                    }
+                    if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?\(idStr)") {
+                        try? MastodonRequest.get(url: url) { (data, response, error) in
+                            guard let view = self.view as? FollowingView else { return }
+                            
+                            if let data = data {
+                                do {
+                                    guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] else { return }
+                                    
+                                    for json in responseJson {
+                                        if let id = json["id"] as? String {
+                                            view.tableView.model.relationshipList.updateValue(json, forKey: id)
+                                        }
+                                    }
+                                    
+                                    DispatchQueue.main.async {
+                                        view.tableView.reloadData()
+                                    }
+                                } catch { }
+                            }
+                        }
+                    }
                 } catch { }
             }
             
@@ -168,6 +197,7 @@ private final class FollowingTableView: UITableView {
 private final class FollowingTableModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     var showAutoPegerizeCell = true
     private var list: [AnalyzeJson.AccountData] = []
+    var relationshipList: [String: [String: Any]] = [:]
     
     override init() {
         super.init()
@@ -223,8 +253,24 @@ private final class FollowingTableModel: NSObject, UITableViewDataSource, UITabl
         
         cell.idLabel.text = list[indexPath.row].acct
         
-        //cell.followButton.setTitle("フォロー中", for: .normal)
-        cell.followButton.setTitleColor(ThemeColor.idColor, for: .normal)
+        cell.followButton.alpha = 0
+        cell.followButton.removeTarget(cell, action: #selector(cell.followAction), for: .touchUpInside)
+        cell.followButton.removeTarget(cell, action: #selector(cell.unfollowAction), for: .touchUpInside)
+        
+        if let relationShipJson = relationshipList[data.id ?? ""] {
+            cell.followButton.alpha = 1
+            if relationShipJson["following"] as? Int == 1 {
+                cell.followButton.setTitle("☑️", for: .normal)
+                cell.followButton.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+                cell.followButton.addTarget(cell, action: #selector(cell.unfollowAction), for: .touchUpInside)
+            } else {
+                cell.followButton.setTitle("+", for: .normal)
+                cell.followButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
+                cell.followButton.setTitleColor(UIColor.blue, for: .normal)
+                cell.followButton.backgroundColor = UIColor.gray
+                cell.followButton.addTarget(cell, action: #selector(cell.followAction), for: .touchUpInside)
+            }
+        }
         
         return cell
     }
@@ -298,6 +344,12 @@ private final class FollowingTableCell: UITableViewCell {
             self.nameLabel.addGestureRecognizer(tapGesture)
             self.nameLabel.isUserInteractionEnabled = true
         }
+        
+        self.followButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+        self.followButton.setTitleColor(ThemeColor.idColor, for: .normal)
+        self.followButton.clipsToBounds = true
+        self.followButton.layer.cornerRadius = 8
+        self.followButton.alpha = 0
     }
     
     // アイコンをタップした時の処理
@@ -315,6 +367,63 @@ private final class FollowingTableCell: UITableViewCell {
         UIView.animate(withDuration: 0.3) {
             accountTimeLineViewController.view.frame.origin.x = 0
         }
+    }
+    
+    @objc func followAction() {
+        ProfileAction.follow(id: self.accountData?.id ?? "")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
+                try? MastodonRequest.get(url: url) { (data, response, error) in
+                    guard let view = self.superview as? FollowingTableView else { return }
+                    
+                    if let data = data {
+                        do {
+                            guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                            
+                            if let id = responseJson["id"] as? String {
+                                view.model.relationshipList.updateValue(responseJson, forKey: id)
+                            }
+                            
+                            DispatchQueue.main.async {
+                                view.reloadData()
+                            }
+                        } catch { }
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func unfollowAction() {
+        Dialog.show(message: I18n.get("ALERT_UNFOLLOW"),
+                    okName: I18n.get("ACTION_UNFOLLOW"),
+                    cancelName: I18n.get("BUTTON_CANCEL"),
+                    callback: { result in
+                        ProfileAction.unfollow(id: self.accountData?.id ?? "")
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
+                                try? MastodonRequest.get(url: url) { (data, response, error) in
+                                    guard let view = self.superview as? FollowingTableView else { return }
+                                    
+                                    if let data = data {
+                                        do {
+                                            guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                                            
+                                            if let id = responseJson["id"] as? String {
+                                                view.model.relationshipList.updateValue(responseJson, forKey: id)
+                                            }
+                                            
+                                            DispatchQueue.main.async {
+                                                view.reloadData()
+                                            }
+                                        } catch { }
+                                    }
+                                }
+                            }
+                        }
+        })
     }
     
     override func layoutSubviews() {
