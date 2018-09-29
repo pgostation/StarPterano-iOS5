@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftyGif
+import APNGKit
 
 final class ImageCache {
     private static var memCache: [String: UIImage] = [:]
@@ -136,6 +137,80 @@ final class ImageCache {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+final class APNGCache {
+    private static var memCache: [String: APNGImage] = [:]
+    private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
+    private static let fileManager = FileManager()
+    private static let imageQueue = DispatchQueue(label: "APNGCache")
+    
+    static func image(urlStr: String?, callback: @escaping (APNGImage)->Void) {
+        guard let urlStr = urlStr else { return }
+        
+        // メモリキャッシュにある場合
+        if let image = memCache[urlStr] {
+            callback(image)
+            return
+        }
+        
+        // ストレージキャッシュにある場合
+        let cacheDir = NSHomeDirectory() + "/Library/Caches"
+        let filePath = cacheDir + urlStr.replacingOccurrences(of: "/", with: "|")
+        if fileManager.fileExists(atPath: filePath) {
+            imageQueue.async {
+                let url = URL(fileURLWithPath: filePath)
+                if let data = try? Data(contentsOf: url) {
+                    if let image = APNGImage(data: data) {
+                        DispatchQueue.main.async {
+                            memCache.updateValue(image, forKey: urlStr)
+                            callback(image)
+                            
+                            if memCache.count >= 200 { // メモリの使いすぎを防ぐ
+                                memCache = [:]
+                            }
+                        }
+                    }
+                }
+            }
+            return
+        }
+        
+        // リクエスト済みの場合、コールバックリストに追加する
+        if waitingDict.keys.contains(urlStr) {
+            waitingDict[urlStr]?.append(callback)
+            return
+        }
+        
+        waitingDict[urlStr] = []
+        
+        // ネットワークに取りに行く
+        imageQueue.async {
+            guard let url = URL(string: urlStr) else { return }
+            if let data = try? Data(contentsOf: url) {
+                if let image = APNGImage(data: data) {
+                    DispatchQueue.main.async {
+                        memCache.updateValue(image, forKey: urlStr)
+                        callback(image)
+                        
+                        for waitingCallback in waitingDict[urlStr] ?? [] {
+                            waitingCallback(image)
+                        }
+                        
+                        waitingDict.removeValue(forKey: urlStr)
+                        
+                        if memCache.count >= 200 { // メモリの使いすぎを防ぐ
+                            memCache = [:]
+                        }
+                    }
+                    
+                    // ストレージにキャッシュする
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    try? data.write(to: fileUrl)
                 }
             }
         }

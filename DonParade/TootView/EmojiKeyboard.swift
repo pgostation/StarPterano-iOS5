@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftyGif
+import APNGKit
 
 final class EmojiKeyboard: UIView {
     private let spaceButton = UIButton()
@@ -141,18 +142,33 @@ private final class EmojiInputScrollView: UIScrollView {
         // 絵文字ボタンの追加
         for emoji in self.emojiList {
             let button = EmojiButton(key: emoji.short_code ?? "")
-            ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { (image) in
-                print(emoji.url)
-                if emoji.url?.hasSuffix(".gif") == true {
-                    let imageView = UIImageView(gifImage: image, manager: self.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+            if SettingsData.useAnimation && emoji.url?.hasSuffix(".png") == true {
+                // 上からAPNGのビューを貼り付ける
+                APNGCache.image(urlStr: emoji.url) { image in
+                    let imageView = APNGImageView(image: image)
+                    imageView.autoStartAnimation = true
                     let buttonSize: CGFloat = 24 + SettingsData.fontSize
                     imageView.frame = CGRect(x: 0,
                                              y: 0,
                                              width: buttonSize,
                                              height: buttonSize)
                     button.addSubview(imageView)
-                } else {
-                    button.setImage(image, for: .normal)
+                }
+            } else {
+                // APNG以外
+                ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
+                    if emoji.url?.hasSuffix(".gif") == true {
+                        // 上からGIFアニメーションのビューを貼り付ける
+                        let imageView = UIImageView(gifImage: image, manager: self.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                        let buttonSize: CGFloat = 24 + SettingsData.fontSize
+                        imageView.frame = CGRect(x: 0,
+                                                 y: 0,
+                                                 width: buttonSize,
+                                                 height: buttonSize)
+                        button.addSubview(imageView)
+                    } else {
+                        button.setImage(image, for: .normal)
+                    }
                 }
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)

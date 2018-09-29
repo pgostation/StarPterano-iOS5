@@ -5,4 +5,5 @@ use_frameworks!
 target 'DonParade' do
 pod 'Starscream'
 pod 'SwiftyGif'
+pod 'APNGKit'
 end
