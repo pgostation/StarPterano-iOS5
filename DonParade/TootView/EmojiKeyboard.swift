@@ -138,6 +138,13 @@ private final class EmojiInputScrollView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        while let apngView = self.viewWithTag(5555) as? APNGImageView {
+            apngView.stopAnimating()
+            apngView.removeFromSuperview()
+        }
+    }
+    
     private func addEmojis() {
         // 絵文字ボタンの追加
         for emoji in self.emojiList {
@@ -146,6 +153,7 @@ private final class EmojiInputScrollView: UIScrollView {
                 // 上からAPNGのビューを貼り付ける
                 APNGImageCache.image(urlStr: emoji.url) { image in
                     let imageView = APNGImageView(image: image)
+                    imageView.tag = 5555
                     imageView.autoStartAnimation = true
                     let buttonSize: CGFloat = 24 + SettingsData.fontSize
                     imageView.frame = CGRect(x: 0,
