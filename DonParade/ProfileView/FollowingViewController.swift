@@ -76,7 +76,12 @@ final class FollowingViewController: MyViewController {
                     
                     if let view = self.view as? FollowingView {
                         DispatchQueue.main.async {
-                            view.tableView.model.change(addList: list)
+                            if !view.tableView.model.change(addList: list) {
+                                // 重複したデータを受信したら、終了
+                                if let view = self.view as? FollowingView {
+                                    view.tableView.model.showAutoPegerizeCell = false
+                                }
+                            }
                             view.tableView.reloadData()
                         }
                     }
@@ -207,8 +212,17 @@ private final class FollowingTableModel: NSObject, UITableViewDataSource, UITabl
         fatalError("init(coder:) has not been implemented")
     }
     
-    func change(addList: [AnalyzeJson.AccountData]) {
+    func change(addList: [AnalyzeJson.AccountData]) -> Bool {
+        if let first = addList.first {
+            for data in self.list {
+                if data.id == first.id {
+                    return false
+                }
+            }
+        }
         self.list += addList
+        
+        return true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

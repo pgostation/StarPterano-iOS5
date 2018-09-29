@@ -349,7 +349,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     self?.setCellColor(cell: cell)
                     if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
                         (messageView as? UILabel)?.numberOfLines = 1
-                        //messageView.frame.size.height = SettingsData.fontSize + 2
                         messageView.sizeToFit()
                     }
                     let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
