@@ -246,7 +246,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // テキストビューの高さを変化させる
     func textViewDidChange(_ textView: UITextView) {
-        if textView.inputView is EmojiKeyboard {
+        if textView.inputView is EmojiKeyboard || textView.text.contains(":"){
             var emojis: [[String: Any]] = []
             
             for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
@@ -256,7 +256,12 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             }
             
             let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
-            textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+            if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
+                textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+            }
+            else if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
+                spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+            }
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
         }
