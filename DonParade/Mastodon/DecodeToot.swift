@@ -261,6 +261,28 @@ final class DecodeToot {
         
         return attributedStr.string
     }
+    
+    // NSAttributedStringから絵文字のshortcodeの配列を返す
+    static func getEmojiList(attributedText: NSAttributedString, textStorage: NSTextStorage) -> [(NSRange, String)] {
+        // 絵文字のある場所をリストにする
+        var list: [(NSRange, String)] = []
+        let range = NSRange(location: 0, length: attributedText.length)
+        if (textStorage.containsAttachments(in: range)) {
+            let attrString = attributedText
+            var location = 0
+            while location < range.length {
+                var r = NSRange()
+                let attrDictionary = attrString.attributes(at: location, effectiveRange: &r)
+                let attachment = attrDictionary[NSAttributedStringKey.attachment] as? NSTextAttachment
+                if let image = attachment?.image {
+                    list.append((r, (image as? EmojiImage)?.shortcode ?? ""))
+                }
+                location += r.length
+            }
+        }
+        
+        return list
+    }
 }
 
 class EmojiImage: UIImage {

@@ -10,6 +10,7 @@
 
 import UIKit
 import SafariServices
+import APNGKit
 
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
@@ -257,7 +258,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // プロパティ設定
         let messageView: UIView
-        if hasLink {
+        if hasLink || (SettingsData.useAnimation && data.emojis != nil && data.emojis!.count > 0) {
             let msgView = UITextView()
             msgView.attributedText = attributedText
             msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
@@ -373,6 +374,41 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             }
         })
+        
+        // カスタム絵文字のAPNGアニメーション対応
+        if SettingsData.useAnimation, let emojis = data.emojis, emojis.count > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                guard let messageView = cell?.messageView as? UITextView else { return }
+                
+                let list = DecodeToot.getEmojiList(attributedText: messageView.attributedText, textStorage: messageView.textStorage)
+                for data in list {
+                    let beginning = messageView.beginningOfDocument
+                    guard let start = messageView.position(from: beginning, offset: data.0.location) else { continue }
+                    guard let end = messageView.position(from: start, offset: data.0.length) else { continue }
+                    guard let textRange = messageView.textRange(from: start, to: end) else { continue }
+                    let position = messageView.firstRect(for: textRange)
+                    
+                    for emoji in emojis {
+                        if emoji["shortcode"] as? String == data.1 {
+                            APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
+                                let apngView = APNGImageView(image: image)
+                                apngView.autoStartAnimation = true
+                                apngView.backgroundColor = ThemeColor.cellBgColor
+                                let size = (position.size.width + position.size.height) / 2
+                                apngView.frame = CGRect(x: position.origin.x - 2,
+                                                        y: position.origin.y,
+                                                        width: size,
+                                                        height: size)
+                                messageView.addSubview(apngView)
+                            }
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        
+        
         let account = accountList[data.accountId]
         
         cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))

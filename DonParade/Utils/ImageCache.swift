@@ -143,11 +143,11 @@ final class ImageCache {
     }
 }
 
-final class APNGCache {
+final class APNGImageCache {
     private static var memCache: [String: APNGImage] = [:]
     private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
-    private static let imageQueue = DispatchQueue(label: "APNGCache")
+    private static let imageQueue = DispatchQueue(label: "APNGImageCache")
     
     static func image(urlStr: String?, callback: @escaping (APNGImage)->Void) {
         guard let urlStr = urlStr else { return }
@@ -172,6 +172,7 @@ final class APNGCache {
                             
                             if memCache.count >= 200 { // メモリの使いすぎを防ぐ
                                 memCache = [:]
+                                APNGCache.defaultCache.clearMemoryCache()
                             }
                         }
                     }
@@ -205,6 +206,7 @@ final class APNGCache {
                         
                         if memCache.count >= 200 { // メモリの使いすぎを防ぐ
                             memCache = [:]
+                            APNGCache.defaultCache.clearMemoryCache()
                         }
                     }
                     
