@@ -152,6 +152,7 @@ private final class EmojiInputScrollView: UIScrollView {
             if SettingsData.useAnimation && emoji.url?.hasSuffix(".png") == true {
                 // 上からAPNGのビューを貼り付ける
                 APNGImageCache.image(urlStr: emoji.url) { image in
+                    if image.frameCount <= 1 { return }
                     let imageView = APNGImageView(image: image)
                     imageView.tag = 5555
                     imageView.autoStartAnimation = true

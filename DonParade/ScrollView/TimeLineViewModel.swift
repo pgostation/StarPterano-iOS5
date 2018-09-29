@@ -363,6 +363,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
                     let isHidden = cell?.messageView?.isHidden ?? false
                     messageView.isHidden = isHidden
+                    let oldFrame = cell?.messageView?.frame
                     cell?.messageView?.removeFromSuperview()
                     cell?.messageView = messageView
                     cell?.insertSubview(messageView, at: 2)
@@ -370,6 +371,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
                         (messageView as? UILabel)?.numberOfLines = 1
                         messageView.frame.size.height = SettingsData.fontSize + 2
+                    }
+                    if let oldFrame = oldFrame {
+                        messageView.frame = oldFrame
                     }
                 }
             }
@@ -391,13 +395,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     for emoji in emojis {
                         if emoji["shortcode"] as? String == data.1 {
                             APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
+                                print(image.frameCount)
+                                if image.frameCount <= 1 { return }
                                 let apngView = APNGImageView(image: image)
                                 apngView.tag = 5555
                                 apngView.autoStartAnimation = true
                                 apngView.backgroundColor = ThemeColor.cellBgColor
-                                let size = (position.size.width + position.size.height) / 2
-                                apngView.frame = CGRect(x: position.origin.x - 2,
-                                                        y: position.origin.y,
+                                let size = min(position.size.width, position.size.height)
+                                apngView.frame = CGRect(x: position.origin.x,
+                                                        y: position.origin.y + 2,
                                                         width: size,
                                                         height: size)
                                 messageView.addSubview(apngView)
