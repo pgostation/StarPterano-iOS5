@@ -392,6 +392,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         if emoji["shortcode"] as? String == data.1 {
                             APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
                                 let apngView = APNGImageView(image: image)
+                                apngView.tag = 5555
                                 apngView.autoStartAnimation = true
                                 apngView.backgroundColor = ThemeColor.cellBgColor
                                 let size = (position.size.width + position.size.height) / 2
@@ -843,6 +844,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let cell = view.dequeueReusableCell(withIdentifier: reuseIdentifier) as? TimeLineViewCell ?? TimeLineViewCell(reuseIdentifier: reuseIdentifier)
         
         cell.showDetail = false
+        while let apngView = cell.messageView?.viewWithTag(5555) as? APNGImageView {
+            apngView.stopAnimating()
+            apngView.removeFromSuperview()
+        }
         cell.messageView?.removeFromSuperview()
         cell.continueView?.removeFromSuperview()
         cell.boostView?.removeFromSuperview()

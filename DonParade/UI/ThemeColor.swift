@@ -66,8 +66,8 @@ final class ThemeColor {
             
             selectedBgColor = UIColor(red: 0.20, green: 0.25, blue: 0.00, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.12, green: 0.16, blue: 0.06, alpha: 1)
-            mentionedBgColor = UIColor(red: 0.3, green: 0.33, blue: 0.12, alpha: 1)
-            mentionedSameBgColor = UIColor(red: 0.24, green: 0.21, blue: 0.16, alpha: 1)
+            mentionedBgColor = UIColor(red: 0.3, green: 0.20, blue: 0.12, alpha: 1)
+            mentionedSameBgColor = UIColor(red: 0.24, green: 0.20, blue: 0.16, alpha: 1)
             toMentionBgColor = UIColor(red: 0.15, green: 0.20, blue: 0.30, alpha: 1)
             
             directBar = UIColor(red: 0.6, green: 0, blue: 0, alpha: 1)
