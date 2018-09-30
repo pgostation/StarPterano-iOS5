@@ -165,9 +165,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isDarkMode)
                 cell.textLabel?.text = title
                 cell.callback = { [weak tableView] isOn in
+                    guard let tableView = tableView else { return }
                     SettingsData.isDarkMode = isOn
-                    tableView?.reloadData()
-                    tableView?.backgroundColor = ThemeColor.cellBgColor
+                    
+                    // アニメーションで変更
+                    tableView.reloadRows(at: tableView.indexPathsForVisibleRows ?? [], with: UITableViewRowAnimation.fade)
+                    UIView.animate(withDuration: 0.2) {
+                        tableView.backgroundColor = ThemeColor.cellBgColor
+                    }
+                    
                     MainViewController.instance?.refreshColor()
                 }
                 return cell
