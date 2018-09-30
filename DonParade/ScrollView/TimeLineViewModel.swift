@@ -229,11 +229,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             imagesOffset = 0
         }
         
-        if data.reblog_acct != nil {
-            return max(55, messageView.frame.height + 28 + 20 + imagesOffset + detailOffset)
+        let reblogOffset: CGFloat
+        if data.reblog_acct != nil || data.visibility == "direct" {
+            reblogOffset = 20
         } else {
-            return max(55, messageView.frame.height + 28 + imagesOffset + detailOffset)
+            reblogOffset = 0
         }
+        
+        return max(55, messageView.frame.height + 28 + reblogOffset + imagesOffset + detailOffset)
     }
     
     // メッセージのビューとデータを返す
