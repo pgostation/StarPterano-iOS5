@@ -34,6 +34,11 @@
 "ACTION_DELETE_TOOT" = "Delete this toot";
 "ALERT_DELETE_TOOT_FAILURE" = "Delete the toot failure.";
 "ACTION_COPY_TOOT" = "Copy this toot";
+"ACTION_REPORT_TOOT" = "Report this toot";
+"ALERT_INPUT_REPORT_REASON" = "Input report reason";
+"BUTTON_REPORT" = "REPORT";
+"ALERT_REASON_IS_NIL" = "Reason is empty.";
+"ALERT_REPORT_TOOT_FAILURE" = "Report a toot failure.";
 
 // 何分前
 "DATETIME_NOW" = "now";

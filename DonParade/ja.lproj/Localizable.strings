@@ -34,6 +34,11 @@
 "ACTION_DELETE_TOOT" = "このトゥートを削除";
 "ALERT_DELETE_TOOT_FAILURE" = "トゥートの削除に失敗しました";
 "ACTION_COPY_TOOT" = "トゥートをコピー";
+"ACTION_REPORT_TOOT" = "このトゥートを通報する";
+"ALERT_INPUT_REPORT_REASON" = "通報理由を入力";
+"BUTTON_REPORT" = "通報";
+"ALERT_REASON_IS_NIL" = "理由が入力されていません";
+"ALERT_REPORT_TOOT_FAILURE" = "通報に失敗しました";
 
 // 何分前
 "DATETIME_NOW" = "今";

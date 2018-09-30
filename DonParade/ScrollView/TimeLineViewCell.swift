@@ -228,7 +228,7 @@ final class TimeLineViewCell: UITableViewCell {
             // トゥートを削除
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_DELETE_TOOT"),
-                style: UIAlertActionStyle.default,
+                style: UIAlertActionStyle.destructive,
                 handler: { _ in
                     guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(self.id)") else { return }
                     try? MastodonRequest.delete(url: url, completionHandler: { (data, response, error) in
@@ -238,6 +238,51 @@ final class TimeLineViewCell: UITableViewCell {
                     })
             }))
         }
+        
+        // 通報する
+        guard let accountId = self.accountId else { return }
+        let id = self.id
+        
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_REPORT_TOOT"),
+            style: UIAlertActionStyle.destructive,
+            handler: { _ in
+                Dialog.showWithTextInput(
+                    message: I18n.get("ALERT_INPUT_REPORT_REASON"),
+                    okName: I18n.get("BUTTON_REPORT"),
+                    cancelName: I18n.get("BUTTON_CANCEL"),
+                    defaultText: nil,
+                    callback: { textField, result in
+                        if !result { return }
+                        
+                        if textField.text == nil || textField.text!.count == 0 {
+                            Dialog.show(message: I18n.get("ALERT_REASON_IS_NIL"))
+                            return
+                        }
+                        
+                        guard let hostName = SettingsData.hostName else { return }
+                        
+                        let url = URL(string: "https://\(hostName)/api/v1/reports")!
+                        
+                        let bodyDict = ["account_id": accountId,
+                                        "status_ids": id,
+                                        "comment": textField.text!]
+                        
+                        try? MastodonRequest.post(url: url, body: bodyDict) { (data, response, error) in
+                            if let error = error {
+                                Dialog.show(message: I18n.get("ALERT_REPORT_TOOT_FAILURE") + "\n" + error.localizedDescription)
+                            } else {
+                                if let response = response as? HTTPURLResponse {
+                                    if response.statusCode == 200 {
+                                        //
+                                    } else {
+                                        Dialog.show(message: I18n.get("ALERT_REPORT_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
+                                    }
+                                }
+                            }
+                        }
+                })
+        }))
         
         // ペーストボードにコピー
         alertController.addAction(UIAlertAction(

@@ -34,4 +34,23 @@ final class Dialog {
         
         UIUtils.getFrontViewController()?.present(alert, animated: false, completion: nil)
     }
+    
+    // 入力欄付きのダイアログを表示
+    static func showWithTextInput(message: String, viewController: UIViewController? = nil, okName: String, cancelName: String, defaultText: String?, callback: @escaping (UITextField, Bool)->Void) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addTextField(configurationHandler: { textField in
+            textField.text = defaultText
+            
+            alert.addAction(UIAlertAction(title: okName, style: UIAlertActionStyle.default, handler: { _ in
+                callback(textField, true)
+            }))
+            
+            alert.addAction(UIAlertAction(title: cancelName, style: UIAlertActionStyle.cancel, handler: { _ in
+                callback(textField, false)
+            }))
+            
+            UIUtils.getFrontViewController()?.present(alert, animated: false, completion: nil)
+        })
+    }
 }
