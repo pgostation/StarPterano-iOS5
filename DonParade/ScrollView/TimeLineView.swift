@@ -173,11 +173,6 @@ final class TimeLineView: UITableView {
         if !SettingsData.isStreamingMode { return }
         
         if self.streamingObject?.isConnect != true {
-            if !inRefresh {
-                // 手動取得する
-                refresh()
-            }
-            
             if self.type == .home {
                 self.streaming(streamingType: "user")
             }
@@ -186,6 +181,14 @@ final class TimeLineView: UITableView {
             }
             else if self.type == .global {
                 self.streaming(streamingType: "public")
+            }
+            else {
+                return
+            }
+            
+            if !inRefresh {
+                // 手動取得する
+                refresh()
             }
         }
     }

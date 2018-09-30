@@ -253,14 +253,14 @@ private final class ImageView: UIView {
             self.addSubview(rotateButton)
         }
         
-        setProperties(fromRect: fromRect)
+        setProperties(smallImage: smallImage)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setProperties(fromRect: CGRect?) {
+    private func setProperties(smallImage: UIImage?) {
         self.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.6)
         
         closeButton.setTitle("×", for: .normal)
@@ -285,7 +285,7 @@ private final class ImageView: UIView {
         rotateButton.clipsToBounds = true
         
         // 縦方向に長い画像の場合、閉じるボタンを表示させない
-        if let fromRect = fromRect, fromRect.width < fromRect.height {
+        if let smallImage = smallImage, smallImage.size.width < smallImage.size.height {
             closeButton.alpha = 0
             optionButton.alpha = 0
             rotateButton.alpha = 0
