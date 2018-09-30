@@ -451,7 +451,7 @@ final class MainViewController: MyViewController {
                                            height: notifyLabel.frame.height + 2)
             case .center:
                 notifyLabel.frame = CGRect(x: screenBounds.width / 2 - notifyLabel.frame.width / 2,
-                                           y: screenBounds.height / 2 - notifyLabel.frame.height / 2,
+                                           y: screenBounds.height / 2 - notifyLabel.frame.height / 2 - 50,
                                            width: notifyLabel.frame.width,
                                            height: notifyLabel.frame.height + 2)
             }

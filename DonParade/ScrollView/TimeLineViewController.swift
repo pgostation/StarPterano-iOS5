@@ -148,6 +148,24 @@ final class TimeLineViewController: MyViewController {
         super.viewDidAppear(animated)
         
         (self.view as? TimeLineView)?.startStreaming()
+        
+        let text: String?
+        if self.type == .home {
+            text = (SettingsData.hostName ?? "") + "\n@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
+        }
+        else if self.type == .local {
+            text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_LTL")
+        }
+        else if self.type == .global {
+            text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_GTL")
+        }
+        else {
+            text = nil
+        }
+        
+        if let text = text {
+            MainViewController.instance?.showNotify(text: text, position: .center)
+        }
     }
     
     // ユーザータイムライン/詳細トゥートを閉じる
@@ -173,9 +191,6 @@ final class TimeLineViewController: MyViewController {
         let moveToAccount = SettingsData.accountList[newIndex]
         
         moveTo(moveToAccount: moveToAccount, toRight: false)
-        
-        let text = (SettingsData.hostName ?? "") + "\n@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
-        MainViewController.instance?.showNotify(text: text, position: .center)
     }
     
     // スワイプで前へ
@@ -185,9 +200,6 @@ final class TimeLineViewController: MyViewController {
         let moveToAccount = SettingsData.accountList[newIndex]
         
         moveTo(moveToAccount: moveToAccount, toRight: true)
-        
-        let text = (SettingsData.hostName ?? "") + "\n@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
-        MainViewController.instance?.showNotify(text: text, position: .center)
     }
     
     private func moveTo(moveToAccount: (String, String), toRight: Bool) {
