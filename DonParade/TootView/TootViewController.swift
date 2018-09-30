@@ -59,14 +59,19 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         guard let attributedText = view.textField.attributedText else { return }
         if attributedText.length == 0 { return }
         
-        let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: view.textField.textStorage)
+        let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText))
         
         // 保護テキスト
         let spoilerText: String?
         if view.spoilerTextField.isHidden {
             spoilerText = nil
         } else {
-            spoilerText = DecodeToot.encodeEmoji(attributedText: view.textField.attributedText, textStorage: view.spoilerTextField.textStorage)
+            spoilerText = DecodeToot.encodeEmoji(attributedText: view.spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: view.spoilerTextField.attributedText))
+        }
+        
+        if text.count + (spoilerText?.count ?? 0) > 500 {
+            Dialog.show(message: I18n.get("ALERT_OVER_500CHARACTERS"))
+            return
         }
         
         // 公開範囲
@@ -133,10 +138,16 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             if let error = error {
                 Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\n" + error.localizedDescription)
             } else {
-                TootView.savedText = nil
-                TootView.savedSpoilerText = nil
-                TootView.savedImages = []
-                TootView.inReplyToId = nil
+                if let response = response as? HTTPURLResponse {
+                    if response.statusCode == 200 {
+                        TootView.savedText = nil
+                        TootView.savedSpoilerText = nil
+                        TootView.savedImages = []
+                        TootView.inReplyToId = nil
+                    } else {
+                        Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
+                    }
+                }
             }
         }
     }

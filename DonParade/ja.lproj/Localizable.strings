@@ -52,6 +52,7 @@
 "ALERT_TEXT_EXISTS" = "すでにテキストが入力されています";
 "BUTTON_DELETE_IMAGE" = "削除";
 "SWITCH_NSFW" = "閲覧注意(NSFW)";
+"ALERT_OVER_500CHARACTERS" = "500文字を超えています";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";

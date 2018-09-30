@@ -82,6 +82,7 @@ final class TootView: UIView {
         self.addSubview(imageCheckView)
         
         imageCheckView.isHidden = true
+        spoilerTextField.isHidden = true
         
         refresh()
         
@@ -139,7 +140,6 @@ final class TootView: UIView {
         spoilerTextField.layer.borderColor = ThemeColor.messageColor.cgColor
         spoilerTextField.layer.borderWidth = 1 / UIScreen.main.scale
         spoilerTextField.tag = UIUtils.responderTag2
-        spoilerTextField.isHidden = true
         
         if imageCheckView.isHidden {
             DispatchQueue.main.async {
@@ -204,7 +204,7 @@ final class TootView: UIView {
             spoilerTextField.frame = CGRect(x: 1,
                                             y: 40,
                                             width: screenBounds.width - 2,
-                                            height: max(25, spoilerTextField.frame.height))
+                                            height: min(max(25, spoilerTextField.frame.height), 80))
             top = spoilerTextField.frame.maxY + 2
         }
         
@@ -212,7 +212,7 @@ final class TootView: UIView {
         textField.frame = CGRect(x: 1,
                                  y: top,
                                  width: screenBounds.width - 2,
-                                 height: max(25, textField.frame.height))
+                                 height: min(max(25, textField.frame.height), screenBounds.height - keyBoardHeight - UIUtils.statusBarHeight() - top - 40))
         
         inputBar.frame = CGRect(x: 0,
                                 y: top + textField.frame.height,
