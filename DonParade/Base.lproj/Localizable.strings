@@ -58,6 +58,7 @@
 "BUTTON_DELETE_IMAGE" = "Delete";
 "SWITCH_NSFW" = "NSFW";
 "ALERT_OVER_500CHARACTERS" = "Message is over 500 characters";
+"ALERT_IMAGE_COUNT_MAX" = "Images maximum 4.";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "Privacy";

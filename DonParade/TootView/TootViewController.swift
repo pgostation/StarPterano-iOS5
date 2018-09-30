@@ -164,6 +164,11 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     @objc func addImageAction() {
         guard let view = self.view as? TootView else { return }
         
+        if view.imageCheckView.urls.count >= 4 {
+            Dialog.show(message: I18n.get("ALERT_IMAGE_COUNT_MAX"))
+            return
+        }
+        
         PHPhotoLibrary.requestAuthorization { authStatus in
             switch authStatus {
             case .authorized:
