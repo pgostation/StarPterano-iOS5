@@ -417,6 +417,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.urlStr = data.url ?? ""
         cell.isMiniView = SettingsData.isMiniView
         cell.accountData = account
+        cell.visibility = data.visibility
         
         if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
             (messageView as? UILabel)?.numberOfLines = 1

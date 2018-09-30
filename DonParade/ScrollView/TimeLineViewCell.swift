@@ -63,6 +63,7 @@ final class TimeLineViewCell: UITableViewCell {
     var isMiniView = SettingsData.MiniView.normal
     var imageUrls: [String] = []
     var previewUrls: [String] = []
+    var visibility: String?
     
     var isFaved = false
     var isBoosted = false
@@ -255,6 +256,19 @@ final class TimeLineViewCell: UITableViewCell {
             // トゥート画面を開いていなければ開く
             if !TootViewController.isShown {
                 MainViewController.instance?.tootAction(nil)
+                
+                // 公開範囲を低い方に合わせる
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    // 公開範囲設定を変更
+                    if let visibility = self.visibility {
+                        guard let view = TootViewController.instance?.view as? TootView else { return }
+                        
+                        let mode = self.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
+                                                   m2: SettingsData.protectMode)
+                        view.protectMode = mode
+                        view.refresh()
+                    }
+                }
             }
             
             // @IDを入力する
@@ -263,6 +277,50 @@ final class TimeLineViewCell: UITableViewCell {
                     view.textField.text = "@\(self.idLabel.text ?? "") "
                 }
             }
+        }
+    }
+    
+    // 低い方の公開範囲を返す
+    private func lowerVisibility(m1: SettingsData.ProtectMode?, m2: SettingsData.ProtectMode) -> SettingsData.ProtectMode {
+        guard let m1 = m1 else { return m2 }
+        
+        let v1: Int
+        switch m1 {
+        case .direct:
+            v1 = 0
+        case .privateMode:
+            v1 = 1
+        case .unlisted:
+            v1 = 2
+        case .publicMode:
+            v1 = 3
+        }
+        
+        let v2: Int
+        switch m2 {
+        case .direct:
+            v2 = 0
+        case .privateMode:
+            v2 = 1
+        case .unlisted:
+            v2 = 2
+        case .publicMode:
+            v2 = 3
+        }
+        
+        let v = min(v1, v2)
+        
+        switch v {
+        case 0:
+            return .direct
+        case 1:
+            return .privateMode
+        case 2:
+            return .unlisted
+        case 3:
+            return .publicMode
+        default:
+            return .publicMode
         }
     }
     
