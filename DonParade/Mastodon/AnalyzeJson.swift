@@ -108,12 +108,9 @@ final class AnalyzeJson {
         }
         
         let content = json["content"] as? String
-        let created_at: String?
-        if reblog_acct == nil {
-            created_at = json["created_at"] as? String
-        } else {
-            created_at = reblog?["created_at"] as? String
-        }
+        
+        let created_at = json["created_at"] as? String
+        let reblog_created_at = reblog?["created_at"] as? String
         
         var emojis: [[String: Any]]? = nil
         if reblog_acct == nil {
@@ -207,8 +204,8 @@ final class AnalyzeJson {
             spoiler_text = reblog?["spoiler_text"] as? String
         }
         
-        let tags = json["tags"] as? [String]
-        let uri = json["uri"] as? String
+        //let tags = json["tags"] as? [String]
+        //let uri = json["uri"] as? String
         
         let url: String?
         if reblog_acct == nil {
@@ -239,13 +236,14 @@ final class AnalyzeJson {
                                mentions: mentions,
                                muted: muted,
                                reblog_acct: reblog_acct,
+                               reblog_created_at: reblog_created_at,
                                reblogged: reblogged,
                                reblogs_count: reblogs_count,
                                replies_count: replies_count,
                                sensitive: sensitive,
                                spoiler_text: spoiler_text,
-                               tags: tags,
-                               uri: uri,
+                               //tags: tags,
+                               //uri: uri,
                                url: url,
                                visibility: visibility)
         return data
@@ -356,13 +354,14 @@ final class AnalyzeJson {
         let mentions: [MentionData]?
         let muted: Int?
         let reblog_acct: String?
+        let reblog_created_at: String?
         let reblogged: Int?
         let reblogs_count: Int?
         let replies_count: Int?
         let sensitive: Int?
         let spoiler_text: String?
-        let tags: [String]?
-        let uri: String?
+        //let tags: [String]?
+        //let uri: String?
         let url: String?
         let visibility: String?
     }

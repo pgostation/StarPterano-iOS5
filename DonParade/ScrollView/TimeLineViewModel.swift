@@ -617,7 +617,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.idLabel.text = account?.acct
         cell.idLabel.sizeToFit()
         
-        if let created_at = data.created_at {
+        if let created_at = data.reblog_created_at ?? data.created_at {
             let date = DecodeToot.decodeTime(text: created_at)
             
             if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
