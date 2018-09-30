@@ -11,6 +11,7 @@
 import UIKit
 
 final class NotificationTableModel: NSObject, UITableViewDataSource, UITableViewDelegate {
+    var useAutopagerize = true
     private var list: [AnalyzeJson.NotificationData] = []
     
     override init() {
@@ -29,6 +30,10 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         }
     }
     
+    func getLastId() -> String? {
+        return self.list.last?.id
+    }
+    
     // セルの数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count + 1 // 一番下に余白をつけるため1加える
@@ -38,7 +43,12 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
     private let dummyLabel = UILabel()
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row >= list.count {
-            return 100
+            if self.useAutopagerize {
+                // Autopagerize
+                NotificationViewController.instance?.addOld()
+            }
+            
+            return 150
         }
         
         let data = list[indexPath.row]

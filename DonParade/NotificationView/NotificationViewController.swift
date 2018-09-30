@@ -11,8 +11,12 @@
 import UIKit
 
 final class NotificationViewController: MyViewController {
+    static weak var instance: NotificationViewController?
+    
     init() {
         super.init(nibName: nil, bundle: nil)
+        
+        NotificationViewController.instance = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,13 +34,35 @@ final class NotificationViewController: MyViewController {
         swipeGesture.direction = .right
         self.view?.addGestureRecognizer(swipeGesture)
         
-        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/notifications?limit=20") else { return }
+        // 最新のデータを取得
+        addOld()
+    }
+    
+    func addOld() {
+        var lastId: String? = nil
+        if let view = self.view as? NotificationView {
+            lastId = view.tableView.model.getLastId()
+        }
+        
+        var idStr = ""
+        if let lastId = lastId {
+            idStr = "&max_id=\(lastId)"
+        }
+        
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/notifications?limit=15\(idStr)") else { return }
         try? MastodonRequest.get(url: url, completionHandler: { [weak self] (data, response, error) in
             if let data = data {
                 do {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject>
                     
                     if let responseJson = responseJson {
+                        if responseJson.count == 0 {
+                            if let view = self?.view as? NotificationView {
+                                view.tableView.model.useAutopagerize = false
+                            }
+                            return
+                        }
+                        
                         var list: [AnalyzeJson.NotificationData] = []
                         
                         for json in responseJson {
@@ -79,7 +105,6 @@ final class NotificationViewController: MyViewController {
                 print(error)
             }
         })
-        
     }
     
     @objc func closeAction() {
