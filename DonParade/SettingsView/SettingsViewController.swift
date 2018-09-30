@@ -32,14 +32,14 @@ final class SettingsViewController: MyViewController {
     
     @objc func closeAction() {
         self.dismiss(animated: true, completion: {
-            // 一度メイン画面も閉じる
+            /*// 一度メイン画面も閉じる
             MainViewController.instance?.dismiss(animated: false, completion: nil)
             
             // 改めてメイン画面を開く
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 let mainViewController = MainViewController()
                 UIUtils.getFrontViewController()?.present(mainViewController, animated: false, completion: nil)
-            }
+            }*/
         })
         
     }
@@ -59,6 +59,8 @@ private final class SettingsView: UITableView {
         
         self.delegate = model
         self.dataSource = model
+        
+        self.backgroundColor = ThemeColor.cellBgColor
     }
     
     required init?(coder aDecoder: NSCoder) {

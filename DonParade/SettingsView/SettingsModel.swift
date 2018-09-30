@@ -123,7 +123,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: reuseIdentifier)
         
+        cell.selectionStyle = .none
         cell.accessoryType = .none
+        cell.backgroundColor = ThemeColor.viewBgColor
+        cell.textLabel?.textColor = ThemeColor.idColor
+        cell.detailTextLabel?.textColor = ThemeColor.idColor
         
         var title = ""
         var subtitle: String? = nil
@@ -160,8 +164,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             case .darkMode:
                 let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isDarkMode)
                 cell.textLabel?.text = title
-                cell.callback = { isOn in
+                cell.callback = { [weak tableView] isOn in
                     SettingsData.isDarkMode = isOn
+                    tableView?.reloadData()
+                    tableView?.backgroundColor = ThemeColor.cellBgColor
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .coloring:
@@ -169,6 +176,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.useColoring = isOn
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .fontSize:
@@ -181,6 +189,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.callback = { [weak cell] value in
                     SettingsData.fontSize = CGFloat(value)
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.fontSize))pt"
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .streaming:
@@ -195,6 +204,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.isLoadPreviewImage = isOn
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .nameTappable:
@@ -202,6 +212,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.isNameTappable = isOn
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .iconSize:
@@ -214,6 +225,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.callback = { [weak cell] value in
                     SettingsData.iconSize = CGFloat(value)
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.iconSize))pt"
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             case .useAnimation:
@@ -221,6 +233,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.useAnimation = isOn
+                    MainViewController.instance?.refreshColor()
                 }
                 return cell
             }
@@ -252,6 +265,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             SettingsData.hostName = data.0
             SettingsData.accessToken = data.1
             tableView.reloadData()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                SettingsViewController.instance?.dismiss(animated: false, completion: nil)
+                MainViewController.instance?.tlAction(nil)
+            }
         case 1:
             switch accountList[indexPath.row] {
             case .add:

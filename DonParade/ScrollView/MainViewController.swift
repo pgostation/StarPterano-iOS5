@@ -47,12 +47,24 @@ final class MainViewController: MyViewController {
         tlAction(nil)
     }
     
+    func refreshColor() {
+        guard let view = self.view as? MainView else { return }
+        
+        view.refreshColor()
+        
+        for (_, vc) in TimelineList {
+            let timelineView = (vc.view as? TimeLineView)
+            timelineView?.reloadData()
+            timelineView?.backgroundColor = ThemeColor.viewBgColor
+        }
+    }
+    
     private var timelineViewController: TimeLineViewController?
     static var isLTLDict: [String: Bool] = [:]
     
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
-        if let oldViewController = self.timelineViewController {
+        if let oldViewController = self.timelineViewController, sender != nil {
             if oldViewController.type == .home {
                 // 一番上までスクロール
                 (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
@@ -521,6 +533,10 @@ final class MainView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func refreshColor() {
+        setProperties()
     }
     
     private func setProperties() {

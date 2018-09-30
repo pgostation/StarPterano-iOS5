@@ -16,6 +16,11 @@ class SettingsStepperCell: UITableViewCell {
     init(style: UITableViewCellStyle, value: Double, minValue: Double, maxValue: Double, step: Double) {
         super.init(style: style, reuseIdentifier: nil)
         
+        self.selectionStyle = .none
+        self.backgroundColor = ThemeColor.viewBgColor
+        self.textLabel?.textColor = ThemeColor.idColor
+        self.detailTextLabel?.textColor = ThemeColor.idColor
+        
         let stepper = UIStepper()
         stepper.value = value
         stepper.stepValue = step
