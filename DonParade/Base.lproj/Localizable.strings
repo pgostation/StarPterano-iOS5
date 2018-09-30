@@ -94,7 +94,7 @@
 "ACTION_BLOCK" = "Block";
 "ACTION_UNMUTE" = "Unmute";
 "ACTION_MUTE" = "Mute";
-"ACTION_WEB_BROWSER" = "Open with browser";
+"ACTION_WEB_BROWSER" = "Open with Safari";
 "ALERT_UNFOLLOW" = "Confirm";
 
 // 設定画面

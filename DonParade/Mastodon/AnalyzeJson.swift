@@ -101,11 +101,14 @@ final class AnalyzeJson {
             created_at = reblog?["created_at"] as? String
         }
         
-        let emojis: [[String: Any]]?
+        var emojis: [[String: Any]]? = nil
         if reblog_acct == nil {
             emojis = json["emojis"] as? [[String: Any]]
         } else {
             emojis = reblog?["emojis"] as? [[String: Any]]
+        }
+        if emojis != nil && emojis!.count == 0 {
+            emojis = nil
         }
         
         let favourited: Int?

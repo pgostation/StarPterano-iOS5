@@ -237,8 +237,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // メッセージのビューとデータを返す
+    private var cacheId = ""
+    private var cache: (UIView, AnalyzeJson.ContentData, Bool)?
     private func getMessageViewAndData(index: Int, indexPath: IndexPath, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
         let data = list[index]
+        
+        if data.emojis == nil,  data.id == cacheId, let cache = self.cache {
+            return cache
+        }
         
         // content解析
         let (attributedText, hasLink) = DecodeToot.decodeContentFast(content: data.content, emojis: data.emojis, callback: callback)
@@ -297,6 +303,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 messageView.frame.size.height = 180 - 28
                 isContinue = true
             }
+        }
+        
+        if let id = data.id {
+            self.cacheId = id
+            self.cache = (messageView, data, isContinue)
         }
         
         return (messageView, data, isContinue)
