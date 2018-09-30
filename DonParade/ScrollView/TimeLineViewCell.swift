@@ -59,7 +59,7 @@ final class TimeLineViewCell: UITableViewCell {
     var accountData: AnalyzeJson.AccountData?
     var contentData: String = ""
     var urlStr: String = ""
-    var mensionsList: [AnalyzeJson.MensionData]?
+    var mentionsList: [AnalyzeJson.MentionData]?
     var isMiniView = SettingsData.MiniView.normal
     var imageUrls: [String] = []
     var previewUrls: [String] = []

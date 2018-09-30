@@ -71,9 +71,14 @@
 
 // 通知画面
 "NOTIFICATION_MENTION" = "返信しました";
-"NOTIFICATION_BOOST" = "ブーストしました";
-"NOTIFICATION_FAV" = "☆お気に入りしました";
-"NOTIFICATION_FOLLOW" = "フォローしました";
+"NOTIFICATION_BOOST" = "🔁ブーストしました";
+"NOTIFICATION_FAV" = "🌟お気に入りしました";
+"NOTIFICATION_FOLLOW" = "➕フォローしました";
+"NOTIFY_SEG_ALL" = "すべて";
+"NOTIFY_SEG_MENTION" = "返信";
+"NOTIFY_SEG_FOLLOW" = "フォロー";
+"NOTIFY_SEG_FAV" = "🌟";
+"NOTIFY_SEG_BOOST" = "🔁";
 
 // フォロー状態表示
 "RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "フォロー中\nフォローされています\n";

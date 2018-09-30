@@ -24,7 +24,7 @@ final class TimeLineView: UITableView {
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
-    init(type: TimeLineViewController.TimeLineType, option: String?, mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])?) {
+    init(type: TimeLineViewController.TimeLineType, option: String?, mentions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])?) {
         self.type = type
         self.option = option
         self.refreshCon = UIRefreshControl()
@@ -37,7 +37,7 @@ final class TimeLineView: UITableView {
         self.backgroundColor = ThemeColor.viewBgColor
         self.separatorStyle = .none
         
-        if type != .mensions {
+        if type != .mentions {
             // 引っ張って更新するやつを追加
             self.refreshCon.attributedTitle = NSAttributedString(string: I18n.get("REFRESH_TIMELINE"))
             self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
@@ -54,7 +54,7 @@ final class TimeLineView: UITableView {
             // 会話表示
             self.model.showAutoPagerizeCell = false
             self.model.isDetailTimeline = true
-            self.model.change(tableView: self, addList: mensions!.0, accountList: mensions!.1)
+            self.model.change(tableView: self, addList: mentions!.0, accountList: mentions!.1)
             self.model.selectedRow = 0
             DispatchQueue.main.async {
                 // 古い物を取りに行く
@@ -80,7 +80,7 @@ final class TimeLineView: UITableView {
             }
             
             // ストリーミングが停止していれば再開
-            self.startStreaming()
+            self.startStreaming(inRefresh: true)
             
             return
         }
@@ -113,7 +113,7 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=100\(sinceIdStr)")
-        case .mensions:
+        case .mentions:
             guard let lastInReplyToId = model.getLastInReplyToId() else { return }
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
         case .direct:
@@ -146,7 +146,7 @@ final class TimeLineView: UITableView {
                             DispatchQueue.main.sync {
                                 strongSelf.reloadData()
                                 
-                                if self?.type == .mensions {
+                                if self?.type == .mentions {
                                     if contentData.in_reply_to_id == nil {
                                         return // ループ防止
                                     }
@@ -169,10 +169,15 @@ final class TimeLineView: UITableView {
     }
     
     // ストリーミングを開始
-    func startStreaming() {
+    func startStreaming(inRefresh: Bool = false) {
         if !SettingsData.isStreamingMode { return }
         
         if self.streamingObject?.isConnect != true {
+            if !inRefresh {
+                // 手動取得する
+                refresh()
+            }
+            
             if self.type == .home {
                 self.streaming(streamingType: "user")
             }
@@ -295,7 +300,7 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50\(maxIdStr)")
-        case .mensions:
+        case .mentions:
             return
         case .direct:
             url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(maxIdStr)")

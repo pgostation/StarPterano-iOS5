@@ -108,9 +108,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             // アカウントID情報を更新
             for data in addList {
-                if let mensions = data.mentions {
-                    for mension in mensions {
-                        if let acct = mension.acct, let id = mension.id {
+                if let mentions = data.mentions {
+                    for mention in mentions {
+                        if let acct = mention.acct, let id = mention.id {
                             self.accountIdDict.updateValue(id, forKey: acct)
                         }
                     }
@@ -412,7 +412,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.tableView = tableView as? TimeLineView
         cell.indexPath = indexPath
         cell.accountId = account?.id
-        cell.mensionsList = data.mentions
+        cell.mentionsList = data.mentions
         cell.contentData = data.content ?? ""
         cell.urlStr = data.url ?? ""
         cell.isMiniView = SettingsData.isMiniView
@@ -776,11 +776,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルの色を設定
     private func setCellColor(cell: TimeLineViewCell) {
-        func mensionContains(selectedAccountId: String?, mensions: [AnalyzeJson.MensionData]?) -> Bool {
+        func mentionContains(selectedAccountId: String?, mentions: [AnalyzeJson.MentionData]?) -> Bool {
             guard let selectedAccountId = selectedAccountId else { return false }
-            guard let mensions = mensions else { return false }
-            for mension in mensions {
-                if selectedAccountId == mension.id {
+            guard let mentions = mentions else { return false }
+            for mention in mentions {
+                if selectedAccountId == mention.id {
                     return true
                 }
             }
@@ -815,7 +815,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = ThemeColor.mentionedSameBgColor
             cell.idLabel.backgroundColor = ThemeColor.mentionedSameBgColor
             cell.dateLabel.backgroundColor = ThemeColor.mentionedSameBgColor
-        } else if mensionContains(selectedAccountId: self.selectedAccountId, mensions: cell.mensionsList) {
+        } else if mentionContains(selectedAccountId: self.selectedAccountId, mentions: cell.mentionsList) {
             // メンションが選択中アカウントの場合の色
             cell.backgroundColor = ThemeColor.toMentionBgColor
             cell.messageView?.backgroundColor = ThemeColor.toMentionBgColor
@@ -859,8 +859,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
-            let mensionsData = getMensionsData(data: data)
-            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mensions, option: nil, mensions: (mensionsData, accountList))
+            let mentionsData = getMentionsData(data: data)
+            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
             MainViewController.instance?.addChildViewController(viewController)
             MainViewController.instance?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
@@ -898,19 +898,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // 会話部分のデータを取り出す
-    private func getMensionsData(data: AnalyzeJson.ContentData) -> [AnalyzeJson.ContentData] {
-        var mensionContents: [AnalyzeJson.ContentData] = [data]
+    private func getMentionsData(data: AnalyzeJson.ContentData) -> [AnalyzeJson.ContentData] {
+        var mentionContents: [AnalyzeJson.ContentData] = [data]
         
         var in_reply_to_id = data.in_reply_to_id
         for listData in self.list {
             if listData.id == in_reply_to_id {
-                mensionContents.append(listData)
+                mentionContents.append(listData)
                 in_reply_to_id = listData.in_reply_to_id
                 if in_reply_to_id == nil { break }
             }
         }
         
-        return mensionContents
+        return mentionContents
     }
     
     // UITextViewのリンクタップ時の処理

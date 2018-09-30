@@ -619,10 +619,17 @@ final class MainView: UIView {
                                     width: buttonWidth,
                                     height: buttonHeight)
         
-        notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
-                                           y: screenBounds.height - 50 - bottomOffset,
-                                           width: buttonWidth,
-                                           height: buttonHeight)
+        if TootViewController.isShown {
+            notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
+                                               y: UIUtils.statusBarHeight() + 80,
+                                               width: buttonWidth,
+                                               height: buttonHeight)
+        } else {
+            notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
+                                               y: screenBounds.height - 50 - bottomOffset,
+                                               width: buttonWidth,
+                                               height: buttonHeight)
+        }
         
         accountButton.frame = CGRect(x: screenBounds.width - SettingsData.iconSize - 10,
                                      y: UIUtils.statusBarHeight() + 10,

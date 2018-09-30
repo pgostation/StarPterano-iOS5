@@ -20,7 +20,7 @@ final class NotificationTableCell: UITableViewCell {
     let idLabel = UILabel()
     let dateLabel = UILabel()
     let notificationLabel = UILabel()
-    var statusLabel = UILabel()
+    var statusLabel = UITextView()
     
     var followButton: UIButton?
     
@@ -86,11 +86,11 @@ final class NotificationTableCell: UITableViewCell {
         self.notificationLabel.isOpaque = true
         
         self.statusLabel.textColor = ThemeColor.idColor
+        self.statusLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         self.statusLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         self.statusLabel.backgroundColor = ThemeColor.toMentionBgColor
-        self.statusLabel.numberOfLines = 0
-        self.statusLabel.lineBreakMode = .byCharWrapping
         self.statusLabel.isOpaque = true
+        self.statusLabel.isScrollEnabled = false
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true

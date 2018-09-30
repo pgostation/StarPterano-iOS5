@@ -19,7 +19,7 @@ final class TimeLineViewController: MyViewController {
         case favorites // お気に入り
         case localTag
         case globalTag
-        case mensions // 単一トゥート(と会話)
+        case mentions // 単一トゥート(と会話)
         case direct // ダイレクトメッセージ
         // 会話の場合、@の相手全てのTimelineを取得して表示する。まず過去、それから未来。関係ないのは非表示
     }
@@ -27,12 +27,12 @@ final class TimeLineViewController: MyViewController {
     static var closeButtons: [UIButton] = []
     let type: TimeLineType
     private let option: String? // user指定時はユーザID、タグ指定時はタグ
-    private let mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? // typeに.mensions指定時のみ有効
+    private let mentions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? // typeに.mentions指定時のみ有効
     
-    init(type: TimeLineType, option: String? = nil, mensions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? = nil) {
+    init(type: TimeLineType, option: String? = nil, mentions: ([AnalyzeJson.ContentData], [String: AnalyzeJson.AccountData])? = nil) {
         self.type = type
         self.option = option
-        self.mensions = mensions
+        self.mentions = mentions
         
         super.init(nibName: nil, bundle: nil)
         
@@ -95,8 +95,8 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user || self.type == .mensions || self.type == .localTag || self.type == .globalTag || self.type == .direct || self.type == .favorites {
-            let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
+        if self.type == .user || self.type == .mentions || self.type == .localTag || self.type == .globalTag || self.type == .direct || self.type == .favorites {
+            let view = TimeLineView(type: self.type, option: self.option, mentions: mentions)
             self.view = view
             
             // 閉じるボタンを追加
@@ -123,7 +123,7 @@ final class TimeLineViewController: MyViewController {
             swipeGesture.direction = .right
             self.view?.addGestureRecognizer(swipeGesture)
         } else {
-            let view = TimeLineView(type: self.type, option: self.option, mensions: mensions)
+            let view = TimeLineView(type: self.type, option: self.option, mentions: mentions)
             self.view = view
             
             if SettingsData.accountList.count >= 2 {

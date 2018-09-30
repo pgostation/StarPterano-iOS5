@@ -27,7 +27,10 @@ final class NotificationViewController: MyViewController {
         let view = NotificationView()
         self.view = view
         
+        // 各ボタンのターゲット登録
         view.closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
+        
+        view.segmentControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         
         // 右スワイプで閉じる
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
@@ -107,6 +110,12 @@ final class NotificationViewController: MyViewController {
         })
     }
     
+    @objc func segmentChanged() {
+        guard let view = self.view as? NotificationView else { return }
+        
+        view.tableView.reloadData()
+    }
+    
     @objc func closeAction() {
         UIView.animate(withDuration: 0.3, animations: {
             self.view.frame = CGRect(x: UIScreen.main.bounds.width,
@@ -120,13 +129,15 @@ final class NotificationViewController: MyViewController {
     }
 }
 
-private final class NotificationView: UIView {
-    let tableView = NotificationTableView()
+final class NotificationView: UIView {
+    fileprivate let tableView = NotificationTableView()
     let closeButton = UIButton()
+    let segmentControl = UISegmentedControl()
     
     init() {
         super.init(frame: UIScreen.main.bounds)
         
+        self.addSubview(segmentControl)
         self.addSubview(tableView)
         self.addSubview(closeButton)
         
@@ -142,12 +153,45 @@ private final class NotificationView: UIView {
         
         self.tableView.backgroundColor = ThemeColor.viewBgColor
         
+        // セグメントコントロール
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_ALL"), at: 0, animated: false)
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_MENTION"), at: 1, animated: false)
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_FOLLOW"), at: 2, animated: false)
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_FAV"), at: 3, animated: false)
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_BOOST"), at: 4, animated: false)
+        segmentControl.selectedSegmentIndex = 0
+        segmentControl.tintColor = ThemeColor.mainButtonsTitleColor
+        segmentControl.backgroundColor = ThemeColor.cellBgColor
+        
+        let screenBounds = UIScreen.main.bounds
+        let segAllWidth = min(360, screenBounds.width * 0.98)
+        let segWidth = segAllWidth / 5
+        for i in 0..<segmentControl.numberOfSegments {
+            segmentControl.setWidth(segWidth, forSegmentAt: i)
+        }
+        
+        segmentControl.frame = CGRect(x: screenBounds.width / 2 - segAllWidth / 2,
+                                      y: UIUtils.statusBarHeight(),
+                                      width: segAllWidth,
+                                      height: 40)
+        
+        
         // 閉じるボタン
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
-                                   y: UIScreen.main.bounds.height - 70,
+    }
+    
+    override func layoutSubviews() {
+        let screenBounds = UIScreen.main.bounds
+        
+        tableView.frame = CGRect(x: 0,
+                                 y: UIUtils.statusBarHeight() + 42,
+                                 width: screenBounds.width,
+                                 height: screenBounds.height - (UIUtils.statusBarHeight() + 42))
+        
+        closeButton.frame = CGRect(x: screenBounds.width / 2 - 50 / 2,
+                                   y: screenBounds.height - 70,
                                    width: 50,
                                    height: 50)
     }

@@ -26,7 +26,7 @@ final class AnalyzeJson {
         
         // 新着の場合、更新した数を一時的に表示
         if isNew && model.getFirstTootId() != nil && contentList.count > 0 {
-            if view.type != .user && view.type != .mensions {
+            if view.type != .user && view.type != .mentions {
                 let count = contentList.count
                 MainViewController.instance?.showNotify(text: String(format: I18n.get("NOTIFY_COUNT_%D"), count))
             }
@@ -67,7 +67,7 @@ final class AnalyzeJson {
                 mediaData?.append(data)
             }
         }
-        var mentions: [MensionData]? = nil
+        var mentions: [MentionData]? = nil
         if let mentionsJson = json["mentions"] as? [[String: Any]] {
             for json in mentionsJson {
                 let acct = json["acct"] as? String
@@ -75,7 +75,7 @@ final class AnalyzeJson {
                 let url = json["url"] as? String
                 let username = json["username"] as? String
                 
-                let data = MensionData(acct: acct,
+                let data = MentionData(acct: acct,
                                        id: id,
                                        url: url,
                                        username: username)
@@ -319,7 +319,7 @@ final class AnalyzeJson {
         let in_reply_to_id: String?
         let language: String?
         let mediaData: [MediaData]?
-        let mentions: [MensionData]?
+        let mentions: [MentionData]?
         let muted: Int?
         let reblog_acct: String?
         let reblogged: Int?
@@ -342,7 +342,7 @@ final class AnalyzeJson {
     }
     
     // メンション
-    struct MensionData {
+    struct MentionData {
         let acct: String?
         let id: String? // 数値のID
         let url: String?

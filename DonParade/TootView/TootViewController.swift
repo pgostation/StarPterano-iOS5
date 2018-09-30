@@ -20,10 +20,18 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         TootViewController.isShown = true
         
         _ = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // 通知ボタンの位置を上にずらす
+            MainViewController.instance?.view.setNeedsLayout()
+        }
     }
     
     deinit {
         TootViewController.isShown = false
+        
+        // 通知ボタンの位置を元に戻す
+        MainViewController.instance?.view.setNeedsLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -253,6 +261,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         self.removeFromParentViewController()
         
         TootViewController.isShown = false
+        
+        // 通知ボタンの位置を元に戻す
+        MainViewController.instance?.view.setNeedsLayout()
     }
     
     // テキストビューの高さを変化させる

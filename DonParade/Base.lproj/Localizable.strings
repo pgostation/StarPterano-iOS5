@@ -71,9 +71,14 @@
 
 // 通知画面
 "NOTIFICATION_MENTION" = "is Mentioned";
-"NOTIFICATION_BOOST" = "is Boosted";
-"NOTIFICATION_FAV" = "is Favorited";
+"NOTIFICATION_BOOST" = "🔁is Boosted";
+"NOTIFICATION_FAV" = "🌟is Favorited";
 "NOTIFICATION_FOLLOW" = "is Followed";
+"NOTIFY_SEG_ALL" = "All";
+"NOTIFY_SEG_MENTION" = "Mention";
+"NOTIFY_SEG_FOLLOW" = "Follow";
+"NOTIFY_SEG_FAV" = "🌟";
+"NOTIFY_SEG_BOOST" = "🔁";
 
 // フォロー状態表示
 "RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "Following.\nFollowed by.\n";
