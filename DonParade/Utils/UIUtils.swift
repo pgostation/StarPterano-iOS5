@@ -52,4 +52,15 @@ final class UIUtils {
         
         return viewController
     }
+    
+    static func fullScreen() -> CGRect {
+        if UIDevice.current.model.range(of: "iPad") != nil {
+            let screenBounds = UIScreen.main.bounds
+            return CGRect(x: 0,
+                          y: UIUtils.statusBarHeight(),
+                          width: screenBounds.width,
+                          height: screenBounds.height - UIUtils.statusBarHeight())
+        }
+        return UIScreen.main.bounds
+    }
 }

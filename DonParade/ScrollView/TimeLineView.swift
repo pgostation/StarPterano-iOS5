@@ -29,7 +29,7 @@ final class TimeLineView: UITableView {
         self.option = option
         self.refreshCon = UIRefreshControl()
         
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIUtils.fullScreen(), style: UITableViewStyle.plain)
         
         self.delegate = model
         self.dataSource = model
