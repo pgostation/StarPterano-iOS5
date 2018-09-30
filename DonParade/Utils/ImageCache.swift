@@ -170,7 +170,7 @@ final class APNGImageCache {
                             memCache.updateValue(image, forKey: urlStr)
                             callback(image)
                             
-                            if memCache.count >= 200 { // メモリの使いすぎを防ぐ
+                            if memCache.count >= 1000 { // メモリの使いすぎを防ぐ
                                 memCache = [:]
                                 APNGCache.defaultCache.clearMemoryCache()
                             }
@@ -204,7 +204,7 @@ final class APNGImageCache {
                         
                         waitingDict.removeValue(forKey: urlStr)
                         
-                        if memCache.count >= 200 { // メモリの使いすぎを防ぐ
+                        if memCache.count >= 1000 { // メモリの使いすぎを防ぐ
                             memCache = [:]
                             APNGCache.defaultCache.clearMemoryCache()
                         }
