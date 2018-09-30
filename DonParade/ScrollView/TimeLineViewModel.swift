@@ -42,34 +42,45 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // トゥートの追加
-    func change(tableView: UITableView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false) {
+    func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false) {
+        
+        // ミュートフラグの立っているものは削除しておく
+        var addList2 = addList
+        if tableView.type == .home || tableView.type == .local || tableView.type == .global {
+            for (index, data) in addList2.enumerated().reversed() {
+                if data.muted == 1 {
+                    addList2.remove(at: index)
+                }
+            }
+        }
+        
         DispatchQueue.main.async {
             if self.list.count == 0 {
-                self.list = addList
-            } else if let firstDate1 = self.list.first?.created_at, let firstDate2 = addList.first?.created_at, let lastDate1 = self.list.last?.created_at, let lastDate2 = addList.last?.created_at {
+                self.list = addList2
+            } else if let firstDate1 = self.list.first?.created_at, let firstDate2 = addList2.first?.created_at, let lastDate1 = self.list.last?.created_at, let lastDate2 = addList2.last?.created_at {
                 // 前か後に付ければ良い
                 if lastDate1 > firstDate2 {
-                    self.list = self.list + addList
+                    self.list = self.list + addList2
                     
                     if self.list.count > 100000 {
                         // 10万トゥートを超えると流石に削除する
                         self.list.removeFirst(self.list.count - 100000)
                     }
                 } else if lastDate2 > firstDate1 {
-                    self.list = addList + self.list
+                    self.list = addList2 + self.list
                     
                     // 選択位置がずれないようにする
                     if self.selectedRow != nil {
-                        self.selectedRow = self.selectedRow! + addList.count
+                        self.selectedRow = self.selectedRow! + addList2.count
                     }
                     
-                    if addList.count <= 3 && tableView.contentOffset.y <= 60 {
+                    if addList2.count <= 3 && tableView.contentOffset.y <= 60 {
                         // 一番上の場合、ずれさせる
                     } else {
                         // スクロールして、表示していたツイートがあまりずれないようにする
                         let oldOffsetY = tableView.contentOffset.y
                         DispatchQueue.main.async {
-                            tableView.scrollToRow(at: IndexPath(row: addList.count, section: 0),
+                            tableView.scrollToRow(at: IndexPath(row: addList2.count, section: 0),
                                                   at: UITableViewScrollPosition.top,
                                                   animated: false)
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
@@ -83,7 +94,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 } else {
                     // すでにあるデータを更新する
                     var index = 0
-                    for newContent in addList {
+                    for newContent in addList2 {
                         while index < self.list.count {
                             let listData = self.list[index]
                             if listData.id == newContent.id {

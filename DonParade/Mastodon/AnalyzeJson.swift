@@ -49,8 +49,15 @@ final class AnalyzeJson {
             let data = analyzeAccountJson(account: account)
             view?.accountList.updateValue(data, forKey: acct)
         }
+        
         var mediaData: [MediaData]? = nil
-        if let media_attachments = json["media_attachments"] as? [[String: Any]] {
+        let media_attachments: [[String: Any]]?
+        if reblog_acct == nil {
+            media_attachments = json["media_attachments"] as? [[String: Any]]
+        } else {
+            media_attachments = reblog?["media_attachments"] as? [[String: Any]]
+        }
+        if let media_attachments = media_attachments {
             for media_attachment in media_attachments {
                 let id = media_attachment["id"] as? Int64
                 let preview_url = media_attachment["preview_url"] as? String
@@ -67,8 +74,15 @@ final class AnalyzeJson {
                 mediaData?.append(data)
             }
         }
+        
         var mentions: [MentionData]? = nil
-        if let mentionsJson = json["mentions"] as? [[String: Any]] {
+        let mentionsJson: [[String: Any]]?
+        if reblog_acct == nil {
+            mentionsJson = json["mentions"] as? [[String: Any]]
+        } else {
+            mentionsJson = reblog?["mentions"] as? [[String: Any]]
+        }
+        if let mentionsJson = mentionsJson {
             for json in mentionsJson {
                 let acct = json["acct"] as? String
                 let id = json["id"] as? String
@@ -125,8 +139,19 @@ final class AnalyzeJson {
             favourites_count = reblog?["favourites_count"] as? Int
         }
         
-        let id = json["id"] as? String
-        let in_reply_to_account_id = json["in_reply_to_account_id"] as? String
+        let id: String?
+        if reblog_acct == nil {
+            id = json["id"] as? String
+        } else {
+            id = reblog?["id"] as? String
+        }
+        
+        let in_reply_to_account_id: String?
+        if reblog_acct == nil {
+            in_reply_to_account_id = json["in_reply_to_account_id"] as? String
+        } else {
+            in_reply_to_account_id = reblog?["in_reply_to_account_id"] as? String
+        }
         
         let in_reply_to_id: String?
         if reblog_acct == nil {
@@ -136,7 +161,16 @@ final class AnalyzeJson {
         }
         
         let language = json["language"] as? String
-        let muted = json["muted"] as? Int
+        
+        var muted: Int? = nil
+        if reblog_acct == nil {
+            muted = json["muted"] as? Int
+        } else {
+            muted = reblog?["muted"] as? Int
+            if muted == 0 {
+                muted = json["muted"] as? Int
+            }
+        }
         
         let reblogged: Int?
         if reblog_acct == nil {
