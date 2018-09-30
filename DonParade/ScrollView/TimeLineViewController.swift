@@ -173,6 +173,9 @@ final class TimeLineViewController: MyViewController {
         let moveToAccount = SettingsData.accountList[newIndex]
         
         moveTo(moveToAccount: moveToAccount, toRight: false)
+        
+        let text = (SettingsData.hostName ?? "") + "\n@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
+        MainViewController.instance?.showNotify(text: text, position: .center)
     }
     
     // スワイプで前へ
@@ -182,6 +185,9 @@ final class TimeLineViewController: MyViewController {
         let moveToAccount = SettingsData.accountList[newIndex]
         
         moveTo(moveToAccount: moveToAccount, toRight: true)
+        
+        let text = (SettingsData.hostName ?? "") + "\n@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
+        MainViewController.instance?.showNotify(text: text, position: .center)
     }
     
     private func moveTo(moveToAccount: (String, String), toRight: Bool) {

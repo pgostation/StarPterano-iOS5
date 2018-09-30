@@ -417,12 +417,15 @@ final class MainViewController: MyViewController {
     }
     
     // 一時的お知らせを更新
-    func showNotify(text: String) {
+    enum NofityPosition {
+        case top
+        case center
+    }
+    func showNotify(text: String, position: NofityPosition = .top) {
         DispatchQueue.main.async {
             guard let view = self.view as? MainView else { return }
             
             view.notifyLabel.text = text
-            view.setNeedsLayout()
             
             UIView.animate(withDuration: 0.3, animations: {
                 view.notifyLabel.alpha = 1
@@ -432,6 +435,25 @@ final class MainViewController: MyViewController {
                 UIView.animate(withDuration: 0.3, animations: {
                     view.notifyLabel.alpha = 0
                 })
+            }
+            
+            let screenBounds = UIScreen.main.bounds
+            let notifyLabel = view.notifyLabel
+            notifyLabel.frame.size.width = screenBounds.width - 50
+            notifyLabel.sizeToFit()
+            notifyLabel.frame.size.width += 10
+            
+            switch position {
+            case .top:
+                notifyLabel.frame = CGRect(x: screenBounds.width / 2 - notifyLabel.frame.width / 2,
+                                           y: UIUtils.statusBarHeight() + 10,
+                                           width: notifyLabel.frame.width,
+                                           height: notifyLabel.frame.height + 2)
+            case .center:
+                notifyLabel.frame = CGRect(x: screenBounds.width / 2 - notifyLabel.frame.width / 2,
+                                           y: screenBounds.height / 2 - notifyLabel.frame.height / 2,
+                                           width: notifyLabel.frame.width,
+                                           height: notifyLabel.frame.height + 2)
             }
         }
     }
@@ -635,13 +657,5 @@ final class MainView: UIView {
                                      y: UIUtils.statusBarHeight() + 10,
                                      width: SettingsData.iconSize,
                                      height: SettingsData.iconSize)
-        
-        notifyLabel.frame.size.width = screenBounds.width - 50
-        notifyLabel.sizeToFit()
-        notifyLabel.frame.size.width += 10
-        notifyLabel.frame = CGRect(x: screenBounds.width / 2 - notifyLabel.frame.width / 2,
-                                   y: 30 + bottomOffset / 2,
-                                   width: notifyLabel.frame.width,
-                                   height: notifyLabel.frame.height + 2)
     }
 }
