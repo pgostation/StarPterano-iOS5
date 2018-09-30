@@ -823,64 +823,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルを使い回す
     private func getCell(view: UITableView, height: CGFloat) -> TimeLineViewCell {
-        let reuseIdentifier = "TimeLineViewModel\(height)"
+        let reuseIdentifier = "TimeLineViewModel"
         let cell = view.dequeueReusableCell(withIdentifier: reuseIdentifier) as? TimeLineViewCell ?? TimeLineViewCell(reuseIdentifier: reuseIdentifier)
-        
-        cell.showDetail = false
-        while let apngView = cell.messageView?.viewWithTag(5555) as? APNGImageView {
-            apngView.stopAnimating()
-            apngView.removeFromSuperview()
-        }
-        cell.messageView?.removeFromSuperview()
-        cell.continueView?.removeFromSuperview()
-        cell.boostView?.removeFromSuperview()
-        cell.boostView = nil
-        cell.showMoreButton?.removeFromSuperview()
-        cell.showMoreButton = nil
-        cell.spolerTextLabel?.removeFromSuperview()
-        cell.spolerTextLabel = nil
-        cell.detailDateLabel?.removeFromSuperview()
-        cell.detailDateLabel = nil
-        cell.DMBarLeft?.removeFromSuperview()
-        cell.DMBarLeft = nil
-        cell.DMBarRight?.removeFromSuperview()
-        cell.DMBarRight = nil
-        for label in cell.rebologerLabels {
-            label.removeFromSuperview()
-        }
-        cell.rebologerLabels = []
-        cell.rebologerList = nil
-        for label in cell.favoriterLabels {
-            label.removeFromSuperview()
-        }
-        cell.favoriterLabels = []
-        cell.favoriterList = nil
-        for imageView in cell.imageViews ?? [] {
-            imageView.removeFromSuperview()
-        }
-        cell.imageViews = []
-        if cell.replyButton != nil {
-            cell.replyButton?.removeFromSuperview()
-            cell.repliedLabel?.removeFromSuperview()
-            cell.boostButton?.removeFromSuperview()
-            cell.boostedLabel?.removeFromSuperview()
-            cell.favoriteButton?.removeFromSuperview()
-            cell.favoritedLabel?.removeFromSuperview()
-            cell.detailButton?.removeFromSuperview()
-            cell.applicationLabel?.removeFromSuperview()
-        }
-        cell.iconView?.removeFromSuperview()
-        cell.iconView?.image = nil
-        
-        if SettingsData.isMiniView == .superMini {
-            cell.nameLabel.isHidden = true
-            cell.idLabel.isHidden = true
-            cell.dateLabel.isHidden = true
-        } else {
-            cell.nameLabel.isHidden = false
-            cell.idLabel.isHidden = false
-            cell.dateLabel.isHidden = false
-        }
         
         return cell
     }

@@ -9,6 +9,7 @@
 // トゥートの内容を表示するセル
 
 import UIKit
+import APNGKit
 
 final class TimeLineViewCell: UITableViewCell {
     static var showMoreList: [String] = []
@@ -129,6 +130,65 @@ final class TimeLineViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 再利用前に呼ばれる
+    override func prepareForReuse() {
+        self.showDetail = false
+        while let apngView = self.messageView?.viewWithTag(5555) as? APNGImageView {
+            apngView.stopAnimating()
+            apngView.removeFromSuperview()
+        }
+        self.messageView?.removeFromSuperview()
+        self.continueView?.removeFromSuperview()
+        self.boostView?.removeFromSuperview()
+        self.boostView = nil
+        self.showMoreButton?.removeFromSuperview()
+        self.showMoreButton = nil
+        self.spolerTextLabel?.removeFromSuperview()
+        self.spolerTextLabel = nil
+        self.detailDateLabel?.removeFromSuperview()
+        self.detailDateLabel = nil
+        self.DMBarLeft?.removeFromSuperview()
+        self.DMBarLeft = nil
+        self.DMBarRight?.removeFromSuperview()
+        self.DMBarRight = nil
+        for label in self.rebologerLabels {
+            label.removeFromSuperview()
+        }
+        self.rebologerLabels = []
+        self.rebologerList = nil
+        for label in self.favoriterLabels {
+            label.removeFromSuperview()
+        }
+        self.favoriterLabels = []
+        self.favoriterList = nil
+        for imageView in self.imageViews ?? [] {
+            imageView.removeFromSuperview()
+        }
+        self.imageViews = []
+        if self.replyButton != nil {
+            self.replyButton?.removeFromSuperview()
+            self.repliedLabel?.removeFromSuperview()
+            self.boostButton?.removeFromSuperview()
+            self.boostedLabel?.removeFromSuperview()
+            self.favoriteButton?.removeFromSuperview()
+            self.favoritedLabel?.removeFromSuperview()
+            self.detailButton?.removeFromSuperview()
+            self.applicationLabel?.removeFromSuperview()
+        }
+        self.iconView?.removeFromSuperview()
+        self.iconView?.image = nil
+        
+        if SettingsData.isMiniView == .superMini {
+            self.nameLabel.isHidden = true
+            self.idLabel.isHidden = true
+            self.dateLabel.isHidden = true
+        } else {
+            self.nameLabel.isHidden = false
+            self.idLabel.isHidden = false
+            self.dateLabel.isHidden = false
+        }
     }
     
     // アイコンをタップした時の処理
