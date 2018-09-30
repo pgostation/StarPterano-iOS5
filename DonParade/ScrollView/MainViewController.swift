@@ -424,8 +424,10 @@ final class MainViewController: MyViewController {
     @objc func tootAction(_ sender: UIButton?) {
         let tootViewController = TootViewController()
         tootViewController.view.backgroundColor = UIColor.clear
-        self.addChildViewController(tootViewController)
-        self.view.addSubview(tootViewController.view)
+        if let rootVc = UIUtils.getFrontViewController() {
+            rootVc.addChildViewController(tootViewController)
+            rootVc.view.addSubview(tootViewController.view)
+        }
     }
     
     // 一時的お知らせを更新
