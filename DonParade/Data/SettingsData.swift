@@ -113,6 +113,22 @@ final class SettingsData {
     // ログインがアプリ起動後初めてかどうか（ユーザ名を取得するかどうかを判定するために使う）
     static var loginedAccessTokenList: [String] = []
     
+    // 各アカウントでのタイムライン表示モードを保持
+    enum TLMode: String {
+        case home = "Home"
+        case local = "Local"
+        case federation = "Federation" // 連合TL
+    }
+    static func tlMode(key: String) -> TLMode {
+        if let string = defaults.string(forKey: "tlMode_\(key)") {
+            return TLMode(rawValue: string) ?? .home
+        }
+        return .home
+    }
+    static func setTlMode(key: String, mode: TLMode) {
+        defaults.set(mode.rawValue, forKey: "tlMode_\(key)")
+    }
+    
     // タップで詳細に移動
     static var tapDetailMode: Bool {
         get {

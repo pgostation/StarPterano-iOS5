@@ -43,8 +43,19 @@ final class MainViewController: MyViewController {
         let accountPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(accountPressAction(_:)))
         view.accountButton.addGestureRecognizer(accountPressGesture)
         
-        // 起動時はTLを表示する
-        tlAction(nil)
+        // TLを表示する
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            switch SettingsData.tlMode(key: hostName + "," + accessToken) {
+            case .home:
+                tlAction(nil)
+            case .local:
+                ltlAction(nil)
+            case .federation:
+                gtlAction(nil)
+            }
+        } else {
+            tlAction(nil)
+        }
     }
     
     func refreshColor() {
@@ -60,7 +71,6 @@ final class MainViewController: MyViewController {
     }
     
     private var timelineViewController: TimeLineViewController?
-    static var isLTLDict: [String: Bool] = [:]
     
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
@@ -84,7 +94,7 @@ final class MainViewController: MyViewController {
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
-            MainViewController.isLTLDict[hostName + "," + accessToken] = false
+            SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .home)
         }
         
         // 一番下にタイムラインビューを入れる
@@ -120,7 +130,7 @@ final class MainViewController: MyViewController {
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
-            MainViewController.isLTLDict[hostName + "," + accessToken] = true
+            SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .local)
         }
         
         // 一番下にタイムラインビューを入れる
@@ -135,8 +145,8 @@ final class MainViewController: MyViewController {
     }
     
     // 長押しで連合タイムラインへ移動
-    @objc func gtlAction(_ gesture: UILongPressGestureRecognizer) {
-        if gesture.state != .began { return }
+    @objc func gtlAction(_ gesture: UILongPressGestureRecognizer?) {
+        if let gesture = gesture, gesture.state != .began { return }
         
         if let oldViewController = self.timelineViewController {
             if oldViewController.type == .global {
@@ -157,6 +167,8 @@ final class MainViewController: MyViewController {
                 self.timelineViewController = TimeLineViewController(type: .global)
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
+            
+            SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .federation)
         }
         
         // 一番下にタイムラインビューを入れる
@@ -251,24 +263,35 @@ final class MainViewController: MyViewController {
         let oldTimelineViewController = self.timelineViewController
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            let isLTL = MainViewController.isLTLDict[hostName + "," + accessToken] ?? false
-            let key = "\(hostName)_\(accessToken)_" + (isLTL ? "LTL" : "Home")
+            let isLTL = SettingsData.tlMode(key: hostName + "," + accessToken)
+            let key = "\(hostName)_\(accessToken)_" + (isLTL.rawValue)
             if let vc = self.TimelineList[key] {
                 self.timelineViewController = vc
             } else {
-                self.timelineViewController = TimeLineViewController(type: isLTL ? .local : .home)
+                switch isLTL {
+                case .home:
+                    self.timelineViewController = TimeLineViewController(type: .home)
+                case .local:
+                    self.timelineViewController = TimeLineViewController(type: .local)
+                case .federation:
+                    self.timelineViewController = TimeLineViewController(type: .global)
+                }
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
             if let view = self.view as? MainView {
-                view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-                
-                if isLTL {
-                    view.ltlButton.layer.borderWidth = 2
-                    view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+                if isLTL == .federation {
+                    view.ltlButton.setTitle(I18n.get("BUTTON_GTL"), for: .normal)
                 } else {
+                    view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+                }
+                
+                if isLTL == .home {
                     view.tlButton.layer.borderWidth = 2
                     view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
+                } else {
+                    view.ltlButton.layer.borderWidth = 2
+                    view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 }
                 
                 if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {

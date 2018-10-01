@@ -387,7 +387,7 @@ private final class FollowingTableCell: UITableViewCell {
     @objc func followAction() {
         ProfileAction.follow(id: self.accountData?.id ?? "")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     guard let view = self.superview as? FollowingTableView else { return }
@@ -417,7 +417,7 @@ private final class FollowingTableCell: UITableViewCell {
                     callback: { result in
                         ProfileAction.unfollow(id: self.accountData?.id ?? "")
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
                                 try? MastodonRequest.get(url: url) { (data, response, error) in
                                     guard let view = self.superview as? FollowingTableView else { return }
