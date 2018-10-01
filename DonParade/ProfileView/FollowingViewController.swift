@@ -295,7 +295,7 @@ private final class FollowingTableCell: UITableViewCell {
     
     // 基本ビュー
     let lineLayer = CALayer()
-    let iconView = UIImageView()
+    let iconView = WideTouchImageView()
     let nameLabel = UILabel()
     let idLabel = UILabel()
     
@@ -334,6 +334,7 @@ private final class FollowingTableCell: UITableViewCell {
         
         self.iconView.layer.cornerRadius = 5
         self.iconView.clipsToBounds = true
+        self.iconView.insets = UIEdgeInsetsMake(5, 5, 5, 5)
         
         self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)

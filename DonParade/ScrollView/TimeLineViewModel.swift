@@ -581,15 +581,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if cell.id == id {
                 if image.imageCount != nil {
                     // GIFアニメーション
-                    cell.iconView = UIImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    cell.iconView = WideTouchImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
                 } else {
-                    cell.iconView = UIImageView()
+                    cell.iconView = WideTouchImageView()
                 }
                 
                 cell.addSubview(cell.iconView!)
                 cell.iconView?.image = image
                 cell.iconView?.layer.cornerRadius = 5
                 cell.iconView?.clipsToBounds = true
+                cell.iconView?.insets = UIEdgeInsetsMake(5, 5, 5, 5)
                 
                 // アイコンのタップジェスチャー
                 let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.tapAccountAction))

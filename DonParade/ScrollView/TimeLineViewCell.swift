@@ -18,7 +18,7 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 基本ビュー
     let lineLayer = CALayer()
-    var iconView: UIImageView?
+    var iconView: WideTouchImageView?
     let nameLabel = UILabel()
     let idLabel = UILabel()
     let dateLabel = UILabel()

@@ -32,6 +32,7 @@
 		1286DF632154F2DA008FFFAC /* SettingsSelectProtectMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF622154F2DA008FFFAC /* SettingsSelectProtectMode.swift */; };
 		1286DF6521551824008FFFAC /* TootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF6421551824008FFFAC /* TootView.swift */; };
 		1286DF682155E906008FFFAC /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF672155E906008FFFAC /* ImageViewController.swift */; };
+		129771E321624204003728FC /* WideTouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129771E221624204003728FC /* WideTouchButton.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -88,6 +89,7 @@
 		1286DF622154F2DA008FFFAC /* SettingsSelectProtectMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSelectProtectMode.swift; sourceTree = "<group>"; };
 		1286DF6421551824008FFFAC /* TootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootView.swift; sourceTree = "<group>"; };
 		1286DF672155E906008FFFAC /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		129771E221624204003728FC /* WideTouchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideTouchButton.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				121DC0DB2153C64F00928DCC /* MyWindow.swift */,
 				121DC0E12153E32500928DCC /* WaitIndicator.swift */,
 				1286DF5A215488CB008FFFAC /* ThemeColor.swift */,
+				129771E221624204003728FC /* WideTouchButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
 				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
 				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,
+				129771E321624204003728FC /* WideTouchButton.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
