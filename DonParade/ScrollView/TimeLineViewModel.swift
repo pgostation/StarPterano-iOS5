@@ -364,21 +364,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // 表示用のデータを取得
         let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, callback: { [weak self] in
             // あとから絵文字が読み込めた場合の更新処理
-            if cell.id == id {
-                if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
-                    let isHidden = cell?.messageView?.isHidden ?? false
-                    messageView.isHidden = isHidden
-                    cell?.messageView?.removeFromSuperview()
-                    cell?.messageView = messageView
-                    cell?.insertSubview(messageView, at: 1)
-                    self?.setCellColor(cell: cell)
-                    if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
-                        (messageView as? UILabel)?.numberOfLines = 1
-                        messageView.sizeToFit()
-                    }
-                    let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
-                        messageView.frame.origin.y = y
+            if cell.id != id { return }
+            if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
+                if cell.id != id { return }
+                let isHidden = cell?.messageView?.isHidden ?? false
+                messageView.isHidden = isHidden
+                cell?.messageView?.removeFromSuperview()
+                cell?.messageView = messageView
+                cell?.insertSubview(messageView, at: 1)
+                self?.setCellColor(cell: cell)
+                if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
+                    (messageView as? UILabel)?.numberOfLines = 1
+                    messageView.sizeToFit()
                 }
+                let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
+                messageView.frame.origin.y = y
             }
         })
         
