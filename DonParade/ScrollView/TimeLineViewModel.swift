@@ -446,7 +446,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 「もっと見る」の場合
         if data.sensitive == 1 || data.spoiler_text != "" {
-            messageView.isHidden = true
+            if data.spoiler_text != "" {
+                messageView.isHidden = true
+            }
             cell.spolerTextLabel = UILabel()
             cell.spolerTextLabel?.textColor = ThemeColor.messageColor
             cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
