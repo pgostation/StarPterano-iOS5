@@ -357,7 +357,10 @@ final class TimeLineView: UITableView {
                         var acct = ""
                         let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
-                        strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        
+                        DispatchQueue.main.async {
+                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        }
                     }
                 } catch {
                     
@@ -386,7 +389,10 @@ final class TimeLineView: UITableView {
                         var acct = ""
                         let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                         let contentList = [contentData]
-                        strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        
+                        DispatchQueue.main.async {
+                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        }
                     }
                 } catch {
                     
