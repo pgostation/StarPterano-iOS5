@@ -128,16 +128,29 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         cell.backgroundColor = ThemeColor.viewBgColor
         cell.textLabel?.textColor = ThemeColor.idColor
         cell.detailTextLabel?.textColor = ThemeColor.idColor
+        cell.imageView?.image = nil
         
         var title = ""
         var subtitle: String? = nil
         switch indexPath.section {
         case 0:
             let data = SettingsData.accountList[indexPath.row]
-            title = (SettingsData.accountUsername(accessToken: data.1) ?? "") + " @ " + data.0.replacingOccurrences(of: "https://", with: "") 
+            title = (SettingsData.accountUsername(accessToken: data.1) ?? "") + " @ " + data.0.replacingOccurrences(of: "https://", with: "")
             
             if SettingsData.hostName == data.0 && SettingsData.accessToken == data.1 {
                 cell.accessoryType = .checkmark
+            }
+            
+            // アイコンを設定
+            if let iconStr = SettingsData.accountIconUrl(accessToken: data.1) {
+                cell.textLabel?.text = title
+                ImageCache.image(urlStr: iconStr, isTemp: false, isSmall: true) { image in
+                    if cell.textLabel?.text != title { return }
+                    cell.imageView?.image = image
+                    cell.imageView?.clipsToBounds = true
+                    cell.imageView?.layer.cornerRadius = 8
+                    cell.setNeedsLayout()
+                }
             }
         case 1:
             title = I18n.get(accountList[indexPath.row].rawValue)
@@ -275,6 +288,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 SettingsViewController.instance?.dismiss(animated: false, completion: nil)
                 MainViewController.instance?.tlAction(nil)
+                MainViewController.instance?.setAccountIcon()
             }
         case 1:
             switch accountList[indexPath.row] {

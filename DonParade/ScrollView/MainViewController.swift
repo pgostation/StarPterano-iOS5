@@ -294,12 +294,7 @@ final class MainViewController: MyViewController {
                     view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 }
                 
-                if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
-                    ImageCache.image(urlStr: iconStr, isTemp: false, isSmall: true) { image in
-                        if accessToken != SettingsData.accessToken { return }
-                        view.accountButton.setImage(image, for: .normal)
-                    }
-                }
+                setAccountIcon()
             }
         }
         
@@ -344,6 +339,20 @@ final class MainViewController: MyViewController {
         })
         
         refreshNotificationButton()
+    }
+    
+    // アカウントボタンをアイコンを設定
+    func setAccountIcon() {
+        if let accessToken = SettingsData.accessToken {
+            if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {
+                ImageCache.image(urlStr: iconStr, isTemp: false, isSmall: true) { image in
+                    if accessToken != SettingsData.accessToken { return }
+                    if let view = self.view as? MainView {
+                        view.accountButton.setImage(image, for: .normal)
+                    }
+                }
+            }
+        }
     }
     
     // 前のビューを外す
