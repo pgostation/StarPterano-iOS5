@@ -109,8 +109,15 @@ final class AnalyzeJson {
         
         let content = json["content"] as? String
         
-        let created_at = json["created_at"] as? String
-        let reblog_created_at = reblog?["created_at"] as? String
+        let created_at: String?
+        let reblog_created_at: String?
+        if reblog_acct == nil {
+            created_at = json["created_at"] as? String
+            reblog_created_at = nil
+        } else {
+            created_at = reblog?["created_at"] as? String
+            reblog_created_at = reblog?["created_at"] as? String
+        }
         
         var emojis: [[String: Any]]? = nil
         if reblog_acct == nil {
@@ -136,12 +143,8 @@ final class AnalyzeJson {
             favourites_count = reblog?["favourites_count"] as? Int
         }
         
-        let id: String?
-        if reblog_acct == nil {
-            id = json["id"] as? String
-        } else {
-            id = reblog?["id"] as? String
-        }
+        let id = json["id"] as? String
+        let reblog_id = reblog?["id"] as? String
         
         let in_reply_to_account_id: String?
         if reblog_acct == nil {
@@ -237,6 +240,7 @@ final class AnalyzeJson {
                                muted: muted,
                                reblog_acct: reblog_acct,
                                reblog_created_at: reblog_created_at,
+                               reblog_id: reblog_id,
                                reblogged: reblogged,
                                reblogs_count: reblogs_count,
                                replies_count: replies_count,
@@ -355,6 +359,7 @@ final class AnalyzeJson {
         let muted: Int?
         let reblog_acct: String?
         let reblog_created_at: String?
+        let reblog_id: String?
         let reblogged: Int?
         let reblogs_count: Int?
         let replies_count: Int?
