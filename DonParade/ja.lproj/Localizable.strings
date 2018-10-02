@@ -59,6 +59,7 @@
 "SWITCH_NSFW" = "閲覧注意(NSFW)";
 "ALERT_OVER_500CHARACTERS" = "500文字を超えています";
 "ALERT_IMAGE_COUNT_MAX" = "画像は最大4枚です";
+"DIALOG_SEARCH_EMOJI" = "絵文字検索";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";

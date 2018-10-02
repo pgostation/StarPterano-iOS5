@@ -103,9 +103,7 @@ final class EmojiKeyboard: UIView {
     }
     
     @objc func searchAction() {
-        
-        
-        Dialog.showWithTextInput(message: "絵文字検索", okName: "OK", cancelName: "Cancel", defaultText: nil, timerCallback: true, callback: { textField, result in
+        Dialog.showWithTextInput(message: I18n.get("DIALOG_SEARCH_EMOJI"), okName: "OK", cancelName: "Cancel", defaultText: nil, isAlphabet: true, callback: { textField, result in
             if !result {
                 self.emojiScrollView.searchText = nil
             } else {
