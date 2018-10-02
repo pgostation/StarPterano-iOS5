@@ -16,19 +16,22 @@ final class EmojiKeyboard: UIView {
     private let spaceButton = UIButton()
     private let returnButton = UIButton()
     private let deleteButton = UIButton()
+    private let searchButton = UIButton()
     private let emojiScrollView = EmojiInputScrollView()
     
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 300 : 240))
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 320 : 250))
         
         self.addSubview(spaceButton)
         self.addSubview(returnButton)
         self.addSubview(deleteButton)
+        self.addSubview(searchButton)
         self.addSubview(emojiScrollView)
         
         spaceButton.addTarget(self, action: #selector(spaceAction), for: .touchUpInside)
         returnButton.addTarget(self, action: #selector(returnAction), for: .touchUpInside)
         deleteButton.addTarget(self, action: #selector(deleteAction), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchAction), for: .touchUpInside)
         
         setProperties()
     }
@@ -59,6 +62,11 @@ final class EmojiKeyboard: UIView {
         deleteButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
         deleteButton.clipsToBounds = true
         deleteButton.layer.cornerRadius = 10
+        
+        searchButton.setTitle("🔍", for: .normal)
+        searchButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+        searchButton.clipsToBounds = true
+        searchButton.layer.cornerRadius = 10
     }
     
     @objc func spaceAction() {
@@ -94,20 +102,38 @@ final class EmojiKeyboard: UIView {
         (textView as? UITextView)?.deleteBackward()
     }
     
+    @objc func searchAction() {
+        
+        
+        Dialog.showWithTextInput(message: "絵文字検索", okName: "OK", cancelName: "Cancel", defaultText: nil, timerCallback: true, callback: { textField, result in
+            if !result {
+                self.emojiScrollView.searchText = nil
+            } else {
+                self.emojiScrollView.searchText = textField.text
+            }
+            self.emojiScrollView.setNeedsLayout()
+        })
+    }
+ 
     override func layoutSubviews() {
         self.spaceButton.frame = CGRect(x: 10,
                                         y: 1,
                                         width: 80,
                                         height: 40)
         
-        self.returnButton.frame = CGRect(x: 100,
+        self.returnButton.frame = CGRect(x: 95,
                                          y: 1,
                                          width: 80,
                                          height: 40)
         
-        self.deleteButton.frame = CGRect(x: 190,
+        self.deleteButton.frame = CGRect(x: 180,
                                          y: 1,
                                          width: 80,
+                                         height: 40)
+        
+        self.searchButton.frame = CGRect(x: 265,
+                                         y: 1,
+                                         width: 40,
                                          height: 40)
         
         self.emojiScrollView.frame = CGRect(x: 0,
@@ -120,7 +146,7 @@ final class EmojiKeyboard: UIView {
 private final class EmojiInputScrollView: UIScrollView {
     private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
     private var emojiButtons: [EmojiButton] = []
-    private let gifManager = SwiftyGifManager(memoryLimit: 20)
+    var searchText: String?
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -220,11 +246,22 @@ private final class EmojiInputScrollView: UIScrollView {
     }
     
     override func layoutSubviews() {
-        let buttonSize: CGFloat = 24 + SettingsData.fontSize
+        if let searchText = self.searchText {
+            let filteredEmojiButtons = getFilteredEmojiButtons(key: searchText)
+            
+            layoutEmojiButtons(emojiButtons: filteredEmojiButtons)
+            return
+        }
+        
+        layoutEmojiButtons(emojiButtons: self.emojiButtons)
+    }
+    
+    private func layoutEmojiButtons(emojiButtons: [UIButton]) {
+        let buttonSize: CGFloat = 22 + SettingsData.fontSize
         let margin: CGFloat = 2
         let screenBounds = UIScreen.main.bounds
         let xCount = floor(screenBounds.width / (buttonSize + margin)) // ボタンの横に並ぶ数
-        let yCount = ceil(CGFloat(self.emojiList.count) / xCount) // ボタンの縦に並ぶ数
+        let yCount = ceil(CGFloat(emojiButtons.count) / xCount) // ボタンの縦に並ぶ数
         let viewHeight = (buttonSize + margin) * yCount
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
@@ -232,13 +269,27 @@ private final class EmojiInputScrollView: UIScrollView {
         for y in 0..<Int(yCount) {
             for x in 0..<Int(xCount) {
                 let index = y * Int(xCount) + x
-                if index >= self.emojiList.count { break }
-                let button = self.emojiButtons[index]
+                if index >= emojiButtons.count { break }
+                let button = emojiButtons[index]
                 button.frame = CGRect(x: CGFloat(x) * (buttonSize + margin),
                                       y: CGFloat(y) * (buttonSize + margin),
                                       width: buttonSize,
                                       height: buttonSize)
             }
         }
+    }
+    
+    private func getFilteredEmojiButtons(key: String) -> [UIButton] {
+        var buttons: [UIButton] = []
+        
+        for button in self.emojiButtons {
+            if button.key.contains(key) {
+                buttons.append(button)
+            } else {
+                button.removeFromSuperview()
+            }
+        }
+        
+        return buttons
     }
 }

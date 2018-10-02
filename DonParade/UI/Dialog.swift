@@ -36,21 +36,44 @@ final class Dialog {
     }
     
     // 入力欄付きのダイアログを表示
-    static func showWithTextInput(message: String, viewController: UIViewController? = nil, okName: String, cancelName: String, defaultText: String?, callback: @escaping (UITextField, Bool)->Void) {
+    private static var timer: Timer?
+    private static var callback: ((UITextField, Bool)->Void)?
+    private static var textField: UITextField?
+    static func showWithTextInput(message: String, viewController: UIViewController? = nil, okName: String, cancelName: String, defaultText: String?, timerCallback: Bool = false, callback: @escaping (UITextField, Bool)->Void) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
         
         alert.addTextField(configurationHandler: { textField in
+            self.callback = callback
+            self.textField = textField
             textField.text = defaultText
             
             alert.addAction(UIAlertAction(title: okName, style: UIAlertActionStyle.default, handler: { _ in
+                self.timer?.invalidate()
+                self.timer = nil
+                self.callback = nil
+                self.textField = nil
                 callback(textField, true)
             }))
             
             alert.addAction(UIAlertAction(title: cancelName, style: UIAlertActionStyle.cancel, handler: { _ in
+                self.timer?.invalidate()
+                self.timer = nil
+                self.callback = nil
+                self.textField = nil
                 callback(textField, false)
             }))
             
             UIUtils.getFrontViewController()?.present(alert, animated: false, completion: nil)
+            
+            if timerCallback {
+                self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+            }
         })
+    }
+    
+    @objc static func timerAction() {
+        if self.timer == nil { return }
+        
+        self.callback?(self.textField!, true)
     }
 }
