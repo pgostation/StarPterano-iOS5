@@ -938,8 +938,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // ハッシュタグの場合
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
                                                         option: String(Url.path.suffix(Url.path.count - 6)))
-            MainViewController.instance?.addChildViewController(viewController)
-            MainViewController.instance?.view.addSubview(viewController.view)
+            UIUtils.getFrontViewController()?.addChildViewController(viewController)
+            UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                y: 0,
                                                width: UIScreen.main.bounds.width,
@@ -964,8 +964,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                                             option: id)
                 
                 func show() {
-                    MainViewController.instance?.addChildViewController(viewController)
-                    MainViewController.instance?.view.addSubview(viewController.view)
+                    UIUtils.getFrontViewController()?.addChildViewController(viewController)
+                    UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
                     viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                        y: 0,
                                                        width: UIScreen.main.bounds.width,
