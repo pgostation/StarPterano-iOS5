@@ -150,12 +150,13 @@ private final class EmojiInputScrollView: UIScrollView {
         for emoji in self.emojiList {
             let button = EmojiButton(key: emoji.short_code ?? "")
             if SettingsData.useAnimation && emoji.url?.hasSuffix(".png") == true {
-                // 上からAPNGのビューを貼り付ける
                 APNGImageCache.image(urlStr: emoji.url) { image in
-                    if image.frameCount <= 1 { return }
+                    // APNGのビューを貼り付ける
                     let imageView = APNGImageView(image: image)
                     imageView.tag = 5555
-                    imageView.autoStartAnimation = true
+                    if image.frameCount > 1 {
+                        imageView.autoStartAnimation = true
+                    }
                     let buttonSize: CGFloat = 24 + SettingsData.fontSize
                     imageView.frame = CGRect(x: 0,
                                              y: 0,
@@ -166,18 +167,7 @@ private final class EmojiInputScrollView: UIScrollView {
             } else {
                 // APNG以外
                 ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
-                    if emoji.url?.hasSuffix(".gif") == true {
-                        // 上からGIFアニメーションのビューを貼り付ける
-                        let imageView = UIImageView(gifImage: image, manager: self.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
-                        let buttonSize: CGFloat = 24 + SettingsData.fontSize
-                        imageView.frame = CGRect(x: 0,
-                                                 y: 0,
-                                                 width: buttonSize,
-                                                 height: buttonSize)
-                        button.addSubview(imageView)
-                    } else {
-                        button.setImage(image, for: .normal)
-                    }
+                    button.setImage(image, for: .normal)
                 }
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
