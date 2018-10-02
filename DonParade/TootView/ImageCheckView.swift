@@ -54,7 +54,9 @@ final class ImageCheckView: UIView {
         manager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) { (image, info) in
             guard let image = image else { return }
             
-            self.urls.append(imageUrl)
+            if !self.urls.contains(imageUrl) {
+                self.urls.append(imageUrl)
+            }
             
             let imageView = UIImageView()
             imageView.image = image

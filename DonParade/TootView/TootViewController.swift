@@ -57,6 +57,11 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         view.cwButton.addTarget(self, action: #selector(cwAction), for: .touchUpInside)
         //view.saveButton.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
         view.emojiButton.addTarget(self, action: #selector(emojiAction), for: .touchUpInside)
+        
+        // 添付画像の復帰
+        for url in view.imageCheckView.urls {
+            view.imageCheckView.add(imageUrl: url)
+        }
     }
     
     // トゥートする
