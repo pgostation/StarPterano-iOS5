@@ -196,6 +196,9 @@ private final class EmojiInputScrollView: UIScrollView {
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
             
+            let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressButton(_:)))
+            button.addGestureRecognizer(pressGesture)
+            
             self.addSubview(button)
             
             emojiButtons.append(button)
@@ -226,6 +229,13 @@ private final class EmojiInputScrollView: UIScrollView {
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+        }
+    }
+    
+    // 絵文字情報を表示
+    @objc func pressButton(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began, let button = gesture.view as? EmojiButton {
+            Dialog.show(message: button.key)
         }
     }
     
@@ -284,7 +294,7 @@ private final class EmojiInputScrollView: UIScrollView {
             if button.key.contains(key) {
                 buttons.append(button)
             } else {
-                button.removeFromSuperview()
+                button.frame.origin.x = -100
             }
         }
         
