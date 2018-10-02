@@ -100,11 +100,19 @@ final class MainViewController: MyViewController {
         // 一番下にタイムラインビューを入れる
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
         if let view = self.view as? MainView {
             view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
             view.tlButton.layer.borderWidth = 2
             view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        }
+        
+        // 中身が空の場合は更新する
+        if let timelineView = self.timelineViewController!.view as? TimeLineView {
+            if timelineView.model.getFirstTootId() == nil {
+                timelineView.refresh()
+            }
         }
     }
     
@@ -136,11 +144,19 @@ final class MainViewController: MyViewController {
         // 一番下にタイムラインビューを入れる
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
         if let view = self.view as? MainView {
             view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
             view.ltlButton.layer.borderWidth = 2
             view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        }
+        
+        // 中身が空の場合は更新する
+        if let timelineView = self.timelineViewController!.view as? TimeLineView {
+            if timelineView.model.getFirstTootId() == nil {
+                timelineView.refresh()
+            }
         }
     }
     
@@ -174,11 +190,19 @@ final class MainViewController: MyViewController {
         // 一番下にタイムラインビューを入れる
         self.addChildViewController(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
         if let view = self.view as? MainView {
             view.ltlButton.setTitle(I18n.get("BUTTON_GTL"), for: .normal)
             view.ltlButton.layer.borderWidth = 2
             view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+        }
+        
+        // 中身が空の場合は更新する
+        if let timelineView = self.timelineViewController!.view as? TimeLineView {
+            if timelineView.model.getFirstTootId() == nil {
+                timelineView.refresh()
+            }
         }
     }
     

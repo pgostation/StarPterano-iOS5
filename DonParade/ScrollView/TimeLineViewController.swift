@@ -147,11 +147,6 @@ final class TimeLineViewController: MyViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if !(self.view is TimeLineView) {
-            loadView()
-            return
-        }
-        
         (self.view as? TimeLineView)?.startStreaming()
         
         let text: String?

@@ -17,14 +17,15 @@ final class MastodonRequest {
     private static var lastRequestStr = "" // GETメソッドをループして呼ぶのを防ぐ
     private static var lastReqestDate = Date()
     static func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
-        if lastRequestStr == url.absoluteString && Date().timeIntervalSince(lastReqestDate) <= 1 {
+        let requestStr = (SettingsData.accessToken ?? "") + url.absoluteString
+        if lastRequestStr == requestStr && Date().timeIntervalSince(lastReqestDate) <= 1 {
             print("1秒以内に同一URLへのGETがありました \(url.absoluteString)")
             return
         }
         
         print("get \(url.absoluteString)")
         
-        lastRequestStr = url.absoluteString
+        lastRequestStr = requestStr
         lastReqestDate = Date()
         
         var request: URLRequest = URLRequest(url: url)
