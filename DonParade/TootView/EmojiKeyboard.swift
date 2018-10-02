@@ -152,9 +152,19 @@ private final class EmojiInputScrollView: UIScrollView {
         if self.emojiList.count > 0 {
             addEmojis()
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.addEmojis()
+            // 絵文字データが取れるまでリトライする
+            func retry(count: Int) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    if self.emojiList.count > 0 {
+                        self.addEmojis()
+                        self.setNeedsLayout()
+                    } else if count <= 3 {
+                        retry(count: count + 1)
+                    }
+                }
             }
+            
+            retry(count: 0)
         }
     }
     
