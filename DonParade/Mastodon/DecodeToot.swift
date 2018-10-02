@@ -52,7 +52,7 @@ final class DecodeToot {
             if let startHrefRange = tmpHrefStr2.range(of: " href=\""), let endHrefRange = tmpHrefStr2.range(of: "\" ") {
                 let hrefStartIndex = tmpHrefStr2.index(startHrefRange.lowerBound, offsetBy: 7)
                 let hrefEndIndex = tmpHrefStr2.index(endHrefRange.lowerBound, offsetBy: -1)
-                urlStr = String(tmpHrefStr2.suffix(tmpHrefStr2.count - hrefStartIndex.encodedOffset).prefix(hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset + 1))
+                urlStr = String(tmpHrefStr2.suffix(max(0, tmpHrefStr2.count - hrefStartIndex.encodedOffset)).prefix(max(0, hrefEndIndex.encodedOffset - hrefStartIndex.encodedOffset + 1)))
             }
             
             // 表示用文字列を取り出す

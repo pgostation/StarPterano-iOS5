@@ -180,6 +180,10 @@ final class NotificationView: UIView {
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        closeButton.layer.cornerRadius = 10
+        closeButton.clipsToBounds = true
+        closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        closeButton.layer.borderWidth = 1
     }
     
     override func layoutSubviews() {

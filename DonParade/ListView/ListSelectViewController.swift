@@ -68,6 +68,11 @@ private final class ListSelectView: UIView {
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        closeButton.layer.cornerRadius = 10
+        closeButton.clipsToBounds = true
+        closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        closeButton.layer.borderWidth = 1
+        
         closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
                                    y: UIScreen.main.bounds.height - 70,
                                    width: 50,

@@ -269,6 +269,8 @@ private final class ImageView: UIView {
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
         closeButton.layer.cornerRadius = 10
         closeButton.clipsToBounds = true
+        closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        closeButton.layer.borderWidth = 1
         
         optionButton.setTitle("…", for: .normal)
         optionButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 36)
@@ -276,6 +278,8 @@ private final class ImageView: UIView {
         optionButton.backgroundColor = ThemeColor.mainButtonsBgColor
         optionButton.layer.cornerRadius = 10
         optionButton.clipsToBounds = true
+        optionButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        optionButton.layer.borderWidth = 1
         
         rotateButton.setTitle("⤾", for: .normal)
         rotateButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 36)
@@ -283,6 +287,8 @@ private final class ImageView: UIView {
         rotateButton.backgroundColor = ThemeColor.mainButtonsBgColor
         rotateButton.layer.cornerRadius = 10
         rotateButton.clipsToBounds = true
+        rotateButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        rotateButton.layer.borderWidth = 1
         
         // 縦方向に長い画像の場合、閉じるボタンを表示させない
         if let smallImage = smallImage, smallImage.size.width < smallImage.size.height {
