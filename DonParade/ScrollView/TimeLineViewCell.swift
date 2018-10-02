@@ -15,6 +15,7 @@ final class TimeLineViewCell: UITableViewCell {
     static var showMoreList: [String] = []
     
     var id = "" // トゥートのID
+    var reblog_id: String? = nil
     
     // 基本ビュー
     let lineLayer = CALayer()
@@ -328,14 +329,14 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func boostAction() {
         self.boostButton?.isHidden = true
         
-        tableView?.boostAction(id: self.id, isBoosted: self.isBoosted)
+        tableView?.boostAction(id: self.reblog_id ?? self.id, isBoosted: self.isBoosted)
     }
     
     // お気に入りボタンをタップした時の処理
     @objc func favoriteAction() {
         self.favoriteButton?.isHidden = true
         
-        tableView?.favoriteAction(id: self.id, isFaved: self.isFaved)
+        tableView?.favoriteAction(id: self.reblog_id ?? self.id, isFaved: self.isFaved)
     }
     
     // 「・・・」ボタンをタップした時の処理

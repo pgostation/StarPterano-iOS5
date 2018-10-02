@@ -422,6 +422,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
         cell.id = data.id ?? ""
+        cell.reblog_id = data.reblog_id
         id = data.id ?? ""
         cell.tableView = tableView as? TimeLineView
         cell.indexPath = indexPath
