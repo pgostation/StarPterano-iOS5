@@ -15,7 +15,7 @@ import SwiftyGif
 final class TimeLineView: UITableView {
     let type: TimeLineViewController.TimeLineType
     let option: String?
-    private let model = TimeLineViewModel()
+    let model = TimeLineViewModel()
     private let refreshCon: UIRefreshControl
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")

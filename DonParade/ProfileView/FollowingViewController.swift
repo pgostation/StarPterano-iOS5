@@ -184,7 +184,7 @@ private final class FollowingView: UIView {
     }
 }
 
-private final class FollowingTableView: UITableView {
+final class FollowingTableView: UITableView {
     let model = FollowingTableModel()
     
     init() {
@@ -204,7 +204,7 @@ private final class FollowingTableView: UITableView {
     }
 }
 
-private final class FollowingTableModel: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class FollowingTableModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     var showAutoPegerizeCell = true
     private var list: [AnalyzeJson.AccountData] = []
     var relationshipList: [String: [String: Any]] = [:]

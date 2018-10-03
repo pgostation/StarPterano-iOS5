@@ -88,6 +88,9 @@ private final class ListSelectTableView: UITableView {
         
         self.delegate = model
         self.dataSource = model
+        
+        self.backgroundColor = ThemeColor.cellBgColor
+        self.separatorStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {

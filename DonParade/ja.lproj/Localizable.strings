@@ -84,7 +84,7 @@
 "NOTIFY_SEG_BOOST" = "🔁";
 
 // 検索画面
-"SEARCH_SEG_TOOT" = "トゥート";
+"SEARCH_SEG_TAG" = "タグ";
 "SEARCH_SEG_ACCOUNT" = "ユーザー";
 
 // フォロー状態表示

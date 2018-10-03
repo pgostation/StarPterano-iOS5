@@ -47,6 +47,11 @@ final class NotificationViewController: MyViewController {
             lastId = view.tableView.model.getLastId()
         }
         
+        let waitIndicator = WaitIndicator()
+        if lastId == nil {
+            self.view.addSubview(waitIndicator)
+        }
+        
         var idStr = ""
         if let lastId = lastId {
             idStr = "&max_id=\(lastId)"
@@ -54,6 +59,10 @@ final class NotificationViewController: MyViewController {
         
         guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/notifications?limit=15\(idStr)") else { return }
         try? MastodonRequest.get(url: url, completionHandler: { [weak self] (data, response, error) in
+            DispatchQueue.main.async {
+                waitIndicator.removeFromSuperview()
+            }
+            
             if let data = data {
                 do {
                     let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject>
