@@ -32,15 +32,7 @@ final class ListSelectViewController: MyViewController {
     }
     
     @objc func closeAction() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.view.frame = CGRect(x: UIScreen.main.bounds.width,
-                                     y: 0,
-                                     width: UIScreen.main.bounds.width,
-                                     height: UIScreen.main.bounds.height)
-        }, completion: { _ in
-            self.removeFromParentViewController()
-            self.view.removeFromSuperview()
-        })
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -91,14 +83,51 @@ private final class ListSelectTableView: UITableView {
         
         self.backgroundColor = ThemeColor.cellBgColor
         self.separatorStyle = .none
+        
+        getLists()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private func getLists() {
+        let waitIndicator = WaitIndicator()
+        self.addSubview(waitIndicator)
+        
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/lists") else { return }
+        
+        try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
+            DispatchQueue.main.async {
+                waitIndicator.removeFromSuperview()
+            }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
+                        var list: [AnalyzeJson.ListData] = []
+                        for listJson in responseJson {
+                            let data = AnalyzeJson.ListData(id: listJson["id"] as? String,
+                                                            title: listJson["title"] as? String)
+                            list.append(data)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self?.model.list = list
+                            self?.reloadData()
+                        }
+                    }
+                } catch {
+                    
+                }
+            }
+        }
+    }
 }
 
 private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITableViewDelegate {
+    var list: [AnalyzeJson.ListData] = []
+    
     override init() {
         super.init()
     }
@@ -107,15 +136,17 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
         fatalError("init(coder:) has not been implemented")
     }
     
-    func change(addList: [AnalyzeJson.ListData]) {
-        
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return list.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        let cell =  UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        
+        let data = list[indexPath.row]
+        
+        cell.textLabel?.text = data.title
+        
+        return cell
     }
 }

@@ -77,7 +77,7 @@ private final class SearchView: UIView, UITextFieldDelegate {
         segmentControl.insertSegment(withTitle: I18n.get("SEARCH_SEG_TAG"), at: 0, animated: false)
         segmentControl.insertSegment(withTitle: I18n.get("SEARCH_SEG_ACCOUNT"), at: 1, animated: false)
         segmentControl.selectedSegmentIndex = 0
-        segmentControl.tintColor = ThemeColor.mainButtonsTitleColor
+        segmentControl.tintColor = ThemeColor.nameColor
         segmentControl.backgroundColor = ThemeColor.cellBgColor
         
         // 検索文字列入力フィールド

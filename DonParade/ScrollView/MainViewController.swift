@@ -61,7 +61,7 @@ final class MainViewController: MyViewController {
             case .federation:
                 ftlAction(nil)
             case .list:
-                listAction(nil)
+                showListTL()
             }
         } else {
             tlAction(nil)
@@ -188,18 +188,28 @@ final class MainViewController: MyViewController {
         self.setButtonNameAndBorder()
     }
     
-    // リストボタンをタップで優先リストのタイムラインへ移動
+    // リストボタンをタップでリスト選択画面へ移動
     @objc func listAction(_ sender: Any?) {
         if let gesture = sender as? UILongPressGestureRecognizer {
             if gesture.state != .began { return }
         }
         
+        listPressAction(nil)
+    }
+    
+    private func showListTL() {
         if let oldViewController = self.timelineViewController {
             if oldViewController.type == .list {
                 // 一番上までスクロール
                 (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
                 return
             }
+        }
+        
+        // 選択しているリストがない場合、リスト選択画面に行く
+        if SettingsData.selectedListId(accessToken: SettingsData.accessToken ?? "") == nil {
+            listPressAction(nil)
+            return
         }
         
         // 前のビューを外す
@@ -221,27 +231,29 @@ final class MainViewController: MyViewController {
     private func setButtonNameAndBorder() {
         guard let view = self.view as? MainView else { return }
         
-        if let tlView = view.subviews.first as? TimeLineView {
-            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-            view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
-            view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
-            view.ftlButton.layer.borderWidth = 1 / UIScreen.main.scale
-            view.listButton.layer.borderWidth = 1 / UIScreen.main.scale
-            
-            switch tlView.type {
-            case .home:
-                view.tlButton.layer.borderWidth = 2
-            case .local:
-                view.ltlButton.layer.borderWidth = 2
-            case .federation:
-                if !SettingsData.showFTLButton {
-                    view.ltlButton.setTitle(I18n.get("BUTTON_FTL"), for: .normal)
+        DispatchQueue.main.async {
+            if let tlView = self.timelineViewController?.view as? TimeLineView {
+                view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
+                view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+                view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
+                view.ftlButton.layer.borderWidth = 1 / UIScreen.main.scale
+                view.listButton.layer.borderWidth = 1 / UIScreen.main.scale
+                
+                switch tlView.type {
+                case .home:
+                    view.tlButton.layer.borderWidth = 2
+                case .local:
+                    view.ltlButton.layer.borderWidth = 2
+                case .federation:
+                    if !SettingsData.showFTLButton {
+                        view.ltlButton.setTitle(I18n.get("BUTTON_FTL"), for: .normal)
+                    }
+                    view.ftlButton.layer.borderWidth = 2
+                case .list:
+                    view.listButton.layer.borderWidth = 2
+                default:
+                    break
                 }
-                view.ftlButton.layer.borderWidth = 2
-            case .list:
-                view.listButton.layer.borderWidth = 2
-            default:
-                break
             }
         }
     }
@@ -282,7 +294,8 @@ final class MainViewController: MyViewController {
     @objc func listPressAction(_ gesture: UILongPressGestureRecognizer?) {
         if let gesture = gesture, gesture.state != .began { return }
         
-        Dialog.show(message: "リスト選択画面を出すつもり")
+        let vc = ListSelectViewController()
+        self.present(vc, animated: false, completion: nil)
     }
     
     // アカウントボタンの長押し

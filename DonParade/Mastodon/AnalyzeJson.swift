@@ -398,7 +398,8 @@ final class AnalyzeJson {
     
     // リスト
     struct ListData {
-        
+        let id: String?
+        let title: String?
     }
     
     // フォロー関係
