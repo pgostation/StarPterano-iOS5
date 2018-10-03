@@ -67,6 +67,7 @@ final class MainView: UIView {
         tlButton.layer.borderWidth = 1 / UIScreen.main.scale
         tlButton.clipsToBounds = true
         tlButton.layer.cornerRadius = 10
+        tlButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             tlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
@@ -83,6 +84,7 @@ final class MainView: UIView {
         ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
         ltlButton.clipsToBounds = true
         ltlButton.layer.cornerRadius = 10
+        ltlButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             ltlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
@@ -99,6 +101,7 @@ final class MainView: UIView {
         ftlButton.layer.borderWidth = 1 / UIScreen.main.scale
         ftlButton.clipsToBounds = true
         ftlButton.layer.cornerRadius = 10
+        ftlButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             ftlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
@@ -115,6 +118,7 @@ final class MainView: UIView {
         listButton.layer.borderWidth = 1 / UIScreen.main.scale
         listButton.clipsToBounds = true
         listButton.layer.cornerRadius = 10
+        listButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             listButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
@@ -130,6 +134,7 @@ final class MainView: UIView {
         tootButton.layer.borderWidth = 1 / UIScreen.main.scale
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 35
+        tootButton.isExclusiveTouch = true
         
         searchButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
         searchButton.setTitle(I18n.get("BUTTON_SEARCH"), for: .normal)
@@ -143,6 +148,7 @@ final class MainView: UIView {
         searchButton.layer.borderWidth = 1 / UIScreen.main.scale
         searchButton.clipsToBounds = true
         searchButton.layer.cornerRadius = 10
+        searchButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             searchButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
@@ -159,6 +165,7 @@ final class MainView: UIView {
         notificationsButton.layer.borderWidth = 1 / UIScreen.main.scale
         notificationsButton.clipsToBounds = true
         notificationsButton.layer.cornerRadius = 10
+        notificationsButton.isExclusiveTouch = true
         if #available(iOS 11.0, *) {
             notificationsButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
@@ -169,6 +176,7 @@ final class MainView: UIView {
         accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         accountButton.clipsToBounds = true
         accountButton.layer.cornerRadius = 10
+        accountButton.isExclusiveTouch = true
         
         notifyLabel.backgroundColor = ThemeColor.idColor.withAlphaComponent(0.8)
         notifyLabel.textColor = ThemeColor.viewBgColor

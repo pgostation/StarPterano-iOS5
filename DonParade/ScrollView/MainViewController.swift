@@ -155,6 +155,7 @@ final class MainViewController: MyViewController {
     @objc func ftlAction(_ sender: Any?) {
         if let gesture = sender as? UILongPressGestureRecognizer {
             if gesture.state != .began { return }
+            if SettingsData.showFTLButton { return }
         }
         
         if let oldViewController = self.timelineViewController {
@@ -192,12 +193,13 @@ final class MainViewController: MyViewController {
     @objc func listAction(_ sender: Any?) {
         if let gesture = sender as? UILongPressGestureRecognizer {
             if gesture.state != .began { return }
+            if SettingsData.showListButton { return }
         }
         
         listPressAction(nil)
     }
     
-    private func showListTL() {
+    func showListTL() {
         if let oldViewController = self.timelineViewController {
             if oldViewController.type == .list {
                 // 一番上までスクロール

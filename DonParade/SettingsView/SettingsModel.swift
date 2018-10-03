@@ -74,8 +74,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .nameTappable,
                                                   .streaming,
                                                   .useAnimation,
-                                                  .showFTLButton,
-                                                  .showListButton]
+                                                  .showListButton,
+                                                  .showFTLButton]
     
     // 5.キャッシュ
     private enum Cache: String {

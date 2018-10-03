@@ -135,6 +135,12 @@ final class SettingsData {
         guard let accessToken = accessToken else { return nil }
         return defaults.string(forKey: "selectedListId_\(accessToken)")
     }
+    static func selectListId(accessToken: String?, listId: String?) {
+        guard let accessToken = accessToken else { return }
+        guard let listId = listId else { return }
+        
+        defaults.set(listId, forKey: "selectedListId_\(accessToken)")
+    }
     
     // タップで詳細に移動
     static var tapDetailMode: Bool {

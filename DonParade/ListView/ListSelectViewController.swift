@@ -149,4 +149,17 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let data = list[indexPath.row]
+        
+        if let vc = UIUtils.getFrontViewController() as? ListSelectViewController {
+            vc.closeAction()
+            
+            DispatchQueue.main.async {
+                SettingsData.selectListId(accessToken: SettingsData.accessToken, listId: data.id)
+                MainViewController.instance?.showListTL()
+            }
+        }
+    }
 }

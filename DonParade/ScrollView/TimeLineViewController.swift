@@ -159,6 +159,9 @@ final class TimeLineViewController: MyViewController {
         else if self.type == .federation {
             text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_FTL")
         }
+        else if self.type == .list {
+            text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_LIST")
+        }
         else {
             text = nil
         }
