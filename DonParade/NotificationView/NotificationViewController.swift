@@ -163,19 +163,6 @@ final class NotificationView: UIView {
         segmentControl.tintColor = ThemeColor.mainButtonsTitleColor
         segmentControl.backgroundColor = ThemeColor.cellBgColor
         
-        let screenBounds = UIScreen.main.bounds
-        let segAllWidth = min(360, screenBounds.width * 0.98)
-        let segWidth = segAllWidth / 5
-        for i in 0..<segmentControl.numberOfSegments {
-            segmentControl.setWidth(segWidth, forSegmentAt: i)
-        }
-        
-        segmentControl.frame = CGRect(x: screenBounds.width / 2 - segAllWidth / 2,
-                                      y: UIUtils.statusBarHeight(),
-                                      width: segAllWidth,
-                                      height: 40)
-        
-        
         // 閉じるボタン
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
@@ -188,6 +175,17 @@ final class NotificationView: UIView {
     
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
+        
+        let segAllWidth = min(360, screenBounds.width * 0.98)
+        let segWidth = segAllWidth / 5
+        for i in 0..<segmentControl.numberOfSegments {
+            segmentControl.setWidth(segWidth, forSegmentAt: i)
+        }
+        
+        segmentControl.frame = CGRect(x: screenBounds.width / 2 - segAllWidth / 2,
+                                      y: UIUtils.statusBarHeight(),
+                                      width: segAllWidth,
+                                      height: 40)
         
         tableView.frame = CGRect(x: 0,
                                  y: UIUtils.statusBarHeight() + 42,

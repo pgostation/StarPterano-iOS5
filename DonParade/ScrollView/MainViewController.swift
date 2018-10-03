@@ -28,6 +28,8 @@ final class MainViewController: MyViewController {
         // ボタンのaddTarget
         view.tlButton.addTarget(self, action: #selector(tlAction(_:)), for: .touchUpInside)
         view.ltlButton.addTarget(self, action: #selector(ltlAction(_:)), for: .touchUpInside)
+        view.ftlButton.addTarget(self, action: #selector(ftlAction(_:)), for: .touchUpInside)
+        view.listButton.addTarget(self, action: #selector(listAction(_:)), for: .touchUpInside)
         
         view.tootButton.addTarget(self, action: #selector(tootAction(_:)), for: .touchUpInside)
         
@@ -37,8 +39,14 @@ final class MainViewController: MyViewController {
         view.accountButton.addTarget(self, action: #selector(accountAction(_:)), for: .touchUpInside)
         
         // 長押し
-        let ltlPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(gtlAction(_:)))
+        let ltlPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ftlAction(_:)))
         view.ltlButton.addGestureRecognizer(ltlPressGesture)
+        
+        let listPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(listPressAction(_:)))
+        view.listButton.addGestureRecognizer(listPressGesture)
+        
+        let homePressGesture = UILongPressGestureRecognizer(target: self, action: #selector(listPressAction(_:)))
+        view.tlButton.addGestureRecognizer(homePressGesture)
         
         let accountPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(accountPressAction(_:)))
         view.accountButton.addGestureRecognizer(accountPressGesture)
@@ -51,7 +59,9 @@ final class MainViewController: MyViewController {
             case .local:
                 ltlAction(nil)
             case .federation:
-                gtlAction(nil)
+                ftlAction(nil)
+            case .list:
+                listAction(nil)
             }
         } else {
             tlAction(nil)
@@ -62,6 +72,9 @@ final class MainViewController: MyViewController {
         guard let view = self.view as? MainView else { return }
         
         view.refreshColor()
+        view.setNeedsLayout()
+        
+        self.setButtonNameAndBorder()
         
         for (_, vc) in TimelineList {
             let timelineView = (vc.view as? TimeLineView)
@@ -102,11 +115,7 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
-        if let view = self.view as? MainView {
-            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-            view.tlButton.layer.borderWidth = 2
-            view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
-        }
+        self.setButtonNameAndBorder()
     }
     
     // LTLへの切り替え
@@ -139,19 +148,17 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
-        if let view = self.view as? MainView {
-            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-            view.ltlButton.layer.borderWidth = 2
-            view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
-        }
+        self.setButtonNameAndBorder()
     }
     
-    // 長押しで連合タイムラインへ移動
-    @objc func gtlAction(_ gesture: UILongPressGestureRecognizer?) {
-        if let gesture = gesture, gesture.state != .began { return }
+    // 連合ボタンをタップまたはローカルボタン長押しで連合タイムラインへ移動
+    @objc func ftlAction(_ sender: Any?) {
+        if let gesture = sender as? UILongPressGestureRecognizer {
+            if gesture.state != .began { return }
+        }
         
         if let oldViewController = self.timelineViewController {
-            if oldViewController.type == .global {
+            if oldViewController.type == .federation {
                 // 一番上までスクロール
                 (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
                 return
@@ -162,11 +169,11 @@ final class MainViewController: MyViewController {
         removeOldView()
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            let key = "\(hostName)_\(accessToken)_GTL"
+            let key = "\(hostName)_\(accessToken)_FTL"
             if let vc = self.TimelineList[key] {
                 self.timelineViewController = vc
             } else {
-                self.timelineViewController = TimeLineViewController(type: .global)
+                self.timelineViewController = TimeLineViewController(type: .federation)
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
@@ -178,10 +185,64 @@ final class MainViewController: MyViewController {
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
-        if let view = self.view as? MainView {
-            view.ltlButton.setTitle(I18n.get("BUTTON_GTL"), for: .normal)
-            view.ltlButton.layer.borderWidth = 2
+        self.setButtonNameAndBorder()
+    }
+    
+    // リストボタンをタップで優先リストのタイムラインへ移動
+    @objc func listAction(_ sender: Any?) {
+        if let gesture = sender as? UILongPressGestureRecognizer {
+            if gesture.state != .began { return }
+        }
+        
+        if let oldViewController = self.timelineViewController {
+            if oldViewController.type == .list {
+                // 一番上までスクロール
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                return
+            }
+        }
+        
+        // 前のビューを外す
+        removeOldView()
+        
+        if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
+            self.timelineViewController = TimeLineViewController(type: .list)
+            SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .list)
+        }
+        
+        // 一番下にタイムラインビューを入れる
+        self.addChildViewController(self.timelineViewController!)
+        self.view.insertSubview(self.timelineViewController!.view, at: 0)
+        self.timelineViewController!.view.frame = UIUtils.fullScreen()
+        
+        self.setButtonNameAndBorder()
+    }
+    
+    private func setButtonNameAndBorder() {
+        guard let view = self.view as? MainView else { return }
+        
+        if let tlView = view.subviews.first as? TimeLineView {
+            view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
             view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
+            view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
+            view.ftlButton.layer.borderWidth = 1 / UIScreen.main.scale
+            view.listButton.layer.borderWidth = 1 / UIScreen.main.scale
+            
+            switch tlView.type {
+            case .home:
+                view.tlButton.layer.borderWidth = 2
+            case .local:
+                view.ltlButton.layer.borderWidth = 2
+            case .federation:
+                if !SettingsData.showFTLButton {
+                    view.ltlButton.setTitle(I18n.get("BUTTON_FTL"), for: .normal)
+                }
+                view.ftlButton.layer.borderWidth = 2
+            case .list:
+                view.listButton.layer.borderWidth = 2
+            default:
+                break
+            }
         }
     }
     
@@ -215,6 +276,13 @@ final class MainViewController: MyViewController {
         }
         
         markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: false)
+    }
+    
+    // リストボタンの長押し
+    @objc func listPressAction(_ gesture: UILongPressGestureRecognizer?) {
+        if let gesture = gesture, gesture.state != .began { return }
+        
+        Dialog.show(message: "リスト選択画面を出すつもり")
     }
     
     // アカウントボタンの長押し
@@ -277,28 +345,15 @@ final class MainViewController: MyViewController {
                 case .local:
                     self.timelineViewController = TimeLineViewController(type: .local)
                 case .federation:
-                    self.timelineViewController = TimeLineViewController(type: .global)
+                    self.timelineViewController = TimeLineViewController(type: .federation)
+                case .list:
+                    self.timelineViewController = TimeLineViewController(type: .list)
                 }
                 self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
-            if let view = self.view as? MainView {
-                if isLTL == .federation {
-                    view.ltlButton.setTitle(I18n.get("BUTTON_GTL"), for: .normal)
-                } else {
-                    view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-                }
-                
-                if isLTL == .home {
-                    view.tlButton.layer.borderWidth = 2
-                    view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
-                } else {
-                    view.ltlButton.layer.borderWidth = 2
-                    view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
-                }
-                
-                setAccountIcon()
-            }
+            setButtonNameAndBorder()
+            setAccountIcon()
         }
         
         // タイムラインビューを入れる
@@ -374,6 +429,8 @@ final class MainViewController: MyViewController {
         UIView.animate(withDuration: 0.1) {
             view.tlButton.alpha = 0
             view.ltlButton.alpha = 0
+            view.ftlButton.alpha = 0
+            view.listButton.alpha = 0
             view.tootButton.alpha = 0
             view.searchButton.alpha = 0
             view.notificationsButton.alpha = 0
@@ -395,6 +452,8 @@ final class MainViewController: MyViewController {
         UIView.animate(withDuration: 0.1) {
             view.tlButton.alpha = 1
             view.ltlButton.alpha = 1
+            view.ftlButton.alpha = 1
+            view.listButton.alpha = 1
             view.tootButton.alpha = 1
             view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
@@ -415,6 +474,8 @@ final class MainViewController: MyViewController {
         UIView.animate(withDuration: 0.5, animations: {
             view.tlButton.alpha = 0
             view.ltlButton.alpha = 0
+            view.ftlButton.alpha = 0
+            view.listButton.alpha = 0
             view.tootButton.alpha = 0
             view.searchButton.alpha = 0
             view.notificationsButton.alpha = 0
@@ -422,6 +483,8 @@ final class MainViewController: MyViewController {
         }, completion: { _ in
             view.tlButton.isHidden = true
             view.ltlButton.isHidden = true
+            view.ftlButton.isHidden = true
+            view.listButton.isHidden = true
             view.tootButton.isHidden = true
             view.searchButton.isHidden = true
             view.notificationsButton.isHidden = true
@@ -435,6 +498,8 @@ final class MainViewController: MyViewController {
         UIView.animate(withDuration: 0.5) {
             view.tlButton.alpha = 1
             view.ltlButton.alpha = 1
+            view.ftlButton.alpha = 1
+            view.listButton.alpha = 1
             view.tootButton.alpha = 1
             view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
@@ -443,6 +508,8 @@ final class MainViewController: MyViewController {
         
         view.tlButton.isHidden = false
         view.ltlButton.isHidden = false
+        view.ftlButton.isHidden = false
+        view.listButton.isHidden = false
         view.tootButton.isHidden = false
         view.searchButton.isHidden = false
         view.notificationsButton.isHidden = false
@@ -533,187 +600,5 @@ final class MainViewController: MyViewController {
         } else {
             view.notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
         }
-    }
-}
-
-final class MainView: UIView {
-    // 左下
-    let tlButton = WideTouchButton()
-    let ltlButton = WideTouchButton()
-    
-    // 中央下
-    let tootButton = UIButton()
-    
-    // 右下
-    let searchButton = WideTouchButton()
-    let notificationsButton = WideTouchButton()
-    
-    // 右上
-    let accountButton = WideTouchButton()
-    
-    // 上側の一時メッセージ表示
-    let notifyLabel = UILabel()
-    
-    init() {
-        super.init(frame: UIScreen.main.bounds)
-        
-        self.addSubview(tlButton)
-        self.addSubview(ltlButton)
-        self.addSubview(tootButton)
-        //self.addSubview(searchButton)
-        self.addSubview(notificationsButton)
-        self.addSubview(accountButton)
-        self.addSubview(notifyLabel)
-        
-        setProperties()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func refreshColor() {
-        setProperties()
-    }
-    
-    private func setProperties() {
-        self.backgroundColor = ThemeColor.viewBgColor
-        
-        tlButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
-        tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
-        tlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        tlButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        tlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        tlButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        tlButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        tlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        tlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        tlButton.layer.borderWidth = 1 / UIScreen.main.scale
-        tlButton.clipsToBounds = true
-        tlButton.layer.cornerRadius = 10
-        if #available(iOS 11.0, *) {
-            tlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        }
-        
-        ltlButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
-        ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
-        ltlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        ltlButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        ltlButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        ltlButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        ltlButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        ltlButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        ltlButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
-        ltlButton.clipsToBounds = true
-        ltlButton.layer.cornerRadius = 10
-        if #available(iOS 11.0, *) {
-            ltlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        }
-        
-        tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
-        tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        tootButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        tootButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        tootButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        tootButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        tootButton.layer.borderWidth = 1 / UIScreen.main.scale
-        tootButton.clipsToBounds = true
-        tootButton.layer.cornerRadius = 35
-        
-        searchButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
-        searchButton.setTitle(I18n.get("BUTTON_SEARCH"), for: .normal)
-        searchButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        searchButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        searchButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        searchButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        searchButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        searchButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        searchButton.layer.borderWidth = 1 / UIScreen.main.scale
-        searchButton.clipsToBounds = true
-        searchButton.layer.cornerRadius = 10
-        if #available(iOS 11.0, *) {
-            searchButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        }
-        
-        notificationsButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
-        notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
-        notificationsButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        notificationsButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        notificationsButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
-        notificationsButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
-        notificationsButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        notificationsButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        notificationsButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
-        notificationsButton.layer.borderWidth = 1 / UIScreen.main.scale
-        notificationsButton.clipsToBounds = true
-        notificationsButton.layer.cornerRadius = 10
-        if #available(iOS 11.0, *) {
-            notificationsButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-        }
-        
-        accountButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
-        accountButton.setTitle("", for: .normal)
-        accountButton.backgroundColor = ThemeColor.mainButtonsBgColor
-        accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-        accountButton.clipsToBounds = true
-        accountButton.layer.cornerRadius = 10
-        
-        notifyLabel.backgroundColor = ThemeColor.idColor.withAlphaComponent(0.8)
-        notifyLabel.textColor = ThemeColor.viewBgColor
-        notifyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-        notifyLabel.textAlignment = .center
-        notifyLabel.numberOfLines = 0
-        notifyLabel.lineBreakMode = .byCharWrapping
-        notifyLabel.layer.cornerRadius = 4
-        notifyLabel.clipsToBounds = true
-        notifyLabel.alpha = 0
-    }
-    
-    override func layoutSubviews() {
-        let screenBounds = UIScreen.main.bounds
-        let bottomOffset: CGFloat = UIUtils.isIphoneX ? 50 : 0
-        let buttonWidth: CGFloat = 60
-        let buttonHeight: CGFloat = 40
-        
-        tlButton.frame = CGRect(x: -1,
-                                y: screenBounds.height - 100 - bottomOffset,
-                                width: buttonWidth,
-                                height: buttonHeight)
-        
-        ltlButton.frame = CGRect(x: -1,
-                                 y: screenBounds.height - 50 - bottomOffset,
-                                 width: buttonWidth,
-                                 height: buttonHeight)
-        
-        tootButton.frame = CGRect(x: screenBounds.width / 2 - 70 / 2,
-                                  y: screenBounds.height - 70 - bottomOffset,
-                                  width: 70,
-                                  height: 70)
-        
-        searchButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
-                                    y: screenBounds.height - 100 - bottomOffset,
-                                    width: buttonWidth,
-                                    height: buttonHeight)
-        
-        if TootViewController.isShown {
-            notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
-                                               y: UIUtils.statusBarHeight() + 80,
-                                               width: buttonWidth,
-                                               height: buttonHeight)
-        } else {
-            notificationsButton.frame = CGRect(x: screenBounds.width - buttonWidth + 1,
-                                               y: screenBounds.height - 50 - bottomOffset,
-                                               width: buttonWidth,
-                                               height: buttonHeight)
-        }
-        
-        accountButton.frame = CGRect(x: screenBounds.width - SettingsData.iconSize - 10,
-                                     y: UIUtils.statusBarHeight() + 10,
-                                     width: SettingsData.iconSize,
-                                     height: SettingsData.iconSize)
     }
 }

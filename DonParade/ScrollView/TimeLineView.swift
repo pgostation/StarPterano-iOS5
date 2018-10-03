@@ -98,7 +98,7 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/home?limit=100\(sinceIdStr)")
         case .local:
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=1&limit=100\(sinceIdStr)")
-        case .global:
+        case .federation:
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=100\(sinceIdStr)")
         case .user:
             guard let option = option else { return }
@@ -109,7 +109,7 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=1&limit=100\(sinceIdStr)")
-        case .globalTag:
+        case .federationTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=100\(sinceIdStr)")
@@ -118,6 +118,15 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
         case .direct:
             url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(sinceIdStr)")
+        case .list:
+            guard let listId = SettingsData.selectedListId(accessToken: SettingsData.accessToken) else {
+                DispatchQueue.main.async {
+                    self.refreshCon.endRefreshing()
+                    self.waitIndicator?.removeFromSuperview()
+                }
+                return
+            }
+            url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(sinceIdStr)")
         }
         
         guard let requestUrl = url else { return }
@@ -179,7 +188,7 @@ final class TimeLineView: UITableView {
             else if self.type == .local {
                 self.streaming(streamingType: "public:local")
             }
-            else if self.type == .global {
+            else if self.type == .federation {
                 self.streaming(streamingType: "public")
             }
             else {
@@ -288,7 +297,7 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/home?limit=50\(maxIdStr)")
         case .local:
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?local=1&limit=50\(maxIdStr)")
-        case .global:
+        case .federation:
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=50\(maxIdStr)")
         case .user:
             guard let option = option else { return }
@@ -299,7 +308,7 @@ final class TimeLineView: UITableView {
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?local=1&limit=50\(maxIdStr)")
-        case .globalTag:
+        case .federationTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50\(maxIdStr)")
@@ -307,6 +316,15 @@ final class TimeLineView: UITableView {
             return
         case .direct:
             url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(maxIdStr)")
+        case .list:
+            guard let listId = SettingsData.selectedListId(accessToken: SettingsData.accessToken) else {
+                DispatchQueue.main.async {
+                    self.refreshCon.endRefreshing()
+                    self.waitIndicator?.removeFromSuperview()
+                }
+                return
+            }
+            url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(maxIdStr)")
         }
         
         guard let requestUrl = url else { return }

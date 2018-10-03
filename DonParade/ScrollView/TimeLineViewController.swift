@@ -14,14 +14,14 @@ final class TimeLineViewController: MyViewController {
     enum TimeLineType {
         case home // ホーム
         case local // ローカルタイムライン
-        case global // 連合タイムライン
+        case federation // 連合タイムライン
         case user // 指定ユーザータイムライン
         case favorites // お気に入り
         case localTag
-        case globalTag
+        case federationTag
         case mentions // 単一トゥート(と会話)
         case direct // ダイレクトメッセージ
-        // 会話の場合、@の相手全てのTimelineを取得して表示する。まず過去、それから未来。関係ないのは非表示
+        case list // リスト
     }
     
     static var closeButtons: [UIButton] = []
@@ -95,7 +95,7 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user || self.type == .mentions || self.type == .localTag || self.type == .globalTag || self.type == .direct || self.type == .favorites {
+        if self.type == .user || self.type == .mentions || self.type == .localTag || self.type == .federationTag || self.type == .direct || self.type == .favorites {
             let view = TimeLineView(type: self.type, option: self.option, mentions: mentions)
             self.view = view
             
@@ -156,8 +156,8 @@ final class TimeLineViewController: MyViewController {
         else if self.type == .local {
             text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_LTL")
         }
-        else if self.type == .global {
-            text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_GTL")
+        else if self.type == .federation {
+            text = (SettingsData.hostName ?? "") + "\n" + I18n.get("BUTTON_FTL")
         }
         else {
             text = nil

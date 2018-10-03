@@ -46,7 +46,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // ミュートフラグの立っているものは削除しておく
         var addList2 = addList
-        if tableView.type == .home || tableView.type == .local || tableView.type == .global {
+        if tableView.type == .home || tableView.type == .local || tableView.type == .federation {
             for (index, data) in addList2.enumerated().reversed() {
                 if data.muted == 1 {
                     addList2.remove(at: index)
@@ -936,7 +936,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func textView(_ textView: UITextView, shouldInteractWith Url: URL, in characterRange: NSRange) -> Bool {
         if Url.path.hasPrefix("/tags/") {
             // ハッシュタグの場合
-            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.globalTag,
+            let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.federationTag,
                                                         option: String(Url.path.suffix(Url.path.count - 6)))
             UIUtils.getFrontViewController()?.addChildViewController(viewController)
             UIUtils.getFrontViewController()?.view.addSubview(viewController.view)

@@ -17,7 +17,8 @@
 // タイムライン
 "BUTTON_TL" = "ホーム";
 "BUTTON_LTL" = "ローカル";
-"BUTTON_GTL" = "連合";
+"BUTTON_FTL" = "連合";
+"BUTTON_LIST" = "リスト";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_SEARCH" = "検索";
 "BUTTON_NOTIFY" = " 通知";
@@ -82,6 +83,10 @@
 "NOTIFY_SEG_FAV" = "🌟";
 "NOTIFY_SEG_BOOST" = "🔁";
 
+// 検索画面
+"SEARCH_SEG_TOOT" = "トゥート";
+"SEARCH_SEG_ACCOUNT" = "ユーザー";
+
 // フォロー状態表示
 "RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "フォロー中\nフォローされています\n";
 "RELATIONSHIP_FOLLOWING" = "フォロー中\n";
@@ -140,6 +145,8 @@
 "SETTINGS_LOADPREVIEW" = "プレビュー画像を読み込む";
 "SETTINGS_NAMETAPPABLE" = "名前欄タップで移動";
 "SETTINGS_USEANIMATION" = "画像アニメーション";
+"SETTINGS_SHOWFTLBUTTON" = "連合ボタンを表示";
+"SETTINGS_SHOWLISTBUTTON" = "リストボタンを表示";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

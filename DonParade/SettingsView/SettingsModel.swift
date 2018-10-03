@@ -62,6 +62,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case loadPreviewImage = "SETTINGS_LOADPREVIEW"
         case nameTappable = "SETTINGS_NAMETAPPABLE" // アカウント名をタップできるか
         case useAnimation = "SETTINGS_USEANIMATION"
+        case showFTLButton = "SETTINGS_SHOWFTLBUTTON"
+        case showListButton = "SETTINGS_SHOWLISTBUTTON"
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
@@ -71,7 +73,9 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .loadPreviewImage,
                                                   .nameTappable,
                                                   .streaming,
-                                                  .useAnimation]
+                                                  .useAnimation,
+                                                  .showFTLButton,
+                                                  .showListButton]
     
     // 5.キャッシュ
     private enum Cache: String {
@@ -252,6 +256,22 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.useAnimation = isOn
+                    MainViewController.instance?.refreshColor()
+                }
+                return cell
+            case .showFTLButton:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.showFTLButton)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.showFTLButton = isOn
+                    MainViewController.instance?.refreshColor()
+                }
+                return cell
+            case .showListButton:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.showListButton)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.showListButton = isOn
                     MainViewController.instance?.refreshColor()
                 }
                 return cell

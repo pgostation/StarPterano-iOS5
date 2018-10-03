@@ -17,7 +17,8 @@
 // タイムライン
 "BUTTON_TL" = "Home";
 "BUTTON_LTL" = "Local";
-"BUTTON_GTL" = "FTL";
+"BUTTON_FTL" = "FTL";
+"BUTTON_LIST" = "List";
 "BUTTON_TOOT" = "Toot!";
 "BUTTON_SEARCH" = "Search";
 "BUTTON_NOTIFY" = " Notify";
@@ -82,6 +83,10 @@
 "NOTIFY_SEG_FAV" = "🌟";
 "NOTIFY_SEG_BOOST" = "🔁";
 
+// 検索画面
+"SEARCH_SEG_TOOT" = "Toots";
+"SEARCH_SEG_ACCOUNT" = "Users";
+
 // フォロー状態表示
 "RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "Following.\nFollowed by.\n";
 "RELATIONSHIP_FOLLOWING" = "Following.\n";
@@ -140,6 +145,8 @@
 "SETTINGS_LOADPREVIEW" = "Load preview image";
 "SETTINGS_NAMETAPPABLE" = "Tappable name";
 "SETTINGS_USEANIMATION" = "Icon animation";
+"SETTINGS_SHOWFTLBUTTON" = "Show federation button";
+"SETTINGS_SHOWLISTBUTTON" = "Show list button";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

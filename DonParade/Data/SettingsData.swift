@@ -118,6 +118,7 @@ final class SettingsData {
         case home = "Home"
         case local = "Local"
         case federation = "Federation" // 連合TL
+        case list = "List"
     }
     static func tlMode(key: String) -> TLMode {
         if let string = defaults.string(forKey: "tlMode_\(key)") {
@@ -127,6 +128,12 @@ final class SettingsData {
     }
     static func setTlMode(key: String, mode: TLMode) {
         defaults.set(mode.rawValue, forKey: "tlMode_\(key)")
+    }
+    
+    // 各アカウントで優先表示するリストIDを保持
+    static func selectedListId(accessToken: String?) -> String? {
+        guard let accessToken = accessToken else { return nil }
+        return defaults.string(forKey: "selectedListId_\(accessToken)")
     }
     
     // タップで詳細に移動
@@ -352,6 +359,40 @@ final class SettingsData {
                 defaults.removeObject(forKey: "useAnimation")
             } else {
                 defaults.set("OFF", forKey: "useAnimation")
+            }
+        }
+    }
+    
+    // 連合ボタンを表示
+    static var showFTLButton: Bool {
+        get {
+            if let string = defaults.string(forKey: "showFTLButton") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "showFTLButton")
+            } else {
+                defaults.removeObject(forKey: "showFTLButton")
+            }
+        }
+    }
+    
+    // リストボタンを表示
+    static var showListButton: Bool {
+        get {
+            if let string = defaults.string(forKey: "showListButton") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "showListButton")
+            } else {
+                defaults.removeObject(forKey: "showListButton")
             }
         }
     }
