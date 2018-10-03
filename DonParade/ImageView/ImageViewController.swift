@@ -369,14 +369,19 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
         return imageView
     }
     
+    private var lastSwipeDate = Date()
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.zoomScale == 1 {
-            // 横スワイプで左右移動
-            if scrollView.contentOffset.x > 30 {
-                ImageViewController.instance?.leftAction()
-            }
-            else if scrollView.contentOffset.x < -30 {
-                ImageViewController.instance?.rightAction()
+            if Date().timeIntervalSince(lastSwipeDate) >= 0.5 {
+                // 横スワイプで左右移動
+                if scrollView.contentOffset.x > 30 {
+                    ImageViewController.instance?.leftAction()
+                    lastSwipeDate = Date()
+                }
+                else if scrollView.contentOffset.x < -30 {
+                    ImageViewController.instance?.rightAction()
+                    lastSwipeDate = Date()
+                }
             }
             
             // 上下スワイプで閉じる
