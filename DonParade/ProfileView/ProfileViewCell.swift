@@ -427,6 +427,15 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             }))
         }
         
+        // リストに追加
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_ADD_TO_LIST"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                let vc = AllListsViewController(accountId: id)
+                UIUtils.getFrontViewController()?.present(vc, animated: true, completion: nil)
+        }))
+        
         // 内蔵ブラウザで表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_WEB_BROWSER"),

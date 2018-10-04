@@ -108,6 +108,7 @@
 "ACTION_UNMUTE" = "ミュート解除する";
 "ACTION_MUTE" = "ミュートする";
 "ACTION_WEB_BROWSER" = "Safariで表示";
+"ACTION_ADD_TO_LIST" = "リストに追加";
 "ALERT_UNFOLLOW" = "フォロー解除しますか";
 
 // リスト画面
