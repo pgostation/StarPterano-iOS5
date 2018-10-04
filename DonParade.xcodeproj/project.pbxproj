@@ -34,6 +34,8 @@
 		1286DF682155E906008FFFAC /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF672155E906008FFFAC /* ImageViewController.swift */; };
 		129771E321624204003728FC /* WideTouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129771E221624204003728FC /* WideTouchButton.swift */; };
 		12B8B4242164BF0E00869496 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4232164BF0E00869496 /* MainView.swift */; };
+		12B8B4262165BAA900869496 /* ListSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */; };
+		12B8B4282165CD2B00869496 /* ListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4272165CD2B00869496 /* ListData.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -92,6 +94,8 @@
 		1286DF672155E906008FFFAC /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		129771E221624204003728FC /* WideTouchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideTouchButton.swift; sourceTree = "<group>"; };
 		12B8B4232164BF0E00869496 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectTableViewCell.swift; sourceTree = "<group>"; };
+		12B8B4272165CD2B00869496 /* ListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListData.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -159,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				127A37B42157250700347880 /* ListSelectViewController.swift */,
+				12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */,
 			);
 			path = ListView;
 			sourceTree = "<group>";
@@ -323,6 +328,7 @@
 			children = (
 				12F9AC98214CA9B100E9E508 /* SettingsData.swift */,
 				12CD0262214F49E000133A95 /* EmojiData.swift */,
+				12B8B4272165CD2B00869496 /* ListData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 				127A37C02157C63500347880 /* ImageUpload.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
 				12CD0263214F49E000133A95 /* EmojiData.swift in Sources */,
+				12B8B4282165CD2B00869496 /* ListData.swift in Sources */,
 				12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */,
 				1286DF682155E906008FFFAC /* ImageViewController.swift in Sources */,
 				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,
@@ -502,6 +509,7 @@
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
+				12B8B4262165BAA900869496 /* ListSelectTableViewCell.swift in Sources */,
 				127A37B921573FE900347880 /* NotificationTableCell.swift in Sources */,
 				1255A978215D1B2600DE1CF3 /* ShowMyAnyList.swift in Sources */,
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,

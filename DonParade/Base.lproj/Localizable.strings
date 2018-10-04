@@ -110,6 +110,10 @@
 "ACTION_WEB_BROWSER" = "Open with Safari";
 "ALERT_UNFOLLOW" = "Confirm";
 
+// リスト画面
+"BUTTON_EDIT" = "Edit";
+"BUTTON_CREATE_LIST" = "Create new list";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 "BUTTON_REMOVE" = "Remove";

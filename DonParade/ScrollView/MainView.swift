@@ -176,6 +176,7 @@ final class MainView: UIView {
         accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         accountButton.clipsToBounds = true
         accountButton.layer.cornerRadius = 10
+        accountButton.alpha = 0.9
         accountButton.isExclusiveTouch = true
         
         notifyLabel.backgroundColor = ThemeColor.idColor.withAlphaComponent(0.8)

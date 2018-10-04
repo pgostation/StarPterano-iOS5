@@ -174,7 +174,7 @@ private final class FollowingView: UIView {
         closeButton.layer.borderWidth = 1
         
         closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
-                                   y: UIScreen.main.bounds.height - 70,
+                                   y: UIScreen.main.bounds.height - (UIUtils.isIphoneX ? 110 : 70),
                                    width: 50,
                                    height: 50)
     }

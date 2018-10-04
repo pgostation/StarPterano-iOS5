@@ -202,7 +202,7 @@ final class NotificationView: UIView {
                                  height: screenBounds.height - (UIUtils.statusBarHeight() + 42))
         
         closeButton.frame = CGRect(x: screenBounds.width / 2 - 50 / 2,
-                                   y: screenBounds.height - 70,
+                                   y: screenBounds.height - (UIUtils.isIphoneX ? 110 : 70),
                                    width: 50,
                                    height: 50)
     }

@@ -13,6 +13,8 @@ import UIKit
 final class ListSelectViewController: MyViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
+        
+        self.modalTransitionStyle = .crossDissolve
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -23,12 +25,43 @@ final class ListSelectViewController: MyViewController {
         let view = ListSelectView()
         self.view = view
         
+        view.createButton.addTarget(self, action: #selector(self.createAction), for: .touchUpInside)
         view.closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
         
         // 右スワイプで閉じる
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
         swipeGesture.direction = .right
         self.view?.addGestureRecognizer(swipeGesture)
+    }
+    
+    // リストの新規作成 (名前入力ダイアログを表示)
+    @objc func createAction() {
+        Dialog.showWithTextInput(message: I18n.get("リスト名"),
+                                 okName: "作成",
+                                 cancelName: "キャンセル",
+                                 defaultText: nil) { (textField, result) in
+                                    if !result { return }
+                                    
+                                    if let text = textField.text {
+                                        self.createList(name: text)
+                                    }
+        }
+    }
+    
+    // リストの新規作成のリクエストを投げる
+    private func createList(name: String) {
+        let waitIndicator = WaitIndicator()
+        self.view.addSubview(waitIndicator)
+        
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/lists") else { return }
+        
+        try? MastodonRequest.post(url: url, body: ["title": name]) { [weak self] (data, response, error) in
+            DispatchQueue.main.async {
+                waitIndicator.removeFromSuperview()
+            }
+            
+            (self?.view as? ListSelectView)?.tableView.getLists(force: true)
+        }
     }
     
     @objc func closeAction() {
@@ -39,11 +72,13 @@ final class ListSelectViewController: MyViewController {
 private final class ListSelectView: UIView {
     let tableView = ListSelectTableView()
     let closeButton = UIButton()
+    let createButton = UIButton()
     
     init() {
         super.init(frame: UIScreen.main.bounds)
         
         self.addSubview(tableView)
+        self.addSubview(createButton)
         self.addSubview(closeButton)
         
         setProperties()
@@ -56,6 +91,15 @@ private final class ListSelectView: UIView {
     private func setProperties() {
         self.backgroundColor = ThemeColor.viewBgColor
         
+        // 作成ボタン
+        createButton.setTitle(I18n.get("BUTTON_CREATE_LIST"), for: .normal)
+        createButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        createButton.backgroundColor = ThemeColor.mainButtonsBgColor
+        createButton.layer.cornerRadius = 10
+        createButton.clipsToBounds = true
+        createButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        createButton.layer.borderWidth = 1
+        
         // 閉じるボタン
         closeButton.setTitle("×", for: .normal)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
@@ -64,11 +108,25 @@ private final class ListSelectView: UIView {
         closeButton.clipsToBounds = true
         closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
         closeButton.layer.borderWidth = 1
+    }
+    
+    override func layoutSubviews() {
+        let screenBounds = UIScreen.main.bounds
         
-        closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 / 2,
-                                   y: UIScreen.main.bounds.height - 70,
+        createButton.frame = CGRect(x: screenBounds.width / 2 - 150 / 2,
+                                    y: UIUtils.statusBarHeight(),
+                                    width: 150,
+                                    height: 40)
+        
+        closeButton.frame = CGRect(x: screenBounds.width / 2 - 50 / 2,
+                                   y: screenBounds.height - (UIUtils.isIphoneX ? 110 : 70),
                                    width: 50,
                                    height: 50)
+        
+        tableView.frame = CGRect(x: 0,
+                                 y: UIUtils.statusBarHeight() + 42,
+                                 width: screenBounds.width,
+                                 height: screenBounds.height - (UIUtils.statusBarHeight() + 42))
     }
 }
 
@@ -84,6 +142,8 @@ private final class ListSelectTableView: UITableView {
         self.backgroundColor = ThemeColor.cellBgColor
         self.separatorStyle = .none
         
+        self.rowHeight = 52
+        
         getLists()
     }
     
@@ -91,7 +151,17 @@ private final class ListSelectTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func getLists() {
+    // リスト一覧を取得
+    func getLists(force: Bool = false) {
+        // キャッシュがあれば使う
+        if !force, let cache = ListData.getCache(accessToken: SettingsData.accessToken ?? "") {
+            DispatchQueue.main.async {
+                self.model.list = cache
+                self.reloadData()
+            }
+            return
+        }
+        
         let waitIndicator = WaitIndicator()
         self.addSubview(waitIndicator)
         
@@ -110,6 +180,10 @@ private final class ListSelectTableView: UITableView {
                             let data = AnalyzeJson.ListData(id: listJson["id"] as? String,
                                                             title: listJson["title"] as? String)
                             list.append(data)
+                        }
+                        
+                        if let accessToken = SettingsData.accessToken {
+                            ListData.setCache(accessToken: accessToken, value: list)
                         }
                         
                         DispatchQueue.main.async {
@@ -141,11 +215,12 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell =  UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        let reuseIdentifier = "ListSelectTableViewCell"
+        let cell = (tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? ListSelectTableViewCell) ?? ListSelectTableViewCell(reuseIdentifier: reuseIdentifier)
         
         let data = list[indexPath.row]
         
-        cell.textLabel?.text = data.title
+        cell.nameLabel.text = data.title
         
         return cell
     }

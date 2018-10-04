@@ -42,10 +42,7 @@ final class MainViewController: MyViewController {
         let ltlPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ftlAction(_:)))
         view.ltlButton.addGestureRecognizer(ltlPressGesture)
         
-        let listPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(listPressAction(_:)))
-        view.listButton.addGestureRecognizer(listPressGesture)
-        
-        let homePressGesture = UILongPressGestureRecognizer(target: self, action: #selector(listPressAction(_:)))
+        let homePressGesture = UILongPressGestureRecognizer(target: self, action: #selector(listAction(_:)))
         view.tlButton.addGestureRecognizer(homePressGesture)
         
         let accountPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(accountPressAction(_:)))
@@ -194,28 +191,21 @@ final class MainViewController: MyViewController {
         self.setButtonNameAndBorder()
     }
     
-    // リストボタンをタップでリスト選択画面へ移動
+    // リストボタン
     @objc func listAction(_ sender: Any?) {
         if let gesture = sender as? UILongPressGestureRecognizer {
             if gesture.state != .began { return }
             if SettingsData.showListButton { return }
         }
         
-        listPressAction(nil)
+        let vc = ListSelectViewController()
+        self.present(vc, animated: false, completion: nil)
     }
     
     func showListTL() {
-        if let oldViewController = self.timelineViewController {
-            if oldViewController.type == .list {
-                // 一番上までスクロール
-                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
-                return
-            }
-        }
-        
         // 選択しているリストがない場合、リスト選択画面に行く
         if SettingsData.selectedListId(accessToken: SettingsData.accessToken ?? "") == nil {
-            listPressAction(nil)
+            listAction(nil)
             return
         }
         
@@ -297,14 +287,6 @@ final class MainViewController: MyViewController {
         markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: false)
     }
     
-    // リストボタンの長押し
-    @objc func listPressAction(_ gesture: UILongPressGestureRecognizer?) {
-        if let gesture = gesture, gesture.state != .began { return }
-        
-        let vc = ListSelectViewController()
-        self.present(vc, animated: false, completion: nil)
-    }
-    
     // アカウントボタンの長押し
     @objc func accountPressAction(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state != .began { return }
@@ -355,7 +337,10 @@ final class MainViewController: MyViewController {
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
             let isLTL = SettingsData.tlMode(key: hostName + "," + accessToken)
-            let key = "\(hostName)_\(accessToken)_" + (isLTL.rawValue)
+            var key = "\(hostName)_\(accessToken)_" + (isLTL.rawValue)
+            if isLTL == .list {
+                key += SettingsData.selectedListId(accessToken: accessToken) ?? ""
+            }
             if let vc = self.TimelineList[key] {
                 self.timelineViewController = vc
                 (vc.view as? TimeLineView)?.reloadData()
@@ -478,7 +463,7 @@ final class MainViewController: MyViewController {
             view.tootButton.alpha = 1
             view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
-            view.accountButton.alpha = 1
+            view.accountButton.alpha = 0.9
         }
         
         if let tableView = TimeLineViewController.closeButtons.last?.superview as? UITableView {
@@ -524,7 +509,7 @@ final class MainViewController: MyViewController {
             view.tootButton.alpha = 1
             view.searchButton.alpha = 1
             view.notificationsButton.alpha = 1
-            view.accountButton.alpha = 1
+            view.accountButton.alpha = 0.9
         }
         
         view.tlButton.isHidden = false

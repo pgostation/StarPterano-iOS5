@@ -28,6 +28,11 @@ final class SettingsViewController: MyViewController {
                                    width: 60,
                                    height: 44)
         self.view.addSubview(closeButton)
+        
+        // 右スワイプで閉じる
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeAction))
+        swipeGesture.direction = .right
+        self.view?.addGestureRecognizer(swipeGesture)
     }
     
     @objc func closeAction() {

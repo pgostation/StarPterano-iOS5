@@ -110,6 +110,10 @@
 "ACTION_WEB_BROWSER" = "Safariで表示";
 "ALERT_UNFOLLOW" = "フォロー解除しますか";
 
+// リスト画面
+"BUTTON_EDIT" = "編集";
+"BUTTON_CREATE_LIST" = "新規リストを作成";
+
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";
 "BUTTON_REMOVE" = "削除";

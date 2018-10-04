@@ -720,73 +720,101 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // お気に入りした人やブーストした人の名前表示
         if isDetailTimeline && indexPath.row == selectedRow { // 詳細拡大表示
-            // ブーストした人の名前を表示
-            if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
-                for _ in 0..<min(10, reblogs_count) {
-                    let label = UILabel()
-                    cell.rebologerLabels.append(label)
-                    label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-                    label.textColor = ThemeColor.idColor
-                    cell.addSubview(label)
-                }
-                
-                if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/reblogged_by?limit=10") {
-                    try? MastodonRequest.get(url: url) { (data, response, error) in
-                        if cell.id != id { return }
-                        if let data = data {
-                            do {
-                                if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
-                                    DispatchQueue.main.async {
-                                        var count = 0
-                                        for json in responseJson {
-                                            let accountData = AnalyzeJson.analyzeAccountJson(account: json)
-                                            if count >= cell.rebologerLabels.count { break }
-                                            let label = cell.rebologerLabels[count]
-                                            label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
-                                            count += 1
-                                        }
-                                    }
-                                }
-                            } catch { }
-                        }
-                    }
-                }
+            getBoosterAndFavoriter(data: data, cell: cell)
+        }
+        
+        return cell
+    }
+    
+    // トゥートを更新してからブーストした人やお気に入りした人を取得する
+    private var waitingQueryId: String? = nil
+    private func getBoosterAndFavoriter(data: AnalyzeJson.ContentData, cell: TimeLineViewCell) {
+        if self.waitingQueryId == data.id {
+            // 2回目が来たらリクエスト発行
+            self.waitingQueryId = nil
+            self.getBoosterAndFavoriterInner(data: data, cell: cell)
+            return
+        }
+        self.waitingQueryId = data.id
+        
+        // 2秒以内にリクエストが来なければ発行
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if self.waitingQueryId == nil {
+                return
             }
-            // お気に入りした人の名前を表示
-            if let favourites_count = data.favourites_count, favourites_count > 0 {
-                for _ in 0..<min(10, favourites_count) {
-                    let label = UILabel()
-                    cell.favoriterLabels.append(label)
-                    label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-                    label.textColor = ThemeColor.idColor
-                    cell.addSubview(label)
-                }
-                
-                if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/favourited_by?limit=10") {
-                    try? MastodonRequest.get(url: url) { (data, response, error) in
-                        if cell.id != id { return }
-                        if let data = data {
-                            do {
-                                if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
-                                    DispatchQueue.main.async {
-                                        var count = 0
-                                        for json in responseJson {
-                                            let accountData = AnalyzeJson.analyzeAccountJson(account: json)
-                                            if count >= cell.favoriterLabels.count { break }
-                                            let label = cell.favoriterLabels[count]
-                                            label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
-                                            count += 1
-                                        }
+            self.getBoosterAndFavoriterInner(data: data, cell: cell)
+        }
+    }
+    
+    private func getBoosterAndFavoriterInner(data: AnalyzeJson.ContentData, cell: TimeLineViewCell) {
+        if cell.id != data.id { return }
+        
+        let id = data.id
+        
+        // ブーストした人の名前を表示
+        if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+            for _ in 0..<min(10, reblogs_count) {
+                let label = UILabel()
+                cell.rebologerLabels.append(label)
+                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                label.textColor = ThemeColor.idColor
+                cell.addSubview(label)
+            }
+            
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/reblogged_by?limit=10") {
+                try? MastodonRequest.get(url: url) { (data, response, error) in
+                    if cell.id != id { return }
+                    if let data = data {
+                        do {
+                            if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
+                                DispatchQueue.main.async {
+                                    var count = 0
+                                    for json in responseJson {
+                                        let accountData = AnalyzeJson.analyzeAccountJson(account: json)
+                                        if count >= cell.rebologerLabels.count { break }
+                                        let label = cell.rebologerLabels[count]
+                                        label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                        count += 1
                                     }
                                 }
-                            } catch { }
-                        }
+                            }
+                        } catch { }
                     }
                 }
             }
         }
-        
-        return cell
+        // お気に入りした人の名前を表示
+        if let favourites_count = data.favourites_count, favourites_count > 0 {
+            for _ in 0..<min(10, favourites_count) {
+                let label = UILabel()
+                cell.favoriterLabels.append(label)
+                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                label.textColor = ThemeColor.idColor
+                cell.addSubview(label)
+            }
+            
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/favourited_by?limit=10") {
+                try? MastodonRequest.get(url: url) { (data, response, error) in
+                    if cell.id != id { return }
+                    if let data = data {
+                        do {
+                            if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: AnyObject]] {
+                                DispatchQueue.main.async {
+                                    var count = 0
+                                    for json in responseJson {
+                                        let accountData = AnalyzeJson.analyzeAccountJson(account: json)
+                                        if count >= cell.favoriterLabels.count { break }
+                                        let label = cell.favoriterLabels[count]
+                                        label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                        count += 1
+                                    }
+                                }
+                            }
+                        } catch { }
+                    }
+                }
+            }
+        }
     }
     
     // セルの色を設定

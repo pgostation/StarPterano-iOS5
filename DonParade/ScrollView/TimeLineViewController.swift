@@ -111,7 +111,7 @@ final class TimeLineViewController: MyViewController {
             closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
             closeButton.layer.borderWidth = 1
             closeButton.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 60 / 2,
-                                       y: UIScreen.main.bounds.height - 80,
+                                       y: UIScreen.main.bounds.height - (UIUtils.isIphoneX ? 120 : 80),
                                        width: 60,
                                        height: 60)
             closeButton.addTarget(self, action: #selector(self.closeAction), for: .touchUpInside)
