@@ -883,14 +883,34 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             MainViewController.instance?.addChildViewController(viewController)
             MainViewController.instance?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
-                                                              y: 0,
-                                                              width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height)
+                                               y: 0,
+                                               width: UIScreen.main.bounds.width,
+                                               height: UIScreen.main.bounds.height)
             UIView.animate(withDuration: 0.3) {
                 viewController.view.frame.origin.x = 0
             }
             
             tableView.deselectRow(at: indexPath, animated: true)
+            
+            // ステータスの内容を更新する(お気に入りの数とか)
+            guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "-")") else { return }
+            try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
+                guard let strongSelf = self else { return }
+                guard let data = data else { return }
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyzeJson(view: tableView as! TimeLineView, model: strongSelf, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        
+                        // 詳細ビューと元のビューの両方に反映する
+                        strongSelf.change(tableView: tableView as! TimeLineView, addList: contentList, accountList: strongSelf.accountList)
+                        if let tlView = viewController.view as? TimeLineView {
+                            tlView.model.change(tableView: tlView, addList: contentList, accountList: tlView.accountList)
+                        }
+                    }
+                } catch { }
+            }
         } else {
             // セルを拡大して表示
             var indexPaths: [IndexPath] = [indexPath]

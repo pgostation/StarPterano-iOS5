@@ -76,6 +76,11 @@ final class MainViewController: MyViewController {
         
         self.setButtonNameAndBorder()
         
+        if let tlView = self.timelineViewController?.view as? TimeLineView {
+            tlView.reloadData()
+            tlView.backgroundColor = ThemeColor.viewBgColor
+        }
+        
         for (_, vc) in TimelineList {
             let timelineView = (vc.view as? TimeLineView)
             timelineView?.reloadData()

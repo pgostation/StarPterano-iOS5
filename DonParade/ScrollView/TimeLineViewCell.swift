@@ -191,6 +191,18 @@ final class TimeLineViewCell: UITableViewCell {
             self.idLabel.isHidden = false
             self.dateLabel.isHidden = false
         }
+        
+        // フォントサイズと色を指定
+        self.nameLabel.textColor = ThemeColor.nameColor
+        self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
+        
+        self.idLabel.textColor = ThemeColor.idColor
+        self.idLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
+        
+        self.dateLabel.textColor = ThemeColor.dateColor
+        self.dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
+        
+        self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
     }
     
     // アイコンをタップした時の処理
