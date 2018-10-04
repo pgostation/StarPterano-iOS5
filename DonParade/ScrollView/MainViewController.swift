@@ -358,6 +358,7 @@ final class MainViewController: MyViewController {
             let key = "\(hostName)_\(accessToken)_" + (isLTL.rawValue)
             if let vc = self.TimelineList[key] {
                 self.timelineViewController = vc
+                (vc.view as? TimeLineView)?.reloadData()
             } else {
                 switch isLTL {
                 case .home:

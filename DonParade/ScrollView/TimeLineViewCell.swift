@@ -182,16 +182,6 @@ final class TimeLineViewCell: UITableViewCell {
         self.iconView?.removeFromSuperview()
         self.iconView?.image = nil
         
-        if SettingsData.isMiniView == .superMini {
-            self.nameLabel.isHidden = true
-            self.idLabel.isHidden = true
-            self.dateLabel.isHidden = true
-        } else {
-            self.nameLabel.isHidden = false
-            self.idLabel.isHidden = false
-            self.dateLabel.isHidden = false
-        }
-        
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)

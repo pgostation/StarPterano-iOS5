@@ -276,11 +276,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let msgView = UITextView()
             msgView.attributedText = attributedText
             msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
-            if isDetailTimeline && indexPath.row == selectedRow { // 拡大表示
-                msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
-            } else {
-                msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-            }
+            msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             msgView.textColor = ThemeColor.messageColor
             msgView.backgroundColor = ThemeColor.cellBgColor
             msgView.textContainer.lineBreakMode = .byCharWrapping
@@ -855,6 +851,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private func getCell(view: UITableView, height: CGFloat) -> TimeLineViewCell {
         let reuseIdentifier = "TimeLineViewModel"
         let cell = view.dequeueReusableCell(withIdentifier: reuseIdentifier) as? TimeLineViewCell ?? TimeLineViewCell(reuseIdentifier: reuseIdentifier)
+        
+        if SettingsData.isMiniView == .superMini {
+            cell.nameLabel.isHidden = true
+            cell.idLabel.isHidden = true
+            cell.dateLabel.isHidden = true
+        } else {
+            cell.nameLabel.isHidden = false
+            cell.idLabel.isHidden = false
+            cell.dateLabel.isHidden = false
+        }
         
         return cell
     }
