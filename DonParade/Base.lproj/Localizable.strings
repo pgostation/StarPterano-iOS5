@@ -24,6 +24,7 @@
 "BUTTON_NOTIFY" = " Notify";
 "BUTTON_NOTIFY_MARK" = "* Notify";
 "BUTTON_SHOW_MORE" = "Show More";
+"BUTTON_HIDE_REDO" = "Hide";
 "REFRESH_TIMELINE" = "Refresh";
 "BOOSTED_BY_%@" = "🔁 %@";
 "THIS_TOOT_IS_DIRECT_MESSAGE" = "Direct Message";

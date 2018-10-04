@@ -230,6 +230,10 @@ final class FollowingTableModel: NSObject, UITableViewDataSource, UITableViewDel
         return true
     }
     
+    func clear() {
+        self.list = []
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count + (showAutoPegerizeCell ? 1 : 0)
     }

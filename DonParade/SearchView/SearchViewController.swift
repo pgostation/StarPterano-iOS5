@@ -184,6 +184,7 @@ private final class SearchView: UIView, UITextFieldDelegate {
                 }
                 
                 DispatchQueue.main.async {
+                    self.accountTableView.model.clear()
                     if !self.accountTableView.model.change(addList: list) {
                         // 重複したデータを受信したら、終了
                         self.accountTableView.model.showAutoPegerizeCell = false

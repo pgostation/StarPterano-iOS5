@@ -474,12 +474,30 @@ final class TimeLineViewCell: UITableViewCell {
     
     // もっと見る
     @objc func showMoreAction() {
+        if TimeLineViewCell.showMoreList.contains(self.id) {
+            // やっぱり隠す
+            for (index, data) in TimeLineViewCell.showMoreList.enumerated() {
+                if data == self.id {
+                    TimeLineViewCell.showMoreList.remove(at: index)
+                    break
+                }
+            }
+            if self.spolerTextLabel?.text != "" {
+                self.messageView?.isHidden = true
+            }
+            for imageView in self.imageViews ?? [] {
+                imageView.isHidden = true
+            }
+            self.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
+            return
+        }
+        
         self.messageView?.isHidden = false
         for imageView in self.imageViews ?? [] {
             imageView.isHidden = false
         }
         
-        self.showMoreButton?.removeFromSuperview()
+        self.showMoreButton?.setTitle(I18n.get("BUTTON_HIDE_REDO"), for: .normal)
         
         TimeLineViewCell.showMoreList.append(self.id)
     }
