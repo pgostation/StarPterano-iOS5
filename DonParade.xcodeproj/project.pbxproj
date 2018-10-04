@@ -36,6 +36,8 @@
 		12B8B4242164BF0E00869496 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4232164BF0E00869496 /* MainView.swift */; };
 		12B8B4262165BAA900869496 /* ListSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */; };
 		12B8B4282165CD2B00869496 /* ListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4272165CD2B00869496 /* ListData.swift */; };
+		12B8B42A216612DF00869496 /* ListEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B429216612DF00869496 /* ListEditViewController.swift */; };
+		12B8B42C2166186300869496 /* ListEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B42B2166186300869496 /* ListEditTableViewCell.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -96,6 +98,8 @@
 		12B8B4232164BF0E00869496 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectTableViewCell.swift; sourceTree = "<group>"; };
 		12B8B4272165CD2B00869496 /* ListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListData.swift; sourceTree = "<group>"; };
+		12B8B429216612DF00869496 /* ListEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditViewController.swift; sourceTree = "<group>"; };
+		12B8B42B2166186300869496 /* ListEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditTableViewCell.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 			children = (
 				127A37B42157250700347880 /* ListSelectViewController.swift */,
 				12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */,
+				12B8B429216612DF00869496 /* ListEditViewController.swift */,
+				12B8B42B2166186300869496 /* ListEditTableViewCell.swift */,
 			);
 			path = ListView;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 				12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */,
 				12F9AC99214CA9B100E9E508 /* SettingsData.swift in Sources */,
 				12F9AC8C214CA3BD00E9E508 /* Dialog.swift in Sources */,
+				12B8B42A216612DF00869496 /* ListEditViewController.swift in Sources */,
 				121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */,
 				1255A97A215DF97100DE1CF3 /* FollowingViewController.swift in Sources */,
 				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
@@ -514,6 +521,7 @@
 				1255A978215D1B2600DE1CF3 /* ShowMyAnyList.swift in Sources */,
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,
 				121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */,
+				12B8B42C2166186300869496 /* ListEditTableViewCell.swift in Sources */,
 				12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */,
 				1286DF6521551824008FFFAC /* TootView.swift in Sources */,
 				12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */,

@@ -575,12 +575,12 @@ final class TimeLineViewCell: UITableViewCell {
             idWidth = screenBounds.width - (self.nameLabel.frame.width + nameLeft + 45 + 5)
         }
         self.idLabel.frame = CGRect(x: nameLeft + self.nameLabel.frame.width + 5,
-                                    y: isMiniView != .normal ? 3 : 7,
+                                    y: isMiniView != .normal ? 3 : 6,
                                     width: idWidth,
                                     height: SettingsData.fontSize)
         
         self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
-                                      y: isMiniView != .normal ? 3 : 7,
+                                      y: isMiniView != .normal ? 3 : 6,
                                       width: 45,
                                       height: SettingsData.fontSize)
         
@@ -677,9 +677,9 @@ final class TimeLineViewCell: UITableViewCell {
                                               height: 20)
             
             self.boostButton?.frame = CGRect(x: 110,
-                                             y: top,
+                                             y: top + 3,
                                              width: 40,
-                                             height: 40)
+                                             height: 34)
             
             self.boostedLabel?.frame = CGRect(x: 145,
                                               y: top + 10,
@@ -687,9 +687,9 @@ final class TimeLineViewCell: UITableViewCell {
                                               height: 20)
             
             self.favoriteButton?.frame = CGRect(x: 170,
-                                                y: top,
+                                                y: top + 3,
                                                 width: 40,
-                                                height: 40)
+                                                height: 34)
             
             self.favoritedLabel?.frame = CGRect(x: 205,
                                                 y: top + 10,

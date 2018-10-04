@@ -467,7 +467,7 @@ final class MainViewController: MyViewController {
         }
         
         if let tableView = TimeLineViewController.closeButtons.last?.superview as? UITableView {
-            TimeLineViewController.closeButtons.last?.frame.origin.y = UIScreen.main.bounds.height - 70 + tableView.contentOffset.y
+            TimeLineViewController.closeButtons.last?.frame.origin.y = UIScreen.main.bounds.height - (UIUtils.isIphoneX ? 110 : 70) + tableView.contentOffset.y
             TimeLineViewController.closeButtons.last?.isHidden = false
         }
         

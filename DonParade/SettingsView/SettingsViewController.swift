@@ -16,6 +16,8 @@ final class SettingsViewController: MyViewController {
         
         self.view.backgroundColor = ThemeColor.selectedBgColor
         
+        self.modalTransitionStyle = .crossDissolve
+        
         let view = SettingsView()
         self.view.addSubview(view)
         

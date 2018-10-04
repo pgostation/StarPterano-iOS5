@@ -111,8 +111,13 @@
 "ALERT_UNFOLLOW" = "フォロー解除しますか";
 
 // リスト画面
+"TITLE_LIST" = "リスト";
 "BUTTON_EDIT" = "編集";
-"BUTTON_CREATE_LIST" = "新規リストを作成";
+"BUTTON_CREATE_LIST" = "＋";
+"DIALOG_DELETE_LIST" = "このリストを削除します";
+"BUTTON_DELETE" = "削除";
+"LIST_SEARCH_ACCOUNT" = "フォロー中のユーザーから検索して追加";
+"DIALOG_REMOVE_FROM_LIST" = "このユーザーをリストから削除しますか";
 
 // 設定画面
 "BUTTON_CLOSE" = "閉じる";

@@ -106,7 +106,7 @@ final class MainView: UIView {
             ftlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
         
-        listButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        listButton.insets = UIEdgeInsetsMake(0, 5, 5, 0)
         listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
         listButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         listButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -136,7 +136,7 @@ final class MainView: UIView {
         tootButton.layer.cornerRadius = 35
         tootButton.isExclusiveTouch = true
         
-        searchButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        searchButton.insets = UIEdgeInsetsMake(0, 0, 5, 5)
         searchButton.setTitle(I18n.get("BUTTON_SEARCH"), for: .normal)
         searchButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -250,8 +250,8 @@ final class MainView: UIView {
                                                height: buttonHeight)
         }
         
-        accountButton.frame = CGRect(x: screenBounds.width - SettingsData.iconSize - 10,
-                                     y: UIUtils.statusBarHeight() + 10,
+        accountButton.frame = CGRect(x: screenBounds.width - SettingsData.iconSize - 2,
+                                     y: UIUtils.statusBarHeight() + 20,
                                      width: SettingsData.iconSize,
                                      height: SettingsData.iconSize)
     }

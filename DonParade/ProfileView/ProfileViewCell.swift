@@ -528,9 +528,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             
             label.frame.size.width = screenBounds.width * 0.4
             label.sizeToFit()
-            label.frame = CGRect(x: 0,
+            label.frame = CGRect(x: 2,
                                  y: top,
-                                 width: screenBounds.width * 0.4,
+                                 width: screenBounds.width * 0.4 - 2,
                                  height: label.frame.height)
             
             textView.frame.size.width = screenBounds.width * 0.6

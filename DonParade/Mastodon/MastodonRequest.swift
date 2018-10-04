@@ -55,13 +55,17 @@ final class MastodonRequest {
     }
     
     // DELETEメソッド
-    static func delete(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+    static func delete(url: URL, body: Dictionary<String, Any>? = nil, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
         var request: URLRequest = URLRequest(url: url)
         
         guard let accessToken = SettingsData.accessToken else { return }
         
         request.httpMethod = "DELETE"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        if let body = body {
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+        }
         
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }

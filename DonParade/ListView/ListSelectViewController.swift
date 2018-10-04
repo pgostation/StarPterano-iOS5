@@ -72,6 +72,7 @@ final class ListSelectViewController: MyViewController {
 private final class ListSelectView: UIView {
     let tableView = ListSelectTableView()
     let closeButton = UIButton()
+    let titleLabel = UILabel()
     let createButton = UIButton()
     
     init() {
@@ -79,6 +80,7 @@ private final class ListSelectView: UIView {
         
         self.addSubview(tableView)
         self.addSubview(createButton)
+        self.addSubview(titleLabel)
         self.addSubview(closeButton)
         
         setProperties()
@@ -93,6 +95,7 @@ private final class ListSelectView: UIView {
         
         // 作成ボタン
         createButton.setTitle(I18n.get("BUTTON_CREATE_LIST"), for: .normal)
+        createButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
         createButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         createButton.backgroundColor = ThemeColor.mainButtonsBgColor
         createButton.layer.cornerRadius = 10
@@ -102,20 +105,31 @@ private final class ListSelectView: UIView {
         
         // 閉じるボタン
         closeButton.setTitle("×", for: .normal)
+        closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
         closeButton.layer.cornerRadius = 10
         closeButton.clipsToBounds = true
         closeButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
         closeButton.layer.borderWidth = 1
+        
+        // タイトル
+        titleLabel.text = I18n.get("TITLE_LIST")
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = ThemeColor.idColor
     }
     
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         
-        createButton.frame = CGRect(x: screenBounds.width / 2 - 150 / 2,
+        titleLabel.frame = CGRect(x: screenBounds.width / 2 - 100 / 2,
                                     y: UIUtils.statusBarHeight(),
-                                    width: 150,
+                                    width: 100,
+                                    height: 40)
+        
+        createButton.frame = CGRect(x: screenBounds.width - 50,
+                                    y: UIUtils.statusBarHeight(),
+                                    width: 40,
                                     height: 40)
         
         closeButton.frame = CGRect(x: screenBounds.width / 2 - 50 / 2,
@@ -211,14 +225,22 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
+        return list.count + 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row >= list.count {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.backgroundColor = ThemeColor.cellBgColor
+            return cell
+        }
+        
         let reuseIdentifier = "ListSelectTableViewCell"
         let cell = (tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? ListSelectTableViewCell) ?? ListSelectTableViewCell(reuseIdentifier: reuseIdentifier)
         
         let data = list[indexPath.row]
+        
+        cell.id = data.id ?? ""
         
         cell.nameLabel.text = data.title
         
@@ -226,6 +248,10 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row >= list.count {
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
+        
         let data = list[indexPath.row]
         
         if let vc = UIUtils.getFrontViewController() as? ListSelectViewController {
@@ -234,6 +260,37 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
             DispatchQueue.main.async {
                 SettingsData.selectListId(accessToken: SettingsData.accessToken, listId: data.id)
                 MainViewController.instance?.showListTL()
+            }
+        }
+    }
+    
+    // セルが削除対応かどうかを決める
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if indexPath.row >= list.count {
+            return UITableViewCellEditingStyle.none
+        }
+        
+        return UITableViewCellEditingStyle.delete
+    }
+    
+    // スワイプでの削除
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let data = list[indexPath.row]
+        
+        if editingStyle == .delete {
+            if indexPath.row < list.count {
+                Dialog.show(message: I18n.get("DIALOG_DELETE_LIST"),
+                            okName: I18n.get("BUTTON_DELETE"),
+                            cancelName: I18n.get("BUTTON_CANCEL"))
+                { result in
+                    if !result { return }
+                        
+                    guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/lists/\(data.id ?? "-")") else { return }
+                    
+                    try? MastodonRequest.delete(url: url) { (data, response, error) in
+                        (tableView as? ListSelectTableView)?.getLists(force: true)
+                    }
+                }
             }
         }
     }

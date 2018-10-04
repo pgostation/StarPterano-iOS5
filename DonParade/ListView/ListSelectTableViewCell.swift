@@ -29,6 +29,8 @@ final class ListSelectTableViewCell: UITableViewCell {
         self.addSubview(editButton)
         self.layer.addSublayer(self.lineLayer)
         
+        editButton.addTarget(self, action: #selector(editButtonAction), for: .touchUpInside)
+        
         setProperties()
     }
     
@@ -59,6 +61,20 @@ final class ListSelectTableViewCell: UITableViewCell {
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
+    }
+    
+    // 編集
+    @objc func editButtonAction() {
+        let vc = ListEditViewController(name: self.nameLabel.text, id: self.id)
+        if let rootVc = UIUtils.getFrontViewController() {
+            rootVc.addChildViewController(vc)
+            rootVc.view.addSubview(vc.view)
+            
+            vc.view.frame.origin.x = UIScreen.main.bounds.width
+            UIView.animate(withDuration: 0.3) {
+                vc.view.frame.origin.x = 0
+            }
+        }
     }
     
     override func layoutSubviews() {

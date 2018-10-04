@@ -111,8 +111,13 @@
 "ALERT_UNFOLLOW" = "Confirm";
 
 // リスト画面
+"TITLE_LIST" = "List";
 "BUTTON_EDIT" = "Edit";
-"BUTTON_CREATE_LIST" = "Create new list";
+"BUTTON_CREATE_LIST" = "＋";
+"DIALOG_DELETE_LIST" = "Are you sure that you want to delete the list?";
+"BUTTON_DELETE" = "Delete";
+"LIST_SEARCH_ACCOUNT" = "Search following users";
+"DIALOG_REMOVE_FROM_LIST" = "Are you sure that you want to remove the user from this list?";
 
 // 設定画面
 "BUTTON_CLOSE" = "Close";
