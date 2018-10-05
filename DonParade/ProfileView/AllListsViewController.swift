@@ -288,8 +288,10 @@ private final class AllListsTableCell: UITableViewCell {
         
         try? MastodonRequest.post(url: url, body: ["account_ids": ["\(self.accountId)"]]) { (data, response, error) in
             if let response = response as? HTTPURLResponse, response.statusCode == 200 {
-                self.removeButton.isHidden = false
-                self.addButton.isHidden = true
+                DispatchQueue.main.async {
+                    self.removeButton.isHidden = false
+                    self.addButton.isHidden = true
+                }
             }
         }
     }
@@ -302,8 +304,10 @@ private final class AllListsTableCell: UITableViewCell {
         
         try? MastodonRequest.delete(url: url, body: ["account_ids": ["\(self.accountId)"]]) { (data, response, error) in
             if let response = response as? HTTPURLResponse, response.statusCode == 200 {
-                self.removeButton.isHidden = true
-                self.addButton.isHidden = false
+                DispatchQueue.main.async {
+                    self.removeButton.isHidden = true
+                    self.addButton.isHidden = false
+                }
             }
         }
     }

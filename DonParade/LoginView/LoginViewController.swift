@@ -36,7 +36,7 @@ final class LoginViewController: MyViewController {
         
         guard let registerUrl = URL(string: "https://\(hostName)/api/v1/apps") else { return }
         
-        let body: [String: String] = ["client_name": "DonParade",
+        let body: [String: String] = ["client_name": "StarPterano",
                                       "redirect_uris": "urn:ietf:wg:oauth:2.0:oob",
                                       "scopes": "read write follow"]
         

@@ -91,6 +91,7 @@ final class NotificationTableCell: UITableViewCell {
         self.statusLabel.backgroundColor = ThemeColor.toMentionBgColor
         self.statusLabel.isOpaque = true
         self.statusLabel.isScrollEnabled = false
+        self.statusLabel.isEditable = false
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true

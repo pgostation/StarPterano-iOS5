@@ -95,9 +95,17 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         followingCountLabel.addGestureRecognizer(followingTapGesture)
         followingCountLabel.isUserInteractionEnabled = true
         
+        let followingTapGesture2 = UITapGestureRecognizer(target: self, action: #selector(followingTapAction))
+        followingCountTitle.addGestureRecognizer(followingTapGesture2)
+        followingCountTitle.isUserInteractionEnabled = true
+        
         let followersTapGesture = UITapGestureRecognizer(target: self, action: #selector(followersTapAction))
         followerCountLabel.addGestureRecognizer(followersTapGesture)
         followerCountLabel.isUserInteractionEnabled = true
+        
+        let followersTapGesture2 = UITapGestureRecognizer(target: self, action: #selector(followersTapAction))
+        followerCountTitle.addGestureRecognizer(followersTapGesture2)
+        followerCountTitle.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {

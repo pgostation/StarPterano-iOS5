@@ -690,7 +690,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.boostView = UILabel()
             cell.boostView?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             cell.boostView?.textColor = ThemeColor.dateColor
-            let name = String(format: I18n.get("BOOSTED_BY_%@"), account?.display_name ?? "")
+            var username = account?.display_name ?? ""
+            if username == "" {
+                username = account?.acct ?? ""
+            }
+            let name = String(format: I18n.get("BOOSTED_BY_%@"), username)
             cell.boostView?.attributedText = DecodeToot.decodeName(name: name, emojis: account?.emojis, callback: nil)
             cell.addSubview(cell.boostView!)
         }
