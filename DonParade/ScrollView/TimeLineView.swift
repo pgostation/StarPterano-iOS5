@@ -20,7 +20,7 @@ final class TimeLineView: UITableView {
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
     private let accessToken = SettingsData.accessToken
-    let gifManager = SwiftyGifManager(memoryLimit: 20)
+    let gifManager = SwiftyGifManager(memoryLimit: 100)
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     

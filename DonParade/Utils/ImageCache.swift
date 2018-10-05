@@ -42,7 +42,7 @@ final class ImageCache {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
                     if url.absoluteString.hasSuffix(".gif") {
-                        let image = EmojiImage(gifData: data)
+                        let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
                         image.shortcode = shortcode
                         DispatchQueue.main.async {
                             if !isTemp {
@@ -86,7 +86,7 @@ final class ImageCache {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
                 if url.absoluteString.hasSuffix(".gif") {
-                    let image = EmojiImage(gifData: data)
+                    let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
                     image.shortcode = shortcode
                     DispatchQueue.main.async {
                         if !isTemp {
