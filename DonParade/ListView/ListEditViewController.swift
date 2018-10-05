@@ -67,6 +67,30 @@ final class ListEditViewController: MyViewController {
                     }
                 }
                 
+                /* リストに自分は追加できなかった
+                let myName = SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "")
+                if text == myName {
+                    let myData = AnalyzeJson.AccountData(acct: nil,
+                                                         avatar: nil,
+                                                         avatar_static: SettingsData.accountIconUrl(accessToken: SettingsData.accessToken ?? ""),
+                                                         bot: nil,
+                                                         created_at: nil,
+                                                         display_name: myName,
+                                                         emojis: nil,
+                                                         fields: nil,
+                                                         followers_count: nil,
+                                                         following_count: nil,
+                                                         header: nil,
+                                                         header_static: nil,
+                                                         id: SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? ""),
+                                                         locked: nil,
+                                                         note: nil,
+                                                         statuses_count: nil,
+                                                         url: nil,
+                                                         username: nil)
+                    list.append(myData)
+                }*/
+                
                 DispatchQueue.main.async {
                     if let view = self?.view as? ListEditView {
                         view.tableView.model.searchList = list

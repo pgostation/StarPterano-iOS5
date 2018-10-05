@@ -230,11 +230,19 @@ final class MainViewController: MyViewController {
         
         DispatchQueue.main.async {
             if let tlView = self.timelineViewController?.view as? TimeLineView {
-                view.ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
                 view.tlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 view.ltlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 view.ftlButton.layer.borderWidth = 1 / UIScreen.main.scale
                 view.listButton.layer.borderWidth = 1 / UIScreen.main.scale
+                
+                if !SettingsData.showFTLButton {
+                    view.ftlButton.isHidden = true
+                    view.setNeedsLayout()
+                }
+                if !SettingsData.showListButton {
+                    view.listButton.isHidden = true
+                    view.setNeedsLayout()
+                }
                 
                 switch tlView.type {
                 case .home:
@@ -243,10 +251,15 @@ final class MainViewController: MyViewController {
                     view.ltlButton.layer.borderWidth = 2
                 case .federation:
                     if !SettingsData.showFTLButton {
-                        view.ltlButton.setTitle(I18n.get("BUTTON_FTL"), for: .normal)
+                        view.ftlButton.isHidden = false
+                        view.setNeedsLayout()
                     }
                     view.ftlButton.layer.borderWidth = 2
                 case .list:
+                    if !SettingsData.showListButton {
+                        view.listButton.isHidden = false
+                        view.setNeedsLayout()
+                    }
                     view.listButton.layer.borderWidth = 2
                 default:
                     break
@@ -486,15 +499,6 @@ final class MainViewController: MyViewController {
             view.searchButton.alpha = 0
             view.notificationsButton.alpha = 0
             view.accountButton.alpha = 0
-        }, completion: { _ in
-            view.tlButton.isHidden = true
-            view.ltlButton.isHidden = true
-            view.ftlButton.isHidden = true
-            view.listButton.isHidden = true
-            view.tootButton.isHidden = true
-            view.searchButton.isHidden = true
-            view.notificationsButton.isHidden = true
-            view.accountButton.isHidden = true
         })
     }
     
@@ -511,15 +515,6 @@ final class MainViewController: MyViewController {
             view.notificationsButton.alpha = 1
             view.accountButton.alpha = 0.9
         }
-        
-        view.tlButton.isHidden = false
-        view.ltlButton.isHidden = false
-        view.ftlButton.isHidden = false
-        view.listButton.isHidden = false
-        view.tootButton.isHidden = false
-        view.searchButton.isHidden = false
-        view.notificationsButton.isHidden = false
-        view.accountButton.isHidden = false
     }
     
     // アカウントボタンをタップ（設定画面に移動）

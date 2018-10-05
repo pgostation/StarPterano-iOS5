@@ -193,11 +193,11 @@ final class MainView: UIView {
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         let bottomOffset: CGFloat = UIUtils.isIphoneX ? 50 : 0
-        let bottomOffset2: CGFloat = SettingsData.showFTLButton ? 50 : 0
+        let bottomOffset2: CGFloat = (SettingsData.showFTLButton || !ftlButton.isHidden) ? 50 : 0
         let buttonWidth: CGFloat = 60
         let buttonHeight: CGFloat = 40
         
-        if SettingsData.showListButton {
+        if SettingsData.showListButton || !listButton.isHidden {
             listButton.frame = CGRect(x: -1,
                                       y: screenBounds.height - 150 - bottomOffset - bottomOffset2,
                                       width: buttonWidth,
@@ -216,7 +216,7 @@ final class MainView: UIView {
                                  width: buttonWidth,
                                  height: buttonHeight)
         
-        if SettingsData.showFTLButton {
+        if SettingsData.showFTLButton || !ftlButton.isHidden {
             ftlButton.frame = CGRect(x: -1,
                                      y: screenBounds.height - 0 - bottomOffset - bottomOffset2,
                                      width: buttonWidth,
