@@ -42,7 +42,7 @@ final class DecodeToot {
         // リンク
         var linkList: [(String.Index, String, String)] = []
         var loopCount = 0
-        while let startRange = text.range(of: "<a "), let endRange = text.range(of: "</a>"), loopCount < 10 {
+        while let startRange = text.range(of: "<a "), let endRange = text.range(of: "</a>"), loopCount < 50 {
             let startIndex = text.index(startRange.lowerBound, offsetBy: 0)
             let endIndex = text.index(endRange.lowerBound, offsetBy: 4)
             
