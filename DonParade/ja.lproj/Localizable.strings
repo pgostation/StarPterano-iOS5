@@ -7,7 +7,7 @@
 */
 
 // ログイン
-"PLACEHOLDER_INPUT_DOMAIN" = "ドメインを入力 (例：mstdn.jp)";
+"PLACEHOLDER_INPUT_DOMAIN" = "ドメインを入力 (例：pawoo.net)";
 "BUTTON_MASTODON_OAUTH" = "Mastodon認証";
 "ALERT_INPUT_DOMAIN" = "ドメインを入力してください";
 "PLACEHOLDER_INPUT_CODE" = "認証コードを入力してください";

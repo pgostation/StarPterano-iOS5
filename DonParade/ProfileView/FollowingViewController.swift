@@ -19,6 +19,8 @@ final class FollowingViewController: MyViewController {
         
         super.init(nibName: nil, bundle: nil)
         
+        self.modalPresentationStyle = .overCurrentContext
+        
         getNextData()
     }
     
