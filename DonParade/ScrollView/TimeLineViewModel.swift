@@ -765,7 +765,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.addSubview(label)
             }
             
-            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/reblogged_by?limit=10") {
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/reblogged_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
                     if let data = data {
@@ -797,7 +797,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.addSubview(label)
             }
             
-            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "")/favourited_by?limit=10") {
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/favourited_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
                     if let data = data {

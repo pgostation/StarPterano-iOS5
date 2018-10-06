@@ -35,7 +35,15 @@ final class MastodonRequest {
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        session.dataTask(with: request, completionHandler: completionHandler).resume()
+        session.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    print("response.statusCode=\(response.statusCode), data=\(String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? "-")")
+                }
+            }
+            
+            completionHandler(data, response, error)
+            }.resume()
     }
     
     // POSTメソッド
@@ -51,7 +59,15 @@ final class MastodonRequest {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         
-        session.dataTask(with: request, completionHandler: completionHandler).resume()
+        session.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    print("response.statusCode=\(response.statusCode), data=\(String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? "-")")
+                }
+            }
+            
+            completionHandler(data, response, error)
+            }.resume()
     }
     
     // DELETEメソッド
@@ -67,7 +83,15 @@ final class MastodonRequest {
             request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         }
         
-        session.dataTask(with: request, completionHandler: completionHandler).resume()
+        session.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    print("response.statusCode=\(response.statusCode), data=\(String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? "-")")
+                }
+            }
+            
+            completionHandler(data, response, error)
+            }.resume()
     }
     
     // POSTメソッド (アクセストークンなし、認証前に使う)
