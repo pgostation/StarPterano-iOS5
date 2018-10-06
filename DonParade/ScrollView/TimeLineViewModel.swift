@@ -11,6 +11,7 @@
 import UIKit
 import SafariServices
 import APNGKit
+import AVFoundation
 
 final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     private var list: [AnalyzeJson.ContentData] = []
@@ -663,35 +664,84 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 画像や動画ありの場合
         if let mediaData = data.mediaData {
-            cell.imageViews = []
             cell.previewUrls = []
             cell.imageUrls = []
             
-            for media in mediaData {
-                let imageView = UIImageView()
-                if !SettingsData.isLoadPreviewImage {
-                    imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+            for (index, media) in mediaData.enumerated() {
+                func addImageView(withPlayButton: Bool) {
+                    let imageView = UIImageView()
+                    
+                    if !SettingsData.isLoadPreviewImage {
+                        imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+                    }
+                    imageView.clipsToBounds = true
+                    
+                    // タップで全画面表示
+                    let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))
+                    imageView.addGestureRecognizer(tapGesture)
+                    imageView.isUserInteractionEnabled = true
+                    
+                    // 画像読み込み
+                    let isPreview = !(isDetailTimeline && indexPath.row == selectedRow)
+                    ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false, isPreview: isPreview) { image in
+                        imageView.image = image
+                        cell.setNeedsLayout()
+                    }
+                    cell.addSubview(imageView)
+                    cell.imageViews.append(imageView)
+                    
+                    if data.sensitive == 1 || data.spoiler_text != "" {
+                        imageView.isHidden = true
+                    }
+                    
+                    cell.previewUrls.append(media.preview_url ?? "")
+                    cell.imageUrls.append(media.url ?? "")
+                    
+                    if withPlayButton {
+                        // 再生の絵文字を表示
+                        let triangleView = UILabel()
+                        triangleView.text = "▶️"
+                        triangleView.font = UIFont.systemFont(ofSize: 24)
+                        triangleView.sizeToFit()
+                        imageView.addSubview(triangleView)
+                        DispatchQueue.main.async {
+                            triangleView.center = CGPoint(x: imageView.bounds.width / 2, y: imageView.bounds.height / 2)
+                        }
+                    }
                 }
-                imageView.clipsToBounds = true
                 
-                // タップで全画面表示
-                let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))
-                imageView.addGestureRecognizer(tapGesture)
-                imageView.isUserInteractionEnabled = true
-                
-                ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false, isPreview: true) { image in
-                    imageView.image = image
-                    cell.setNeedsLayout()
+                if media.type == "gifv" || media.type == "video" {
+                    // 動画の場合
+                    if indexPath.row == selectedRow {
+                        // とりあえずプレビューを表示
+                        addImageView(withPlayButton: false)
+                        
+                        // 動画読み込み
+                        MovieCache.movie(urlStr: media.url) { player in
+                            // レイヤーの追加
+                            let playerLayer = AVPlayerLayer(player: player)
+                            cell.layer.addSublayer(playerLayer)
+                            cell.movieLayers.append(playerLayer)
+                            
+                            if index < cell.imageViews.count {
+                                cell.layoutSubviews()
+                                playerLayer.frame = cell.imageViews[index].frame
+                            }
+                            
+                            // 再生
+                            player.play()
+                            
+                            if data.sensitive == 1 || data.spoiler_text != "" {
+                                playerLayer.isHidden = true
+                            }
+                        }
+                    } else {
+                        addImageView(withPlayButton: true)
+                    }
+                } else {
+                    // 静止画の場合
+                    addImageView(withPlayButton: false)
                 }
-                cell.addSubview(imageView)
-                cell.imageViews?.append(imageView)
-                
-                if data.sensitive == 1 || data.spoiler_text != "" {
-                    imageView.isHidden = true
-                }
-                
-                cell.previewUrls.append(media.preview_url ?? "")
-                cell.imageUrls.append(media.url ?? "")
             }
         }
         

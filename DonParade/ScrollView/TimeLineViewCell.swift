@@ -10,6 +10,8 @@
 
 import UIKit
 import APNGKit
+import AVFoundation
+import AVKit
 
 final class TimeLineViewCell: UITableViewCell {
     static var showMoreList: [String] = []
@@ -28,7 +30,8 @@ final class TimeLineViewCell: UITableViewCell {
     //追加ビュー
     var continueView: UILabel? // 長すぎるトゥートで、続きがあることを表示
     var boostView: UILabel? // 誰がboostしたかを表示
-    var imageViews: [UIImageView]? // 添付画像を表示
+    var imageViews: [UIImageView] = [] // 添付画像を表示
+    var movieLayers: [AVPlayerLayer] = []
     var showMoreButton: UIButton? // もっと見る
     var spolerTextLabel: UILabel?
     var detailDateLabel: UILabel?
@@ -165,10 +168,14 @@ final class TimeLineViewCell: UITableViewCell {
         }
         self.favoriterLabels = []
         self.favoriterList = nil
-        for imageView in self.imageViews ?? [] {
+        for imageView in self.imageViews {
             imageView.removeFromSuperview()
         }
         self.imageViews = []
+        for playerLayer in self.movieLayers {
+            playerLayer.player?.pause()
+            playerLayer.removeFromSuperlayer()
+        }
         if self.replyButton != nil {
             self.replyButton?.removeFromSuperview()
             self.repliedLabel?.removeFromSuperview()
@@ -485,7 +492,7 @@ final class TimeLineViewCell: UITableViewCell {
             if self.spolerTextLabel?.text != "" {
                 self.messageView?.isHidden = true
             }
-            for imageView in self.imageViews ?? [] {
+            for imageView in self.imageViews {
                 imageView.isHidden = true
             }
             self.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
@@ -493,7 +500,7 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         self.messageView?.isHidden = false
-        for imageView in self.imageViews ?? [] {
+        for imageView in self.imageViews {
             imageView.isHidden = false
         }
         
@@ -504,17 +511,40 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 画像をタップ
     @objc func imageTapAction(_ gesture: UITapGestureRecognizer) {
-        for (index, imageView) in (self.imageViews ?? []).enumerated() {
+        for (index, imageView) in self.imageViews.enumerated() {
             if imageView == gesture.view {
-                let fromRect = imageView.convert(imageView.bounds, to: UIUtils.getFrontViewController()?.view ?? imageView)
-                let vc = ImageViewController(imagesUrls: self.imageUrls, previewUrls: self.previewUrls, index: index, fromRect: fromRect, smallImage: imageView.image)
-                vc.modalTransitionStyle = .crossDissolve
-                UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
-                
-                // ボタンを隠す
-                MainViewController.instance?.hideButtonsForce()
-                
-                break
+                if imageUrls[index].hasSuffix(".mp4") {
+                    // 動画
+                    let waitIndicator = WaitIndicator()
+                    UIUtils.getFrontViewController()?.view.addSubview(waitIndicator)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        waitIndicator.removeFromSuperview()
+                    }
+                    
+                    MovieCache.movie(urlStr: imageUrls[index]) { player in
+                        DispatchQueue.main.async {
+                            waitIndicator.removeFromSuperview()
+                            
+                            let viewController = AVPlayerViewController()
+                            viewController.player = player
+                            UIUtils.getFrontViewController()?.present(viewController, animated: true) {
+                                player.play()
+                            }
+                        }
+                    }
+                } else {
+                    // 静止画
+                    let fromRect = imageView.convert(imageView.bounds, to: UIUtils.getFrontViewController()?.view ?? imageView)
+                    let vc = ImageViewController(imagesUrls: self.imageUrls, previewUrls: self.previewUrls, index: index, fromRect: fromRect, smallImage: imageView.image)
+                    vc.modalTransitionStyle = .crossDissolve
+                    UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
+                    
+                    // ボタンを隠す
+                    MainViewController.instance?.hideButtonsForce()
+                    
+                    break
+                }
             }
         }
     }
@@ -612,7 +642,7 @@ final class TimeLineViewCell: UITableViewCell {
                                           height: 18)
         
         let imageHeight = isDetailMode ? (UIScreen.main.bounds.width - 80 + 10) : 90
-        let imagesOffset = CGFloat(self.imageViews?.count ?? 0) * imageHeight
+        let imagesOffset = CGFloat(self.imageViews.count) * imageHeight
         self.boostView?.frame = CGRect(x: nameLeft - 12,
                                        y: (self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
                                        width: screenBounds.width - 56,
@@ -634,7 +664,7 @@ final class TimeLineViewCell: UITableViewCell {
         
         self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 300)
         
-        for (index, imageView) in (self.imageViews ?? []).enumerated() {
+        for (index, imageView) in self.imageViews.enumerated() {
             if isDetailMode && SettingsData.isLoadPreviewImage {
                 imageView.contentMode = .scaleAspectFit
                 var imageWidth: CGFloat = 0
@@ -648,11 +678,11 @@ final class TimeLineViewCell: UITableViewCell {
                         let newRate = imageWidth / size.width
                         imageHeight = size.height * newRate
                     }
+                    imageView.frame = CGRect(x: nameLeft,
+                                             y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
+                                             width: imageWidth,
+                                             height: imageHeight)
                 }
-                imageView.frame = CGRect(x: nameLeft,
-                                         y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
-                                         width: imageWidth,
-                                         height: imageHeight)
             } else {
                 let imageWidth: CGFloat = screenBounds.width - 80
                 let imageHeight: CGFloat = 80
@@ -665,7 +695,7 @@ final class TimeLineViewCell: UITableViewCell {
         }
         
         if self.replyButton != nil {
-            var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews?.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+            var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
             self.replyButton?.frame = CGRect(x: 50,
                                              y: top,

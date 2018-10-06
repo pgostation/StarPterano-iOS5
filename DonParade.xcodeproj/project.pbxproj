@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		121764C82167AB830017E76A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 121764CA2167AB830017E76A /* InfoPlist.strings */; };
+		121764CD216846AB0017E76A /* MovieCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764CC216846AB0017E76A /* MovieCache.swift */; };
 		121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0D92152955F00928DCC /* TootViewController.swift */; };
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
 		121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView.swift */; };
@@ -72,6 +73,7 @@
 		07B719C767E8F3CB26EC8954 /* Pods-DonParade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonParade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DonParade/Pods-DonParade.debug.xcconfig"; sourceTree = "<group>"; };
 		121764C92167AB830017E76A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CB2167AB890017E76A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		121764CC216846AB0017E76A /* MovieCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCache.swift; sourceTree = "<group>"; };
 		121DC0D92152955F00928DCC /* TootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootViewController.swift; sourceTree = "<group>"; };
 		121DC0DB2153C64F00928DCC /* MyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWindow.swift; sourceTree = "<group>"; };
 		121DC0DD2153CF7F00928DCC /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 				12F9ACAB214D424D00E9E508 /* UIUtils.swift */,
 				12CD025C214EB24A00133A95 /* ImageCache.swift */,
 				12F6602E215656890049AEE0 /* ImageUtils.swift */,
+				121764CC216846AB0017E76A /* MovieCache.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				12B8B4282165CD2B00869496 /* ListData.swift in Sources */,
 				12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */,
 				1286DF682155E906008FFFAC /* ImageViewController.swift in Sources */,
+				121764CD216846AB0017E76A /* MovieCache.swift in Sources */,
 				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,
 				127A37C221583DC700347880 /* ProfileViewCell.swift in Sources */,
 				12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */,

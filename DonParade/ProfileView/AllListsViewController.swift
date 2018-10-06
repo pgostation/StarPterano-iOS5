@@ -194,8 +194,6 @@ final class AllListsTableModel: NSObject, UITableViewDataSource, UITableViewDele
         cell.addButton.isHidden = true
         cell.removeButton.isHidden = true
         if let accountList = self.accountList {
-            print("accountList =\(accountList)")
-            print("data = \(data)")
             var flag = false
             for hasAccount in accountList {
                 if data.id == hasAccount.id {
