@@ -25,7 +25,7 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
         
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
-        imagePicker.mediaTypes = ["public.image"]
+        imagePicker.mediaTypes = ["public.image", "public.movie"]
         MainViewController.instance?.present(imagePicker, animated: true, completion: nil)
     }
     

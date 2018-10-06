@@ -70,7 +70,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         // 通常テキスト
         guard let attributedText = view.textField.attributedText else { return }
-        if attributedText.length == 0 { return }
         
         let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText))
         
@@ -87,6 +86,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             return
         }
         
+        // 投稿するものがない
+        if attributedText.length == 0 && spoilerText == nil && view.imageCheckView.urls.count == 0 { return }
+        
         // 公開範囲
         let visibility = view.protectMode.rawValue
         let nsfw = view.imageCheckView.nsfwSw.isOn
@@ -98,18 +100,36 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             var idList: [String] = []
             for url in view.imageCheckView.urls {
                 group.enter()
-                ImageUpload.upload(imageUrl: url, callback: { json in
-                    if let json = json {
-                        if let id = json["id"] as? String {
-                            idList.append(id)
-                        }
-                        group.leave()
-                    } else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                let lowUrlStr = url.absoluteString.lowercased()
+                if lowUrlStr.contains(".mp4") || lowUrlStr.contains(".m4v") || lowUrlStr.contains(".mov") {
+                    // 動画
+                    ImageUpload.upload(movieUrl: url, callback: { json in
+                        if let json = json {
+                            if let id = json["id"] as? String {
+                                idList.append(id)
+                            }
                             group.leave()
+                        } else {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                group.leave()
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    // 静止画
+                    ImageUpload.upload(imageUrl: url, callback: { json in
+                        if let json = json {
+                            if let id = json["id"] as? String {
+                                idList.append(id)
+                            }
+                            group.leave()
+                        } else {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                group.leave()
+                            }
+                        }
+                    })
+                }
             }
             
             // 画像を全てアップロードし終わったら投稿

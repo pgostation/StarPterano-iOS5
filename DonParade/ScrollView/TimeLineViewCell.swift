@@ -66,6 +66,7 @@ final class TimeLineViewCell: UITableViewCell {
     var mentionsList: [AnalyzeJson.MentionData]?
     var isMiniView = SettingsData.MiniView.normal
     var imageUrls: [String] = []
+    var imageTypes: [String] = []
     var previewUrls: [String] = []
     var visibility: String?
     
@@ -513,7 +514,7 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func imageTapAction(_ gesture: UITapGestureRecognizer) {
         for (index, imageView) in self.imageViews.enumerated() {
             if imageView == gesture.view {
-                if imageUrls[index].hasSuffix(".mp4") {
+                if imageTypes[index] == "video" || imageTypes[index] == "gifv" {
                     // 動画
                     let waitIndicator = WaitIndicator()
                     UIUtils.getFrontViewController()?.view.addSubview(waitIndicator)

@@ -677,6 +677,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if let mediaData = data.mediaData {
             cell.previewUrls = []
             cell.imageUrls = []
+            cell.imageTypes = []
             
             for (index, media) in mediaData.enumerated() {
                 func addImageView(withPlayButton: Bool) {
@@ -707,6 +708,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     
                     cell.previewUrls.append(media.preview_url ?? "")
                     cell.imageUrls.append(media.url ?? "")
+                    cell.imageTypes.append(media.type ?? "")
                     
                     if withPlayButton {
                         // 再生の絵文字を表示
