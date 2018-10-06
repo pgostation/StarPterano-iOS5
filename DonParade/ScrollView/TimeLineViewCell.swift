@@ -611,7 +611,8 @@ final class TimeLineViewCell: UITableViewCell {
                                           width: 40,
                                           height: 18)
         
-        let imagesOffset = CGFloat((self.imageViews?.count ?? 0) * 90)
+        let imageHeight = isDetailMode ? (UIScreen.main.bounds.width - 80 + 10) : 90
+        let imagesOffset = CGFloat(self.imageViews?.count ?? 0) * imageHeight
         self.boostView?.frame = CGRect(x: nameLeft - 12,
                                        y: (self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset,
                                        width: screenBounds.width - 56,
