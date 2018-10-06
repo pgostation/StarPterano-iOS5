@@ -405,18 +405,18 @@ private final class FollowingTableCell: UITableViewCell {
             ProfileAction.follow(id: self.accountData?.id ?? "")
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id[]=\(self.accountData?.id ?? "")") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     DispatchQueue.main.async {
                         guard let view = self.superview as? FollowingTableView else { return }
                         
                         if let data = data {
                             do {
-                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] else { return }
                                 
-                                if let id = responseJson["id"] as? String {
-                                    view.model.relationshipList.updateValue(responseJson, forKey: id)
+                                if let id = responseJson.first?["id"] as? String {
+                                    view.model.relationshipList.updateValue(responseJson.first!, forKey: id)
                                 }
                                 
                                 DispatchQueue.main.async {
@@ -437,18 +437,18 @@ private final class FollowingTableCell: UITableViewCell {
                     callback: { result in
                         ProfileAction.unfollow(id: self.accountData?.id ?? "")
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-                            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id[]=\(self.accountData?.id ?? "")") {
                                 try? MastodonRequest.get(url: url) { (data, response, error) in
                                     DispatchQueue.main.async {
                                         guard let view = self.superview as? FollowingTableView else { return }
                                         
                                         if let data = data {
                                             do {
-                                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] else { return }
                                                 
-                                                if let id = responseJson["id"] as? String {
-                                                    view.model.relationshipList.updateValue(responseJson, forKey: id)
+                                                if let id = responseJson.first?["id"] as? String {
+                                                    view.model.relationshipList.updateValue(responseJson.first!, forKey: id)
                                                 }
                                                 
                                                 DispatchQueue.main.async {
