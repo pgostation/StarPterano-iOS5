@@ -581,7 +581,13 @@ final class TimeLineViewCell: UITableViewCell {
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         let isDetailMode = !SettingsData.tapDetailMode && self.showDetail
+        let isMiniView = isDetailMode ? .normal : self.isMiniView
         let iconSize = isMiniView != .normal ? SettingsData.iconSize - 4 : SettingsData.iconSize
+        
+        if isDetailMode {
+            self.nameLabel.isHidden = false
+            self.idLabel.isHidden = false
+        }
         
         self.lineLayer.frame = CGRect(x: 0,
                                       y: 0,

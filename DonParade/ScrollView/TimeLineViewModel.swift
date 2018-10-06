@@ -609,6 +609,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in
             if cell.id == id {
+                cell.iconView?.removeFromSuperview()
                 if image.imageCount != nil {
                     // GIFアニメーション
                     cell.iconView = WideTouchImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
