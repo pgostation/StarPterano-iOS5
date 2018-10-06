@@ -347,7 +347,27 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
             }
         }
         
+        // プレビュー画像
         ImageCache.image(urlStr: previewUrl, isTemp: true, isSmall: false) { [weak self] (image) in
+            guard let strongSelf = self else { return }
+            
+            if strongSelf.imageView.image == nil {
+                strongSelf.imageView.image = image
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    if fromRect != nil {
+                        UIView.animate(withDuration: 0.2) {
+                            strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
+                        }
+                    } else {
+                        strongSelf.imageView.frame = ImageViewController.getRect(size: image.size, rate: 1)
+                    }
+                }
+            }
+        }
+        
+        // 高精細画像
+        ImageCache.image(urlStr: imageUrl, isTemp: true, isSmall: false) { [weak self] (image) in
             guard let strongSelf = self else { return }
             
             if image.imageCount != nil {
