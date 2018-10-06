@@ -148,15 +148,16 @@ final class ImageViewController: MyViewController {
         self.view.insertSubview(scrollView, at: 0)
         
         let screenBounds = UIScreen.main.bounds
+        scrollView.frame.origin.x = screenBounds.width
         
         let maxIndex = 20
         for i in 4...maxIndex {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 5)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 4)) {
                 scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * screenBounds.width,
                                           y: 0,
                                           width: screenBounds.width,
                                           height: screenBounds.height)
-                view.imageScrollView.frame = CGRect(x: CGFloat(i) / CGFloat(maxIndex) * -screenBounds.width,
+                view.imageScrollView.frame = CGRect(x: CGFloat(i - 4) / CGFloat(maxIndex) * -screenBounds.width,
                                                     y: 0,
                                                     width: screenBounds.width,
                                                     height: screenBounds.height)
@@ -180,15 +181,16 @@ final class ImageViewController: MyViewController {
         self.view.insertSubview(scrollView, at: 0)
         
         let screenBounds = UIScreen.main.bounds
+        scrollView.frame.origin.x = -screenBounds.width
         
         let maxIndex = 20
         for i in 4...maxIndex {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 5)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 4)) {
                 scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * -screenBounds.width,
                                           y: 0,
                                           width: screenBounds.width,
                                           height: screenBounds.height)
-                view.imageScrollView.frame = CGRect(x: CGFloat(i) / CGFloat(maxIndex) * screenBounds.width,
+                view.imageScrollView.frame = CGRect(x: CGFloat(i - 4) / CGFloat(maxIndex) * screenBounds.width,
                                                     y: 0,
                                                     width: screenBounds.width,
                                                     height: screenBounds.height)
