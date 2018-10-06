@@ -394,25 +394,31 @@ private final class FollowingTableCell: UITableViewCell {
     }
     
     @objc func followAction() {
-        ProfileAction.follow(id: self.accountData?.id ?? "")
+        if self.accountData?.acct?.contains("@") == true {
+            ProfileAction.remoteFollow(uri: (self.accountData?.acct)!)
+        } else {
+            ProfileAction.follow(id: self.accountData?.id ?? "")
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
-                    guard let view = self.superview as? FollowingTableView else { return }
-                    
-                    if let data = data {
-                        do {
-                            guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
-                            
-                            if let id = responseJson["id"] as? String {
-                                view.model.relationshipList.updateValue(responseJson, forKey: id)
-                            }
-                            
-                            DispatchQueue.main.async {
-                                view.reloadData()
-                            }
-                        } catch { }
+                    DispatchQueue.main.async {
+                        guard let view = self.superview as? FollowingTableView else { return }
+                        
+                        if let data = data {
+                            do {
+                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                                
+                                if let id = responseJson["id"] as? String {
+                                    view.model.relationshipList.updateValue(responseJson, forKey: id)
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    view.reloadData()
+                                }
+                            } catch { }
+                        }
                     }
                 }
             }
@@ -429,20 +435,22 @@ private final class FollowingTableCell: UITableViewCell {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/relationships/?id=\(self.accountData?.id ?? "")") {
                                 try? MastodonRequest.get(url: url) { (data, response, error) in
-                                    guard let view = self.superview as? FollowingTableView else { return }
-                                    
-                                    if let data = data {
-                                        do {
-                                            guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
-                                            
-                                            if let id = responseJson["id"] as? String {
-                                                view.model.relationshipList.updateValue(responseJson, forKey: id)
-                                            }
-                                            
-                                            DispatchQueue.main.async {
-                                                view.reloadData()
-                                            }
-                                        } catch { }
+                                    DispatchQueue.main.async {
+                                        guard let view = self.superview as? FollowingTableView else { return }
+                                        
+                                        if let data = data {
+                                            do {
+                                                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] else { return }
+                                                
+                                                if let id = responseJson["id"] as? String {
+                                                    view.model.relationshipList.updateValue(responseJson, forKey: id)
+                                                }
+                                                
+                                                DispatchQueue.main.async {
+                                                    view.reloadData()
+                                                }
+                                            } catch { }
+                                        }
                                     }
                                 }
                             }

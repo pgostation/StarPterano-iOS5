@@ -49,7 +49,7 @@ final class ImageUpload {
             guard let videoData = try? Data(contentsOf: assetUrl.url) else { return }
             
             // 圧縮して送信
-            print("#### videoData = \(videoData.count / 1000)KB")
+            print("videoData = \(videoData.count / 1000)KB")
             if let asset = asset {
                 let presetname: String
                 if videoData.count < 5000000 {
@@ -83,7 +83,7 @@ final class ImageUpload {
                         self.filename = "movie.mp4"
                         self.mimetype = "video/mp4"
                         if let compressedData = try? Data(contentsOf: fileUrl) {
-                            print("#### compressedData = \(compressedData.count / 1000)KB")
+                            print("compressedData = \(compressedData.count / 1000)KB")
                             self.uploadData(data: compressedData, uploadUrl: uploadUrl, callback: callback)
                         }
                     case .failed:
