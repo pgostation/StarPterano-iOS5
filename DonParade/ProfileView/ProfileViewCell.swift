@@ -18,6 +18,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     private var uri = ""
     private var relationshipData: AnalyzeJson.RelationshipData? = nil
     private var urlStr = ""
+    private let accountData: AnalyzeJson.AccountData?
     
     // ヘッダ画像
     let headerImageView = UIImageView()
@@ -49,6 +50,8 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     let actionButton = UIButton()
     
     init(accountData: AnalyzeJson.AccountData?, isTemp: Bool) {
+        self.accountData = accountData
+        
         super.init(style: .default, reuseIdentifier: nil)
         
         self.id = accountData?.id ?? ""
@@ -163,6 +166,11 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                                y: 5,
                                                width: 70,
                                                height: 70)
+                
+                // タップで全画面表示
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self!.tapIconAction))
+                self?.iconView?.addGestureRecognizer(tapGesture)
+                self?.iconView?.isUserInteractionEnabled = true
             }
         }
         
@@ -474,6 +482,15 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     
     @objc func followersTapAction() {
         let vc = FollowingViewController(type: "accounts/\(self.id)/followers")
+        UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
+    }
+    
+    // アイコンタップで全画面表示
+    @objc func tapIconAction() {
+        guard let data = self.accountData else { return }
+        
+        let vc = ImageViewController(imagesUrls: [data.avatar ?? data.avatar_static ?? ""], previewUrls: [data.avatar_static ?? ""], index: 0, fromRect: self.iconView!.frame, smallImage: self.iconView?.image)
+        vc.modalTransitionStyle = .crossDissolve
         UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
     }
     

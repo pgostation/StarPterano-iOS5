@@ -190,8 +190,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         return list.count + 1 // オートページャライズ用のセル
     }
     
-    // セルのだいたいの高さ(スクロールバーの表示用)
+    // セルのだいたいの高さ(スクロールバーの表示とスクロール位置の調整用)
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let timelineView = tableView as? TimeLineView {
+            if timelineView.type == .user && indexPath.row == 0 {
+                let accountData = timelineView.accountList[timelineView.option ?? ""]
+                if let count = accountData?.fields?.count {
+                    return 350 + CGFloat(count) * 40
+                } else {
+                    return 350
+                }
+            }
+        }
+        
         switch SettingsData.isMiniView {
         case .normal:
             return 60

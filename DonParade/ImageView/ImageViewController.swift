@@ -9,6 +9,7 @@
 // 添付画像のフルスクリーン表示、ピンチアウトで拡大したり、横スライドで次の画像へ移動できる
 
 import UIKit
+import SwiftyGif
 
 final class ImageViewController: MyViewController {
     static weak var instance: ImageViewController?
@@ -319,7 +320,8 @@ private final class ImageView: UIView {
 }
 
 private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
-    let imageView = UIImageView()
+    var imageView = UIImageView()
+    var gifManager: SwiftyGifManager?
     
     init(imageUrl: String, previewUrl: String, fromRect: CGRect?, smallImage: UIImage?) {
         super.init(frame: UIScreen.main.bounds)
@@ -348,7 +350,22 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
         ImageCache.image(urlStr: previewUrl, isTemp: true, isSmall: false) { [weak self] (image) in
             guard let strongSelf = self else { return }
             
-            strongSelf.imageView.image = image
+            if image.imageCount != nil {
+                // GIFアニメーション
+                let oldView = strongSelf.imageView
+                strongSelf.imageView.removeFromSuperview()
+                
+                strongSelf.gifManager = SwiftyGifManager(memoryLimit: 1)
+                
+                strongSelf.imageView = UIImageView(gifImage: image, manager: strongSelf.gifManager!, loopCount: SettingsData.useAnimation ? -1 : 0)
+                strongSelf.addSubview(strongSelf.imageView)
+                strongSelf.imageView.frame = oldView.frame
+                strongSelf.imageView.contentMode = .scaleAspectFit
+            } else {
+                // 静止画
+                strongSelf.imageView.image = image
+            }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 if fromRect != nil {
                     UIView.animate(withDuration: 0.2) {
