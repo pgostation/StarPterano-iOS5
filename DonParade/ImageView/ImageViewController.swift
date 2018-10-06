@@ -148,14 +148,10 @@ final class ImageViewController: MyViewController {
         self.view.insertSubview(scrollView, at: 0)
         
         let screenBounds = UIScreen.main.bounds
-        scrollView.frame = CGRect(x: screenBounds.width,
-                                  y: 0,
-                                  width: screenBounds.width,
-                                  height: screenBounds.height)
         
         let maxIndex = 20
-        for i in 0...maxIndex {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.015 * Double(i)) {
+        for i in 4...maxIndex {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 5)) {
                 scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * screenBounds.width,
                                           y: 0,
                                           width: screenBounds.width,
@@ -184,14 +180,10 @@ final class ImageViewController: MyViewController {
         self.view.insertSubview(scrollView, at: 0)
         
         let screenBounds = UIScreen.main.bounds
-        scrollView.frame = CGRect(x: -screenBounds.width,
-                                  y: 0,
-                                  width: screenBounds.width,
-                                  height: screenBounds.height)
         
         let maxIndex = 20
-        for i in 0...maxIndex {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.015 * Double(i)) {
+        for i in 4...maxIndex {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.02 * Double(i - 5)) {
                 scrollView.frame = CGRect(x: CGFloat(maxIndex - i) / CGFloat(maxIndex) * -screenBounds.width,
                                           y: 0,
                                           width: screenBounds.width,
