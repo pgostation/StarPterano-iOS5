@@ -59,6 +59,14 @@ final class ShowMyAnyList {
         // ####
     }
     
+    // フォローリクエスト
+    static func showFollowRequestList(rootVc: UIViewController) {
+        DispatchQueue.main.async {
+            let vc = FollowRequestViewController()
+            show(rootVc: rootVc, vc: vc)
+        }
+    }
+    
     // 設定画面のさらに上に表示する
     private static func show(rootVc: UIViewController, vc: UIViewController) {
         rootVc.addChildViewController(vc)

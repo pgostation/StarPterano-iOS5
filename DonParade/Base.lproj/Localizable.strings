@@ -144,6 +144,7 @@
 "SETTINGS_FAVORITELIST"= "Favorite list";
 "SETTINGS_MUTELIST" = "Mute list";
 "SETTINGS_BLOCKLIST" = "Block list";
+"SETTINGS_FOLLOWREQUESTLIST" = "Follow request list";
 
 // 設定画面(アプリ設定)
 "SETTINGS_TOOT_PROTECT_DEFAULT" = "Private mode";

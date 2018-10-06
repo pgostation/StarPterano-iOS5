@@ -110,6 +110,18 @@ final class SettingsData {
         defaults.set(value, forKey: "accountNumberID_\(accessToken)")
     }
     
+    // アカウントのisLockedを保持
+    static func accountLocked(accessToken: String) -> Bool {
+        return defaults.string(forKey: "isLocked_\(accessToken)") == "ON"
+    }
+    static func setAccountLocked(accessToken: String, value: Bool) {
+        if value {
+            defaults.set("ON", forKey: "isLocked_\(accessToken)")
+        } else {
+            defaults.removeObject(forKey: "isLocked_\(accessToken)")
+        }
+    }
+    
     // ログインがアプリ起動後初めてかどうか（ユーザ名を取得するかどうかを判定するために使う）
     static var loginedAccessTokenList: [String] = []
     

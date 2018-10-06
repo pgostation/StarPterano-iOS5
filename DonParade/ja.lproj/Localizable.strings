@@ -144,6 +144,7 @@
 "SETTINGS_FAVORITELIST"= "お気に入りリスト";
 "SETTINGS_MUTELIST" = "ミュートリスト";
 "SETTINGS_BLOCKLIST" = "ブロックリスト";
+"SETTINGS_FOLLOWREQUESTLIST" = "フォローリクエスト";
 
 // 設定画面(アプリ設定)
 "SETTINGS_TOOT_PROTECT_DEFAULT" = "公開範囲";

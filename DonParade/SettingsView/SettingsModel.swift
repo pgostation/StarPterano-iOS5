@@ -36,20 +36,19 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private enum MyPage: String {
         case mastodonSite = "SETTINGS_MASTODON_SITE"
         case mypage = "SETTINGS_MYPAGE"
-        //case list = "SETTINGS_LIST"
         case dm = "SETTINGS_DMLIST"
         case favorite = "SETTINGS_FAVORITELIST"
         case mute = "SETTINGS_MUTELIST"
         case block = "SETTINGS_BLOCKLIST"
-        case searchAccount = "SETTINGS_SEARCH_ACCOUNT"
+        case followRequest = "SETTINGS_FOLLOWREQUESTLIST"
     }
     private let myPageList: [MyPage] = [.mastodonSite,
                                         .mypage,
                                         .dm,
-                                        .favorite]
+                                        .favorite,
+                                        .followRequest] // 最後のアイテムの表示はロックアカウントのみ
                                         //.mute,
-                                        //.block,
-                                        //.searchAccount]
+                                        //.block]
     
     // 4.アプリの設定
     private enum Application: String {
@@ -86,7 +85,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     
     // 6.その他
     private enum Other: String {
-        //case search = "SETTINGS_SEARCH" // 表示しているタイムラインから検索
         case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
     }
@@ -111,7 +109,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 1:
             return accountList.count
         case 2:
-            return myPageList.count
+            if SettingsData.accountLocked(accessToken: SettingsData.accessToken ?? "") {
+                return myPageList.count
+            } else {
+                return myPageList.count - 1
+            }
         case 3:
             return applicationList.count
         case 4:
@@ -345,8 +347,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 ShowMyAnyList.showBlockList(rootVc: SettingsViewController.instance!)
             case .mute:
                 ShowMyAnyList.showMuteList(rootVc: SettingsViewController.instance!)
-            case .searchAccount:
-                break
+            case .followRequest:
+                ShowMyAnyList.showFollowRequestList(rootVc: SettingsViewController.instance!)
             }
         case 3:
             switch applicationList[indexPath.row] {

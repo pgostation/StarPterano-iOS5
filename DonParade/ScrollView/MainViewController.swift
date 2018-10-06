@@ -333,6 +333,16 @@ final class MainViewController: MyViewController {
                 ShowMyAnyList.showMyPage(rootVc: self)
         }))
         
+        if SettingsData.accountLocked(accessToken: SettingsData.accessToken ?? "") {
+            // フォローリクエストを表示
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("SETTINGS_FOLLOWREQUESTLIST"),
+                style: UIAlertActionStyle.default,
+                handler: { _ in
+                    ShowMyAnyList.showFollowRequestList(rootVc: self)
+            }))
+        }
+        
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
