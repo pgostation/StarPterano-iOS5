@@ -325,10 +325,10 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                 else if relationshipData.followed_by == 1 {
                                     text += I18n.get("RELATIONSHIP_FOLLOWED")
                                 }
-                                /*if relationshipData.requested == 1 {
+                                if relationshipData.requested == 1 {
                                     text += I18n.get("RELATIONSHIP_REQUESTED")
                                 }
-                                if relationshipData.endorsed == 1 {
+                                /*if relationshipData.endorsed == 1 {
                                     text += I18n.get("RELATIONSHIP_ENDORSED")
                                 }*/
                                 

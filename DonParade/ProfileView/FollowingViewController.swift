@@ -284,8 +284,13 @@ final class FollowingTableModel: NSObject, UITableViewDataSource, UITableViewDel
             cell.followButton.alpha = 1
             if relationShipJson["following"] as? Int == 1 {
                 cell.followButton.setTitle("☑️", for: .normal)
+                cell.followButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
                 cell.followButton.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
                 cell.followButton.addTarget(cell, action: #selector(cell.unfollowAction), for: .touchUpInside)
+            } else if relationShipJson["requested"] as? Int == 1 {
+                cell.followButton.setTitle("⌛️", for: .normal)
+                cell.followButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+                cell.followButton.backgroundColor = UIColor.gray
             } else {
                 cell.followButton.setTitle("+", for: .normal)
                 cell.followButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
