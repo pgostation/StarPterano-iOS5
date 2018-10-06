@@ -43,9 +43,20 @@ final class TootView: UIView {
     init() {
         super.init(frame: UIScreen.main.bounds)
         
-        // 下書きを復帰
-        self.textField.text = TootView.savedText
-        self.spoilerTextField.text = TootView.savedSpoilerText
+        if TootView.savedText != nil || TootView.savedSpoilerText != nil {
+            // 絵文字データを取得
+            let emojiCache = EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true)
+            var emojis: [[String: Any]] = []
+            for emoji in emojiCache {
+                let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
+                                           "url": emoji.url ?? ""]
+                emojis.append(dict)
+            }
+            
+            // 下書きを復帰
+            self.textField.attributedText = DecodeToot.decodeName(name: TootView.savedText, emojis: emojis, callback: nil)
+            self.spoilerTextField.attributedText = DecodeToot.decodeName(name: TootView.savedSpoilerText, emojis: emojis, callback: nil)
+        }
         self.imageCheckView.urls = TootView.savedImages
         
         // キーボードの高さを監視
@@ -95,8 +106,8 @@ final class TootView: UIView {
     
     deinit {
         // 閉じる時に下書きに保存
-        TootView.savedText = self.textField.text
-        TootView.savedSpoilerText = self.spoilerTextField.text
+        TootView.savedText = DecodeToot.encodeEmoji(attributedText: self.textField.attributedText, textStorage: self.textField.textStorage)
+        TootView.savedSpoilerText = DecodeToot.encodeEmoji(attributedText: self.spoilerTextField.attributedText, textStorage: self.spoilerTextField.textStorage)
         TootView.savedImages = self.imageCheckView.urls
     }
     
