@@ -42,7 +42,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // トゥートの追加
-    func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false) {
+    func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false, isBoosted: Bool = false) {
         
         // ミュートフラグの立っているものは削除しておく
         var addList2 = addList
@@ -58,8 +58,28 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if self.list.count == 0 {
                 self.list = addList2
             } else if let firstDate1 = self.list.first?.created_at, let firstDate2 = addList2.first?.created_at, let lastDate1 = self.list.last?.created_at, let lastDate2 = addList2.last?.created_at {
-                // 前か後に付ければ良い
-                if lastDate1 > firstDate2 {
+                
+                if addList2.count == 1 && isBoosted {
+                    // 自分でブーストした場合、上に持ってくるとおかしくなるので
+                    // すでにあるデータを更新する
+                    if let newContent = addList2.first {
+                        var index = 0
+                        while index < self.list.count {
+                            let listData = self.list[index]
+                            if listData.id == newContent.id || listData.id == newContent.reblog_id || listData.reblog_id == newContent.reblog_id || listData.reblog_id == newContent.id {
+                                self.list[index] = newContent
+                                break
+                            }
+                            // タイムラインの方が古いので、その前に追加する
+                            if (listData.id ?? "") < (newContent.reblog_id ?? "") {
+                                self.list.insert(newContent, at: index)
+                                break
+                            }
+                            index += 1
+                        }
+                    }
+                } else if lastDate1 > firstDate2 {
+                    // 後に付ければ良い
                     self.list = self.list + addList2
                     
                     if self.list.count > 100000 {
@@ -67,6 +87,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.list.removeFirst(self.list.count - 100000)
                     }
                 } else if lastDate2 > firstDate1 {
+                    // 前に付ければ良い
                     self.list = addList2 + self.list
                     
                     // 選択位置がずれないようにする
@@ -79,12 +100,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     } else {
                         // スクロールして、表示していたツイートがあまりずれないようにする
                         let oldOffsetY = tableView.contentOffset.y
-                        DispatchQueue.main.async {
+                        //DispatchQueue.main.async {
                             tableView.scrollToRow(at: IndexPath(row: addList2.count, section: 0),
                                                   at: UITableViewScrollPosition.top,
                                                   animated: false)
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
-                        }
+                        //}
                     }
                     
                     if self.list.count > 100000 {
@@ -938,7 +959,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         var acct = ""
-                        let contentData = AnalyzeJson.analyzeJson(view: tableView as! TimeLineView, model: strongSelf, json: responseJson, acct: &acct)
+                        let contentData = AnalyzeJson.analyzeJson(view: tableView as? TimeLineView, model: strongSelf, json: responseJson, acct: &acct)
                         let contentList = [contentData]
                         
                         // 詳細ビューと元のビューの両方に反映する

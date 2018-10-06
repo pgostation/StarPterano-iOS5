@@ -409,7 +409,7 @@ final class TimeLineView: UITableView {
                         let contentList = [contentData]
                         
                         DispatchQueue.main.async {
-                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:], isBoosted: true)
                         }
                     }
                 } catch {
