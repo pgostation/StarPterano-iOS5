@@ -15,7 +15,7 @@ final class ImageCheckView: UIView {
     private let nsfwLabel = UILabel()
     let nsfwSw = UISwitch()
     var urls: [URL] = []
-    private var imageViews: [UIImageView] = []
+    private var imageViews: [UIView] = []
     private var deleteButtons: [UIButton] = []
     
     init() {
@@ -48,6 +48,66 @@ final class ImageCheckView: UIView {
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
         guard let asset = fetchResult.firstObject else { return }
         
+        var isGIForPNG = false
+        let resources = PHAssetResource.assetResources(for: asset)
+        for resource in resources {
+            if resource.uniformTypeIdentifier == "com.compuserve.gif" {
+                isGIForPNG = true
+            }
+            if resource.uniformTypeIdentifier == "public.png" {
+                isGIForPNG = true
+            }
+        }
+        
+        if isGIForPNG {
+            addPNGImage(imageUrl: imageUrl, asset: asset)
+        } else {
+            addNormalImage(imageUrl: imageUrl, asset: asset)
+        }
+    }
+    
+    // GIFかPNGの場合
+    private func addPNGImage(imageUrl: URL, asset: PHAsset) {
+        let manager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
+        options.version = .original
+        manager.requestImageData(for: asset, options: options) { (data, string, orientation, infoDict) in
+            guard let data = data else { return }
+            
+            if !self.urls.contains(imageUrl) {
+                self.urls.append(imageUrl)
+            }
+            
+            let imageView: UIView
+            if imageUrl.absoluteString.lowercased().contains(".gif") {
+                let image = UIImage(gifData: data)
+                imageView = UIImageView(gifImage: image)
+                (imageView as? UIImageView)?.contentMode = .scaleAspectFit
+            } else {
+                let image = UIImage(data: data)
+                imageView = UIImageView(image: image)
+                (imageView as? UIImageView)?.contentMode = .scaleAspectFit
+            }
+            self.addSubview(imageView)
+            self.imageViews.append(imageView)
+            
+            let deleteButton = UIButton()
+            deleteButton.setTitle(I18n.get("BUTTON_DELETE_IMAGE"), for: .normal)
+            deleteButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+            deleteButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+            deleteButton.clipsToBounds = true
+            deleteButton.layer.cornerRadius = 12
+            self.addSubview(deleteButton)
+            self.deleteButtons.append(deleteButton)
+            deleteButton.addTarget(self, action: #selector(self.deleteAction(_:)), for: .touchUpInside)
+            
+            self.setNeedsLayout()
+        }
+    }
+    
+    // 不透明な静止画
+    private func addNormalImage(imageUrl: URL, asset: PHAsset) {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる

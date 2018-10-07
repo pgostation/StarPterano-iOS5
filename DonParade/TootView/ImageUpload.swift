@@ -14,31 +14,67 @@ final class ImageUpload {
     
     // 画像のアップロード
     static func upload(imageUrl: URL, callback: @escaping ([String: Any]?)->Void) {
-        // 画像アップロード先URL
-        guard let uploadUrl = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
-        
         // imageData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
         guard let asset = fetchResult.firstObject else { return }
         
+        var isGIF = false
+        var isPNG = false
+        let resources = PHAssetResource.assetResources(for: asset)
+        for resource in resources {
+            if resource.uniformTypeIdentifier == "com.compuserve.gif" {
+                isGIF = true
+            }
+            if resource.uniformTypeIdentifier == "public.png" {
+                isPNG = true
+            }
+        }
+        
+        if isGIF || isPNG {
+            uploadPNG(imageUrl: imageUrl, asset: asset, isPNG: isPNG, callback: callback)
+        } else {
+            uploadJPEG(imageUrl: imageUrl, asset: asset, callback: callback)
+        }
+    }
+    
+    // データそのまま送信
+    private static func uploadPNG(imageUrl: URL, asset: PHAsset, isPNG: Bool, callback: @escaping ([String: Any]?)->Void) {
+        let manager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
+        options.version = .original
+        manager.requestImageData(for: asset, options: options) { (data, string, orientation, infoDict) in
+            guard let data = data else { return }
+            
+            if isPNG {
+                self.filename = "image.png"
+                self.mimetype = "image/png"
+            } else {
+                self.filename = "image.gif"
+                self.mimetype = "image/gif"
+            }
+            self.uploadData(data: data, callback: callback)
+        }
+    }
+    
+    // JPEGで再圧縮して送信
+    private static func uploadJPEG(imageUrl: URL, asset: PHAsset, callback: @escaping ([String: Any]?)->Void) {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
         manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { (image, info) in
             guard let image = image else { return }
+            
             let imageData = UIImageJPEGRepresentation(image, 0.8)!
             
             self.filename = "image.jpeg"
             self.mimetype = "image/jpeg"
-            self.uploadData(data: imageData, uploadUrl: uploadUrl, callback: callback)
+            self.uploadData(data: imageData, callback: callback)
         }
     }
     
     // 動画のアップロード
     static func upload(movieUrl: URL, callback: @escaping ([String: Any]?)->Void) {
-        // 画像アップロード先URL
-        guard let uploadUrl = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
-        
         // movieData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [movieUrl], options: nil)
         guard let asset = fetchResult.firstObject else { return }
@@ -84,7 +120,7 @@ final class ImageUpload {
                         self.mimetype = "video/mp4"
                         if let compressedData = try? Data(contentsOf: fileUrl) {
                             print("compressedData = \(compressedData.count / 1000)KB")
-                            self.uploadData(data: compressedData, uploadUrl: uploadUrl, callback: callback)
+                            self.uploadData(data: compressedData, callback: callback)
                         }
                     case .failed:
                         break
@@ -99,7 +135,10 @@ final class ImageUpload {
     }
     
     // mediaデータのアップロード
-    private static func uploadData(data: Data, uploadUrl: URL, callback: @escaping ([String: Any]?)->Void) {
+    private static func uploadData(data: Data, callback: @escaping ([String: Any]?)->Void) {
+        // 画像アップロード先URL
+        guard let uploadUrl = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
+        
         // boudary生成
         let boundary = generateBoundaryString()
         

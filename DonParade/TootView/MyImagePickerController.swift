@@ -35,7 +35,7 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
     
     // 選択完了時に呼ばれる
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let imageUrl = info["UIImagePickerControllerReferenceURL"] as? URL
+        let imageUrl = (info["PHImageFileURLKey"] ?? info["UIImagePickerControllerReferenceURL"]) as? URL
         self.callback(imageUrl)
         MyImagePickerController.instance = nil
         
