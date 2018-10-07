@@ -852,14 +852,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // ブーストした人の名前を表示
         if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
-            for _ in 0..<min(10, reblogs_count) {
-                let label = UILabel()
-                cell.rebologerLabels.append(label)
-                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-                label.textColor = ThemeColor.idColor
-                cell.addSubview(label)
-            }
-            
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/reblogged_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
@@ -870,11 +862,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                     var count = 0
                                     for json in responseJson {
                                         let accountData = AnalyzeJson.analyzeAccountJson(account: json)
-                                        if count >= cell.rebologerLabels.count { break }
+                                        if count >= 10 { break }
+                                        if cell.rebologerLabels.count <= count {
+                                            let label = UILabel()
+                                            cell.rebologerLabels.append(label)
+                                            label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                                            label.textColor = ThemeColor.idColor
+                                            cell.addSubview(label)
+                                        }
                                         let label = cell.rebologerLabels[count]
                                         label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
                                         count += 1
                                     }
+                                    cell.setNeedsLayout()
                                 }
                             }
                         } catch { }
@@ -882,16 +882,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             }
         }
+        
         // お気に入りした人の名前を表示
         if let favourites_count = data.favourites_count, favourites_count > 0 {
-            for _ in 0..<min(10, favourites_count) {
-                let label = UILabel()
-                cell.favoriterLabels.append(label)
-                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-                label.textColor = ThemeColor.idColor
-                cell.addSubview(label)
-            }
-            
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/favourited_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
@@ -902,11 +895,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                     var count = 0
                                     for json in responseJson {
                                         let accountData = AnalyzeJson.analyzeAccountJson(account: json)
-                                        if count >= cell.favoriterLabels.count { break }
+                                        if count >= 10 { break }
+                                        if cell.favoriterLabels.count <= count {
+                                            let label = UILabel()
+                                            cell.favoriterLabels.append(label)
+                                            label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                                            label.textColor = ThemeColor.idColor
+                                            cell.addSubview(label)
+                                        }
                                         let label = cell.favoriterLabels[count]
                                         label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
                                         count += 1
                                     }
+                                    cell.setNeedsLayout()
                                 }
                             }
                         } catch { }
