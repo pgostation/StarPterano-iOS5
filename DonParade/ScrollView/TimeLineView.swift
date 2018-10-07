@@ -200,6 +200,31 @@ final class TimeLineView: UITableView {
                 refresh()
             }
         }
+        
+        // 通知用にhomeのストリーミングを確認
+        if self.type != .home {
+            checkHomeStreaming()
+        }
+    }
+    
+    // 通知用にhomeのストリーミングを確認、接続
+    private static var inChecking = false
+    private func checkHomeStreaming() {
+        if TimeLineView.inChecking { return }
+        TimeLineView.inChecking = true
+        
+        guard let timelineList = MainViewController.instance?.timelineList else { return }
+        
+        let key = "\(SettingsData.hostName ?? "")_\(SettingsData.accessToken ?? "")_Home"
+        if let homeTimelineViewController = timelineList[key] {
+            (homeTimelineViewController.view as? TimeLineView)?.startStreaming()
+        } else {
+            let homeTimelineViewController = TimeLineViewController(type: .home)
+            MainViewController.instance?.timelineList.updateValue(homeTimelineViewController, forKey: key)
+            (homeTimelineViewController.view as? TimeLineView)?.startStreaming()
+        }
+        
+        TimeLineView.inChecking = false
     }
     
     // ストリーミングを受信

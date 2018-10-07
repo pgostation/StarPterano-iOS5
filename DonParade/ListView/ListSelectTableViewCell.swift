@@ -64,7 +64,14 @@ final class ListSelectTableViewCell: UITableViewCell {
     }
     
     // 編集
+    private static var doubleTapFlag = false
     @objc func editButtonAction() {
+        if ListSelectTableViewCell.doubleTapFlag { return }
+        ListSelectTableViewCell.doubleTapFlag = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            ListSelectTableViewCell.doubleTapFlag = false
+        }
+        
         let vc = ListEditViewController(name: self.nameLabel.text, id: self.id)
         if let rootVc = UIUtils.getFrontViewController() {
             rootVc.addChildViewController(vc)

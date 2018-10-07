@@ -204,7 +204,14 @@ final class TimeLineViewCell: UITableViewCell {
     }
     
     // アイコンをタップした時の処理
+    private static var doubleTapFlag = false
     @objc func tapAccountAction() {
+        if TimeLineViewCell.doubleTapFlag { return }
+        TimeLineViewCell.doubleTapFlag = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            TimeLineViewCell.doubleTapFlag = false
+        }
+        
         if TootViewController.isShown {
             // トゥート画面表示中は移動せず、@IDを入力する
             pressAccountAction(nil)

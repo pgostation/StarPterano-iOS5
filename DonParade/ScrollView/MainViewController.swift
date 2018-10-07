@@ -12,7 +12,7 @@ import UIKit
 
 final class MainViewController: MyViewController {
     static weak var instance: MainViewController?
-    var TimelineList: [String: TimeLineViewController] = [:]
+    var timelineList: [String: TimeLineViewController] = [:]
     
     override func loadView() {
         MainViewController.instance = self
@@ -78,7 +78,7 @@ final class MainViewController: MyViewController {
             tlView.backgroundColor = ThemeColor.viewBgColor
         }
         
-        for (_, vc) in TimelineList {
+        for (_, vc) in timelineList {
             let timelineView = (vc.view as? TimeLineView)
             timelineView?.reloadData()
             timelineView?.backgroundColor = ThemeColor.viewBgColor
@@ -102,11 +102,11 @@ final class MainViewController: MyViewController {
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
             let key = "\(hostName)_\(accessToken)_Home"
-            if let vc = self.TimelineList[key] {
+            if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
                 self.timelineViewController = TimeLineViewController(type: .home)
-                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+                self.timelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
             SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .home)
@@ -135,11 +135,11 @@ final class MainViewController: MyViewController {
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
             let key = "\(hostName)_\(accessToken)_LTL"
-            if let vc = self.TimelineList[key] {
+            if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
                 self.timelineViewController = TimeLineViewController(type: .local)
-                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+                self.timelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
             SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .local)
@@ -173,11 +173,11 @@ final class MainViewController: MyViewController {
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
             let key = "\(hostName)_\(accessToken)_FTL"
-            if let vc = self.TimelineList[key] {
+            if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
                 self.timelineViewController = TimeLineViewController(type: .federation)
-                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+                self.timelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
             SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .federation)
@@ -270,6 +270,11 @@ final class MainViewController: MyViewController {
     
     // 検索画面に移動
     @objc func searchAction(_ sender: UIButton?) {
+        sender?.isUserInteractionEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            sender?.isUserInteractionEnabled = true
+        }
+        
         let vc = SearchViewController()
         self.addChildViewController(vc)
         self.view.addSubview(vc.view)
@@ -285,6 +290,11 @@ final class MainViewController: MyViewController {
     
     // 通知画面に移動
     @objc func notificationsAction(_ sender: UIButton?) {
+        sender?.isUserInteractionEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            sender?.isUserInteractionEnabled = true
+        }
+        
         let vc = NotificationViewController()
         self.addChildViewController(vc)
         self.view.addSubview(vc.view)
@@ -364,7 +374,7 @@ final class MainViewController: MyViewController {
             if isLTL == .list {
                 key += SettingsData.selectedListId(accessToken: accessToken) ?? ""
             }
-            if let vc = self.TimelineList[key] {
+            if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
                 (vc.view as? TimeLineView)?.reloadData()
             } else {
@@ -378,7 +388,7 @@ final class MainViewController: MyViewController {
                 case .list:
                     self.timelineViewController = TimeLineViewController(type: .list)
                 }
-                self.TimelineList.updateValue(self.timelineViewController!, forKey: key)
+                self.timelineList.updateValue(self.timelineViewController!, forKey: key)
             }
             
             setButtonNameAndBorder()

@@ -382,7 +382,14 @@ private final class FollowingTableCell: UITableViewCell {
     }
     
     // アイコンをタップした時の処理
+    private static var doubleTapFlag = false
     @objc func tapAccountAction() {
+        if FollowingTableCell.doubleTapFlag { return }
+        FollowingTableCell.doubleTapFlag = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            FollowingTableCell.doubleTapFlag = false
+        }
+        
         let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountData?.id ?? "")
         if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
             timelineView.accountList.updateValue(accountData, forKey: accountData.id ?? "")
