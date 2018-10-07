@@ -18,7 +18,7 @@ final class MovieCache {
         
         // ストレージキャッシュにある場合
         let cacheDir = NSHomeDirectory() + "/Library/Caches"
-        let filePath = cacheDir + urlStr.replacingOccurrences(of: "/", with: "|")
+        let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)

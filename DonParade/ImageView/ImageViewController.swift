@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftyGif
+import Photos
 
 final class ImageViewController: MyViewController {
     static weak var instance: ImageViewController?
@@ -119,7 +120,17 @@ final class ImageViewController: MyViewController {
             title: I18n.get("ACTION_SAVE_IMAGE_TO_ALBUM"),
             style: UIAlertActionStyle.default,
             handler: { _ in
-                UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+                let netUrlStr = self.imagesUrls[self.index]
+                let cacheDir = NSHomeDirectory() + "/Library/Caches/"
+                let filePath = cacheDir + netUrlStr.replacingOccurrences(of: "/", with: "|")
+                if FileManager.default.fileExists(atPath: filePath) {
+                    let url = URL(fileURLWithPath: filePath)
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+                    }, completionHandler: nil)
+                } else {
+                    UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+                }
         }))
         
         // キャンセル

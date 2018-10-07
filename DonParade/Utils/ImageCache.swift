@@ -44,7 +44,7 @@ final class ImageCache {
         } else {
             cacheDir = NSHomeDirectory() + "/Library/Caches"
         }
-        let filePath = cacheDir + urlStr.replacingOccurrences(of: "/", with: "|")
+        let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)
@@ -182,7 +182,7 @@ final class APNGImageCache {
         
         // ストレージキャッシュにある場合
         let cacheDir = NSHomeDirectory() + "/Library/Caches"
-        let filePath = cacheDir + urlStr.replacingOccurrences(of: "/", with: "|")
+        let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)
