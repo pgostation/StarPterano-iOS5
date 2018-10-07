@@ -42,6 +42,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         return list.last?.in_reply_to_id
     }
     
+    //
+    func clear() {
+        self.list = []
+        self.showAutoPagerizeCell = true
+        self.selectedRow = nil
+        self.selectedAccountId = nil
+        self.inReplyToTootId = nil
+        self.inReplyToAccountId = nil
+    }
+    
     // トゥートの追加
     func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false, isBoosted: Bool = false) {
         

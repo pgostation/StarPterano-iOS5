@@ -42,6 +42,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     let statusCountTitle = UILabel()
     let statusCountLabel = UILabel()
     
+    // メディアのみ表示
+    let mediaOnlyButton = UIButton()
+    
     // フォローしているか、フォローされているか、ミュート、ブロック状態の表示
     let relationshipLabel = UILabel()
     
@@ -87,6 +90,8 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         self.addSubview(statusCountTitle)
         self.addSubview(statusCountLabel)
         
+        self.addSubview(mediaOnlyButton)
+        
         // フォローしているか、フォローされているかの表示
         self.addSubview(relationshipLabel)
         self.addSubview(actionButton)
@@ -109,6 +114,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         let followersTapGesture2 = UITapGestureRecognizer(target: self, action: #selector(followersTapAction))
         followerCountTitle.addGestureRecognizer(followersTapGesture2)
         followerCountTitle.isUserInteractionEnabled = true
+        
+        actionButton.addTarget(self, action: #selector(tapActionButton), for: .touchUpInside)
+        mediaOnlyButton.addTarget(self, action: #selector(mediaOnlyAction), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -275,6 +283,17 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         statusCountLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         statusCountLabel.textAlignment = .center
         
+        mediaOnlyButton.setTitle("🖼", for: .normal)
+        DispatchQueue.main.async {
+            if self.timelineView?.mediaOnly == true {
+                self.mediaOnlyButton.backgroundColor = UIColor.blue
+            } else {
+                self.mediaOnlyButton.backgroundColor = UIColor.gray
+            }
+        }
+        mediaOnlyButton.clipsToBounds = true
+        mediaOnlyButton.layer.cornerRadius = 8
+        
         // フォロー関連
         actionButton.setTitle("…", for: .normal)
         actionButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
@@ -285,7 +304,6 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         actionButton.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
         actionButton.layer.borderWidth = 1
         actionButton.alpha = 0
-        actionButton.addTarget(self, action: #selector(tapActionButton), for: .touchUpInside)
         
         relationshipLabel.textColor = ThemeColor.contrastColor
         relationshipLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
@@ -336,9 +354,12 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                 if relationshipData.muting == 1 {
                                     text += I18n.get("RELATIONSHIP_MUTING")
                                 }
-                                /*if relationshipData.muting_notifications == 1 {
+                                if relationshipData.muting_notifications == 1 {
                                     text += I18n.get("RELATIONSHIP_MUTING_NOTIFICATION")
-                                }*/
+                                }
+                                if relationshipData.following == 1 && relationshipData.showing_reblogs == 0 {
+                                    text += I18n.get("RELATIONSHIP_HIDE_BOOST")
+                                }
                                 
                                 // ブロック
                                 if relationshipData.domain_blocking == 1 {
@@ -387,6 +408,24 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 handler: { _ in
                     ProfileAction.unfollow(id: id)
             }))
+            
+            if relationshipData.showing_reblogs == 1 {
+                // ブーストを表示しない
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("ACTION_HIDE_BOOST"),
+                    style: UIAlertActionStyle.default,
+                    handler: { _ in
+                        ProfileAction.hideBoost(id: id)
+                }))
+            } else {
+                // ブーストを表示する
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("ACTION_SHOW_BOOST"),
+                    style: UIAlertActionStyle.default,
+                    handler: { _ in
+                        ProfileAction.showBoost(id: id)
+                }))
+            }
         } else {
             if id.suffix(id.count - 1).contains("@") {
                 // リモートフォローする
@@ -483,6 +522,20 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     @objc func followersTapAction() {
         let vc = FollowingViewController(type: "accounts/\(self.id)/followers")
         UIUtils.getFrontViewController()?.present(vc, animated: false, completion: nil)
+    }
+    
+    // メディアオンリーのタイムラインにするかどうか
+    @objc func mediaOnlyAction() {
+        self.timelineView?.mediaOnly = !(self.timelineView?.mediaOnly == true)
+        
+        if self.timelineView?.mediaOnly == true {
+            mediaOnlyButton.backgroundColor = UIColor.blue
+        } else {
+            mediaOnlyButton.backgroundColor = UIColor.gray
+        }
+        
+        self.timelineView?.clear()
+        self.timelineView?.refresh()
     }
     
     // アイコンタップで全画面表示
@@ -582,31 +635,37 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }
         
         // 数の表示
+        let countsWidth = screenBounds.width / 3.5
         statusCountTitle.frame = CGRect(x: 5,
                                         y: top,
-                                        width: screenBounds.width / 3,
+                                        width: countsWidth,
                                         height: SettingsData.fontSize)
-        statusCountLabel.frame = CGRect(x: 0,
+        statusCountLabel.frame = CGRect(x: 5,
                                         y: top + SettingsData.fontSize,
-                                        width: screenBounds.width / 3,
+                                        width: countsWidth - 5,
                                         height: SettingsData.fontSize)
         
-        followingCountTitle.frame = CGRect(x: screenBounds.width / 3 + 5,
+        mediaOnlyButton.frame = CGRect(x: countsWidth - 5,
+                                       y: top + 2,
+                                       width: countsWidth / 2,
+                                       height: (SettingsData.fontSize * 2) - 4)
+        
+        followingCountTitle.frame = CGRect(x: countsWidth * 1.5 + 5,
                                            y: top,
-                                           width: screenBounds.width / 3,
+                                           width: countsWidth,
                                            height: SettingsData.fontSize)
-        followingCountLabel.frame = CGRect(x: screenBounds.width / 3,
+        followingCountLabel.frame = CGRect(x: countsWidth * 1.5,
                                            y: top + SettingsData.fontSize,
-                                           width: screenBounds.width / 3,
+                                           width: countsWidth,
                                            height: SettingsData.fontSize)
         
-        followerCountTitle.frame = CGRect(x: screenBounds.width * 2 / 3 + 5,
+        followerCountTitle.frame = CGRect(x: countsWidth * 2.5 + 5,
                                           y: top,
-                                          width: screenBounds.width / 3,
+                                          width: countsWidth,
                                           height: SettingsData.fontSize)
-        followerCountLabel.frame = CGRect(x: screenBounds.width * 2 / 3,
+        followerCountLabel.frame = CGRect(x: countsWidth * 2.5,
                                           y: top + SettingsData.fontSize,
-                                          width: screenBounds.width / 3,
+                                          width: countsWidth,
                                           height: SettingsData.fontSize)
         
         self.frame.size.height = top + SettingsData.fontSize * 2 + 8

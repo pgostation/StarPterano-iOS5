@@ -21,6 +21,7 @@ final class TimeLineView: UITableView {
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
     private let accessToken = SettingsData.accessToken
     let gifManager = SwiftyGifManager(memoryLimit: 100)
+    var mediaOnly: Bool = false
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -67,6 +68,11 @@ final class TimeLineView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // タイムラインを消去
+    func clear() {
+        self.model.clear()
+    }
+    
     // タイムラインを初回取得/手動更新
     @objc func refresh() {
         if self.waitingStatusList.count > 0 {
@@ -102,7 +108,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=100\(sinceIdStr)")
         case .user:
             guard let option = option else { return }
-            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=100\(sinceIdStr)")
+            let mediaOnlyStr = mediaOnly ? "&only_media=1" : ""
+            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=100\(sinceIdStr)\(mediaOnlyStr)")
         case .favorites:
             url = URL(string: "https://\(hostName)/api/v1/favourites?limit=50\(sinceIdStr)")
         case .localTag:
@@ -326,7 +333,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/public?limit=50\(maxIdStr)")
         case .user:
             guard let option = option else { return }
-            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=50\(maxIdStr)")
+            let mediaOnlyStr = mediaOnly ? "&only_media=1" : ""
+            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=50\(maxIdStr)\(mediaOnlyStr)")
         case .favorites:
             url = URL(string: "https://\(hostName)/api/v1/favourites?limit=50\(maxIdStr)")
         case .localTag:

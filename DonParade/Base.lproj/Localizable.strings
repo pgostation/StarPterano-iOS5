@@ -90,15 +90,16 @@
 "SEARCH_SEG_ACCOUNT" = "Users";
 
 // フォロー状態表示
-"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "Following.\nFollowed by.\n";
+"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "⇄Following\n";
 "RELATIONSHIP_FOLLOWING" = "Following.\n";
 "RELATIONSHIP_FOLLOWED" = "Followed by.\n";
 "RELATIONSHIP_REQUESTED" = "Requested.\n";
 "RELATIONSHIP_ENDORSED" = "Endorsed.\n";
 "RELATIONSHIP_MUTING" = "Muting.\n";
-"RELATIONSHIP_MUTING_NOTIFICATION" = "Muting boost.\n";
+"RELATIONSHIP_MUTING_NOTIFICATION" = "Muting notifs.\n";
 "RELATIONSHIP_DOMAIN_BLOCKING" = "Domain blocking.\n";
 "RELATIONSHIP_BLOCKING" = "Blocking.\n";
+"RELATIONSHIP_HIDE_BOOST" = "Hiding boosts.\n";
 
 // フォローアクション
 "ACTION_UNFOLLOW" = "Unfollow";

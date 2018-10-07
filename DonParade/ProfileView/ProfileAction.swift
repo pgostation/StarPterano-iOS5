@@ -74,6 +74,19 @@ final class ProfileAction {
         }
     }
     
+    // 通知もミュートする
+    static func muteAlsoNotify(id: String) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url = URL(string: "https://\(hostName)/api/v1/accounts/\(id)/mute")!
+        
+        try? MastodonRequest.post(url: url, body: [:]) { (data, response, error) in
+            if let data = data, data.count > 0 {
+                refresh()
+            }
+        }
+    }
+    
     static func unblock(id: String) {
         guard let hostName = SettingsData.hostName else { return }
         
@@ -92,6 +105,30 @@ final class ProfileAction {
         let url = URL(string: "https://\(hostName)/api/v1/accounts/\(id)/block")!
         
         try? MastodonRequest.post(url: url, body: [:]) { (data, response, error) in
+            if let data = data, data.count > 0 {
+                refresh()
+            }
+        }
+    }
+    
+    static func hideBoost(id: String) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url = URL(string: "https://\(hostName)/api/v1/accounts/\(id)/follow")!
+        
+        try? MastodonRequest.post(url: url, body: ["reblogs": 0]) { (data, response, error) in
+            if let data = data, data.count > 0 {
+                refresh()
+            }
+        }
+    }
+    
+    static func showBoost(id: String) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url = URL(string: "https://\(hostName)/api/v1/accounts/\(id)/follow")!
+        
+        try? MastodonRequest.post(url: url, body: ["reblogs": 1]) { (data, response, error) in
             if let data = data, data.count > 0 {
                 refresh()
             }

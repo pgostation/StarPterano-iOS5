@@ -90,15 +90,16 @@
 "SEARCH_SEG_ACCOUNT" = "ユーザー";
 
 // フォロー状態表示
-"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "フォロー中\nフォローされています\n";
+"RELATIONSHIP_FOLLOWING_AND_FOLLOWED" = "相互フォロー\n";
 "RELATIONSHIP_FOLLOWING" = "フォロー中\n";
 "RELATIONSHIP_FOLLOWED" = "フォローされています\n";
 "RELATIONSHIP_REQUESTED" = "フォロー申請中\n";
 "RELATIONSHIP_ENDORSED" = "承認済み\n";
 "RELATIONSHIP_MUTING" = "ミュート中\n";
-"RELATIONSHIP_MUTING_NOTIFICATION" = "ブースト非表示\n";
+"RELATIONSHIP_MUTING_NOTIFICATION" = "通知非表示\n";
 "RELATIONSHIP_DOMAIN_BLOCKING" = "ドメインブロック中\n";
 "RELATIONSHIP_BLOCKING" = "ブロック中\n";
+"RELATIONSHIP_HIDE_BOOST" = "ブースト非表示\n";
 
 // フォローアクション
 "ACTION_UNFOLLOW" = "フォロー解除する";
