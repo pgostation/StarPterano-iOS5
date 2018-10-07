@@ -851,7 +851,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let id = data.id
         
         // ブーストした人の名前を表示
-        if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
+        let reblogs_count = data.reblogs_count ?? 0
+        if reblogs_count > 0 || data.reblogged == 1 {
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/reblogged_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
@@ -884,7 +885,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // お気に入りした人の名前を表示
-        if let favourites_count = data.favourites_count, favourites_count > 0 {
+        let favourites_count = data.favourites_count ?? 0
+        if favourites_count > 0 || data.favourited == 1 {
             if let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.reblog_id ?? data.id ?? "")/favourited_by?limit=10") {
                 try? MastodonRequest.get(url: url) { (data, response, error) in
                     if cell.id != id { return }
