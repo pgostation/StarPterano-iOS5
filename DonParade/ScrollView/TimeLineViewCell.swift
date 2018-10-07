@@ -609,7 +609,7 @@ final class TimeLineViewCell: UITableViewCell {
         let nameLeft = iconSize + (isMiniView != .normal ? 10 : 14)
         self.nameLabel.frame = CGRect(x: nameLeft,
                                       y: isMiniView != .normal ? 3 : 7,
-                                      width: min(self.nameLabel.frame.width, screenBounds.width - (self.iconView?.frame.maxY ?? 0) - 45),
+                                      width: min(self.nameLabel.frame.width, screenBounds.width - nameLeft - 50),
                                       height: SettingsData.fontSize + 1)
         
         let idWidth: CGFloat
