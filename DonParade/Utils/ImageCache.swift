@@ -14,6 +14,7 @@ import APNGKit
 
 final class ImageCache {
     private static var memCache: [String: UIImage] = [:]
+    private static var oldMemCache: [String: UIImage] = [:]
     private static var waitingDict: [String: [(UIImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "ImageCache")
@@ -24,6 +25,13 @@ final class ImageCache {
         
         // メモリキャッシュにある場合
         if let image = memCache[urlStr] {
+            callback(image)
+            return
+        }
+        // 破棄候補のメモリキャッシュにある場合
+        if let image = oldMemCache[urlStr] {
+            memCache[urlStr] = image
+            oldMemCache.removeValue(forKey: urlStr)
             callback(image)
             return
         }
@@ -59,7 +67,8 @@ final class ImageCache {
                             }
                             callback(image)
                             
-                            if memCache.count >= 2000 { // メモリの使いすぎを防ぐ
+                            if memCache.count >= 50 { // メモリの使いすぎを防ぐ
+                                oldMemCache = memCache
                                 memCache = [:]
                             }
                         }
@@ -113,7 +122,8 @@ final class ImageCache {
                         
                         waitingDict.removeValue(forKey: urlStr)
                         
-                        if memCache.count >= 2000 { // メモリの使いすぎを防ぐ
+                        if memCache.count >= 50 { // メモリの使いすぎを防ぐ
+                            oldMemCache = memCache
                             memCache = [:]
                         }
                     }
@@ -141,10 +151,15 @@ final class ImageCache {
             }
         }
     }
+    
+    static func clear() {
+        oldMemCache = [:]
+    }
 }
 
 final class APNGImageCache {
     private static var memCache: [String: APNGImage] = [:]
+    private static var oldMemCache: [String: APNGImage] = [:]
     private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "APNGImageCache")
@@ -154,6 +169,13 @@ final class APNGImageCache {
         
         // メモリキャッシュにある場合
         if let image = memCache[urlStr] {
+            callback(image)
+            return
+        }
+        // 破棄候補のメモリキャッシュにある場合
+        if let image = oldMemCache[urlStr] {
+            memCache[urlStr] = image
+            oldMemCache.removeValue(forKey: urlStr)
             callback(image)
             return
         }
@@ -170,7 +192,8 @@ final class APNGImageCache {
                             memCache.updateValue(image, forKey: urlStr)
                             callback(image)
                             
-                            if memCache.count >= 1000 { // メモリの使いすぎを防ぐ
+                            if memCache.count >= 30 { // メモリの使いすぎを防ぐ
+                                oldMemCache = memCache
                                 memCache = [:]
                                 APNGCache.defaultCache.clearMemoryCache()
                             }
@@ -204,7 +227,8 @@ final class APNGImageCache {
                         
                         waitingDict.removeValue(forKey: urlStr)
                         
-                        if memCache.count >= 1000 { // メモリの使いすぎを防ぐ
+                        if memCache.count >= 30 { // メモリの使いすぎを防ぐ
+                            oldMemCache = memCache
                             memCache = [:]
                             APNGCache.defaultCache.clearMemoryCache()
                         }
@@ -216,5 +240,9 @@ final class APNGImageCache {
                 }
             }
         }
+    }
+    
+    static func clear() {
+        oldMemCache = [:]
     }
 }

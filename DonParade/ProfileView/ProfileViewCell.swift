@@ -646,9 +646,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                                         height: SettingsData.fontSize)
         
         mediaOnlyButton.frame = CGRect(x: countsWidth - 5,
-                                       y: top + 2,
+                                       y: top + 4,
                                        width: countsWidth / 2,
-                                       height: (SettingsData.fontSize * 2) - 4)
+                                       height: (SettingsData.fontSize * 2) - 2)
         
         followingCountTitle.frame = CGRect(x: countsWidth * 1.5 + 5,
                                            y: top,

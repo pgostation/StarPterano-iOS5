@@ -65,6 +65,13 @@ final class MainViewController: MyViewController {
         }
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        ImageCache.clear()
+        APNGImageCache.clear()
+    }
+    
     func refreshColor() {
         guard let view = self.view as? MainView else { return }
         
