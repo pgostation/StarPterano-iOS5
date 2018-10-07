@@ -224,7 +224,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         if textView2.isFirstResponder {
             if let textView2 = textView2 as? UITextView {
-                textView2.insertText(" :" + button.key + ": ")
+                textView2.insertText(" :" + button.key + ":")
                 
                 // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
                 textView2.textColor = ThemeColor.messageColor
@@ -234,7 +234,7 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         if let textView = textView as? UITextView {
-            textView.insertText(" :" + button.key + ": ")
+            textView.insertText(" :" + button.key + ":")
             
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor

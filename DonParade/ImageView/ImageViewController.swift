@@ -93,6 +93,27 @@ final class ImageViewController: MyViewController {
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
+        // ブラウザで開く
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                guard let url = URL(string: self.imagesUrls[self.index]) else { return }
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+        }))
+        
+        // URLをコピー
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_COPY_URL"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                UIPasteboard.general.string = self.imagesUrls[self.index]
+        }))
+        
         // アルバムに保存
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_SAVE_IMAGE_TO_ALBUM"),

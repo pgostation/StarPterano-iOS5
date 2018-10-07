@@ -72,6 +72,7 @@
 
 // 画像の全画面表示
 "ACTION_SAVE_IMAGE_TO_ALBUM" = "アルバムに保存";
+"ACTION_COPY_URL" = "URLをコピー";
 
 // 通知画面
 "NOTIFICATION_MENTION" = "返信しました";
