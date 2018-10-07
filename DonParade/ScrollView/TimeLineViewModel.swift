@@ -84,6 +84,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             // タイムラインの方が古いので、その前に追加する
                             if (listData.id ?? "") < (newContent.reblog_id ?? "") {
                                 self.list.insert(newContent, at: index)
+                                
+                                // 選択位置がずれないようにする
+                                if self.selectedRow != nil && index < self.selectedRow! {
+                                    self.selectedRow = self.selectedRow! + 1
+                                }
                                 break
                             }
                             index += 1
@@ -109,14 +114,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     if addList2.count <= 3 && tableView.contentOffset.y <= 60 {
                         // 一番上の場合、ずれさせる
                     } else {
-                        // スクロールして、表示していたツイートがあまりずれないようにする
-                        let oldOffsetY = tableView.contentOffset.y
-                        //DispatchQueue.main.async {
-                            tableView.scrollToRow(at: IndexPath(row: addList2.count, section: 0),
+                        DispatchQueue.main.async {
+                            // スクロールして、表示していたツイートがあまりずれないようにする
+                            let oldOffsetY = tableView.contentOffset.y
+                            let indexPath = IndexPath(row: addList2.count, section: 0)
+                            tableView.scrollToRow(at: indexPath,
                                                   at: UITableViewScrollPosition.top,
                                                   animated: false)
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
-                        //}
+                        }
                     }
                     
                     if self.list.count > 100000 {
@@ -127,18 +133,24 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // すでにあるデータを更新する
                     var index = 0
                     for newContent in addList2 {
+                        var flag = false
                         while index < self.list.count {
                             let listData = self.list[index]
                             if listData.id == newContent.id {
                                 self.list[index] = newContent
+                                flag = true
                                 break
                             }
                             // タイムラインの方が古いので、その前に追加する
                             if (listData.id ?? "") < (newContent.id ?? "") {
                                 self.list.insert(newContent, at: index)
+                                flag = true
                                 break
                             }
                             index += 1
+                        }
+                        if !flag {
+                            self.list.append(newContent)
                         }
                     }
                 }
