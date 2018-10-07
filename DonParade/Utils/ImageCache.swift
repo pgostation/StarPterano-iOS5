@@ -53,18 +53,14 @@ final class ImageCache {
                         let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
                         image.shortcode = shortcode
                         DispatchQueue.main.async {
-                            if !isTemp {
-                                memCache.updateValue(image, forKey: urlStr)
-                            }
+                            memCache.updateValue(image, forKey: urlStr)
                             callback(image)
                         }
                     } else if let image = EmojiImage(data: data) {
                         let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
                         smallImage.shortcode = shortcode
                         DispatchQueue.main.async {
-                            if !isTemp {
-                                memCache.updateValue(smallImage, forKey: urlStr)
-                            }
+                            memCache.updateValue(smallImage, forKey: urlStr)
                             callback(image)
                             
                             if memCache.count >= 50 { // メモリの使いすぎを防ぐ
