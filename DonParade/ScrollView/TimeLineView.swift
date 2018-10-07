@@ -181,6 +181,11 @@ final class TimeLineView: UITableView {
     func startStreaming(inRefresh: Bool = false) {
         if !SettingsData.isStreamingMode { return }
         
+        // 通知用にhomeのストリーミングを確認
+        if self.type != .home {
+            checkHomeStreaming()
+        }
+        
         if self.streamingObject?.isConnect != true {
             if self.type == .home {
                 self.streaming(streamingType: "user")
@@ -199,11 +204,6 @@ final class TimeLineView: UITableView {
                 // 手動取得する
                 refresh()
             }
-        }
-        
-        // 通知用にhomeのストリーミングを確認
-        if self.type != .home {
-            checkHomeStreaming()
         }
     }
     
