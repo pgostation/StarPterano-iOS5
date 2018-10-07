@@ -57,6 +57,12 @@ final class ImageCache {
                                 memCache.updateValue(image, forKey: urlStr)
                             }
                             callback(image)
+                            
+                            for waitingCallback in waitingDict[urlStr] ?? [] {
+                                waitingCallback(image)
+                            }
+                            
+                            waitingDict.removeValue(forKey: urlStr)
                         }
                     } else if let image = EmojiImage(data: data) {
                         let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
@@ -66,6 +72,12 @@ final class ImageCache {
                                 memCache.updateValue(smallImage, forKey: urlStr)
                             }
                             callback(image)
+                            
+                            for waitingCallback in waitingDict[urlStr] ?? [] {
+                                waitingCallback(image)
+                            }
+                            
+                            waitingDict.removeValue(forKey: urlStr)
                             
                             if memCache.count >= 50 { // メモリの使いすぎを防ぐ
                                 oldMemCache = memCache
@@ -102,6 +114,12 @@ final class ImageCache {
                             memCache.updateValue(image, forKey: urlStr)
                         }
                         callback(image)
+                        
+                        for waitingCallback in waitingDict[urlStr] ?? [] {
+                            waitingCallback(image)
+                        }
+                        
+                        waitingDict.removeValue(forKey: urlStr)
                     }
                     
                     // ストレージにキャッシュする
@@ -160,7 +178,6 @@ final class ImageCache {
 final class APNGImageCache {
     private static var memCache: [String: APNGImage] = [:]
     private static var oldMemCache: [String: APNGImage] = [:]
-    private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "APNGImageCache")
     
