@@ -32,6 +32,7 @@ final class TimeLineViewCell: UITableViewCell {
     var boostView: UILabel? // 誰がboostしたかを表示
     var imageViews: [UIImageView] = [] // 添付画像を表示
     var movieLayers: [AVPlayerLayer] = []
+    var looper: Any? //AVPlayerLooper?
     var showMoreButton: UIButton? // もっと見る
     var spolerTextLabel: UILabel?
     var detailDateLabel: UILabel?
@@ -177,6 +178,8 @@ final class TimeLineViewCell: UITableViewCell {
             playerLayer.player?.pause()
             playerLayer.removeFromSuperlayer()
         }
+        self.movieLayers = []
+        self.looper = nil
         if self.replyButton != nil {
             self.replyButton?.removeFromSuperview()
             self.repliedLabel?.removeFromSuperview()
@@ -530,14 +533,27 @@ final class TimeLineViewCell: UITableViewCell {
                         waitIndicator.removeFromSuperview()
                     }
                     
-                    MovieCache.movie(urlStr: imageUrls[index]) { player in
+                    MovieCache.movie(urlStr: imageUrls[index]) { [weak self] player, queuePlayer, looper in
                         DispatchQueue.main.async {
                             waitIndicator.removeFromSuperview()
                             
-                            let viewController = AVPlayerViewController()
-                            viewController.player = player
-                            UIUtils.getFrontViewController()?.present(viewController, animated: true) {
-                                player.play()
+                            if let player = player {
+                                let viewController = AVPlayerViewController()
+                                viewController.player = player
+                                UIUtils.getFrontViewController()?.present(viewController, animated: true) {
+                                    player.play()
+                                }
+                            } else {
+                                if #available(iOS 10.0, *) {
+                                    if let queuePlayer = queuePlayer as? AVQueuePlayer, let looper = looper as? AVPlayerLooper {
+                                        let viewController = AVPlayerViewController()
+                                        viewController.player = queuePlayer
+                                        self?.looper = looper
+                                        UIUtils.getFrontViewController()?.present(viewController, animated: true) {
+                                            queuePlayer.play()
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

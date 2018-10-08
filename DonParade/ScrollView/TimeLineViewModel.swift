@@ -753,22 +753,46 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         addImageView(withPlayButton: false)
                         
                         // 動画読み込み
-                        MovieCache.movie(urlStr: media.url) { player in
-                            // レイヤーの追加
-                            let playerLayer = AVPlayerLayer(player: player)
-                            cell.layer.addSublayer(playerLayer)
-                            cell.movieLayers.append(playerLayer)
-                            
-                            if index < cell.imageViews.count {
-                                cell.layoutSubviews()
-                                playerLayer.frame = cell.imageViews[index].frame
-                            }
-                            
-                            // 再生
-                            player.play()
-                            
-                            if data.sensitive == 1 || data.spoiler_text != "" {
-                                playerLayer.isHidden = true
+                        MovieCache.movie(urlStr: media.url) { player, queuePlayer, looper in
+                            if let player = player {
+                                // レイヤーの追加
+                                let playerLayer = AVPlayerLayer(player: player)
+                                cell.layer.addSublayer(playerLayer)
+                                cell.movieLayers.append(playerLayer)
+                                
+                                if index < cell.imageViews.count {
+                                    cell.layoutSubviews()
+                                    playerLayer.frame = cell.imageViews[index].frame
+                                }
+                                
+                                // 再生
+                                player.play()
+                                
+                                if data.sensitive == 1 || data.spoiler_text != "" {
+                                    playerLayer.isHidden = true
+                                }
+                            } else {
+                                if #available(iOS 10.0, *) {
+                                    if let queuePlayer = queuePlayer as? AVQueuePlayer, let looper = looper as? AVPlayerLooper {
+                                        // レイヤーの追加
+                                        let playerLayer = AVPlayerLayer(player: queuePlayer)
+                                        cell.layer.addSublayer(playerLayer)
+                                        cell.movieLayers.append(playerLayer)
+                                        cell.looper = looper
+                                        
+                                        if index < cell.imageViews.count {
+                                            cell.layoutSubviews()
+                                            playerLayer.frame = cell.imageViews[index].frame
+                                        }
+                                        
+                                        // ループ再生
+                                        queuePlayer.play()
+                                        
+                                        if data.sensitive == 1 || data.spoiler_text != "" {
+                                            playerLayer.isHidden = true
+                                        }
+                                    }
+                                }
                             }
                         }
                     } else {

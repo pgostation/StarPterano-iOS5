@@ -9,11 +9,11 @@
 import AVFoundation
 
 final class MovieCache {
-    private static var waitingDict: [String: [(AVPlayer)->Void]] = [:]
+    private static var waitingDict: [String: [(AVPlayer?, Any?, Any?)->Void]] = [:] // AVPlayer or AVPlayerLooper
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "MovieCache")
     
-    static func movie(urlStr: String?, callback: @escaping (AVPlayer)->Void) {
+    static func movie(urlStr: String?, callback: @escaping (AVPlayer?, Any?, Any?)->Void) {
         guard let urlStr = urlStr else { return }
         
         // ストレージキャッシュにある場合
@@ -22,9 +22,18 @@ final class MovieCache {
         if fileManager.fileExists(atPath: filePath) {
             imageQueue.async {
                 let url = URL(fileURLWithPath: filePath)
-                let player = AVPlayer(url: url)
+                var player: AVPlayer? = nil
+                var queuePlayer: Any? = nil
+                var playerLooper: Any? = nil
+                if #available(iOS 10.0, *) {
+                    let playerItem = AVPlayerItem(url: url)
+                    queuePlayer = AVQueuePlayer(items: [playerItem])
+                    playerLooper = AVPlayerLooper(player: queuePlayer as! AVQueuePlayer, templateItem: playerItem)
+                } else {
+                    player = AVPlayer(url: url)
+                }
                 DispatchQueue.main.async {
-                    callback(player)
+                    callback(player, queuePlayer, playerLooper)
                 }
             }
             return
@@ -42,12 +51,21 @@ final class MovieCache {
         imageQueue.async {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
-                let player = AVPlayer(url: url)
+                var player: AVPlayer? = nil
+                var queuePlayer: Any? = nil
+                var playerLooper: Any? = nil
+                if #available(iOS 10.0, *) {
+                    let playerItem = AVPlayerItem(url: url)
+                    queuePlayer = AVQueuePlayer(items: [playerItem])
+                    playerLooper = AVPlayerLooper(player: queuePlayer as! AVQueuePlayer, templateItem: playerItem)
+                } else {
+                    player = AVPlayer(url: url)
+                }
                 DispatchQueue.main.async {
-                    callback(player)
+                    callback(player, queuePlayer, playerLooper)
                     
                     for waitingCallback in waitingDict[urlStr] ?? [] {
-                        waitingCallback(player)
+                        waitingCallback(player, queuePlayer, playerLooper)
                     }
                     
                     waitingDict.removeValue(forKey: urlStr)
