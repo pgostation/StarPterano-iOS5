@@ -47,7 +47,7 @@ final class DecodeToot {
             let endIndex = text.index(endRange.lowerBound, offsetBy: 4)
             
             // href文字列を取り出す
-            let tmpHrefStr = text.suffix(max(0, text.count - startIndex.encodedOffset)).prefix(max(0, endIndex.encodedOffset - startIndex.encodedOffset - 4))
+            let tmpHrefStr = text.suffix(from: startIndex).prefix(upTo: text.index(endIndex, offsetBy: -4))
             let tmpHrefStr2 = "\(tmpHrefStr)"
             var urlStr = ""
             if let startHrefRange = tmpHrefStr2.range(of: " href=\""), let endHrefRange = tmpHrefStr2.range(of: "\" ") {
@@ -65,7 +65,7 @@ final class DecodeToot {
             
             // リストに追加
             linkList.append((startIndex, String(urlStr), linkStr))
-            text = String(text.prefix(startIndex.encodedOffset)) + linkStr + String(text.suffix(max(0, text.count - endIndex.encodedOffset)))
+            text = String(text.prefix(upTo: startIndex)) + linkStr + String(text.suffix(from: endIndex))
             
             loopCount += 1
         }
