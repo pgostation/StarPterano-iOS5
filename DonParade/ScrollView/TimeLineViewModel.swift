@@ -137,6 +137,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         while index < self.list.count {
                             let listData = self.list[index]
                             if listData.id == newContent.id {
+                                // 更新
                                 self.list[index] = newContent
                                 flag = true
                                 break
@@ -185,6 +186,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if index >= 500 { break }
                 
                 if deleteId == data.id {
+                    // 選択位置がずれないようにする
+                    if self.selectedRow != nil && index < self.selectedRow! {
+                        self.selectedRow = self.selectedRow! - 1
+                    }
+                    
+                    // 削除
                     self.list.remove(at: index)
                     tableView.reloadData()
                     break
