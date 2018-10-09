@@ -41,6 +41,7 @@
 "BUTTON_REPORT" = "通報";
 "ALERT_REASON_IS_NIL" = "理由が入力されていません";
 "ALERT_REPORT_TOOT_FAILURE" = "通報に失敗しました";
+"ACTION_DESELECT" = "選択を解除";
 
 // 何分前
 "DATETIME_NOW" = "今";

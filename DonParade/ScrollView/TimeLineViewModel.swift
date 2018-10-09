@@ -46,6 +46,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     func clear() {
         self.list = []
         self.showAutoPagerizeCell = true
+        clearSelection()
+    }
+    
+    //
+    func clearSelection() {
         self.selectedRow = nil
         self.selectedAccountId = nil
         self.inReplyToTootId = nil

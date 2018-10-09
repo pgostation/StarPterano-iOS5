@@ -363,6 +363,15 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func detailAction() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
+        // 選択解除
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_DESELECT"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                self.tableView?.model.clearSelection()
+                self.tableView?.reloadData()
+        }))
+        
         if self.accountId == SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") {
             // トゥートを削除
             alertController.addAction(UIAlertAction(
