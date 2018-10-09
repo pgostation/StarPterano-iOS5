@@ -1052,8 +1052,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
             let mentionsData = getMentionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
-            MainViewController.instance?.addChildViewController(viewController)
-            MainViewController.instance?.view.addSubview(viewController.view)
+            UIUtils.getFrontViewController()?.addChildViewController(viewController)
+            UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                y: 0,
                                                width: UIScreen.main.bounds.width,

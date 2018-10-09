@@ -232,8 +232,8 @@ final class TimeLineViewCell: UITableViewCell {
             if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                 timelineView.accountList.updateValue(accountData, forKey: accountId)
             }
-            MainViewController.instance?.addChildViewController(accountTimeLineViewController)
-            MainViewController.instance?.view.addSubview(accountTimeLineViewController.view)
+            UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+            UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
             accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
