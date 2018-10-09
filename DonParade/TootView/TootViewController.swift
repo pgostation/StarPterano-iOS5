@@ -309,10 +309,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             
             let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
             if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
-                textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
+                    textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                })
             }
             else if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
-                spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
+                    spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                })
             }
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)

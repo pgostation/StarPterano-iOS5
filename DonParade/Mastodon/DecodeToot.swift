@@ -194,6 +194,8 @@ final class DecodeToot {
         if let emojis = emojis {
             for emoji in emojis {
                 guard let shortcode = emoji["shortcode"] as? String else { continue }
+                if !text.contains(":\(shortcode):") { continue }
+                
                 let url = emoji["url"] as? String
                 
                 let attachment = NSTextAttachment()
@@ -207,6 +209,10 @@ final class DecodeToot {
                 }
                 if attachment.image == nil {
                     execCallback = true
+                    let dummyImage = EmojiImage()
+                    dummyImage.shortcode = shortcode
+                    attachment.image = dummyImage
+                    
                 }
                 attachment.bounds = CGRect(x: 0, y: 0, width: SettingsData.fontSize + 4, height: SettingsData.fontSize + 4)
                 

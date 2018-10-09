@@ -33,6 +33,9 @@ final class EmojiKeyboard: UIView {
         deleteButton.addTarget(self, action: #selector(deleteAction), for: .touchUpInside)
         searchButton.addTarget(self, action: #selector(searchAction), for: .touchUpInside)
         
+        let pressDeleteGesture = UILongPressGestureRecognizer(target: self, action: #selector(pressDeleteAction(_:)))
+        deleteButton.addGestureRecognizer(pressDeleteGesture)
+        
         setProperties()
     }
     
@@ -111,6 +114,22 @@ final class EmojiKeyboard: UIView {
             }
             self.emojiScrollView.setNeedsLayout()
         })
+    }
+    
+    // 削除押しっぱなし
+    private var pressTimer: Timer?
+    @objc func pressDeleteAction(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            if #available(iOS 10.0, *) {
+                self.pressTimer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true, block: { (timer) in
+                    self.deleteAction()
+                })
+            }
+        }
+        if gesture.state == .ended || gesture.state == .cancelled {
+            self.pressTimer?.invalidate()
+            self.pressTimer = nil
+        }
     }
  
     override func layoutSubviews() {
@@ -222,9 +241,23 @@ private final class EmojiInputScrollView: UIScrollView {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
         guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
         
+        var emojis: [[String: Any]] = []
+        
+        for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
+            let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
+                                       "url": emoji.url ?? ""]
+            emojis.append(dict)
+        }
+        
         if textView2.isFirstResponder {
             if let textView2 = textView2 as? UITextView {
-                textView2.insertText(" :" + button.key + ":")
+                var encodedText = DecodeToot.encodeEmoji(attributedText: textView2.attributedText, textStorage: textView2.textStorage)
+                encodedText += " :" + button.key + ": "
+                let date = Date()
+                textView2.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
+                    if Date().timeIntervalSince(date) > 0.1 { return }
+                    textView2.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                })
                 
                 // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
                 textView2.textColor = ThemeColor.messageColor
@@ -234,7 +267,13 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         if let textView = textView as? UITextView {
-            textView.insertText(" :" + button.key + ":")
+            var encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
+            encodedText += " :" + button.key + ": "
+            let date = Date()
+            textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
+                if Date().timeIntervalSince(date) > 0.1 { return }
+                textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+            })
             
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor
