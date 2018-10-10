@@ -322,8 +322,8 @@ final class SettingsData {
                 self._iconSize = CGFloat(value)
                 return CGFloat(value)
             }
-            self._iconSize = 40
-            return 40
+            self._iconSize = 38
+            return 38
         }
         set(newValue) {
             self._iconSize = newValue

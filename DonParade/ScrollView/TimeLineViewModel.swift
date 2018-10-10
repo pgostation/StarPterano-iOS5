@@ -370,7 +370,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.isMiniView != .normal ? 50 : 66)
+        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.iconSize * 2 - 2)
         messageView.sizeToFit()
         var isContinue = false
         if self.selectedRow == indexPath.row {
