@@ -251,13 +251,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         if textView2.isFirstResponder {
             if let textView2 = textView2 as? UITextView {
-                var encodedText = DecodeToot.encodeEmoji(attributedText: textView2.attributedText, textStorage: textView2.textStorage)
-                encodedText += " :" + button.key + ": "
-                let date = Date()
-                textView2.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
-                    if Date().timeIntervalSince(date) > 0.1 { return }
-                    textView2.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
-                })
+                textView2.insertText(" :" + button.key + ": ")
                 
                 // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
                 textView2.textColor = ThemeColor.messageColor
@@ -267,13 +261,7 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         if let textView = textView as? UITextView {
-            var encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
-            encodedText += " :" + button.key + ": "
-            let date = Date()
-            textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
-                if Date().timeIntervalSince(date) > 0.1 { return }
-                textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
-            })
+            textView.insertText(" :" + button.key + ": ")
             
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor
