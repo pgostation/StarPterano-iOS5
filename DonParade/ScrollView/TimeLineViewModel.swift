@@ -913,11 +913,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                         let accountData = AnalyzeJson.analyzeAccountJson(account: json)
                                         if count >= 10 { break }
                                         if cell.rebologerLabels.count <= count {
-                                            let label = UILabel()
+                                            let label = BoosterLabel()
                                             cell.rebologerLabels.append(label)
                                             label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                                             label.textColor = ThemeColor.idColor
                                             cell.addSubview(label)
+                                            
+                                            label.accountData = accountData
+                                            label.setGesture()
                                         }
                                         let label = cell.rebologerLabels[count]
                                         label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
@@ -947,11 +950,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                         let accountData = AnalyzeJson.analyzeAccountJson(account: json)
                                         if count >= 10 { break }
                                         if cell.favoriterLabels.count <= count {
-                                            let label = UILabel()
+                                            let label = BoosterLabel()
                                             cell.favoriterLabels.append(label)
                                             label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                                             label.textColor = ThemeColor.idColor
                                             cell.addSubview(label)
+                                            
+                                            label.accountData = accountData
+                                            label.setGesture()
                                         }
                                         let label = cell.favoriterLabels[count]
                                         label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
@@ -962,6 +968,40 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             }
                         } catch { }
                     }
+                }
+            }
+        }
+    }
+    
+    private class BoosterLabel: UILabel {
+        var accountData: AnalyzeJson.AccountData? = nil
+        
+        func setGesture() {
+            self.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+            self.addGestureRecognizer(tapGesture)
+        }
+        
+        @objc func tapAction() {
+            if let accountId = self.accountData?.id {
+                if let timelineView = self.superview?.superview as? TimeLineView {
+                    if timelineView.option == accountId {
+                        return
+                    }
+                }
+                
+                let accountTimeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.user, option: accountId)
+                if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
+                    timelineView.accountList.updateValue(accountData, forKey: accountId)
+                }
+                UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+                UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
+                accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                                  y: 0,
+                                                                  width: UIScreen.main.bounds.width,
+                                                                  height: UIScreen.main.bounds.height)
+                UIView.animate(withDuration: 0.3) {
+                    accountTimeLineViewController.view.frame.origin.x = 0
                 }
             }
         }
