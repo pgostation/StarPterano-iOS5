@@ -12,7 +12,7 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool) {
+    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool, isNewRefresh: Bool = false) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
@@ -34,7 +34,7 @@ final class AnalyzeJson {
             }
         }
         
-        model.change(tableView: view, addList: contentList, accountList: view.accountList)
+        model.change(tableView: view, addList: contentList, accountList: view.accountList, isNewRefresh: isNewRefresh)
     }
     
     static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String) -> ContentData {
@@ -319,6 +319,33 @@ final class AnalyzeJson {
                                     showing_reblogs: showing_reblogs,
                                     endorsed: endorsed)
         return data
+    }
+    
+    static func emptyContentData() -> ContentData {
+        return ContentData(accountId: "",
+                           application: nil,
+                           content: nil,
+                           created_at: nil,
+                           emojis: nil,
+                           favourited: nil,
+                           favourites_count: nil,
+                           id: nil,
+                           in_reply_to_account_id: nil,
+                           in_reply_to_id: nil,
+                           language: nil,
+                           mediaData: nil,
+                           mentions: nil,
+                           muted: nil,
+                           reblog_acct: nil,
+                           reblog_created_at: nil,
+                           reblog_id: nil,
+                           reblogged: nil,
+                           reblogs_count: nil,
+                           replies_count: nil,
+                           sensitive: nil,
+                           spoiler_text: nil,
+                           url: nil,
+                           visibility: nil)
     }
     
     // トゥートした人の情報 (あるいはブーストした人)

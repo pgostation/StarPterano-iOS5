@@ -93,9 +93,11 @@ final class TimeLineView: UITableView {
         
         guard let hostName = SettingsData.hostName else { return }
         
+        var isNewRefresh = false
         var sinceIdStr = ""
         if let id = model.getFirstTootId() {
             sinceIdStr = "&since_id=\(id)"
+            isNewRefresh = true
         }
         
         let url: URL?
@@ -149,7 +151,7 @@ final class TimeLineView: UITableView {
             if let data = data {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
-                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true)
+                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh)
                     } else if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         TimeLineView.tableDispatchQueue.async {
                             var acct = ""

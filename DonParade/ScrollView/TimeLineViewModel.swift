@@ -58,7 +58,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // トゥートの追加
-    func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false, isBoosted: Bool = false) {
+    func change(tableView: TimeLineView, addList: [AnalyzeJson.ContentData], accountList: [String: AnalyzeJson.AccountData], isStreaming: Bool = false, isNewRefresh: Bool = false, isBoosted: Bool = false) {
         
         // ミュートフラグの立っているものは削除しておく
         var addList2 = addList
@@ -108,6 +108,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.list.removeFirst(self.list.count - 100000)
                     }
                 } else if lastDate2 > firstDate1 {
+                    if isNewRefresh {
+                        // 再読み込み用のセルをつける
+                        self.list.insert(AnalyzeJson.emptyContentData(), at: 0)
+                    }
                     // 前に付ければ良い
                     self.list = addList2 + self.list
                     
@@ -205,6 +209,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    // 途中読み込みセルをタップしたら
+    @objc func reloadOld(_ sender: UIButton) {
+        // 一番上で見つかった途中読み込みセルより前をすべて消す
+        for (index, data) in self.list.enumerated() {
+            if data.id == nil {
+                self.list.removeLast(self.list.count - index)
+                if let tableView = sender.superview?.superview as? UITableView {
+                    tableView.reloadData()
+                }
+                break
+            }
+        }
+    }
+    
     // セルの数
     private var isFirstView = true
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -266,7 +284,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if index == list.count {
             // AutoPagerize用セルの高さ
-            return UIUtils.isIphoneX ? 150 : 100
+            return UIUtils.isIphoneX ? 350 : 300
         }
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
@@ -444,6 +462,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 messageView.frame.origin.y = y
             }
         })
+        
+        if data.id == nil {
+            // タイムライン途中読み込み用のセル
+            let cell = UITableViewCell.init(style: .default, reuseIdentifier: nil)
+            cell.backgroundColor = ThemeColor.viewBgColor
+            cell.selectionStyle = .none
+            let loadButton = UIButton()
+            loadButton.setTitle("🔄", for: .normal)
+            loadButton.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: SettingsData.isMiniView == .normal ? 60 : (SettingsData.isMiniView == .miniView ? 44 : 30))
+            cell.addSubview(loadButton)
+            loadButton.addTarget(self, action: #selector(reloadOld(_:)), for: .touchUpInside)
+            return cell
+        }
         
         // カスタム絵文字のAPNGアニメーション対応
         if SettingsData.useAnimation, let emojis = data.emojis, emojis.count > 0 {
