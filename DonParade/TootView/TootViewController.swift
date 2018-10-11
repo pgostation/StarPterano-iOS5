@@ -91,7 +91,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         // 公開範囲
         let visibility = view.protectMode.rawValue
-        let nsfw = view.imageCheckView.nsfwSw.isOn
+        let nsfw = (!view.spoilerTextField.isHidden) || view.imageCheckView.nsfwSw.isOn
         
         if view.imageCheckView.urls.count > 0 {
             // 画像をアップロードしてから投稿
