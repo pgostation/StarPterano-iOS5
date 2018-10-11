@@ -293,6 +293,7 @@ final class ProfileEditView: UIScrollView {
                                 height: 120)
         top = noteView.frame.maxY
         
+        /*
         titlesLabel.frame = CGRect(x: 1,
                                    y: top + 5,
                                    width: screenBounds.width - 20,
@@ -316,7 +317,7 @@ final class ProfileEditView: UIScrollView {
                                  width: screenBounds.width * 0.6 - 1,
                                  height: 60)
         }
-        top = addFields.last?.frame.maxY ?? top
+        top = addFields.last?.frame.maxY ?? top*/
         
         self.iconView?.frame = CGRect(x: 20,
                                       y: top + 10,
@@ -370,5 +371,19 @@ final class ProfileEditView: UIScrollView {
         
         self.contentSize = CGSize(width: screenBounds.width,
                                   height: top + 5 + keyBoardHeight + 40)
+        
+        // 入力中のtextFieldが隠れないようにスクロールする
+        for title in addTitles {
+            if title.isFirstResponder {
+                let y = title.frame.maxY - (screenBounds.height - (keyBoardHeight + 50))
+                self.setContentOffset(CGPoint(x: 0, y: max(0, y)), animated: false)
+            }
+        }
+        for field in addFields {
+            if field.isFirstResponder {
+                let y = field.frame.maxY - (screenBounds.height - (keyBoardHeight + 50))
+                self.setContentOffset(CGPoint(x: 0, y: max(0, y)), animated: false)
+            }
+        }
     }
 }
