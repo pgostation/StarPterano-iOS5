@@ -1115,6 +1115,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // セル選択時の処理
+    private var isAnimating = false
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var index = indexPath.row
         
@@ -1130,6 +1131,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if SettingsData.tapDetailMode || self.selectedRow == indexPath.row {
             if self.isDetailTimeline { return } // すでに詳細表示画面
             if TootViewController.isShown { return } // トゥート画面表示中は移動しない
+            
+            // 連打防止
+            if self.isAnimating { return }
+            self.isAnimating = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.isAnimating = false
+            }
             
             // トゥート詳細画面に移動
             let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
