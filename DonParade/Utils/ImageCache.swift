@@ -25,15 +25,19 @@ final class ImageCache {
         
         // メモリキャッシュにある場合
         if let image = memCache[urlStr] {
-            callback(image)
-            return
+            if image.size.width > 50 * UIScreen.main.scale || isSmall {
+                callback(image)
+                return
+            }
         }
         // 破棄候補のメモリキャッシュにある場合
         if let image = oldMemCache[urlStr] {
-            memCache[urlStr] = image
-            oldMemCache.removeValue(forKey: urlStr)
-            callback(image)
-            return
+            if image.size.width > 50 * UIScreen.main.scale || isSmall {
+                memCache[urlStr] = image
+                oldMemCache.removeValue(forKey: urlStr)
+                callback(image)
+                return
+            }
         }
         
         // ストレージキャッシュにある場合
