@@ -174,10 +174,11 @@ private final class EmojiInputScrollView: UIScrollView {
             // 絵文字データが取れるまでリトライする
             func retry(count: Int) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
                     if self.emojiList.count > 0 {
                         self.addEmojis()
                         self.setNeedsLayout()
-                    } else if count <= 3 {
+                    } else if count <= 5 {
                         retry(count: count + 1)
                     }
                 }
