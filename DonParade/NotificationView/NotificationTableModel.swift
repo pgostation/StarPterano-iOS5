@@ -35,6 +35,10 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         return self.list.last?.id
     }
     
+    func getNewestCreatedAt() -> String? {
+        return self.list.first?.created_at
+    }
+    
     // セルの数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let selectedSegmentIndex = (tableView.superview as? NotificationView)?.segmentControl.selectedSegmentIndex ?? 0

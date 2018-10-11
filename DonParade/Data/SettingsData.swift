@@ -13,6 +13,14 @@ import UIKit
 final class SettingsData {
     private static let defaults = UserDefaults(suiteName: "Settings")!
     
+    private static var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = enUSPosixLocale
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        return formatter
+    }()
+    
     // 現在選択中のホストネーム
     static var hostName: String? {
         get {
@@ -152,6 +160,22 @@ final class SettingsData {
         guard let listId = listId else { return }
         
         defaults.set(listId, forKey: "selectedListId_\(accessToken)")
+    }
+    
+    // 各アカウントでの最新の既読通知日時を保持
+    static func newestNotifyDate(accessToken: String?) -> Date? {
+        guard let accessToken = accessToken else { return nil }
+        let dateStr = defaults.string(forKey: "newestNotifyDate_\(accessToken)")
+        if let dateStr = dateStr {
+            return dateFormatter.date(from: dateStr)
+        }
+        return nil
+    }
+    static func newestNotifyDate(accessToken: String?, date: Date?) {
+        guard let accessToken = accessToken else { return }
+        guard let date = date else { return }
+        let dateStr = dateFormatter.string(from: date)
+        defaults.set(dateStr, forKey: "newestNotifyDate_\(accessToken)")
     }
     
     // タップで詳細に移動

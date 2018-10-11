@@ -41,6 +41,21 @@ final class NotificationViewController: MyViewController {
         addOld()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard let view = self.view as? NotificationView else { return }
+        
+        // 通知の既読設定
+        if let created_at = view.tableView.model.getNewestCreatedAt() {
+            let date = DecodeToot.decodeTime(text: created_at)
+            let lastDate = SettingsData.newestNotifyDate(accessToken: SettingsData.accessToken)
+            if lastDate == nil || date > lastDate! {
+                SettingsData.newestNotifyDate(accessToken: SettingsData.accessToken, date: date)
+            }
+        }
+    }
+    
     func addOld() {
         var lastId: String? = nil
         if let view = self.view as? NotificationView {
@@ -109,6 +124,15 @@ final class NotificationViewController: MyViewController {
                             // 表示を更新
                             view.tableView.model.change(addList: list)
                             view.tableView.reloadData()
+                            
+                            // 新着マークを表示
+                            if let created_at = view.tableView.model.getNewestCreatedAt() {
+                                let date = DecodeToot.decodeTime(text: created_at)
+                                let lastDate = SettingsData.newestNotifyDate(accessToken: SettingsData.accessToken)
+                                if lastDate == nil || date > lastDate! {
+                                    MainViewController.instance?.markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: true)
+                                }
+                            }
                         }
                     }
                 } catch {

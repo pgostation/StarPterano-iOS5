@@ -82,7 +82,7 @@ final class TimeLineView: UITableView {
             }
             
             DispatchQueue.main.async {
-                self.analyzeStremingData(string: nil)
+                self.analyzeStreamingData(string: nil)
             }
             
             // ストリーミングが停止していれば再開
@@ -233,6 +233,14 @@ final class TimeLineView: UITableView {
             (homeTimelineViewController.view as? TimeLineView)?.startStreaming()
         }
         
+        // 新着通知のチェック
+        let notificationViewController = NotificationViewController()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            if notificationViewController.view != nil {
+                // 特に何もしないが、10秒間notificationViewControllerを保持する
+            }
+        }
+        
         TimeLineView.inChecking = false
     }
     
@@ -245,12 +253,12 @@ final class TimeLineView: UITableView {
         guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(SettingsData.accessToken!)&stream=\(streamingType)") else { return }
         
         self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] string in
-            self?.analyzeStremingData(string: string)
+            self?.analyzeStreamingData(string: string)
         })
     }
     
     //
-    private func analyzeStremingData(string: String?) {
+    private func analyzeStreamingData(string: String?) {
         func update() {
             self.model.change(tableView: self, addList: self.waitingStatusList, accountList: self.accountList, isStreaming: true)
             self.waitingStatusList = []
