@@ -243,7 +243,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             
             let valueLabel = UITextView()
             valueLabel.delegate = self
-            valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: nil, callback: nil).0
+            valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: data.emojis, callback: {
+                valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: data.emojis, callback: nil).0
+            }).0
             valueLabel.textColor = ThemeColor.idColor
             valueLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
             valueLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
