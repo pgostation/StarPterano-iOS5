@@ -198,6 +198,12 @@ final class TimeLineView: UITableView {
         if self.streamingObject?.isConnect != true {
             if self.type == .home {
                 self.streaming(streamingType: "user")
+                
+                // 新着通知のチェック
+                let notificationViewController = NotificationViewController()
+                if notificationViewController.view != nil {
+                    // viewを参照することで、loadViewさせる
+                }
             }
             else if self.type == .local {
                 self.streaming(streamingType: "public:local")
@@ -231,14 +237,6 @@ final class TimeLineView: UITableView {
             let homeTimelineViewController = TimeLineViewController(type: .home)
             MainViewController.instance?.timelineList.updateValue(homeTimelineViewController, forKey: key)
             (homeTimelineViewController.view as? TimeLineView)?.startStreaming()
-        }
-        
-        // 新着通知のチェック
-        let notificationViewController = NotificationViewController()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            if notificationViewController.view != nil {
-                // 特に何もしないが、10秒間notificationViewControllerを保持する
-            }
         }
         
         TimeLineView.inChecking = false
