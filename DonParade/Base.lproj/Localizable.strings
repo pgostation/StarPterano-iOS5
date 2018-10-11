@@ -123,6 +123,15 @@
 "LIST_SEARCH_ACCOUNT" = "Search following users";
 "DIALOG_REMOVE_FROM_LIST" = "Are you sure that you want to remove the user from this list?";
 
+// プロフィール編集画面
+"BUTTON_CHANGE_ICON" = "Change icon";
+"BUTTON_CHANGE_HEADER" = "Change header";
+"BUTTON_SEND" = "Send";
+"PROFILE_NAME" = "Display name";
+"PROFILE_NOTE" = "Note";
+"PROFILE_TITLES" = "Label";
+"PROFILE_FIELDS" = "Value";
+
 // 設定画面
 "BUTTON_CLOSE" = "Close";
 "BUTTON_REMOVE" = "Remove";
@@ -142,6 +151,7 @@
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "Mastodon Web";
 "SETTINGS_MYPAGE" = "Go to your page";
+"SETTINGS_PROFILE" = "Edit profile";
 "SETTINGS_LIST"= "List";
 "SETTINGS_DMLIST"= "DM list";
 "SETTINGS_FAVORITELIST"= "Favorite list";

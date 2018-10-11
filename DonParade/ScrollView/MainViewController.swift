@@ -326,6 +326,14 @@ final class MainViewController: MyViewController {
                                                 message: nil,
                                                 preferredStyle: UIAlertControllerStyle.actionSheet)
         
+        // プロフィール編集
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_PROFILE"),
+            style: UIAlertActionStyle.default,
+            handler: { _ in
+                ShowMyAnyList.editProfile(rootVc: self)
+        }))
+        
         // DMを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_DMLIST"),

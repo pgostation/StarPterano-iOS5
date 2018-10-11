@@ -14,18 +14,22 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
     private let imagePicker = UIImagePickerController()
     static var instance: MyImagePickerController? = nil
     
-    static func show(callback: @escaping (URL?)->Void) {
-        instance = MyImagePickerController(callback: callback)
+    static func show(useMovie: Bool, callback: @escaping (URL?)->Void) {
+        instance = MyImagePickerController(useMovie: useMovie, callback: callback)
     }
     
-    private init(callback: @escaping (URL?)->Void) {
+    private init(useMovie: Bool, callback: @escaping (URL?)->Void) {
         self.callback = callback
         
         super.init()
         
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
-        imagePicker.mediaTypes = ["public.image", "public.movie"]
+        if useMovie {
+            imagePicker.mediaTypes = ["public.image", "public.movie"]
+        } else {
+            imagePicker.mediaTypes = ["public.image"]
+        }
         MainViewController.instance?.present(imagePicker, animated: true, completion: nil)
     }
     

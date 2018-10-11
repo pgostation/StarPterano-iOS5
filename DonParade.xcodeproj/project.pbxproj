@@ -10,6 +10,8 @@
 		121764C82167AB830017E76A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 121764CA2167AB830017E76A /* InfoPlist.strings */; };
 		121764CD216846AB0017E76A /* MovieCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764CC216846AB0017E76A /* MovieCache.swift */; };
 		121764D12168B24E0017E76A /* FollowRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764D02168B24E0017E76A /* FollowRequestViewController.swift */; };
+		121764D3216F1C4E0017E76A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764D2216F1C4E0017E76A /* ProfileEditViewController.swift */; };
+		121764D5216F44A40017E76A /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764D4216F44A40017E76A /* ProfileEditView.swift */; };
 		121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0D92152955F00928DCC /* TootViewController.swift */; };
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
 		121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView.swift */; };
@@ -76,6 +78,8 @@
 		121764CB2167AB890017E76A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CC216846AB0017E76A /* MovieCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCache.swift; sourceTree = "<group>"; };
 		121764D02168B24E0017E76A /* FollowRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRequestViewController.swift; sourceTree = "<group>"; };
+		121764D2216F1C4E0017E76A /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
+		121764D4216F44A40017E76A /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		121DC0D92152955F00928DCC /* TootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootViewController.swift; sourceTree = "<group>"; };
 		121DC0DB2153C64F00928DCC /* MyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWindow.swift; sourceTree = "<group>"; };
 		121DC0DD2153CF7F00928DCC /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
@@ -330,6 +334,8 @@
 				127A37C52158F41A00347880 /* ProfileAction.swift */,
 				1255A979215DF97100DE1CF3 /* FollowingViewController.swift */,
 				12B8B42D21663AE800869496 /* AllListsViewController.swift */,
+				121764D2216F1C4E0017E76A /* ProfileEditViewController.swift */,
+				121764D4216F44A40017E76A /* ProfileEditView.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -491,6 +497,7 @@
 			files = (
 				127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */,
 				1286DF612154DCA8008FFFAC /* EmojiKeyboard.swift in Sources */,
+				121764D5216F44A40017E76A /* ProfileEditView.swift in Sources */,
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				127A37C62158F41A00347880 /* ProfileAction.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
@@ -510,6 +517,7 @@
 				12B8B42E21663AE800869496 /* AllListsViewController.swift in Sources */,
 				121764D12168B24E0017E76A /* FollowRequestViewController.swift in Sources */,
 				1255A97A215DF97100DE1CF3 /* FollowingViewController.swift in Sources */,
+				121764D3216F1C4E0017E76A /* ProfileEditViewController.swift in Sources */,
 				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
 				127A37C02157C63500347880 /* ImageUpload.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,

@@ -74,9 +74,9 @@ final class EmojiKeyboard: UIView {
     
     @objc func spaceAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
-        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
+        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
         
-        if textView2.isFirstResponder {
+        if textView2?.isFirstResponder == true {
             (textView2 as? UITextView)?.insertText(" ")
             return
         }
@@ -85,9 +85,9 @@ final class EmojiKeyboard: UIView {
     
     @objc func returnAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
-        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
+        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
         
-        if textView2.isFirstResponder {
+        if textView2?.isFirstResponder == true {
             (textView2 as? UITextView)?.insertText("\n")
             return
         }
@@ -96,9 +96,9 @@ final class EmojiKeyboard: UIView {
     
     @objc func deleteAction() {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
-        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
+        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
         
-        if textView2.isFirstResponder {
+        if textView2?.isFirstResponder == true {
             (textView2 as? UITextView)?.deleteBackward()
             return
         }
@@ -239,7 +239,7 @@ private final class EmojiInputScrollView: UIScrollView {
         guard let button = button as? EmojiButton else { return }
         
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
-        guard let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) else { return }
+        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
         
         var emojis: [[String: Any]] = []
         
@@ -249,7 +249,7 @@ private final class EmojiInputScrollView: UIScrollView {
             emojis.append(dict)
         }
         
-        if textView2.isFirstResponder {
+        if textView2?.isFirstResponder == true {
             if let textView2 = textView2 as? UITextView {
                 textView2.insertText(" :" + button.key + ": ")
                 

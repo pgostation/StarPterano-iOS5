@@ -19,7 +19,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         TootViewController.instance = self
         TootViewController.isShown = true
         
-        _ = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
+        _ = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // 通知ボタンの位置を上にずらす
@@ -199,7 +199,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             case .authorized:
                 DispatchQueue.main.async {
                     // 画像ピッカーを表示
-                    MyImagePickerController.show(callback: { url in
+                    MyImagePickerController.show(useMovie: true, callback: { url in
                         if let url = url {
                             view.imageCheckView.add(imageUrl: url)
                             for i in 1...3 {
@@ -260,7 +260,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     @objc func saveAction() {
     }
     
-    // カスタム絵文字を入力する
+    // カスタム絵文字キーボードを表示する
     @objc func emojiAction() {
         guard let view = self.view as? TootView else { return }
         
@@ -296,7 +296,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         MainViewController.instance?.view.setNeedsLayout()
     }
     
-    // テキストビューの高さを変化させる
+    // テキストビューの高さを変化させる、絵文字にする
     func textViewDidChange(_ textView: UITextView) {
         if textView.inputView is EmojiKeyboard || textView.text.contains(":"){
             var emojis: [[String: Any]] = []
@@ -311,11 +311,15 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
                 textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
                     textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                    textField.textColor = ThemeColor.messageColor
+                    textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
                 })
             }
             else if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
                 spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
                     spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                    spoilerTextField.textColor = ThemeColor.messageColor
+                    spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
                 })
             }
             textView.textColor = ThemeColor.messageColor

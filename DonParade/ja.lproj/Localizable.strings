@@ -139,9 +139,19 @@
 "SETTINGS_ADD_ACCOUNT" = "アカウントを追加";
 "DIALOG_REMOVE_ACCOUNT" = "アカウントを削除します";
 
+// プロフィール編集画面
+"BUTTON_CHANGE_ICON" = "アイコン変更";
+"BUTTON_CHANGE_HEADER" = "ヘッダー画像変更";
+"BUTTON_SEND" = "送信";
+"PROFILE_NAME" = "表示名 30文字以内";
+"PROFILE_NOTE" = "プロフィール 160文字以内";
+"PROFILE_TITLES" = "ラベル";
+"PROFILE_FIELDS" = "内容";
+
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "マストドンのWebサイトへ";
 "SETTINGS_MYPAGE" = "自分のページへ";
+"SETTINGS_PROFILE" = "プロフィール編集";
 "SETTINGS_LIST"= "リスト";
 "SETTINGS_DMLIST"= "DMリスト";
 "SETTINGS_FAVORITELIST"= "お気に入りリスト";

@@ -251,7 +251,7 @@ final class MainView: UIView {
         }
         
         accountButton.frame = CGRect(x: screenBounds.width - (SettingsData.iconSize - 2),
-                                     y: UIUtils.statusBarHeight() + 20,
+                                     y: UIUtils.statusBarHeight() + 21,
                                      width: SettingsData.iconSize - 2,
                                      height: SettingsData.iconSize - 2)
     }

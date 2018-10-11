@@ -33,6 +33,25 @@ final class ShowMyAnyList {
         }
     }
     
+    // プロフィール編集
+    static func editProfile(rootVc: UIViewController) {
+        // 情報を取得してから表示
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/\(SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") ?? "")") else { return }
+        try? MastodonRequest.get(url: url) { (data, response, error) in
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                        let accountData = AnalyzeJson.analyzeAccountJson(account: responseJson)
+                        DispatchQueue.main.async {
+                            let vc = ProfileEditViewController(accountData: accountData)
+                            show(rootVc: rootVc, vc: vc)
+                        }
+                    }
+                } catch { }
+            }
+        }
+    }
+    
     // DM
     static func showDMList(rootVc: UIViewController) {
         DispatchQueue.main.async {
