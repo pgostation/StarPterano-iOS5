@@ -21,7 +21,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     private let accountData: AnalyzeJson.AccountData?
     
     // ヘッダ画像
-    let headerImageView = UIImageView()
+    var headerImageView = UIImageView()
     
     // メインの表示
     var iconView: UIImageView?
@@ -131,12 +131,21 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         
         // ヘッダ画像
         headerImageView.image = ImageUtils.colorImage(color: ThemeColor.mainButtonsBgColor)
-        headerImageView.contentMode = .scaleAspectFill
-        headerImageView.clipsToBounds = true
-        ImageCache.image(urlStr: data.header_static, isTemp: true, isSmall: false) { [weak self] image in
+        ImageCache.image(urlStr: data.header ?? data.header_static, isTemp: true, isSmall: false) { [weak self] image in
+            guard let strongSelf = self else { return }
             if image.size.width <= 1 && image.size.height <= 1 { return }
-            self?.headerImageView.image = image
-            self?.setNeedsLayout()
+            
+            let headerImageView: UIImageView
+            if image.imageCount != nil {
+                headerImageView = UIImageView(gifImage: image)
+                strongSelf.headerImageView = headerImageView
+            } else {
+                headerImageView = strongSelf.headerImageView
+                headerImageView.image = image
+            }
+            headerImageView.contentMode = .scaleAspectFill
+            headerImageView.clipsToBounds = true
+            strongSelf.setNeedsLayout()
             
             // 視差効果
             do {
@@ -151,7 +160,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 let group = UIMotionEffectGroup()
                 group.motionEffects = [xAxis, yAxis]
                 
-                self?.headerImageView.addMotionEffect(group)
+                strongSelf.headerImageView.addMotionEffect(group)
             }
         }
         
