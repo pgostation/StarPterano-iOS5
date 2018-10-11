@@ -131,6 +131,8 @@
 "PROFILE_NOTE" = "Note";
 "PROFILE_TITLES" = "Label";
 "PROFILE_FIELDS" = "Value";
+"PROFILE_UPDATE_FAILED" = "Failed to update your profile.";
+"PROFILE_LOCKED" = "Locked";
 
 // 設定画面
 "BUTTON_CLOSE" = "Close";

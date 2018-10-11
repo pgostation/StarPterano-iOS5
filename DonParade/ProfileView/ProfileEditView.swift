@@ -14,12 +14,14 @@ final class ProfileEditView: UIScrollView {
     let saveButton = UIButton()
     let iconButton = UIButton()
     let headerButton = UIButton()
+    let lockedSwitch = UISwitch()
     
     // ラベル
     let nameLabel = UILabel()
     let noteLabel = UILabel()
     let titlesLabel = UILabel()
     let fieldsLabel = UILabel()
+    let lockedLabel = UILabel()
     
     // 入力フィールド
     let nameField = UITextView()
@@ -43,6 +45,7 @@ final class ProfileEditView: UIScrollView {
         self.addSubview(noteLabel)
         self.addSubview(titlesLabel)
         self.addSubview(fieldsLabel)
+        self.addSubview(lockedLabel)
         
         self.addSubview(closeButton)
         self.addSubview(saveButton)
@@ -56,6 +59,7 @@ final class ProfileEditView: UIScrollView {
         }
         self.addSubview(iconButton)
         self.addSubview(headerButton)
+        self.addSubview(lockedSwitch)
         self.addSubview(inputBar)
         inputBar.addSubview(emojiButton)
         
@@ -84,7 +88,7 @@ final class ProfileEditView: UIScrollView {
         self.backgroundColor = ThemeColor.viewBgColor
         self.isUserInteractionEnabled = true
         
-        //
+        // ラベル
         self.nameLabel.text = I18n.get("PROFILE_NAME")
         self.nameLabel.textColor = ThemeColor.dateColor
         self.nameLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
@@ -101,9 +105,15 @@ final class ProfileEditView: UIScrollView {
         self.fieldsLabel.textColor = ThemeColor.dateColor
         self.fieldsLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         
+        self.lockedLabel.text = I18n.get("PROFILE_LOCKED")
+        self.lockedLabel.textColor = ThemeColor.dateColor
+        self.lockedLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+        
         // 名前
         self.nameField.attributedText = DecodeToot.decodeName(name: accountData.display_name, emojis: accountData.emojis, callback: {
             self.nameField.attributedText = DecodeToot.decodeName(name: accountData.display_name, emojis: accountData.emojis, callback: nil)
+            self.nameField.textColor = ThemeColor.idColor
+            self.nameField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
         })
         self.nameField.textColor = ThemeColor.idColor
         self.nameField.backgroundColor = ThemeColor.cellBgColor
@@ -115,6 +125,8 @@ final class ProfileEditView: UIScrollView {
         // ノート
         self.noteView.attributedText = DecodeToot.decodeContentFast(content: accountData.note, emojis: accountData.emojis, callback: {
             self.noteView.attributedText = DecodeToot.decodeContentFast(content: accountData.note, emojis: accountData.emojis, callback: nil).0
+            self.noteView.textColor = ThemeColor.idColor
+            self.noteView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
         }).0
         self.noteView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         self.noteView.textColor = ThemeColor.idColor
@@ -144,6 +156,8 @@ final class ProfileEditView: UIScrollView {
                 let content = data["value"] as? String
                 field.attributedText = DecodeToot.decodeContentFast(content: content, emojis: accountData.emojis, callback: {
                     field.attributedText = DecodeToot.decodeContentFast(content: content, emojis: accountData.emojis, callback: nil).0
+                    field.textColor = ThemeColor.idColor
+                    field.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
                 }).0
             }
             field.textColor = ThemeColor.idColor
@@ -197,6 +211,9 @@ final class ProfileEditView: UIScrollView {
         headerButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
         headerButton.layer.cornerRadius = 8
         headerButton.clipsToBounds = true
+        
+        // ロックスイッチ
+        lockedSwitch.isOn = (accountData.locked == 1)
         
         // 閉じるボタン
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
@@ -320,6 +337,19 @@ final class ProfileEditView: UIScrollView {
                                          y: self.headerView?.frame.maxY ?? top,
                                          width: 100,
                                          height: 40)
+        top = self.headerButton.frame.maxY
+        
+        self.lockedLabel.sizeToFit()
+        self.lockedLabel.frame = CGRect(x: 5,
+                                         y: top,
+                                         width: self.lockedLabel.frame.width,
+                                         height: 31)
+        
+        self.lockedSwitch.frame = CGRect(x: self.lockedLabel.frame.maxX + 5,
+                                        y: top,
+                                        width: 51,
+                                        height: 31)
+        top = self.lockedSwitch.frame.maxY
         
         if keyBoardHeight > 0 {
             self.inputBar.frame = CGRect(x: 0,
@@ -339,6 +369,6 @@ final class ProfileEditView: UIScrollView {
                                         height: 40)
         
         self.contentSize = CGSize(width: screenBounds.width,
-                                  height: self.headerButton.frame.maxY + 5 + keyBoardHeight + 40)
+                                  height: top + 5 + keyBoardHeight + 40)
     }
 }

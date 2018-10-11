@@ -143,10 +143,12 @@
 "BUTTON_CHANGE_ICON" = "アイコン変更";
 "BUTTON_CHANGE_HEADER" = "ヘッダー画像変更";
 "BUTTON_SEND" = "送信";
-"PROFILE_NAME" = "表示名 30文字以内";
-"PROFILE_NOTE" = "プロフィール 160文字以内";
+"PROFILE_NAME" = "表示名 - 30文字以内";
+"PROFILE_NOTE" = "プロフィール - 160文字以内";
 "PROFILE_TITLES" = "ラベル";
 "PROFILE_FIELDS" = "内容";
+"PROFILE_UPDATE_FAILED" = "プロフィール更新に失敗しました";
+"PROFILE_LOCKED" = "承認制アカウントにする";
 
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "マストドンのWebサイトへ";

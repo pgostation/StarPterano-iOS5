@@ -13,7 +13,10 @@ final class ImageUpload {
     private init() { }
     
     // 画像のアップロード
-    static func upload(imageUrl: URL, callback: @escaping ([String: Any]?)->Void) {
+    static func upload(httpMethod: String, imageUrl: URL, uploadUrl: URL? = nil, filePathKey: String = "file", callback: @escaping ([String: Any]?)->Void) {
+        // 画像アップロード先URL
+        guard let uploadUrl = uploadUrl ?? URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
+        
         // imageData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
         guard let asset = fetchResult.firstObject else { return }
@@ -31,14 +34,14 @@ final class ImageUpload {
         }
         
         if isGIF || isPNG {
-            uploadPNG(imageUrl: imageUrl, asset: asset, isPNG: isPNG, callback: callback)
+            uploadPNG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, isPNG: isPNG, callback: callback)
         } else {
-            uploadJPEG(imageUrl: imageUrl, asset: asset, callback: callback)
+            uploadJPEG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, callback: callback)
         }
     }
     
     // データそのまま送信
-    private static func uploadPNG(imageUrl: URL, asset: PHAsset, isPNG: Bool, callback: @escaping ([String: Any]?)->Void) {
+    private static func uploadPNG(httpMethod: String, imageUrl: URL, uploadUrl: URL, filePathKey: String, asset: PHAsset, isPNG: Bool, callback: @escaping ([String: Any]?)->Void) {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
@@ -53,12 +56,12 @@ final class ImageUpload {
                 self.filename = "image.gif"
                 self.mimetype = "image/gif"
             }
-            self.uploadData(data: data, callback: callback)
+            self.uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: data, callback: callback)
         }
     }
     
     // JPEGで再圧縮して送信
-    private static func uploadJPEG(imageUrl: URL, asset: PHAsset, callback: @escaping ([String: Any]?)->Void) {
+    private static func uploadJPEG(httpMethod: String, imageUrl: URL, uploadUrl: URL, filePathKey: String, asset: PHAsset, callback: @escaping ([String: Any]?)->Void) {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
@@ -69,12 +72,15 @@ final class ImageUpload {
             
             self.filename = "image.jpeg"
             self.mimetype = "image/jpeg"
-            self.uploadData(data: imageData, callback: callback)
+            self.uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: imageData, callback: callback)
         }
     }
     
     // 動画のアップロード
-    static func upload(movieUrl: URL, callback: @escaping ([String: Any]?)->Void) {
+    static func upload(movieUrl: URL, uploadUrl: URL? = nil, filePathKey: String = "file", callback: @escaping ([String: Any]?)->Void) {
+        // 画像アップロード先URL
+        guard let uploadUrl = uploadUrl ?? URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
+        
         // movieData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [movieUrl], options: nil)
         guard let asset = fetchResult.firstObject else { return }
@@ -120,7 +126,7 @@ final class ImageUpload {
                         self.mimetype = "video/mp4"
                         if let compressedData = try? Data(contentsOf: fileUrl) {
                             print("compressedData = \(compressedData.count / 1000)KB")
-                            self.uploadData(data: compressedData, callback: callback)
+                            self.uploadData(httpMethod: "POST", uploadUrl: uploadUrl, filePathKey: filePathKey, data: compressedData, callback: callback)
                         }
                     case .failed:
                         break
@@ -135,10 +141,7 @@ final class ImageUpload {
     }
     
     // mediaデータのアップロード
-    private static func uploadData(data: Data, callback: @escaping ([String: Any]?)->Void) {
-        // 画像アップロード先URL
-        guard let uploadUrl = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
-        
+    private static func uploadData(httpMethod: String, uploadUrl: URL, filePathKey: String, data: Data, callback: @escaping ([String: Any]?)->Void) {
         // boudary生成
         let boundary = generateBoundaryString()
         
@@ -147,9 +150,9 @@ final class ImageUpload {
         
         // request生成
         var request = URLRequest(url: uploadUrl)
-        request.httpMethod = "POST"
+        request.httpMethod = httpMethod
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.httpBody = createBodyWith(parameters: params, filePathKey: "file", data: data, boundary: boundary)
+        request.httpBody = createBodyWith(parameters: params, filePathKey: filePathKey, data: data, boundary: boundary)
         
         var waitIndicator: WaitIndicator? = nil
         DispatchQueue.main.async {
@@ -189,7 +192,7 @@ final class ImageUpload {
     
     // Create body for media
     // https://qiita.com/aryzae/items/8c16bc456588c1251f48
-    private static func createBodyWith(parameters: [String: String]?, filePathKey: String?, data: Data, boundary: String) -> Data {
+    private static func createBodyWith(parameters: [String: String]?, filePathKey: String, data: Data, boundary: String) -> Data {
         var body = Data()
         
         if let parameters = parameters {
@@ -201,7 +204,7 @@ final class ImageUpload {
         }
         
         body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename)\"\r\n")
+        body.append("Content-Disposition: form-data; name=\"\(filePathKey)\"; filename=\"\(filename)\"\r\n")
         body.append("Content-Type: \(mimetype)\r\n\r\n")
         body.append(data)
         body.append("\r\n")

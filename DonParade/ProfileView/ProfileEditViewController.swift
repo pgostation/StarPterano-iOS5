@@ -67,7 +67,60 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
     
     // 送信ボタンの処理
     @objc func sendAction() {
+        resignFirstResponder()
         
+        sendBasic()
+        
+        if let iconUrl = self.iconUrl {
+            sendImage(type: "avatar", imageUrl: iconUrl)
+        }
+        
+        if let headerUrl = self.headerUrl {
+            sendImage(type: "header", imageUrl: headerUrl)
+        }
+    }
+    
+    // 画像以外の情報を送信
+    private func sendBasic() {
+        guard let view = self.view as? ProfileEditView else { return }
+        let url = URL(string: "https://\(SettingsData.hostName!)/api/v1/accounts/update_credentials")!
+        
+        let display_name = DecodeToot.encodeEmoji(attributedText: view.nameField.attributedText, textStorage: view.nameField.textStorage)
+        let note = DecodeToot.encodeEmoji(attributedText: view.noteView.attributedText, textStorage: view.noteView.textStorage)
+        
+        var body: [String: Any] = [
+            "display_name": display_name,
+            "note": note,
+            "locked": view.lockedSwitch.isOn ? 1 : 0
+        ]
+        
+        for (index, data) in view.addTitles.enumerated() {
+            body.updateValue(data.text ?? "", forKey: "fields_attributes[\(index)][name]")
+        }
+        for (index, data) in view.addFields.enumerated() {
+            let text = DecodeToot.encodeEmoji(attributedText: data.attributedText, textStorage: data.textStorage)
+            body.updateValue(text, forKey: "fields_attributes[\(index)][value]")
+        }
+        
+        try? MastodonRequest.patch(url: url, body: body) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    Dialog.show(message: I18n.get("PROFILE_UPDATE_FAILED"))
+                } else {
+                    DispatchQueue.main.async {
+                        self.closeAction()
+                    }
+                }
+            }
+        }
+    }
+    
+    // 画像を送信
+    private func sendImage(type: String, imageUrl: URL) {
+        let url = URL(string: "https://\(SettingsData.hostName!)/api/v1/accounts/update_credentials")!
+        
+        ImageUpload.upload(httpMethod: "PATCH", imageUrl: imageUrl, uploadUrl: url, filePathKey: type) { (infoDict) in
+        }
     }
     
     // アイコン画像選択ボタンの処理
@@ -255,7 +308,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
     
     // テキストビューの文字を絵文字にする
     func textViewDidChange(_ textView: UITextView) {
-        if textView.inputView is EmojiKeyboard || textView.text.contains(":") || textView.text.contains("\n") {
+        if textView.inputView is EmojiKeyboard || textView.text.contains(" :") || (textView.returnKeyType == .done && textView.text.contains("\n")) {
             var emojis: [[String: Any]] = []
             
             for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {

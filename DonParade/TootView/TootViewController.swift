@@ -117,7 +117,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                     })
                 } else {
                     // 静止画
-                    ImageUpload.upload(imageUrl: url, callback: { json in
+                    ImageUpload.upload(httpMethod: "POST", imageUrl: url, callback: { json in
                         if let json = json {
                             if let id = json["id"] as? String {
                                 idList.append(id)
@@ -298,7 +298,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // テキストビューの高さを変化させる、絵文字にする
     func textViewDidChange(_ textView: UITextView) {
-        if textView.inputView is EmojiKeyboard || textView.text.contains(":"){
+        if textView.inputView is EmojiKeyboard || textView.text.contains(" :"){
             var emojis: [[String: Any]] = []
             
             for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {

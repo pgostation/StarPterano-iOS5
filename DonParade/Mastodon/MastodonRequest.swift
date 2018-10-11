@@ -94,6 +94,30 @@ final class MastodonRequest {
             }.resume()
     }
     
+    // PATCHメソッド
+    static func patch(url: URL, body: Dictionary<String, Any>?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
+        var request: URLRequest = URLRequest(url: url)
+        
+        guard let accessToken = SettingsData.accessToken else { return }
+        
+        request.httpMethod = "PATCH"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        if let body = body {
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+        }
+        
+        session.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    print("response.statusCode=\(response.statusCode), data=\(String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? "-")")
+                }
+            }
+            
+            completionHandler(data, response, error)
+            }.resume()
+    }
+    
     // POSTメソッド (アクセストークンなし、認証前に使う)
     static func firstPost(url: URL, body: Dictionary<String, String>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws {
         var request: URLRequest = URLRequest(url: url)
