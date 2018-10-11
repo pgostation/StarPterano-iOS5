@@ -108,7 +108,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.list.removeFirst(self.list.count - 100000)
                     }
                 } else if lastDate2 > firstDate1 {
-                    if isNewRefresh {
+                    if isNewRefresh && addList.count > 30 {
                         // 再読み込み用のセルをつける
                         self.list.insert(AnalyzeJson.emptyContentData(), at: 0)
                     }
@@ -463,9 +463,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         })
         
-        if data.id == nil {
+        if data.id == nil && (timelineView.type != .user && timelineView.type != .mentions) {
             // タイムライン途中読み込み用のセル
-            let cell = UITableViewCell.init(style: .default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
             cell.selectionStyle = .none
             let loadButton = UIButton()
