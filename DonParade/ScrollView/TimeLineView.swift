@@ -74,6 +74,7 @@ final class TimeLineView: UITableView {
     }
     
     // タイムラインを初回取得/手動更新
+    private var isManualLoading = false
     @objc func refresh() {
         if self.waitingStatusList.count > 0 {
             DispatchQueue.main.async {
@@ -140,6 +141,11 @@ final class TimeLineView: UITableView {
         
         guard let requestUrl = url else { return }
         
+        self.isManualLoading = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.isManualLoading = false
+        }
+        
         try? MastodonRequest.get(url: requestUrl) { [weak self] (data, response, error) in
             guard let strongSelf = self else { return }
             
@@ -157,6 +163,8 @@ final class TimeLineView: UITableView {
                             var acct = ""
                             let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
                             let contentList = [contentData]
+                            
+                            strongSelf.isManualLoading = false
                             
                             strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
                             
@@ -288,7 +296,7 @@ final class TimeLineView: UITableView {
                                 offsetY = self.contentOffset.y
                             }
                             
-                            if offsetY > 60 {
+                            if offsetY > 60 || self.isManualLoading {
                                 // スクロール位置が一番上でない場合、テーブルビューには反映せず裏に持っておく
                                 return
                             }
