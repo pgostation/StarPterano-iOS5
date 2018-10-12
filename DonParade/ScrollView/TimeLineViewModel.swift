@@ -358,7 +358,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         // プロパティ設定
         let messageView: UIView
         if hasLink || (SettingsData.useAnimation && data.emojis != nil && data.emojis!.count > 0) {
-            let msgView = UITextView()
+            let msgView = dequeueReusableTextView()
             msgView.attributedText = attributedText
             msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
             msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
@@ -389,7 +389,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // ビューの高さを決める
         messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.iconSize * 2 - 6)
-        messageView.sizeToFit()
+        if SettingsData.isMiniView == .normal || self.selectedRow == indexPath.row {
+            messageView.sizeToFit()
+        }
         var isContinue = false
         if self.selectedRow == indexPath.row {
             // 詳細表示の場合
@@ -406,6 +408,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         return (messageView, data, isContinue)
+    }
+    
+    // UITextViewをリサイクル
+    private static var cacheTextView: [UITextView] = []
+    private func dequeueReusableTextView() -> UITextView {
+        if let textView = TimeLineViewModel.cacheTextView.popLast() {
+            textView.isHidden = false
+            return textView
+        }
+        return MyTextView()
+    }
+    
+    class MyTextView: UITextView {
+        override func removeFromSuperview() {
+            super.removeFromSuperview()
+            TimeLineViewModel.cacheTextView.append(self)
+        }
     }
     
     // セルを返す
@@ -711,10 +730,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell?.setNeedsLayout()
             }
         })
-        cell.nameLabel.sizeToFit()
+        DispatchQueue.main.async {
+            cell.nameLabel.sizeToFit()
+        }
         
         cell.idLabel.text = account?.acct
-        cell.idLabel.sizeToFit()
         
         if let created_at = data.reblog_created_at ?? data.created_at {
             let date = DecodeToot.decodeTime(text: created_at)

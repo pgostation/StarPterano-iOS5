@@ -147,7 +147,9 @@ final class TimeLineViewCell: UITableViewCell {
             apngView.removeFromSuperview()
         }
         self.messageView?.removeFromSuperview()
+        self.messageView = nil
         self.continueView?.removeFromSuperview()
+        self.continueView = nil
         self.boostView?.removeFromSuperview()
         self.boostView = nil
         self.showMoreButton?.removeFromSuperview()
@@ -665,12 +667,12 @@ final class TimeLineViewCell: UITableViewCell {
         
         if let messageView = self.messageView as? UILabel {
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
+                                       y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         } else if let messageView = self.messageView as? UITextView {
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? -9 : self.detailDateLabel?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
+                                       y: isMiniView == .superMini ? -9 : self.detailDateLabel?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         }
