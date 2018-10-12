@@ -63,6 +63,12 @@ final class EmojiData {
                             }
                             
                             cacheData.updateValue(list, forKey: host)
+                            
+                            for (index, key) in self.waitingList.enumerated() {
+                                if host == key {
+                                    self.waitingList.remove(at: index)
+                                }
+                            }
                         }
                     } catch {
                     }

@@ -626,12 +626,12 @@ final class TimeLineViewCell: UITableViewCell {
                                       width: screenBounds.width,
                                       height: 1 / UIScreen.main.scale)
         
-        self.iconView?.frame = CGRect(x: isMiniView != .normal ? 0 : 2,
+        self.iconView?.frame = CGRect(x: isMiniView != .normal ? 2 : 4,
                                       y: isMiniView == .superMini ? 12 - iconSize / 2 : (isMiniView != .normal ? 6 : 10),
                                       width: iconSize,
                                       height: iconSize)
         
-        let nameLeft = iconSize + 5
+        let nameLeft = iconSize + 7
         self.nameLabel.frame = CGRect(x: nameLeft,
                                       y: isMiniView != .normal ? 3 : 7,
                                       width: min(self.nameLabel.frame.width, screenBounds.width - nameLeft - 50),

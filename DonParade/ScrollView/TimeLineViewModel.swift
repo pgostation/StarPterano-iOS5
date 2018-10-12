@@ -341,7 +341,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private func getMessageViewAndData(index: Int, indexPath: IndexPath, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
         let data = list[index]
         
-        if data.emojis == nil,  data.id == cacheId, let cache = self.cache {
+        if data.emojis == nil, data.id == cacheId, let cache = self.cache {
             return cache
         }
         
@@ -388,7 +388,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // ビューの高さを決める
-        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.iconSize * 2 - 2)
+        messageView.frame.size.width = UIScreen.main.bounds.width - (SettingsData.iconSize * 2 - 6)
         messageView.sizeToFit()
         var isContinue = false
         if self.selectedRow == indexPath.row {
