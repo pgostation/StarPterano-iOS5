@@ -314,8 +314,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        if data.sensitive == 1 || data.spoiler_text != "" { // もっと見る
+        if data.sensitive == 1 { // もっと見る
             detailOffset += 20
+        }
+        if data.spoiler_text != "" {
+            detailOffset += 20 + SettingsData.fontSize + 5
         }
         
         let imagesOffset: CGFloat
@@ -903,7 +906,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             if let id = data.id, id != "" && TimeLineViewCell.showMoreList.contains(id) {
                 // すでに解除済み
-                cell.showMoreAction()
+                cell.showMoreAction(forceShow: true)
             }
         }
         

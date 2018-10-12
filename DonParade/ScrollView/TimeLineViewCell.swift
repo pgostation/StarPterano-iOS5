@@ -502,8 +502,8 @@ final class TimeLineViewCell: UITableViewCell {
     }
     
     // もっと見る
-    @objc func showMoreAction() {
-        if TimeLineViewCell.showMoreList.contains(self.id) {
+    @objc func showMoreAction(forceShow: Bool = true) {
+        if !forceShow && TimeLineViewCell.showMoreList.contains(self.id) {
             // やっぱり隠す
             for (index, data) in TimeLineViewCell.showMoreList.enumerated() {
                 if data == self.id {
@@ -635,9 +635,9 @@ final class TimeLineViewCell: UITableViewCell {
         
         let nameLeft = iconSize + 7
         self.nameLabel.frame = CGRect(x: nameLeft,
-                                      y: isMiniView != .normal ? 3 : 7,
+                                      y: isMiniView != .normal ? 2 : 6,
                                       width: min(self.nameLabel.frame.width, screenBounds.width - nameLeft - 50),
-                                      height: SettingsData.fontSize + 1)
+                                      height: SettingsData.fontSize + 3)
         
         let idWidth: CGFloat
         if self.detailDateLabel != nil {
@@ -690,14 +690,14 @@ final class TimeLineViewCell: UITableViewCell {
                                        height: 20)
         
         if self.messageView?.isHidden == true {
-            self.showMoreButton?.frame = CGRect(x: 50,
-                                                y: self.spolerTextLabel?.frame.maxY ?? 20,
-                                                width: screenBounds.width - 66,
+            self.showMoreButton?.frame = CGRect(x: 100,
+                                                y: self.spolerTextLabel?.frame.maxY ?? self.messageView?.frame.maxY ?? 20,
+                                                width: screenBounds.width - 160,
                                                 height: 20)
         } else {
-            self.showMoreButton?.frame = CGRect(x: 50,
-                                                y: self.messageView?.frame.maxY ?? 20,
-                                                width: screenBounds.width - 66,
+            self.showMoreButton?.frame = CGRect(x: 100,
+                                                y: self.spolerTextLabel?.frame.maxY ?? self.messageView?.frame.maxY ?? 20,
+                                                width: screenBounds.width - 160,
                                                 height: 20)
         }
         
