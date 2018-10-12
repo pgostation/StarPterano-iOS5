@@ -528,7 +528,9 @@ final class TimeLineViewCell: UITableViewCell {
         
         self.showMoreButton?.setTitle(I18n.get("BUTTON_HIDE_REDO"), for: .normal)
         
-        TimeLineViewCell.showMoreList.append(self.id)
+        if !TimeLineViewCell.showMoreList.contains(self.id) && self.id != "" {
+            TimeLineViewCell.showMoreList.append(self.id)
+        }
     }
     
     // 画像をタップ
@@ -667,12 +669,12 @@ final class TimeLineViewCell: UITableViewCell {
         
         if let messageView = self.messageView as? UILabel {
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? 0 : self.detailDateLabel?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
+                                       y: isMiniView == .superMini ? 0 : self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         } else if let messageView = self.messageView as? UITextView {
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? -9 : self.detailDateLabel?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
+                                       y: isMiniView == .superMini ? -9 : self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         }
