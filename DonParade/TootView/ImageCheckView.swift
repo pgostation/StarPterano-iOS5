@@ -144,9 +144,11 @@ final class ImageCheckView: UIView {
                 imageViews[index].removeFromSuperview()
                 deleteButtons[index].removeFromSuperview()
                 
-                urls.remove(at: index)
-                imageViews.remove(at: index)
-                deleteButtons.remove(at: index)
+                if index < urls.count {
+                    urls.remove(at: index)
+                    imageViews.remove(at: index)
+                    deleteButtons.remove(at: index)
+                }
                 
                 (self.superview as? TootView)?.refresh()
                 
