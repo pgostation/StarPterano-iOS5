@@ -155,6 +155,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             if (listData.id ?? "") < (newContent.id ?? "") {
                                 self.list.insert(newContent, at: index)
                                 flag = true
+                                
+                                // 選択位置がずれないようにする
+                                if self.selectedRow != nil && index < self.selectedRow! {
+                                    self.selectedRow = self.selectedRow! + 1
+                                }
+                                
                                 break
                             }
                             index += 1
