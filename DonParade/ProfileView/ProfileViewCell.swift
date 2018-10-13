@@ -11,9 +11,11 @@
 
 import UIKit
 import SafariServices
+import SwiftyGif
 
 final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     weak var timelineView: TimeLineView? = nil
+    private static let gifManager = SwiftyGifManager(memoryLimit: 1)
     private var id = ""
     private var uri = ""
     private var relationshipData: AnalyzeJson.RelationshipData? = nil
@@ -168,9 +170,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         DispatchQueue.main.async {
             ImageCache.image(urlStr: data.avatar ?? data.avatar_static, isTemp: false, isSmall: true) { [weak self] image in
                 if self == nil { return }
-                if image.imageCount != nil, let manager = self?.timelineView?.gifManager {
+                if image.imageCount != nil {
                     // GIFアニメーション
-                    self?.iconView = UIImageView(gifImage: image, manager: manager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    self?.iconView = UIImageView(gifImage: image, manager: ProfileViewCell.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
                 } else {
                     self?.iconView = UIImageView()
                 }
@@ -193,7 +195,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         
         nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) { }
         nameLabel.textColor = ThemeColor.nameColor
-        nameLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
+        nameLabel.layer.shadowColor = UIColor.black.cgColor
         nameLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         nameLabel.layer.shadowOpacity = 1.0
         nameLabel.layer.shadowRadius = 1.0
@@ -211,7 +213,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         idLabel.adjustsFontSizeToFitWidth = true
         
         noteLabel.delegate = self
-        noteLabel.attributedText = DecodeToot.decodeContentFast(content: data.note, emojis: data.emojis, callback: nil).0
+        noteLabel.attributedText = DecodeToot.decodeContent(content: data.note, emojis: data.emojis, callback: nil).0
         noteLabel.textColor = ThemeColor.contrastColor
         noteLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         noteLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor

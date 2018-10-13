@@ -145,8 +145,31 @@ final class DecodeToot {
     }
     
     static func decodeContent(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> (NSMutableAttributedString, Bool) {
-        guard let attributedText = parseText2HTML(sourceText: content ?? "") else {
-            return (NSMutableAttributedString(string: content ?? ""), false)
+        var content = content ?? ""
+        
+        // プロフィールにimgタグで絵文字が入り込んでくる・・・
+        if content.contains("<img ") == true {
+            var loopCount = 0
+            while let startRange = content.range(of: "<img "), let endRange = content.range(of: ".png\" />"), loopCount < 50 {
+                let startIndex = content.index(startRange.lowerBound, offsetBy: 0)
+                let endIndex = content.index(endRange.lowerBound, offsetBy: 8)
+                
+                let tmpEmojiStr = String(content.suffix(from: startIndex))
+                if let startRange = tmpEmojiStr.range(of: "\":"), let endRange = tmpEmojiStr.range(of: ":\"") {
+                    let startEmojiIndex = tmpEmojiStr.index(startRange.lowerBound, offsetBy: 1)
+                    let endEmojiIndex = tmpEmojiStr.index(endRange.lowerBound, offsetBy: 1)
+                    let emojiStr = " " + String(tmpEmojiStr.suffix(from: startEmojiIndex).prefix(upTo: endEmojiIndex)) + " "
+                    print("emojiStr=\(emojiStr)")
+                        
+                    content = String(content.prefix(upTo: startIndex)) + emojiStr + String(content.suffix(from: endIndex))
+                }
+                
+                loopCount += 1
+            }
+        }
+        
+        guard let attributedText = parseText2HTML(sourceText: content ) else {
+            return (NSMutableAttributedString(string: content), false)
         }
         
         // 絵文字に変える
@@ -180,7 +203,7 @@ final class DecodeToot {
             }
         }
         
-        let hasLink = (content?.contains("<a href") == true)
+        let hasLink = (content.contains("<a href") == true)
         
         return (attributedText, hasLink)
     }

@@ -235,6 +235,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         if view.nameField.inputView is EmojiKeyboard {
             // テキストフィールドのカスタムキーボードを解除
             view.nameField.inputView = nil
+            view.noteView.inputView = nil
             for field in view.addFields {
                 field.inputView = nil
             }
@@ -245,6 +246,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
             
             // テキストフィールドのカスタムキーボードを変更
             view.nameField.inputView = emojiView
+            view.noteView.inputView = emojiView
             for field in view.addFields {
                 field.inputView = emojiView
             }
@@ -255,6 +257,8 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         var firstResponder: UITextView? = nil
         if view.nameField.isFirstResponder {
             firstResponder = view.nameField
+        } else if view.noteView.isFirstResponder {
+            firstResponder = view.noteView
         } else {
             for field in view.addFields {
                 if field.isFirstResponder {

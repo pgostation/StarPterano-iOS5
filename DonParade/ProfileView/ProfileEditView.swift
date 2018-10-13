@@ -123,8 +123,8 @@ final class ProfileEditView: UIScrollView {
         self.nameField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
         
         // ノート
-        self.noteView.attributedText = DecodeToot.decodeContentFast(content: accountData.note, emojis: accountData.emojis, callback: {
-            self.noteView.attributedText = DecodeToot.decodeContentFast(content: accountData.note, emojis: accountData.emojis, callback: nil).0
+        self.noteView.attributedText = DecodeToot.decodeContent(content: accountData.note, emojis: accountData.emojis, callback: {
+            self.noteView.attributedText = DecodeToot.decodeContent(content: accountData.note, emojis: accountData.emojis, callback: nil).0
             self.noteView.textColor = ThemeColor.idColor
             self.noteView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
         }).0
