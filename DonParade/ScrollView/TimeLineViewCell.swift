@@ -118,17 +118,6 @@ final class TimeLineViewCell: UITableViewCell {
         self.addSubview(self.nameLabel)
         self.layer.addSublayer(self.lineLayer)
         
-        // タイマーで5秒ごとに時刻を更新
-        if #available(iOS 10.0, *) {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [weak self] timer in
-                if self?.superview == nil {
-                    return
-                }
-                
-                self?.refreshDate()
-            })
-        }
-        
         if SettingsData.isNameTappable {
             // アカウント名のタップジェスチャー
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAccountAction))

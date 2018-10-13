@@ -1223,6 +1223,26 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if cell.iconView?.image?.imageCount != nil {
             _ = (tableView as? TimeLineView)?.gifManager.addImageView(cell.iconView!)
         }
+        
+        // タイマーでN秒ごとに時刻を更新
+        if #available(iOS 10.0, *) {
+            let interval: TimeInterval
+            if Date().timeIntervalSince(cell.date) < 60 {
+                interval = 5
+            } else if Date().timeIntervalSince(cell.date) < 600 {
+                interval = 15
+            } else {
+                interval = 60
+            }
+            
+            cell.timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
+                if cell.superview == nil {
+                    return
+                }
+                
+                cell.refreshDate()
+            })
+        }
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -1231,6 +1251,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if cell.iconView?.image?.imageCount != nil {
             (tableView as? TimeLineView)?.gifManager.deleteImageView(cell.iconView!)
         }
+        
+        cell.timer?.invalidate()
     }
     
     // セル選択時の処理
