@@ -761,6 +761,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if image.imageCount != nil {
                     // GIFアニメーション
                     cell.iconView = WideTouchImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    if !tableView.visibleCells.contains(cell) {
+                        timelineView.gifManager.deleteImageView(cell.iconView!)
+                    }
                 } else {
                     cell.iconView = WideTouchImageView()
                 }
@@ -1212,6 +1215,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = cell as? TimeLineViewCell else { return }
+        
+        if cell.iconView?.image?.imageCount != nil {
+            _ = (tableView as? TimeLineView)?.gifManager.addImageView(cell.iconView!)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = cell as? TimeLineViewCell else { return }
+        
+        if cell.iconView?.image?.imageCount != nil {
+            (tableView as? TimeLineView)?.gifManager.deleteImageView(cell.iconView!)
+        }
     }
     
     // セル選択時の処理
