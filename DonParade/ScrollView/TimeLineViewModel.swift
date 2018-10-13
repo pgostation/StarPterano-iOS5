@@ -567,6 +567,49 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.accountData = account
         cell.visibility = data.visibility
         
+        /* // 時々字が消える現象、このどれでもないのか
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if cell.id == id {
+                if cell.messageView == nil {
+                    print("#### nil - \(data.content ?? "nil")")
+                }
+                else if cell.messageView!.isHidden && data.spoiler_text == "" {
+                    print("#### isHidden - \(data.content ?? "nil")")
+                }
+                else if data.content != "" && cell.messageView!.frame.size.height == 0 {
+                    print("#### height is 0 - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UITextView, messageView.text == nil {
+                    print("#### messageView.text == nil - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UITextView, messageView.text == nil {
+                    print("#### messageView.text == nil - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UITextView, messageView.text == "" && data.content != "" {
+                    print("#### messageView.text == empty - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UITextView, messageView.textColor != ThemeColor.messageColor {
+                    print("#### messageView.textColor != ThemeColor.messageColor - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UILabel, messageView.text == nil {
+                    print("#### messageView(label).text == nil - \(data.content ?? "nil")")
+                }
+                else if let messageView = cell.messageView as? UILabel, messageView.text == "" && data.content != "" {
+                    print("#### messageView(label).text == empty - \(data.content ?? "nil")")
+                }
+                
+                if cell.messageView == nil {
+                    let oldHeight = cell.messageView!.frame.size.height
+                    cell.messageView?.sizeToFit()
+                    let newHeight = cell.messageView!.frame.size.height
+                    
+                    if oldHeight != newHeight {
+                        print("#### oldHeight != newHeight - \(data.content ?? "nil")")
+                    }
+                }
+            }
+        }*/
+        
         if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
             (messageView as? UILabel)?.numberOfLines = 1
             messageView.sizeToFit()

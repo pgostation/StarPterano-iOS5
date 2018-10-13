@@ -143,6 +143,7 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 再利用前に呼ばれる
     override func prepareForReuse() {
+        self.id = ""
         self.showDetail = false
         while let apngView = self.messageView?.viewWithTag(5555) as? APNGImageView {
             apngView.stopAnimating()
