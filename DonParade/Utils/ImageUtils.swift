@@ -61,4 +61,20 @@ final class ImageUtils {
         
         return image
     }
+    
+    // UIViewをキャプチャしてUIImageにする
+    // https://qiita.com/nasu_st/items/561d8946966015abd448
+    static func imageFromView(view: UIView) -> UIImage? {
+        let rect = view.bounds
+        
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        
+        view.drawHierarchy(in: rect, afterScreenUpdates: true)
+        
+        let capture = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return capture
+    }
 }

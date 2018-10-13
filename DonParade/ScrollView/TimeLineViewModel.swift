@@ -766,15 +766,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if let mediaData = data.mediaData {
             cell.previewUrls = []
             cell.imageUrls = []
+            cell.originalUrls = []
             cell.imageTypes = []
             
             for (index, media) in mediaData.enumerated() {
                 func addImageView(withPlayButton: Bool) {
                     let imageView = UIImageView()
                     
-                    if !SettingsData.isLoadPreviewImage {
-                        imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
-                    }
+                    imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
                     imageView.clipsToBounds = true
                     
                     // タップで全画面表示
@@ -786,6 +785,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     let isPreview = !(isDetailTimeline && indexPath.row == selectedRow)
                     ImageCache.image(urlStr: media.preview_url, isTemp: true, isSmall: false, isPreview: isPreview) { image in
                         imageView.image = image
+                        imageView.backgroundColor = nil
                         cell.setNeedsLayout()
                     }
                     cell.addSubview(imageView)
@@ -797,6 +797,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     
                     cell.previewUrls.append(media.preview_url ?? "")
                     cell.imageUrls.append(media.url ?? "")
+                    cell.originalUrls.append(media.remote_url ?? "")
                     cell.imageTypes.append(media.type ?? "")
                     
                     if withPlayButton {
@@ -812,7 +813,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     }
                 }
                 
-                if media.type == "gifv" || media.type == "video" {
+                if media.type == "unknown" {
+                    // 不明
+                    addImageView(withPlayButton: false)
+                    
+                    // リンク先のファイル名を表示
+                    let label = UILabel()
+                    label.text = String((media.remote_url ?? "").split(separator: "/").last ?? "")
+                    label.textAlignment = .center
+                    label.textColor = ThemeColor.linkTextColor
+                    label.adjustsFontSizeToFitWidth = true
+                    cell.imageViews.last?.addSubview(label)
+                    DispatchQueue.main.async {
+                        label.frame = cell.imageViews.last?.bounds ?? CGRect(x: 0, y: 0, width: 0, height: 0)
+                    }
+                } else if media.type == "gifv" || media.type == "video" {
                     // 動画の場合
                     if indexPath.row == selectedRow {
                         // とりあえずプレビューを表示

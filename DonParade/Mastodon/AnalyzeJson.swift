@@ -64,12 +64,14 @@ final class AnalyzeJson {
                 let id = media_attachment["id"] as? Int64
                 let preview_url = media_attachment["preview_url"] as? String
                 let url = media_attachment["url"] as? String
+                let remote_url = media_attachment["remote_url"] as? String
                 let type = media_attachment["type"] as? String
                 
                 let data = MediaData(id: id,
                                      preview_url: preview_url,
                                      type: type,
-                                     url: url)
+                                     url: url,
+                                     remote_url: remote_url)
                 if mediaData == nil {
                     mediaData = []
                 }
@@ -406,6 +408,7 @@ final class AnalyzeJson {
         let preview_url: String?
         let type: String?
         let url: String?
+        let remote_url: String?
     }
     
     // メンション

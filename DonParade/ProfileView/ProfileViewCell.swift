@@ -502,9 +502,9 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 UIUtils.getFrontViewController()?.present(vc, animated: true, completion: nil)
         }))
         
-        // 内蔵ブラウザで表示
+        // Safariで表示
         alertController.addAction(UIAlertAction(
-            title: I18n.get("ACTION_WEB_BROWSER"),
+            title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
             style: UIAlertActionStyle.default,
             handler: { _ in
                 guard let url = URL(string: self.urlStr) else { return }

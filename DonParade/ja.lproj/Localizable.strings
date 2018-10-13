@@ -110,7 +110,7 @@
 "ACTION_BLOCK" = "ブロックする";
 "ACTION_UNMUTE" = "ミュート解除する";
 "ACTION_MUTE" = "ミュートする";
-"ACTION_WEB_BROWSER" = "Safariで表示";
+"ACTION_OPEN_WITH_SAFARI" = "Safariで表示";
 "ACTION_ADD_TO_LIST" = "リストに追加";
 "ALERT_UNFOLLOW" = "フォロー解除しますか";
 

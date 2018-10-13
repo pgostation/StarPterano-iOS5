@@ -154,6 +154,8 @@ final class ImageCache {
                         }
                     }
                 }
+            } else {
+                waitingDict.removeValue(forKey: urlStr)
             }
         }
     }

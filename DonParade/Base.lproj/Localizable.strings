@@ -110,7 +110,7 @@
 "ACTION_BLOCK" = "Block";
 "ACTION_UNMUTE" = "Unmute";
 "ACTION_MUTE" = "Mute";
-"ACTION_WEB_BROWSER" = "Open with Safari";
+"ACTION_OPEN_WITH_SAFARI" = "Open with Safari";
 "ACTION_ADD_TO_LIST" = "Add to lists";
 "ALERT_UNFOLLOW" = "Confirm";
 
