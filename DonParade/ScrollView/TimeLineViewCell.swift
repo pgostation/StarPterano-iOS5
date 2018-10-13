@@ -669,19 +669,35 @@ final class TimeLineViewCell: UITableViewCell {
                                              width: screenBounds.width - 55,
                                              height: 18)
         
-        self.spolerTextLabel?.frame = CGRect(x: 50,
+        self.spolerTextLabel?.frame = CGRect(x: nameLeft,
                                              y: isMiniView == .superMini ? 2 : self.detailDateLabel?.frame.maxY ?? SettingsData.fontSize + 8,
                                              width: self.spolerTextLabel?.frame.width ?? 0,
                                              height: self.spolerTextLabel?.frame.height ?? 0)
         
         if let messageView = self.messageView as? UILabel {
+            let y: CGFloat
+            if isMiniView == .superMini {
+                y = 0
+            } else if let spolerTextLabel = self.spolerTextLabel {
+                y = spolerTextLabel.frame.maxY + 20
+            } else {
+                y = self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize)
+            }
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? 0 : self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? 1 : 5) + SettingsData.fontSize),
+                                       y: y,
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         } else if let messageView = self.messageView as? UITextView {
+            let y: CGFloat
+            if isMiniView == .superMini {
+                y = -9
+            } else if let spolerTextLabel = self.spolerTextLabel {
+                y = spolerTextLabel.frame.maxY + 20
+            } else {
+                y = self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
+            }
             messageView.frame = CGRect(x: nameLeft,
-                                       y: isMiniView == .superMini ? -9 : self.showMoreButton?.frame.maxY ?? self.spolerTextLabel?.frame.maxY ?? self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 5) + SettingsData.fontSize),
+                                       y: y,
                                        width: messageView.frame.width,
                                        height: messageView.frame.height)
         }

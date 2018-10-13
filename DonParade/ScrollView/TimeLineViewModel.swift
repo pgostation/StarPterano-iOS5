@@ -323,8 +323,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if data.sensitive == 1 { // もっと見る
             detailOffset += 20
         }
-        if data.spoiler_text != "" {
-            detailOffset += 20 + SettingsData.fontSize + 5
+        if data.spoiler_text != "" && data.spoiler_text != nil {
+            if data.spoiler_text!.count > 15 {
+                let spolerTextLabel = UILabel()
+                spolerTextLabel.text = data.spoiler_text
+                spolerTextLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                spolerTextLabel.numberOfLines = 0
+                spolerTextLabel.lineBreakMode = .byCharWrapping
+                spolerTextLabel.frame.size.width = UIScreen.main.bounds.width - 70
+                spolerTextLabel.sizeToFit()
+                detailOffset += 20 + spolerTextLabel.frame.height
+            } else {
+                detailOffset += 20 + SettingsData.fontSize + 5
+            }
         }
         
         let imagesOffset: CGFloat
@@ -583,6 +594,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             })
             cell.spolerTextLabel?.numberOfLines = 0
             cell.spolerTextLabel?.lineBreakMode = .byCharWrapping
+            cell.spolerTextLabel?.frame.size.width = UIScreen.main.bounds.width - 70
             cell.spolerTextLabel?.sizeToFit()
             cell.addSubview(cell.spolerTextLabel!)
         }
