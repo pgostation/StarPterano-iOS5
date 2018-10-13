@@ -715,33 +715,34 @@ final class TimeLineViewCell: UITableViewCell {
         
         self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 300)
         
-        for (index, imageView) in self.imageViews.enumerated() {
-            if isDetailMode && SettingsData.isLoadPreviewImage {
+        var imageTop: CGFloat = (self.messageView?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? 20) + 10
+        for imageView in self.imageViews {
+            if isDetailMode && SettingsData.isLoadPreviewImage, let image = imageView.image {
                 imageView.contentMode = .scaleAspectFit
                 var imageWidth: CGFloat = 0
                 var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
-                if let image = imageView.image {
-                    let size = image.size
-                    let rate = imageHeight / size.height
-                    imageWidth = size.width * rate
-                    if imageWidth > screenBounds.width - 60 {
-                        imageWidth = screenBounds.width - 60
-                        let newRate = imageWidth / size.width
-                        imageHeight = size.height * newRate
-                    }
-                    imageView.frame = CGRect(x: nameLeft,
-                                             y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
-                                             width: imageWidth,
-                                             height: imageHeight)
+                let size = image.size
+                let rate = imageHeight / size.height
+                imageWidth = size.width * rate
+                if imageWidth > screenBounds.width - 60 {
+                    imageWidth = screenBounds.width - 60
+                    let newRate = imageWidth / size.width
+                    imageHeight = size.height * newRate
                 }
+                imageView.frame = CGRect(x: nameLeft,
+                                         y: imageTop,
+                                         width: imageWidth,
+                                         height: imageHeight)
+                imageTop = imageView.frame.maxY + 10
             } else {
                 let imageWidth: CGFloat = screenBounds.width - 80
                 let imageHeight: CGFloat = 80
                 imageView.contentMode = .scaleAspectFill
                 imageView.frame = CGRect(x: nameLeft,
-                                         y: (self.messageView?.frame.maxY ?? 0) + (imageHeight + 10) * CGFloat(index) + 8,
+                                         y: imageTop,
                                          width: imageWidth,
                                          height: imageHeight)
+                imageTop = imageView.frame.maxY + 8
             }
         }
         
