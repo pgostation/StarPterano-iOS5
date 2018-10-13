@@ -698,16 +698,11 @@ final class TimeLineViewCell: UITableViewCell {
                                        width: screenBounds.width - 56,
                                        height: 20)
         
-        if self.messageView?.isHidden == true {
-            self.showMoreButton?.frame = CGRect(x: 100,
-                                                y: self.spolerTextLabel?.frame.maxY ?? self.messageView?.frame.maxY ?? 20,
-                                                width: screenBounds.width - 160,
-                                                height: 20)
-        } else {
-            self.showMoreButton?.frame = CGRect(x: 100,
-                                                y: self.spolerTextLabel?.frame.maxY ?? self.messageView?.frame.maxY ?? 20,
-                                                width: screenBounds.width - 160,
-                                                height: 20)
+        if let showMoreButton = self.showMoreButton {
+            showMoreButton.frame = CGRect(x: 100,
+                                          y: self.spolerTextLabel?.frame.maxY ?? self.messageView?.frame.maxY ?? 20,
+                                          width: screenBounds.width - 160,
+                                          height: 20)
         }
         
         self.DMBarLeft?.frame = CGRect(x: 0, y: 0, width: 5, height: 300)

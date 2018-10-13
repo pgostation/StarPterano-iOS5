@@ -562,8 +562,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.insertSubview(messageView, at: 1)
         
         // 「もっと見る」の場合
-        if data.sensitive == 1 || data.spoiler_text != "" {
-            if data.spoiler_text != "" {
+        if data.sensitive == 1 || (data.spoiler_text != nil && data.spoiler_text != "") {
+            if data.spoiler_text != nil && data.spoiler_text != "" {
                 messageView.isHidden = true
             }
             cell.spolerTextLabel = UILabel()
@@ -821,8 +821,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     let label = UILabel()
                     label.text = String((media.remote_url ?? "").split(separator: "/").last ?? "")
                     label.textAlignment = .center
+                    label.numberOfLines = 0
+                    label.lineBreakMode = .byCharWrapping
                     label.textColor = ThemeColor.linkTextColor
-                    label.adjustsFontSizeToFitWidth = true
                     cell.imageViews.last?.addSubview(label)
                     DispatchQueue.main.async {
                         label.frame = cell.imageViews.last?.bounds ?? CGRect(x: 0, y: 0, width: 0, height: 0)
