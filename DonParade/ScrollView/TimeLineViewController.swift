@@ -172,20 +172,6 @@ final class TimeLineViewController: MyViewController {
         if let text = text {
             MainViewController.instance?.showNotify(text: text, position: .center)
         }
-        
-        // GIFアニメーションを再始動
-        if let timelineView = self.view as? TimeLineView {
-            timelineView.gifManager.restart()
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        // 裏でGIFアニメーションが動いたままになるので、止める
-        if let timelineView = self.view as? TimeLineView {
-            timelineView.gifManager.stop()
-        }
     }
     
     // ユーザータイムライン/詳細トゥートを閉じる

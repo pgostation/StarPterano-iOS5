@@ -29,14 +29,6 @@ open class SwiftyGifManager {
         timer?.add(to: .main, forMode: RunLoopMode.commonModes)
     }
     
-    public func stop() {
-        timer?.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
-    }
-    
-    public func restart() {
-        timer?.add(to: .main, forMode: RunLoopMode.commonModes)
-    }
-    
     /**
      Add a new imageView to this manager if it doesn't exist
      - Parameter imageView: The UIImageView we're adding to this manager
