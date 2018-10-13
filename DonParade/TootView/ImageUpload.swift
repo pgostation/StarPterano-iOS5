@@ -68,7 +68,13 @@ final class ImageUpload {
         manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { (image, info) in
             guard let image = image else { return }
             
-            let imageData = UIImageJPEGRepresentation(image, 0.8)!
+            let imageData: Data
+            if filePathKey == "avatar" || filePathKey == "header" {
+                let smallImage = ImageUtils.smallIcon(image: image, size: 800)
+                imageData = UIImageJPEGRepresentation(smallImage, 0.8)!
+            } else {
+                imageData = UIImageJPEGRepresentation(image, 0.8)!
+            }
             
             self.filename = "image.jpeg"
             self.mimetype = "image/jpeg"

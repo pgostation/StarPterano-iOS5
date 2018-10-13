@@ -48,6 +48,28 @@ final class ImageUtils {
         return image
     }
     
+    // 正方形の画像を縮小する
+    static func smallIcon(image: UIImage, size: CGFloat) -> UIImage {
+        if image.size.width < size * UIScreen.main.scale { return image }
+        
+        let rate = max(size / image.size.width, size / image.size.height)
+        
+        let resizedSize = CGSize(width: image.size.width * rate, height: image.size.height * rate)
+        
+        UIGraphicsBeginImageContextWithOptions(resizedSize, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: resizedSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if let resizedImage = resizedImage {
+            if let data = UIImagePNGRepresentation(resizedImage) {
+                return UIImage(data: data) ?? image
+            }
+        }
+        
+        return image
+    }
+    
     // 指定色のUIImageを作成
     static func colorImage(color: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0.0)

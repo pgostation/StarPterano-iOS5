@@ -159,7 +159,6 @@ final class DecodeToot {
                     let startEmojiIndex = tmpEmojiStr.index(startRange.lowerBound, offsetBy: 1)
                     let endEmojiIndex = tmpEmojiStr.index(endRange.lowerBound, offsetBy: 1)
                     let emojiStr = " " + String(tmpEmojiStr.suffix(from: startEmojiIndex).prefix(upTo: endEmojiIndex)) + " "
-                    print("emojiStr=\(emojiStr)")
                         
                     content = String(content.prefix(upTo: startIndex)) + emojiStr + String(content.suffix(from: endIndex))
                 }

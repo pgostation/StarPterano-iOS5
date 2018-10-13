@@ -30,7 +30,7 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
         } else {
             imagePicker.mediaTypes = ["public.image"]
         }
-        MainViewController.instance?.present(imagePicker, animated: true, completion: nil)
+        UIUtils.getFrontViewController()?.present(imagePicker, animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
