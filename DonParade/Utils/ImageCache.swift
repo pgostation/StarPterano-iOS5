@@ -13,6 +13,8 @@ import SwiftyGif
 import APNGKit
 
 final class ImageCache {
+    private static var gifCache: [String: UIImage] = [:]
+    private static var oldGifCache: [String: UIImage] = [:]
     private static var memCache: [String: UIImage] = [:]
     private static var oldMemCache: [String: UIImage] = [:]
     private static var waitingDict: [String: [(UIImage)->Void]] = [:]
@@ -22,6 +24,27 @@ final class ImageCache {
     // 画像をキャッシュから取得する。なければネットに取りに行く
     static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, isPreview: Bool = false, callback: @escaping (UIImage)->Void) {
         guard let urlStr = urlStr else { return }
+        
+        // GIFキャッシュにある場合
+        if let image = gifCache[urlStr] {
+            if let imageCount = image.imageCount, imageCount > 0 {
+                callback(image)
+                return
+            } else {
+                gifCache.removeValue(forKey: urlStr)
+            }
+        }
+        // 破棄候補のGIFキャッシュにある場合
+        if let image = oldGifCache[urlStr] {
+            if let imageCount = image.imageCount, imageCount > 0 {
+                gifCache[urlStr] = image
+                oldGifCache.removeValue(forKey: urlStr)
+                callback(image)
+                return
+            } else {
+                oldGifCache.removeValue(forKey: urlStr)
+            }
+        }
         
         // メモリキャッシュにある場合
         if let image = memCache[urlStr] {
@@ -57,8 +80,13 @@ final class ImageCache {
                         let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
                         image.shortcode = shortcode
                         DispatchQueue.main.async {
-                            memCache.updateValue(image, forKey: urlStr)
+                            gifCache.updateValue(image, forKey: urlStr)
                             callback(image)
+                        }
+                        
+                        if gifCache.count >= 20 { // メモリの使いすぎを防ぐ
+                            oldGifCache = gifCache
+                            gifCache = [:]
                         }
                     } else if let image = EmojiImage(data: data) {
                         let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
@@ -66,11 +94,11 @@ final class ImageCache {
                         DispatchQueue.main.async {
                             memCache.updateValue(smallImage, forKey: urlStr)
                             callback(image)
-                            
-                            if memCache.count >= 70 { // メモリの使いすぎを防ぐ
-                                oldMemCache = memCache
-                                memCache = [:]
-                            }
+                        }
+                        
+                        if memCache.count >= 70 { // メモリの使いすぎを防ぐ
+                            oldMemCache = memCache
+                            memCache = [:]
                         }
                     }
                 }
@@ -99,7 +127,7 @@ final class ImageCache {
                     image.shortcode = shortcode
                     DispatchQueue.main.async {
                         if !isTemp {
-                            memCache.updateValue(image, forKey: urlStr)
+                            gifCache.updateValue(image, forKey: urlStr)
                         }
                         callback(image)
                         
@@ -108,6 +136,11 @@ final class ImageCache {
                         }
                         
                         waitingDict.removeValue(forKey: urlStr)
+                    }
+                    
+                    if gifCache.count >= 20 { // メモリの使いすぎを防ぐ
+                        oldGifCache = gifCache
+                        gifCache = [:]
                     }
                     
                     // ストレージにキャッシュする
@@ -127,11 +160,11 @@ final class ImageCache {
                         }
                         
                         waitingDict.removeValue(forKey: urlStr)
-                        
-                        if memCache.count >= 70 { // メモリの使いすぎを防ぐ
-                            oldMemCache = memCache
-                            memCache = [:]
-                        }
+                    }
+                    
+                    if memCache.count >= 70 { // メモリの使いすぎを防ぐ
+                        oldMemCache = memCache
+                        memCache = [:]
                     }
                     
                     // ストレージにキャッシュする

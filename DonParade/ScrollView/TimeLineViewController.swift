@@ -174,6 +174,24 @@ final class TimeLineViewController: MyViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // GIFアニメーションと日付部分の更新を止める
+        guard let tableView = self.view as? TimeLineView else { return }
+        for cell in tableView.visibleCells {
+            guard let cell = cell as? TimeLineViewCell else { continue }
+            
+            if cell.iconView?.image?.imageCount != nil {
+                tableView.gifManager.deleteImageView(cell.iconView!)
+            }
+            
+            cell.timer?.invalidate()
+            cell.timer = nil
+        }
+        tableView.gifManager.clear()
+    }
+    
     // ユーザータイムライン/詳細トゥートを閉じる
     @objc func closeAction() {
         UIView.animate(withDuration: 0.3, animations: {
