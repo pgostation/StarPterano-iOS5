@@ -409,6 +409,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                             SettingsData.hostName = SettingsData.accountList.first?.0
                             SettingsData.accessToken = SettingsData.accountList.first?.1
                         }
+                        
+                        tableView.reloadData()
                     }
                 }
             }

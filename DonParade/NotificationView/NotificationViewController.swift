@@ -130,7 +130,9 @@ final class NotificationViewController: MyViewController {
                                 let date = DecodeToot.decodeTime(text: created_at)
                                 let lastDate = SettingsData.newestNotifyDate(accessToken: SettingsData.accessToken)
                                 if lastDate == nil || date > lastDate! {
-                                    MainViewController.instance?.markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: true)
+                                    if view.window == nil {
+                                        MainViewController.instance?.markNotificationButton(accessToken: SettingsData.accessToken ?? "", to: true)
+                                    }
                                 }
                             }
                         }
