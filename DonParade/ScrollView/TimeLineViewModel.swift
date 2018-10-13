@@ -303,7 +303,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // メッセージのビューを一度作り、高さを求める
-        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
+        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: false, callback: nil)
         
         // セルを拡大表示するかどうか
         var detailOffset: CGFloat = isSelected ? 40 : 0
@@ -358,11 +358,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // メッセージのビューとデータを返す
     private var cacheId = ""
     private var cache: (UIView, AnalyzeJson.ContentData, Bool)?
-    private func getMessageViewAndData(index: Int, indexPath: IndexPath, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
+    private func getMessageViewAndData(index: Int, indexPath: IndexPath, add: Bool, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
         let data = list[index]
         
         if data.emojis == nil, data.id == cacheId, let cache = self.cache {
-            return cache
+            if !add || cache.0.superview == nil {
+                return cache
+            }
         }
         
         // content解析
@@ -482,10 +484,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         var id: String = ""
         
         // 表示用のデータを取得
-        let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, callback: { [weak self] in
+        let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: { [weak self] in
             // あとから絵文字が読み込めた場合の更新処理
             if cell.id != id { return }
-            if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, callback: nil) {
+            if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil) {
                 if cell.id != id { return }
                 let isHidden = cell?.messageView?.isHidden ?? false
                 messageView.isHidden = isHidden
@@ -566,49 +568,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.isMiniView = SettingsData.isMiniView
         cell.accountData = account
         cell.visibility = data.visibility
-        
-        /* // 時々字が消える現象、このどれでもないのか
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            if cell.id == id {
-                if cell.messageView == nil {
-                    print("#### nil - \(data.content ?? "nil")")
-                }
-                else if cell.messageView!.isHidden && data.spoiler_text == "" {
-                    print("#### isHidden - \(data.content ?? "nil")")
-                }
-                else if data.content != "" && cell.messageView!.frame.size.height == 0 {
-                    print("#### height is 0 - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UITextView, messageView.text == nil {
-                    print("#### messageView.text == nil - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UITextView, messageView.text == nil {
-                    print("#### messageView.text == nil - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UITextView, messageView.text == "" && data.content != "" {
-                    print("#### messageView.text == empty - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UITextView, messageView.textColor != ThemeColor.messageColor {
-                    print("#### messageView.textColor != ThemeColor.messageColor - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UILabel, messageView.text == nil {
-                    print("#### messageView(label).text == nil - \(data.content ?? "nil")")
-                }
-                else if let messageView = cell.messageView as? UILabel, messageView.text == "" && data.content != "" {
-                    print("#### messageView(label).text == empty - \(data.content ?? "nil")")
-                }
-                
-                if cell.messageView == nil {
-                    let oldHeight = cell.messageView!.frame.size.height
-                    cell.messageView?.sizeToFit()
-                    let newHeight = cell.messageView!.frame.size.height
-                    
-                    if oldHeight != newHeight {
-                        print("#### oldHeight != newHeight - \(data.content ?? "nil")")
-                    }
-                }
-            }
-        }*/
         
         if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
             (messageView as? UILabel)?.numberOfLines = 1
@@ -1281,7 +1240,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
             
             // トゥート詳細画面に移動
-            let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, callback: nil)
+            let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
             let mentionsData = getMentionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
             UIUtils.getFrontViewController()?.addChildViewController(viewController)
