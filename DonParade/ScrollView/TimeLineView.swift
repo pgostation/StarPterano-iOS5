@@ -296,7 +296,7 @@ final class TimeLineView: UITableView {
                                 offsetY = self.contentOffset.y
                             }
                             
-                            if offsetY > 60 || self.isManualLoading {
+                            if offsetY > 60 || (self.isManualLoading && self.model.getFirstTootId() != nil) {
                                 // スクロール位置が一番上でない場合、テーブルビューには反映せず裏に持っておく
                                 return
                             }
