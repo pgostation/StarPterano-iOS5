@@ -936,7 +936,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // もっと見るの場合
-        if data.sensitive == 1 || data.spoiler_text != "" {
+        if data.sensitive == 1 || (data.spoiler_text != "" && data.spoiler_text != nil) {
             cell.showMoreButton = UIButton()
             cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
