@@ -15,7 +15,6 @@ import SwiftyGif
 
 final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     weak var timelineView: TimeLineView? = nil
-    private static let gifManager = SwiftyGifManager(memoryLimit: 1)
     private var id = ""
     private var uri = ""
     private var relationshipData: AnalyzeJson.RelationshipData? = nil
@@ -172,7 +171,11 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 if self == nil { return }
                 if image.imageCount != nil {
                     // GIFアニメーション
-                    self?.iconView = UIImageView(gifImage: image, manager: ProfileViewCell.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    if let manager = self?.timelineView?.gifManager {
+                        self?.iconView = UIImageView(gifImage: image, manager: manager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    } else {
+                        self?.iconView = UIImageView()
+                    }
                 } else {
                     self?.iconView = UIImageView()
                 }

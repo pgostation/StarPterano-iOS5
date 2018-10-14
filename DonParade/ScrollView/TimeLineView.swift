@@ -29,6 +29,7 @@ final class TimeLineView: UITableView {
         self.type = type
         self.option = option
         self.refreshCon = UIRefreshControl()
+        self.gifManager.stop()
         
         super.init(frame: UIUtils.fullScreen(), style: UITableViewStyle.plain)
         

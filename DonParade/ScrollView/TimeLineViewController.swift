@@ -150,7 +150,9 @@ final class TimeLineViewController: MyViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        (self.view as? TimeLineView)?.startStreaming()
+        guard let tableView = self.view as? TimeLineView else { return }
+        
+        tableView.startStreaming()
         
         let text: String?
         if self.type == .home {
@@ -172,6 +174,8 @@ final class TimeLineViewController: MyViewController {
         if let text = text {
             MainViewController.instance?.showNotify(text: text, position: .center)
         }
+        
+        tableView.gifManager.restart()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -182,14 +186,11 @@ final class TimeLineViewController: MyViewController {
         for cell in tableView.visibleCells {
             guard let cell = cell as? TimeLineViewCell else { continue }
             
-            if cell.iconView?.image?.imageCount != nil {
-                tableView.gifManager.deleteImageView(cell.iconView!)
-            }
-            
             cell.timer?.invalidate()
             cell.timer = nil
         }
-        tableView.gifManager.clear()
+        
+        tableView.gifManager.stop()
     }
     
     // ユーザータイムライン/詳細トゥートを閉じる
@@ -206,6 +207,14 @@ final class TimeLineViewController: MyViewController {
             // 閉じるボタンは不要なので削除
             TimeLineViewController.closeButtons.removeLast()
         })
+        
+        if let childs = self.parent?.childViewControllers, childs.count >= 2 {
+            if let brother = childs[childs.count - 2] as? TimeLineViewController {
+                if let tableView = brother.view as? TimeLineView {
+                    tableView.gifManager.restart()
+                }
+            }
+        }
     }
     
     // スワイプで次へ
