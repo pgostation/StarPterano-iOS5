@@ -108,7 +108,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         self.list.removeFirst(self.list.count - 100000)
                     }
                 } else if lastDate2 > firstDate1 {
-                    if isNewRefresh && addList.count > 30 {
+                    if isNewRefresh && addList.count >= 40 {
                         // 再読み込み用のセルをつける
                         self.list.insert(AnalyzeJson.emptyContentData(), at: 0)
                     }
