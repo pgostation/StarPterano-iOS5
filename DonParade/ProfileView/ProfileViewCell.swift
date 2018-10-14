@@ -166,7 +166,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }
         
         // メインの表示
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { // 遅らせないと、gifManagerがいない
             ImageCache.image(urlStr: data.avatar ?? data.avatar_static, isTemp: false, isSmall: true) { [weak self] image in
                 if self == nil { return }
                 if image.imageCount != nil {
@@ -174,12 +174,12 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                     if let manager = self?.timelineView?.gifManager {
                         self?.iconView = UIImageView(gifImage: image, manager: manager, loopCount: SettingsData.useAnimation ? -1 : 0)
                     } else {
-                        self?.iconView = UIImageView()
+                        self?.iconView = UIImageView(gifImage: image)
                     }
                 } else {
                     self?.iconView = UIImageView()
+                    self?.iconView?.image = image
                 }
-                self?.iconView?.image = image
                 self?.iconView?.clipsToBounds = true
                 self?.iconView?.layer.cornerRadius = 8
                 self?.addSubview(self!.iconView!)
