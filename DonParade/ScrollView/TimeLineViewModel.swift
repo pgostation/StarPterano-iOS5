@@ -1133,7 +1133,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = ThemeColor.mentionedBgColor
             cell.idLabel.backgroundColor = ThemeColor.mentionedBgColor
             cell.dateLabel.backgroundColor = ThemeColor.mentionedBgColor
-        } else if self.inReplyToAccountId == cell.accountId {
+        } else if self.inReplyToAccountId == cell.accountId && cell.accountId != "" {
             // 返信先のアカウントの色
             cell.backgroundColor = ThemeColor.mentionedSameBgColor
             cell.messageView?.backgroundColor = ThemeColor.mentionedSameBgColor
