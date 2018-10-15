@@ -700,10 +700,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.detailButton!)
             
             // 使用アプリケーション
-            if let application = data.application {
+            if let application = data.application, let name = application["name"] as? String {
                 cell.applicationLabel = UILabel()
                 cell.addSubview(cell.applicationLabel!)
-                cell.applicationLabel?.text = "\(application["name"] ?? "")"
+                cell.applicationLabel?.text = "\(name.prefix(100))"
                 cell.applicationLabel?.textColor = ThemeColor.dateColor
                 cell.applicationLabel?.textAlignment = .right
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
@@ -718,9 +718,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.iconView?.removeFromSuperview()
                 if image.imageCount != nil {
                     // GIFアニメーション
-                    cell.iconView = WideTouchImageView(gifImage: image, manager: timelineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    cell.iconView = WideTouchImageView(gifImage: image, manager: TimeLineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
                     if !tableView.visibleCells.contains(cell) {
-                        timelineView.gifManager.deleteImageView(cell.iconView!)
+                        TimeLineView.gifManager.deleteImageView(cell.iconView!)
                     }
                 } else {
                     cell.iconView = WideTouchImageView()
@@ -1179,7 +1179,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         guard let cell = cell as? TimeLineViewCell else { return }
         
         if cell.iconView?.image?.imageCount != nil {
-            _ = (tableView as? TimeLineView)?.gifManager.addImageView(cell.iconView!)
+            _ = TimeLineView.gifManager.addImageView(cell.iconView!)
         }
         
         // タイマーでN秒ごとに時刻を更新
@@ -1207,7 +1207,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         guard let cell = cell as? TimeLineViewCell else { return }
         
         if cell.iconView?.image?.imageCount != nil {
-            (tableView as? TimeLineView)?.gifManager.deleteImageView(cell.iconView!)
+            TimeLineView.gifManager.deleteImageView(cell.iconView!)
         }
         
         cell.timer?.invalidate()

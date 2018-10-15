@@ -20,7 +20,7 @@ final class TimeLineView: UITableView {
     private weak var waitIndicator: UIView?
     private static let tableDispatchQueue = DispatchQueue(label: "TimeLineView")
     private let accessToken = SettingsData.accessToken
-    let gifManager = SwiftyGifManager(memoryLimit: 100)
+    static let gifManager = SwiftyGifManager(memoryLimit: 100)
     var mediaOnly: Bool = false
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
@@ -29,7 +29,6 @@ final class TimeLineView: UITableView {
         self.type = type
         self.option = option
         self.refreshCon = UIRefreshControl()
-        self.gifManager.stop()
         
         super.init(frame: UIUtils.fullScreen(), style: UITableViewStyle.plain)
         

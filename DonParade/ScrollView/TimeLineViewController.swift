@@ -174,8 +174,6 @@ final class TimeLineViewController: MyViewController {
         if let text = text {
             MainViewController.instance?.showNotify(text: text, position: .center)
         }
-        
-        tableView.gifManager.restart()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -186,11 +184,13 @@ final class TimeLineViewController: MyViewController {
         for cell in tableView.visibleCells {
             guard let cell = cell as? TimeLineViewCell else { continue }
             
+            if let iconView = cell.iconView, iconView.image?.imageCount != nil {
+                TimeLineView.gifManager.deleteImageView(iconView)
+            }
+            
             cell.timer?.invalidate()
             cell.timer = nil
         }
-        
-        tableView.gifManager.stop()
     }
     
     // ユーザータイムライン/詳細トゥートを閉じる
@@ -210,9 +210,7 @@ final class TimeLineViewController: MyViewController {
         
         if let childs = self.parent?.childViewControllers, childs.count >= 2 {
             if let brother = childs[childs.count - 2] as? TimeLineViewController {
-                if let tableView = brother.view as? TimeLineView {
-                    tableView.gifManager.restart()
-                }
+                brother.viewDidAppear(false)
             }
         }
     }
