@@ -320,7 +320,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        if data.sensitive == 1 { // もっと見る
+        if (data.sensitive == 1 && data.mediaData != nil) { // もっと見る
             detailOffset += 20
         }
         if data.spoiler_text != "" && data.spoiler_text != nil {
@@ -552,7 +552,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        
         let account = accountList[data.accountId]
         
         cell = getCell(view: tableView, height: max(55, messageView.frame.height + 28))
@@ -581,7 +580,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.insertSubview(messageView, at: 1)
         
         // 「もっと見る」の場合
-        if data.sensitive == 1 || (data.spoiler_text != nil && data.spoiler_text != "") {
+        if (data.sensitive == 1 && data.mediaData != nil) || (data.spoiler_text != nil && data.spoiler_text != "") {
             if data.spoiler_text != nil && data.spoiler_text != "" {
                 messageView.isHidden = true
             }
@@ -936,7 +935,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // もっと見るの場合
-        if data.sensitive == 1 || (data.spoiler_text != "" && data.spoiler_text != nil) {
+        if (data.sensitive == 1 && data.mediaData != nil) || (data.spoiler_text != "" && data.spoiler_text != nil) {
             cell.showMoreButton = UIButton()
             cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
