@@ -104,11 +104,17 @@ final class AnalyzeJson {
             }
         }
         
-        let application: [String: Any]?
+        var application: [String: Any]?
         if reblog_acct == nil {
             application = json["application"] as? [String: Any]
+            if let name = application?["name"] as? String {
+                application?["name"] = name.prefix(64)
+            }
         } else {
             application = reblog?["application"] as? [String: Any]
+            if let name = application?["name"] as? String {
+                application?["name"] = name.prefix(64)
+            }
         }
         
         let content = json["content"] as? String

@@ -703,7 +703,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             if let application = data.application, let name = application["name"] as? String {
                 cell.applicationLabel = UILabel()
                 cell.addSubview(cell.applicationLabel!)
-                cell.applicationLabel?.text = "\(name.prefix(100))"
+                cell.applicationLabel?.text = name
                 cell.applicationLabel?.textColor = ThemeColor.dateColor
                 cell.applicationLabel?.textAlignment = .right
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
