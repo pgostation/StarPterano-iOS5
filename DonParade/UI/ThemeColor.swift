@@ -34,6 +34,7 @@ final class ThemeColor {
     
     // セル選択色
     static var selectedBgColor = UIColor(red: 0.78, green: 1.0, blue: 0.78, alpha: 1)
+    static var mentionedMeBgColor = UIColor(red: 0.82, green: 0.98, blue: 0.82, alpha: 1)
     static var sameAccountBgColor = UIColor(red: 0.86, green: 0.96, blue: 0.86, alpha: 1)
     static var mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
     static var mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)
@@ -65,6 +66,7 @@ final class ThemeColor {
             opaqueButtonsBgColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             
             selectedBgColor = UIColor(red: 0.20, green: 0.25, blue: 0.00, alpha: 1)
+            mentionedMeBgColor = UIColor(red: 0.16, green: 0.20, blue: 0.03, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.12, green: 0.16, blue: 0.06, alpha: 1)
             mentionedBgColor = UIColor(red: 0.3, green: 0.20, blue: 0.12, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.24, green: 0.20, blue: 0.16, alpha: 1)
@@ -93,6 +95,7 @@ final class ThemeColor {
             opaqueButtonsBgColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
             
             selectedBgColor = UIColor(red: 0.88, green: 1.0, blue: 0.68, alpha: 1)
+            mentionedMeBgColor = UIColor(red: 0.90, green: 0.98, blue: 0.75, alpha: 1)
             sameAccountBgColor = UIColor(red: 0.92, green: 0.96, blue: 0.82, alpha: 1)
             mentionedBgColor = UIColor(red: 1.0, green: 0.93, blue: 0.82, alpha: 1)
             mentionedSameBgColor = UIColor(red: 0.94, green: 0.91, blue: 0.86, alpha: 1)

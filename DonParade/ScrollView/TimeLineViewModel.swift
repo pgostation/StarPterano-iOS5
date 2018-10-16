@@ -1119,8 +1119,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = ThemeColor.selectedBgColor
             cell.idLabel.backgroundColor = ThemeColor.selectedBgColor
             cell.dateLabel.backgroundColor = ThemeColor.selectedBgColor
+        } else if self.selectedAccountId == cell.accountId && self.inReplyToTootId == cell.id {
+            // 選択したアカウントと同一で、返信先のトゥートの色
+            cell.backgroundColor = ThemeColor.mentionedMeBgColor
+            cell.messageView?.backgroundColor = ThemeColor.mentionedMeBgColor
+            cell.nameLabel.backgroundColor = ThemeColor.mentionedMeBgColor
+            cell.idLabel.backgroundColor = ThemeColor.mentionedMeBgColor
+            cell.dateLabel.backgroundColor = ThemeColor.mentionedMeBgColor
         } else if self.selectedAccountId == cell.accountId {
-            // 関連色
+            // 選択したアカウントと同一のアカウントの色
             cell.backgroundColor = ThemeColor.sameAccountBgColor
             cell.messageView?.backgroundColor = ThemeColor.sameAccountBgColor
             cell.nameLabel.backgroundColor = ThemeColor.sameAccountBgColor
