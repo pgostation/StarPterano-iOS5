@@ -11,9 +11,10 @@
 import Foundation
 import Starscream
 
-final class MastodonStreaming: NSObject, WebSocketDelegate {
+final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegate {
     private var socket: WebSocket
     private var callback: (String?)->Void
+    private var timer: Timer? = nil
     var isConnect = false
     
     init(url: URL, callback: @escaping (String?)->Void) {
@@ -26,6 +27,7 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
         super.init()
         
         self.socket.delegate = self
+        self.socket.pongDelegate = self
         self.socket.connect()
     }
     
@@ -36,11 +38,15 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected")
         self.isConnect = true
+        
+        self.timer = Timer.scheduledTimer(timeInterval: 179, target: self, selector: #selector(ping), userInfo: nil, repeats: true)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected. error=\(error?.localizedDescription ?? "")")
         self.isConnect = false
+        self.timer?.invalidate()
+        self.timer = nil
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -54,6 +60,17 @@ final class MastodonStreaming: NSObject, WebSocketDelegate {
     func disconnect() {
         if self.isConnect {
             self.socket.disconnect()
+            self.timer?.invalidate()
+            self.timer = nil
         }
+    }
+    
+    @objc func ping() {
+        print("websocket ping")
+        self.socket.write(ping: Data())
+    }
+    
+    func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
+        print("Got pong! Maybe some data: \(data?.count ?? -1)")
     }
 }
