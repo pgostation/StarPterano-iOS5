@@ -172,7 +172,10 @@ final class ImageViewController: MyViewController {
     @objc func leftAction() {
         guard let view = self.view as? ImageView else { return }
         
-        if index + 1 >= self.imagesUrls.count { return }
+        if index + 1 >= self.imagesUrls.count {
+            ImageViewController.instance?.closeAction()
+            return
+        }
         
         index = index + 1
         
@@ -205,7 +208,10 @@ final class ImageViewController: MyViewController {
     @objc func rightAction() {
         guard let view = self.view as? ImageView else { return }
         
-        if index - 1 < 0 { return }
+        if index - 1 < 0 {
+            ImageViewController.instance?.closeAction()
+            return
+        }
         
         index = index - 1
         
