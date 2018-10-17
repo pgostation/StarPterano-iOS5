@@ -11,6 +11,7 @@
 
 import UIKit
 import SwiftyGif
+import AudioToolbox
 
 final class TimeLineView: UITableView {
     let type: TimeLineViewController.TimeLineType
@@ -305,8 +306,12 @@ final class TimeLineView: UITableView {
                         }
                     }
                 case "notification":
-                    // 通知ボタンにマークをつけるだけ
+                    // 通知ボタンにマークをつける
                     MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
+                    
+                    // 効果音を出す
+                    let soundId: SystemSoundID = 1309
+                    AudioServicesPlaySystemSound(soundId)
                 case "delete":
                     if let deleteId = payload as? String {
                         // waitingStatusListからの削除
