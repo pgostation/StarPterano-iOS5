@@ -17,15 +17,29 @@ final class EmojiKeyboard: UIView {
     private let returnButton = UIButton()
     private let deleteButton = UIButton()
     private let searchButton = UIButton()
+    private let heightSlider = HeightSlider()
     private let emojiScrollView = EmojiInputScrollView()
     
+    var intrinsicHeight: CGFloat = SettingsData.emojiKeyboardHeight {
+        didSet {
+            self.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIViewNoIntrinsicMetric, height: self.intrinsicHeight)
+    }
+    
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIUtils.isIphoneX ? 320 : 250))
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: SettingsData.emojiKeyboardHeight))
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(spaceButton)
         self.addSubview(returnButton)
         self.addSubview(deleteButton)
         self.addSubview(searchButton)
+        self.addSubview(heightSlider)
         self.addSubview(emojiScrollView)
         
         spaceButton.addTarget(self, action: #selector(spaceAction), for: .touchUpInside)
@@ -70,6 +84,12 @@ final class EmojiKeyboard: UIView {
         searchButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
         searchButton.clipsToBounds = true
         searchButton.layer.cornerRadius = 10
+        
+        heightSlider.text = "≡"
+        heightSlider.font = UIFont.systemFont(ofSize: 35)
+        heightSlider.textColor = ThemeColor.mainButtonsTitleColor
+        heightSlider.textAlignment = .center
+        heightSlider.isUserInteractionEnabled = true
     }
     
     @objc func spaceAction() {
@@ -135,22 +155,27 @@ final class EmojiKeyboard: UIView {
     override func layoutSubviews() {
         self.spaceButton.frame = CGRect(x: 10,
                                         y: 1,
-                                        width: 80,
+                                        width: 70,
                                         height: 40)
         
-        self.returnButton.frame = CGRect(x: 95,
+        self.returnButton.frame = CGRect(x: 85,
                                          y: 1,
-                                         width: 80,
+                                         width: 70,
                                          height: 40)
         
-        self.deleteButton.frame = CGRect(x: 180,
+        self.deleteButton.frame = CGRect(x: 160,
                                          y: 1,
-                                         width: 80,
+                                         width: 70,
                                          height: 40)
         
-        self.searchButton.frame = CGRect(x: 265,
+        self.searchButton.frame = CGRect(x: 235,
                                          y: 1,
                                          width: 40,
+                                         height: 40)
+        
+        self.heightSlider.frame = CGRect(x: self.frame.width - 35,
+                                         y: 1,
+                                         width: 35,
                                          height: 40)
         
         self.emojiScrollView.frame = CGRect(x: 0,
@@ -337,5 +362,41 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         return buttons
+    }
+}
+
+private final class HeightSlider: UILabel {
+    private var lastPoint: CGFloat = -1
+    private weak var touch: UITouch? = nil
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if self.touch == nil, let touch = touches.first {
+            self.touch = touch
+            self.lastPoint = touch.location(in: nil).y
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = self.touch {
+            let diff = touch.location(in: nil).y - self.lastPoint
+            
+            if let keyboard = self.superview as? EmojiKeyboard {
+                let height = max(200, min(UIScreen.main.bounds.height - 150, keyboard.frame.size.height - diff))
+                keyboard.frame.size.height = height
+                keyboard.intrinsicHeight = height
+                SettingsData.emojiKeyboardHeight = height
+                keyboard.setNeedsLayout()
+            }
+            
+            self.lastPoint = touch.location(in: nil).y
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // 何もしない
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesEnded(touches, with: event)
     }
 }

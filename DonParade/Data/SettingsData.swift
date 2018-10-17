@@ -439,4 +439,19 @@ final class SettingsData {
             }
         }
     }
+    
+    // 基準アイコンサイズ
+    static var emojiKeyboardHeight: CGFloat {
+        get {
+            let value = defaults.double(forKey: "emojiKeyboardHeight")
+            if value > 0 {
+                return CGFloat(value)
+            }
+            let defaultSize: CGFloat = UIUtils.isIphoneX ? 320 : 250
+            return defaultSize
+        }
+        set(newValue) {
+            defaults.set(newValue, forKey: "emojiKeyboardHeight")
+        }
+    }
 }
