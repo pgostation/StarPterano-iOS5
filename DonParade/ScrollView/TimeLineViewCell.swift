@@ -278,8 +278,11 @@ final class TimeLineViewCell: UITableViewCell {
                     if let visibility = self.visibility {
                         guard let view = TootViewController.instance?.view as? TootView else { return }
                         
-                        let mode = self.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
-                                                   m2: SettingsData.protectMode)
+                        var mode = self.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
+                                                        m2: SettingsData.protectMode)
+                        if mode == SettingsData.ProtectMode.publicMode {
+                            mode = SettingsData.ProtectMode.unlisted // inreplytoではLTLに流さない
+                        }
                         view.protectMode = mode
                         view.refresh()
                     }
