@@ -53,6 +53,10 @@ final class AllListsViewController: MyViewController {
                         list.append(data)
                     }
                     
+                    list.sort(by: { (data1, data2) -> Bool in
+                        return (data1.title ?? "") < (data2.title ?? "")
+                    })
+                    
                     DispatchQueue.main.async {
                         if let view = self.view as? AllListsView {
                             view.tableView.model.list = list
