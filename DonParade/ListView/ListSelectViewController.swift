@@ -196,6 +196,10 @@ private final class ListSelectTableView: UITableView {
                             list.append(data)
                         }
                         
+                        list.sort(by: { (data1, data2) -> Bool in
+                            return (data1.title ?? "") < (data2.title ?? "")
+                        })
+                        
                         if let accessToken = SettingsData.accessToken {
                             ListData.setCache(accessToken: accessToken, value: list)
                         }
