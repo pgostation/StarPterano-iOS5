@@ -44,9 +44,13 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected. error=\(error?.localizedDescription ?? "")")
-        self.isConnect = false
-        self.timer?.invalidate()
-        self.timer = nil
+        if self.isConnect {
+            self.isConnect = false
+            self.timer?.invalidate()
+            self.timer = nil
+            
+            MainViewController.instance?.showNotify(text: I18n.get("NOTIFY_DISCONNECTED_STREAMING"))
+        }
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -59,6 +63,7 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     
     func disconnect() {
         if self.isConnect {
+            self.isConnect = false
             self.socket.disconnect()
             self.timer?.invalidate()
             self.timer = nil

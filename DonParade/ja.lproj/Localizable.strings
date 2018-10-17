@@ -183,3 +183,6 @@
 "SETTINGS_SEARCH" = "タイムライン内を検索";
 "SETTINGS_LICENSE" = "著作権情報";
 "SETTINGS_VERSION" = "バージョン";
+
+// エラー等
+"NOTIFY_DISCONNECTED_STREAMING" = "ストリーミング切断";
