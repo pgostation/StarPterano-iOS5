@@ -15,11 +15,11 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     private var socket: WebSocket
     private var callback: (String?)->Void
     private var timer: Timer? = nil
-    var isConnect = false
+    private let accessToken = SettingsData.accessToken
+    var isConnecting = true
+    var isConnected = false
     
     init(url: URL, callback: @escaping (String?)->Void) {
-        self.isConnect = true
-        
         self.socket = WebSocket(url: url)
         
         self.callback = callback
@@ -37,19 +37,23 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     
     func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected")
-        self.isConnect = true
+        self.isConnected = true
+        self.isConnecting = false
         
         self.timer = Timer.scheduledTimer(timeInterval: 179, target: self, selector: #selector(ping), userInfo: nil, repeats: true)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected. error=\(error?.localizedDescription ?? "")")
-        if self.isConnect {
-            self.isConnect = false
+        if self.isConnected {
+            self.isConnected = false
+            self.isConnecting = false
             self.timer?.invalidate()
             self.timer = nil
             
-            MainViewController.instance?.showNotify(text: I18n.get("NOTIFY_DISCONNECTED_STREAMING"))
+            if accessToken == SettingsData.accessToken {
+                MainViewController.instance?.showNotify(text: I18n.get("NOTIFY_DISCONNECTED_STREAMING"))
+            }
         }
     }
     
@@ -62,8 +66,9 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     }
     
     func disconnect() {
-        if self.isConnect {
-            self.isConnect = false
+        if self.isConnected {
+            self.isConnected = false
+            self.isConnecting = false
             self.socket.disconnect()
             self.timer?.invalidate()
             self.timer = nil

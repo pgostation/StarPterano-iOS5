@@ -203,7 +203,7 @@ final class TimeLineView: UITableView {
             checkHomeStreaming()
         }
         
-        if self.streamingObject?.isConnect != true {
+        if self.streamingObject?.isConnecting != true && self.streamingObject?.isConnected != true {
             if self.type == .home {
                 self.streaming(streamingType: "user")
                 
