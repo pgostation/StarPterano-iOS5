@@ -203,10 +203,23 @@ final class TimeLineView: UITableView {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: [AnyObject]] {
                         if let ancestors = responseJson["ancestors"] {
-                            AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: ancestors, isNew: true, isNewRefresh: false)
+                            var acct = ""
+                            for ancestor in ancestors {
+                                guard let ancestor = ancestor as? [String: Any] else { return }
+                                let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: ancestor, acct: &acct)
+                                strongSelf.model.change(tableView: strongSelf, addList: [contentData], accountList: strongSelf.accountList)
+                            }
                         }
                         if let descendants = responseJson["descendants"] {
-                            AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: descendants, isNew: true, isNewRefresh: false)
+                            var acct = ""
+                            for descendant in descendants {
+                                guard let descendant = descendant as? [String: Any] else { return }
+                                let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: descendant, acct: &acct)
+                                strongSelf.model.change(tableView: strongSelf, addList: [contentData], accountList: strongSelf.accountList)
+                            }
+                        }
+                        DispatchQueue.main.sync {
+                            strongSelf.reloadData()
                         }
                     }
                 } catch {

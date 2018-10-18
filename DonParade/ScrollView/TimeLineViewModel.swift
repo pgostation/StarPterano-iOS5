@@ -529,6 +529,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     guard let end = messageView.position(from: start, offset: data.0.length) else { continue }
                     guard let textRange = messageView.textRange(from: start, to: end) else { continue }
                     let position = messageView.firstRect(for: textRange)
+                    if position.origin.x == CGFloat.infinity { continue }
                     
                     for emoji in emojis {
                         if emoji["shortcode"] as? String == data.1 {
@@ -540,7 +541,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                 apngView.backgroundColor = ThemeColor.cellBgColor
                                 let size = min(position.size.width, position.size.height)
                                 apngView.frame = CGRect(x: position.origin.x,
-                                                        y: position.origin.y + 2,
+                                                        y: position.origin.y + 3,
                                                         width: size,
                                                         height: size)
                                 messageView.addSubview(apngView)
