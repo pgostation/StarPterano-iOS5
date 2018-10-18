@@ -125,8 +125,12 @@ final class TimeLineView: UITableView {
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=100\(sinceIdStr)")
         case .mentions:
-            guard let lastInReplyToId = model.getLastInReplyToId() else { return }
-            url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
+            if let id = model.getFirstTootId(), id != "" {
+                self.refreshContext(id: id)
+            }
+            return
+            //guard let lastInReplyToId = model.getLastInReplyToId() else { return }
+            //url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
         case .direct:
             url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(sinceIdStr)")
         case .list:
@@ -169,16 +173,9 @@ final class TimeLineView: UITableView {
                             
                             strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: strongSelf.accountList)
                             
-                            // 続きを取得
                             DispatchQueue.main.sync {
+                                // テーブルビューを更新
                                 strongSelf.reloadData()
-                                
-                                if self?.type == .mentions {
-                                    if contentData.in_reply_to_id == nil {
-                                        return // ループ防止
-                                    }
-                                    strongSelf.refresh()
-                                }
                             }
                         }
                     }
@@ -192,6 +189,31 @@ final class TimeLineView: UITableView {
         // ストリーミングが停止していれば再開
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.startStreaming()
+        }
+    }
+    
+    private func refreshContext(id : String?) {
+        guard let id = id else { return }
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(id)/context") else { return }
+        
+        try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: [AnyObject]] {
+                        if let ancestors = responseJson["ancestors"] {
+                            AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: ancestors, isNew: true, isNewRefresh: false)
+                        }
+                        if let descendants = responseJson["descendants"] {
+                            AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: descendants, isNew: true, isNewRefresh: false)
+                        }
+                    }
+                } catch {
+                }
+            } else if let error = error {
+                print(error)
+            }
         }
     }
     
