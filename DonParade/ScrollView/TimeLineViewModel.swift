@@ -503,6 +503,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 messageView.frame.origin.y = y
             }
         })
+        while let apngView = messageView.viewWithTag(5555) as? APNGImageView {
+            apngView.stopAnimating()
+            apngView.removeFromSuperview()
+        }
         
         if data.id == nil && (timelineView.type != .user && timelineView.type != .mentions) {
             // タイムライン途中読み込み用のセル

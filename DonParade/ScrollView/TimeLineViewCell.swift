@@ -198,6 +198,8 @@ final class TimeLineViewCell: UITableViewCell {
         self.dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
+        
+        
     }
     
     // アイコンをタップした時の処理
