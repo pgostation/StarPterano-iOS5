@@ -107,6 +107,7 @@ final class ThemeColor {
         
         if !SettingsData.useColoring {
             selectedBgColor = cellBgColor
+            mentionedMeBgColor = cellBgColor
             sameAccountBgColor = cellBgColor
             mentionedBgColor = cellBgColor
             mentionedSameBgColor = cellBgColor

@@ -373,11 +373,14 @@ final class SettingsData {
         }
         set(newValue) {
             self._useColoring = newValue
+            
             if newValue {
                 defaults.removeObject(forKey: "useColoring")
             } else {
                 defaults.set("OFF", forKey: "useColoring")
             }
+            
+            ThemeColor.change()
         }
     }
     
