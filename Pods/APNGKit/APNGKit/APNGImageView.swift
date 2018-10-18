@@ -215,10 +215,10 @@ open class APNGImageView: APNGView {
         
         isAnimating = true
         timer = GCDTimer(intervalInSecs: 0.016)
-        timer!.Event = { [weak self] in
+        timer?.Event = { [weak self] in
             DispatchQueue.main.sync { self?.tick() }
         }
-        timer!.start()
+        timer?.start()
     }
     
     /**
