@@ -23,6 +23,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var inReplyToTootId: String?
     private var inReplyToAccountId: String?
     var isDetailTimeline = false
+    private var cellCount = 0 // 現在のセル数
     
     override init() {
         super.init()
@@ -126,7 +127,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         DispatchQueue.main.async {
                             // スクロールして、表示していたツイートがあまりずれないようにする
                             let oldOffsetY = tableView.contentOffset.y
-                            let indexPath = IndexPath(row: addList2.count, section: 0)
+                            let indexPath = IndexPath(row: min(self.cellCount, addList2.count), section: 0)
                             tableView.scrollToRow(at: indexPath,
                                                   at: UITableViewScrollPosition.top,
                                                   animated: false)
@@ -241,10 +242,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if let timelineView = tableView as? TimeLineView {
             if timelineView.type == .user {
+                self.cellCount = list.count + 2
                 return list.count + 2 // プロフィール表示とオートページャライズ用のセル
             }
         }
         
+        self.cellCount = list.count + 1
         return list.count + 1 // オートページャライズ用のセル
     }
     

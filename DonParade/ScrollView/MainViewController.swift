@@ -108,7 +108,7 @@ final class MainViewController: MyViewController {
         removeOldView()
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            let key = "\(hostName)_\(accessToken)_Home"
+            let key = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.home.rawValue)"
             if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
@@ -141,7 +141,7 @@ final class MainViewController: MyViewController {
         removeOldView()
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            let key = "\(hostName)_\(accessToken)_LTL"
+            let key = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
             if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
@@ -179,7 +179,7 @@ final class MainViewController: MyViewController {
         removeOldView()
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            let key = "\(hostName)_\(accessToken)_FTL"
+            let key = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.federation.rawValue)"
             if let vc = self.timelineList[key] {
                 self.timelineViewController = vc
             } else {
@@ -220,7 +220,15 @@ final class MainViewController: MyViewController {
         removeOldView()
         
         if let hostName = SettingsData.hostName, let accessToken = SettingsData.accessToken {
-            self.timelineViewController = TimeLineViewController(type: .list)
+            var key = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.list.rawValue)"
+            key += SettingsData.selectedListId(accessToken: accessToken) ?? ""
+            if let vc = self.timelineList[key] {
+                self.timelineViewController = vc
+            } else {
+                self.timelineViewController = TimeLineViewController(type: .list)
+                self.timelineList.updateValue(self.timelineViewController!, forKey: key)
+            }
+            
             SettingsData.setTlMode(key: hostName + "," + accessToken, mode: .list)
         }
         
