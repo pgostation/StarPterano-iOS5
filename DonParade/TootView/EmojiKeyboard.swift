@@ -115,14 +115,21 @@ final class EmojiKeyboard: UIView {
     }
     
     @objc func deleteAction() {
-        guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
-        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
+        guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag)  as? UITextView else { return }
+        let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) as? UITextView
         
-        if textView2?.isFirstResponder == true {
-            (textView2 as? UITextView)?.deleteBackward()
+        if textView2?.isFirstResponder == true, let textView2 = textView2 {
+            if EmojiKeyboard.getCarretBeforeChar(textView: textView2) == "\u{200b}" {
+                textView2.deleteBackward()
+            }
+            textView2.deleteBackward()
             return
         }
-        (textView as? UITextView)?.deleteBackward()
+        
+        if EmojiKeyboard.getCarretBeforeChar(textView: textView) == "\u{200b}" {
+            textView.deleteBackward()
+        }
+        textView.deleteBackward()
     }
     
     @objc func searchAction() {
@@ -150,6 +157,20 @@ final class EmojiKeyboard: UIView {
             self.pressTimer?.invalidate()
             self.pressTimer = nil
         }
+    }
+    
+    // キャレット直前の文字を返す
+    static func getCarretBeforeChar(textView: UITextView) -> Character? {
+        guard let currentRange = textView.selectedTextRange else {
+            return nil
+        }
+        
+        let currentPosition = currentRange.start
+        guard let leftRange = textView.textRange(from: textView.beginningOfDocument, to: currentPosition), let leftText = textView.text(in: leftRange) else {
+            return nil
+        }
+        
+        return leftText.last
     }
  
     override func layoutSubviews() {
@@ -277,7 +298,13 @@ private final class EmojiInputScrollView: UIScrollView {
         
         if textView2?.isFirstResponder == true {
             if let textView2 = textView2 as? UITextView {
-                textView2.insertText("\u{200b}:" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
+                let prefixStr: String
+                if EmojiKeyboard.getCarretBeforeChar(textView: textView2) == "\u{200b}" {
+                    prefixStr = ""
+                } else {
+                    prefixStr = "\u{200b}"
+                }
+                textView2.insertText("\(prefixStr):" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
                 
                 // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
                 textView2.textColor = ThemeColor.messageColor
@@ -287,7 +314,13 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         if let textView = textView as? UITextView {
-            textView.insertText("\u{200b}:" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
+            let prefixStr: String
+            if EmojiKeyboard.getCarretBeforeChar(textView: textView) == "\u{200b}" {
+                prefixStr = ""
+            } else {
+                prefixStr = "\u{200b}"
+            }
+            textView.insertText("\(prefixStr):" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
             
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor
