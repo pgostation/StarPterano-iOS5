@@ -328,11 +328,14 @@ final class TimeLineView: UITableView {
                             self.waitingStatusList.insert(statusData, at: 0)
                             
                             var offsetY: CGFloat = 0
+                            var returnFlag = false
                             DispatchQueue.main.sync {
                                 offsetY = self.contentOffset.y
+                                
+                                returnFlag = offsetY > 60 || (self.isManualLoading && self.model.getFirstTootId() != nil)
                             }
                             
-                            if offsetY > 60 || (self.isManualLoading && self.model.getFirstTootId() != nil) {
+                            if returnFlag {
                                 // スクロール位置が一番上でない場合、テーブルビューには反映せず裏に持っておく
                                 return
                             }
