@@ -186,6 +186,10 @@ final class TimeLineViewCell: UITableViewCell {
         }
         self.iconView?.removeFromSuperview()
         self.iconView?.image = nil
+        for gesture in self.iconView?.gestureRecognizers ?? [] {
+            self.iconView?.removeGestureRecognizer(gesture)
+        }
+        self.iconView = nil
         
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
@@ -791,7 +795,7 @@ final class TimeLineViewCell: UITableViewCell {
             
             self.applicationLabel?.frame = CGRect(x: 50,
                                                   y: top - 5,
-                                                  width: screenBounds.width - 50,
+                                                  width: screenBounds.width - 52,
                                                   height: 20)
             
             top += 48

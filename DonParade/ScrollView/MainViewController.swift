@@ -502,6 +502,7 @@ final class MainViewController: MyViewController {
         
         TimeLineViewController.closeButtons.last?.isHidden = true
         
+        self.buttonTimer?.invalidate()
         self.buttonTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(checkTouch), userInfo: nil, repeats: true)
     }
     
@@ -528,6 +529,7 @@ final class MainViewController: MyViewController {
             TimeLineViewController.closeButtons.last?.isHidden = false
         }
         
+        self.buttonTimer?.invalidate()
         self.buttonTimer = nil
     }
     

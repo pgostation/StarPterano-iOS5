@@ -481,9 +481,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         if let id = data.id {
+            if self.oldCacheDict[id] != nil {
+                if let textView = self.oldCacheDict[id]?.0 as? MyTextView {
+                    textView.cachingFlag = false
+                }
+                self.oldCacheDict[id] = nil
+            }
+            if self.cacheDict[id] != nil {
+                if let textView = self.cacheDict[id]?.0 as? MyTextView {
+                    textView.cachingFlag = false
+                }
+                self.cacheDict[id] = nil
+            }
             self.cacheDict[id] = (messageView, data, isContinue)
             
-            if self.cacheDict.count > 25 {
+            // 破棄候補を破棄して、キャッシュを破棄候補に移す
+            if self.cacheDict.count > 10 {
+                // キャッシュ中フラグを倒す
                 for data in self.oldCacheDict {
                     if let textView = data.value.0 as? MyTextView {
                         textView.cachingFlag = false
