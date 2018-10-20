@@ -139,10 +139,6 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     }
                     
                     if isStreaming {
-                        if self.cellCount != self.list.count {
-                            tableView.reloadData()
-                        }
-                        
                         self.animationCellsCount = addList2.count
                     }
                     
@@ -185,7 +181,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             }
                             tableView.reloadRows(at: indexPathList, with: UITableViewRowAnimation.none)
                             
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                 self.inAnimating = false
                             }
                         }
