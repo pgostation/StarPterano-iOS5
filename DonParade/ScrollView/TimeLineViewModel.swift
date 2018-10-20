@@ -37,7 +37,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // 一番新しいトゥートのID
     func getFirstTootId() -> String? {
-        return list.first?.id
+        for data in list {
+            if !data.isMerge {
+                return data.id
+            }
+        }
+        return nil
+    }
+    
+    // 一番古いトゥートのID
+    func getLastTootId() -> String? {
+        for data in list.reversed() {
+            if !data.isMerge {
+                return data.id
+            }
+        }
+        return nil
     }
     
     // 一番古いトゥートのin_reply_to_id
@@ -195,7 +210,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             let listData = self.list[index]
                             if listData.id == newContent.id {
                                 // 更新
-                                self.list[index] = newContent
+                                if newContent.isMerge && !self.list[index].isMerge {
+                                    // 何もしない
+                                } else {
+                                    self.list[index] = newContent
+                                }
                                 flag = true
                                 break
                             }
@@ -550,7 +569,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if index >= list.count {
             if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
                 // 過去のトゥートに遡る
-                timelineView.refreshOld(id: list.last?.id)
+                timelineView.refreshOld(id: timelineView.model.getLastTootId())
             }
             let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
@@ -687,15 +706,45 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(cell.spolerTextLabel!)
         }
         
-        if data.visibility == "direct" || data.visibility == "private" {
-            // ダイレクトメッセージは赤、プライベートメッセージはオレンジ
-            let color = (data.visibility == "direct") ? ThemeColor.directBar: ThemeColor.privateBar
+        func barColor(color: UIColor) {
             cell.DMBarLeft = UIView()
             cell.DMBarLeft?.backgroundColor = color
             cell.addSubview(cell.DMBarLeft!)
             cell.DMBarRight = UIView()
             cell.DMBarRight?.backgroundColor = color
             cell.addSubview(cell.DMBarRight!)
+        }
+        
+        if data.visibility == "direct" {
+            // ダイレクトメッセージは赤
+            barColor(color: ThemeColor.directBar)
+        } else if data.visibility == "private" {
+            // プライベートメッセージはオレンジ
+            barColor(color: ThemeColor.privateBar)
+        } else if timelineView.type == .local && data.isMerge {
+            // ローカルのトゥートがこれ以上なければ、過去のトゥートを取得してTLはこれ以上表示しない
+            var isHomeOnly = true
+            for i in indexPath.row..<list.count {
+                if !list[i].isMerge {
+                    isHomeOnly = false
+                    break
+                }
+            }
+            if isHomeOnly {
+                if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
+                    // 過去のトゥートに遡る
+                    timelineView.refreshOld(id: timelineView.model.getLastTootId())
+                }
+                let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+                cell.backgroundColor = ThemeColor.viewBgColor
+                cell.selectionStyle = .none
+                return cell
+            }
+            
+            if data.visibility == "unlisted" || data.reblog_id != nil || accountList[data.accountId]?.acct?.contains("@") == true {
+                // バーの色は青
+                barColor(color: ThemeColor.unlistedBar)
+            }
         }
         
         // 詳細表示の場合

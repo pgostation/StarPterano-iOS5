@@ -12,14 +12,14 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool, isNewRefresh: Bool = false) {
+    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool, isNewRefresh: Bool = false, isMerge: Bool = false) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
         for json in jsonList {
             guard let json = json as? [String: Any] else { continue }
             
-            let data = analyzeJson(view: view, model: model, json: json, acct: &acct)
+            let data = analyzeJson(view: view, model: model, json: json, acct: &acct, isMerge: isMerge)
             
             contentList.append(data)
         }
@@ -37,7 +37,7 @@ final class AnalyzeJson {
         model.change(tableView: view, addList: contentList, accountList: view.accountList, isNewRefresh: isNewRefresh)
     }
     
-    static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String) -> ContentData {
+    static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String, isMerge: Bool = false) -> ContentData {
         if let account = json["account"] as? [String: Any] {
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)
@@ -259,7 +259,8 @@ final class AnalyzeJson {
                                //tags: tags,
                                //uri: uri,
                                url: url,
-                               visibility: visibility)
+                               visibility: visibility,
+                               isMerge: isMerge)
         return data
     }
     
@@ -353,7 +354,8 @@ final class AnalyzeJson {
                            sensitive: nil,
                            spoiler_text: nil,
                            url: nil,
-                           visibility: nil)
+                           visibility: nil,
+                           isMerge: false)
     }
     
     // トゥートした人の情報 (あるいはブーストした人)
@@ -406,6 +408,7 @@ final class AnalyzeJson {
         //let uri: String?
         let url: String?
         let visibility: String?
+        var isMerge: Bool
     }
     
     // 添付画像、動画

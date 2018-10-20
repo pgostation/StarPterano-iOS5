@@ -99,6 +99,7 @@ final class TimeLineView: UITableView {
         }
         
         guard let hostName = SettingsData.hostName else { return }
+        guard let accessToken = SettingsData.accessToken else { return }
         
         var isNewRefresh = false
         var sinceIdStr = ""
@@ -168,6 +169,16 @@ final class TimeLineView: UITableView {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
                         AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh)
+                        
+                        // ローカルにホームを統合する場合
+                        if SettingsData.mergeLocalTL && self?.type == .home {
+                            let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
+                            if let localTlVc = MainViewController.instance?.timelineList[localKey] {
+                                if let localTlView = localTlVc.view as? TimeLineView {
+                                    AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isMerge: true)
+                                }
+                            }
+                        }
                     } else if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         TimeLineView.tableDispatchQueue.async {
                             var acct = ""
@@ -182,12 +193,39 @@ final class TimeLineView: UITableView {
                                 // テーブルビューを更新
                                 strongSelf.reloadData()
                             }
+                            
+                            // ローカルにホームを統合する場合
+                            if SettingsData.mergeLocalTL && self?.type == .home {
+                                let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
+                                if let localTlVc = MainViewController.instance?.timelineList[localKey] {
+                                    if let localTlView = localTlVc.view as? TimeLineView {
+                                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct, isMerge: true)
+                                        let contentList = [contentData]
+                                        localTlView.model.change(tableView: localTlView, addList: contentList, accountList: strongSelf.accountList)
+                                        
+                                        DispatchQueue.main.sync {
+                                            // テーブルビューを更新
+                                            localTlView.reloadData()
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 } catch {
                 }
             } else if let error = error {
                 print(error)
+            }
+        }
+        
+        // ホーム/ローカル統合時は、ローカル側を手動更新した時にホームも手動更新しないと
+        if SettingsData.mergeLocalTL && self.type == .local {
+            let homeKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.home.rawValue)"
+            if let homeTlVc = MainViewController.instance?.timelineList[homeKey] {
+                if let homeTlView = homeTlVc.view as? TimeLineView {
+                    homeTlView.refresh()
+                }
             }
         }
         
@@ -297,15 +335,26 @@ final class TimeLineView: UITableView {
     private var waitingStatusList: [AnalyzeJson.ContentData] = []
     @objc func streaming(streamingType: String) {
         guard let hostName = SettingsData.hostName else { return }
-        guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(SettingsData.accessToken!)&stream=\(streamingType)") else { return }
+        guard let accessToken = SettingsData.accessToken else { return }
+        guard let url = URL(string: "wss://\(hostName)/api/v1/streaming/?access_token=\(accessToken)&stream=\(streamingType)") else { return }
         
         self.streamingObject = MastodonStreaming(url: url, callback: { [weak self] string in
             self?.analyzeStreamingData(string: string)
+            
+            // ローカルにホームを統合する場合
+            if SettingsData.mergeLocalTL && self?.type == .home {
+                let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
+                if let localTlVc = MainViewController.instance?.timelineList[localKey] {
+                    if let localTlView = localTlVc.view as? TimeLineView {
+                        localTlView.analyzeStreamingData(string: string, isMerge: true)
+                    }
+                }
+            }
         })
     }
     
     //
-    private func analyzeStreamingData(string: String?) {
+    private func analyzeStreamingData(string: String?, isMerge: Bool = false) {
         func update() {
             self.model.change(tableView: self, addList: self.waitingStatusList, accountList: self.accountList, isStreaming: true)
             self.waitingStatusList = []
@@ -324,7 +373,7 @@ final class TimeLineView: UITableView {
                         guard let json = try JSONSerialization.jsonObject(with: string.data(using: String.Encoding.utf8)!, options: .allowFragments) as? [String: Any] else { return }
                         TimeLineView.tableDispatchQueue.async {
                             var acct = ""
-                            let statusData = AnalyzeJson.analyzeJson(view: self, model: self.model, json: json, acct: &acct)
+                            let statusData = AnalyzeJson.analyzeJson(view: self, model: self.model, json: json, acct: &acct, isMerge: isMerge)
                             
                             self.waitingStatusList.insert(statusData, at: 0)
                             
@@ -402,10 +451,11 @@ final class TimeLineView: UITableView {
     // タイムラインに古いトゥートを追加
     func refreshOld(id: String?) {
         guard let hostName = SettingsData.hostName else { return }
+        guard let accessToken = SettingsData.accessToken else { return }
         
-        if id == nil { return }
+        guard let id = id else { return }
         
-        let maxIdStr = "&max_id=\(id ?? "")"
+        let maxIdStr = "&max_id=\(id)"
         
         let url: URL?
         switch self.type {
@@ -462,12 +512,34 @@ final class TimeLineView: UITableView {
                             
                             AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: false)
                             
+                            // ローカルにホームを統合する場合
+                            if SettingsData.mergeLocalTL && self?.type == .home {
+                                let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
+                                if let localTlVc = MainViewController.instance?.timelineList[localKey] {
+                                    if let localTlView = localTlVc.view as? TimeLineView {
+                                        AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: false, isMerge: true)
+                                    }
+                                }
+                            }
                         }
                     }
                 } catch {
                 }
             } else if let error = error {
                 print(error)
+            }
+        }
+        
+        // ホーム/ローカル統合時は、ローカル側を手動更新した時にホームも手動更新しないと
+        if SettingsData.mergeLocalTL && self.type == .local {
+            let homeKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.home.rawValue)"
+            if let homeTlVc = MainViewController.instance?.timelineList[homeKey] {
+                if let homeTlView = homeTlVc.view as? TimeLineView {
+                    guard let homeId = homeTlView.model.getLastTootId() else { return }
+                    if homeId > id {
+                        homeTlView.refreshOld(id: homeId)
+                    }
+                }
             }
         }
     }

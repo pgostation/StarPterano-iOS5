@@ -59,6 +59,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case coloring = "SETTINGS_CELLCOLORING"
         case fontSize = "SETTINGS_FONTSIZE"
         case streaming = "SETTINGS_STREAMING"
+        case mergeLocal = "SETTINGS_MERGELOCAL"
         case iconSize = "SETTINGS_ICONSIZE"
         case loadPreviewImage = "SETTINGS_LOADPREVIEW"
         case nameTappable = "SETTINGS_NAMETAPPABLE" // アカウント名をタップできるか
@@ -74,6 +75,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .loadPreviewImage,
                                                   .nameTappable,
                                                   .streaming,
+                                                  .mergeLocal,
                                                   .useAnimation,
                                                   .showListButton,
                                                   .showFTLButton]
@@ -224,6 +226,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.isStreamingMode = isOn
+                }
+                return cell
+            case .mergeLocal:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.mergeLocalTL)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.mergeLocalTL = isOn
                 }
                 return cell
             case .loadPreviewImage:

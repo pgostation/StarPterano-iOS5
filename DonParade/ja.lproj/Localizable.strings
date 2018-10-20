@@ -174,6 +174,7 @@
 "SETTINGS_USEANIMATION" = "画像アニメーション";
 "SETTINGS_SHOWFTLBUTTON" = "連合ボタンを表示";
 "SETTINGS_SHOWLISTBUTTON" = "リストボタンを表示";
+"SETTINGS_MERGELOCAL" = "ローカルにホームを統合表示";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

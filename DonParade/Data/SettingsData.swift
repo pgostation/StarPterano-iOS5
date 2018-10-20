@@ -457,4 +457,21 @@ final class SettingsData {
             defaults.set(newValue, forKey: "emojiKeyboardHeight")
         }
     }
+    
+    // ローカルにホームを統合表示
+    static var mergeLocalTL: Bool {
+        get {
+            if let string = defaults.string(forKey: "mergeLocalTL") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "mergeLocalTL")
+            } else {
+                defaults.removeObject(forKey: "mergeLocalTL")
+            }
+        }
+    }
 }
