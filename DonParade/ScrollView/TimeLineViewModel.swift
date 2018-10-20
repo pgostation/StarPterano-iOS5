@@ -24,6 +24,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var inReplyToAccountId: String?
     var isDetailTimeline = false
     private var cellCount = 0 // 現在のセル数
+    private var animationCellsCount = 0
     
     override init() {
         super.init()
@@ -72,8 +73,27 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         DispatchQueue.main.async {
+            // アカウント情報を更新
+            for account in accountList {
+                self.accountList.updateValue(account.value, forKey: account.key)
+            }
+            
+            // アカウントID情報を更新
+            for data in addList {
+                if let mentions = data.mentions {
+                    for mention in mentions {
+                        if let acct = mention.acct, let id = mention.id {
+                            self.accountIdDict.updateValue(id, forKey: acct)
+                        }
+                    }
+                }
+            }
+            
             if self.list.count == 0 {
                 self.list = addList2
+                if isStreaming {
+                    tableView.reloadData()
+                }
             } else if let firstDate1 = self.list.first?.created_at, let firstDate2 = addList2.first?.created_at, let lastDate1 = self.list.last?.created_at, let lastDate2 = addList2.last?.created_at {
                 
                 if addList2.count == 1 && isBoosted {
@@ -108,7 +128,23 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         // 10万トゥートを超えると流石に削除する
                         self.list.removeFirst(self.list.count - 100000)
                     }
+                    if isStreaming {
+                        tableView.reloadData()
+                    }
                 } else if lastDate2 > firstDate1 {
+                    if self.list.count > 100000 && !isStreaming {
+                        // 10万トゥートを超えると流石に削除する
+                        self.list.removeLast(self.list.count - 100000)
+                    }
+                    
+                    if isStreaming {
+                        if self.cellCount != self.list.count {
+                            tableView.reloadData()
+                        }
+                        
+                        self.animationCellsCount = addList2.count
+                    }
+                    
                     if isNewRefresh && addList.count >= 40 {
                         // 再読み込み用のセルをつける
                         self.list.insert(AnalyzeJson.emptyContentData(), at: 0)
@@ -135,9 +171,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         }
                     }
                     
-                    if self.list.count > 100000 {
-                        // 10万トゥートを超えると流石に削除する
-                        self.list.removeLast(self.list.count - 100000)
+                    if isStreaming {
+                        tableView.reloadData()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            self.animationCellsCount = 0
+                            var indexPathList: [IndexPath] = []
+                            for i in 0..<self.animationCellsCount {
+                                indexPathList.append(IndexPath(item: i, section: 0))
+                            }
+                            tableView.reloadRows(at: indexPathList, with: UITableViewRowAnimation.none)
+                        }
                     }
                 } else {
                     // すでにあるデータを更新する
@@ -170,21 +214,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             self.list.append(newContent)
                         }
                     }
-                }
-            }
-            
-            // アカウント情報を更新
-            for account in accountList {
-                self.accountList.updateValue(account.value, forKey: account.key)
-            }
-            
-            // アカウントID情報を更新
-            for data in addList {
-                if let mentions = data.mentions {
-                    for mention in mentions {
-                        if let acct = mention.acct, let id = mention.id {
-                            self.accountIdDict.updateValue(id, forKey: acct)
-                        }
+                    
+                    if isStreaming {
+                        tableView.reloadData()
                     }
                 }
             }
@@ -202,6 +234,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if index >= 500 { break }
                 
                 if deleteId == data.id {
+                    tableView.reloadData()
+                    
                     // 選択位置がずれないようにする
                     if self.selectedRow != nil && index < self.selectedRow! {
                         self.selectedRow = self.selectedRow! - 1
@@ -209,7 +243,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     
                     // 削除
                     self.list.remove(at: index)
-                    tableView.reloadData()
+                    tableView.beginUpdates()
+                    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.fade)
+                    tableView.endUpdates()
                     break
                 }
             }
@@ -294,6 +330,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if index == list.count {
             // AutoPagerize用セルの高さ
             return UIUtils.isIphoneX ? 350 : 300
+        }
+        
+        if indexPath.row < self.animationCellsCount {
+            return 0
         }
         
         let isSelected = !SettingsData.tapDetailMode && indexPath.row == self.selectedRow
@@ -1134,7 +1174,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = ThemeColor.mentionedMeBgColor
             cell.idLabel.backgroundColor = ThemeColor.mentionedMeBgColor
             cell.dateLabel.backgroundColor = ThemeColor.mentionedMeBgColor
-        } else if self.selectedAccountId == cell.accountId {
+        } else if self.selectedAccountId == cell.accountId && cell.accountId != "" {
             // 選択したアカウントと同一のアカウントの色
             cell.backgroundColor = ThemeColor.sameAccountBgColor
             cell.messageView?.backgroundColor = ThemeColor.sameAccountBgColor
@@ -1148,7 +1188,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.nameLabel.backgroundColor = ThemeColor.mentionedBgColor
             cell.idLabel.backgroundColor = ThemeColor.mentionedBgColor
             cell.dateLabel.backgroundColor = ThemeColor.mentionedBgColor
-        } else if self.inReplyToAccountId == cell.accountId && cell.accountId != "" {
+        } else if self.inReplyToAccountId == cell.accountId && cell.accountId != nil {
             // 返信先のアカウントの色
             cell.backgroundColor = ThemeColor.mentionedSameBgColor
             cell.messageView?.backgroundColor = ThemeColor.mentionedSameBgColor

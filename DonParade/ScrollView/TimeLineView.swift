@@ -309,10 +309,6 @@ final class TimeLineView: UITableView {
         func update() {
             self.model.change(tableView: self, addList: self.waitingStatusList, accountList: self.accountList, isStreaming: true)
             self.waitingStatusList = []
-            
-            DispatchQueue.main.async {
-                self.reloadData()
-            }
         }
         
         if let data = string?.data(using: String.Encoding.utf8) {
