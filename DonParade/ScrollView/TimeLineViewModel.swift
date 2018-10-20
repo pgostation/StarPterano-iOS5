@@ -174,6 +174,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     } else {
                         DispatchQueue.main.async {
                             // スクロールして、表示していたツイートがあまりずれないようにする
+                            tableView.reloadData()
                             let oldOffsetY = tableView.contentOffset.y
                             let indexPath = IndexPath(row: min(self.cellCount, addList2.count), section: 0)
                             tableView.scrollToRow(at: indexPath,
@@ -427,7 +428,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let data = list[index]
         
         if data.emojis == nil, let id = data.id, let cache = self.cacheDict[id] ?? self.oldCacheDict[id] {
-            if cache.0.superview == nil {
+            if indexPath.row == selectedRow {
+            } else if cache.0.superview == nil {
                 return cache
             }
         }
@@ -480,7 +482,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        if let id = data.id {
+        if let id = data.id, indexPath.row != selectedRow {
             if self.oldCacheDict[id] != nil {
                 if let textView = self.oldCacheDict[id]?.0 as? MyTextView {
                     textView.cachingFlag = false
@@ -866,17 +868,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in
             if cell.id == id {
                 cell.iconView?.removeFromSuperview()
+                let iconView: WideTouchImageView
                 if image.imageCount != nil {
                     // GIFアニメーション
-                    cell.iconView = WideTouchImageView(gifImage: image, manager: TimeLineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
+                    iconView = WideTouchImageView(gifImage: image, manager: TimeLineView.gifManager, loopCount: SettingsData.useAnimation ? -1 : 0)
                     if !tableView.visibleCells.contains(cell) {
-                        TimeLineView.gifManager.deleteImageView(cell.iconView!)
+                        TimeLineView.gifManager.deleteImageView(iconView)
                     }
                 } else {
-                    cell.iconView = WideTouchImageView()
+                    iconView = WideTouchImageView()
                 }
                 
-                cell.addSubview(cell.iconView!)
+                cell.iconView = iconView
+                cell.addSubview(iconView)
                 cell.iconView?.image = image
                 cell.iconView?.layer.cornerRadius = 5
                 cell.iconView?.clipsToBounds = true
