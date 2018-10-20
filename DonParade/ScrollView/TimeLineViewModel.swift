@@ -1450,6 +1450,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             tableView.deselectRow(at: indexPath, animated: true)
             
             // ステータスの内容を更新する(お気に入りの数とか)
+            let isMerge = data.isMerge
             guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(data.id ?? "-")") else { return }
             try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
                 guard let strongSelf = self else { return }
@@ -1457,7 +1458,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
                         var acct = ""
-                        let contentData = AnalyzeJson.analyzeJson(view: tableView as? TimeLineView, model: strongSelf, json: responseJson, acct: &acct)
+                        let contentData = AnalyzeJson.analyzeJson(view: tableView as? TimeLineView, model: strongSelf, json: responseJson, acct: &acct, isMerge: isMerge)
                         let contentList = [contentData]
                         
                         // 詳細ビューと元のビューの両方に反映する
