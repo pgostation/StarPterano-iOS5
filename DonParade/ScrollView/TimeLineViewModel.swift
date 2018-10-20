@@ -140,17 +140,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // 後に付ければ良い
                     self.list = self.list + addList2
                     
-                    if self.list.count > 100000 {
-                        // 10万トゥートを超えると流石に削除する
-                        self.list.removeFirst(self.list.count - 100000)
+                    if self.list.count > 5000 {
+                        // 5000トゥートを超えると削除する
+                        self.list.removeFirst(self.list.count - 5000)
                     }
                     if isStreaming {
                         tableView.reloadData()
                     }
                 } else if lastDate2 > firstDate1 {
-                    if self.list.count > 100000 && !isStreaming {
-                        // 10万トゥートを超えると流石に削除する
-                        self.list.removeLast(self.list.count - 100000)
+                    if self.list.count > 5000 && !isStreaming {
+                        // 5000トゥートを超えると流石に削除する
+                        self.list.removeLast(self.list.count - 5000)
                     }
                     
                     if isStreaming {
