@@ -25,6 +25,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     var isDetailTimeline = false
     private var cellCount = 0 // 現在のセル数
     private var animationCellsCount = 0
+    var inAnimating = false
     
     override init() {
         super.init()
@@ -174,6 +175,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     if isStreaming {
                         tableView.reloadData()
                         
+                        self.inAnimating = true
+                        
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                             self.animationCellsCount = 0
                             var indexPathList: [IndexPath] = []
@@ -181,6 +184,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                 indexPathList.append(IndexPath(item: i, section: 0))
                             }
                             tableView.reloadRows(at: indexPathList, with: UITableViewRowAnimation.none)
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                self.inAnimating = false
+                            }
                         }
                     }
                 } else {
@@ -399,12 +406,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // メッセージのビューとデータを返す
-    private var cacheId = ""
-    private var cache: (UIView, AnalyzeJson.ContentData, Bool)?
+    private var cacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool)] = [:]
+    private var oldCacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool)] = [:]
     private func getMessageViewAndData(index: Int, indexPath: IndexPath, add: Bool, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
         let data = list[index]
         
-        if data.emojis == nil, data.id == cacheId, let cache = self.cache {
+        if data.emojis == nil, let id = data.id, let cache = self.cacheDict[id] ?? self.oldCacheDict[id] {
             if !add || cache.0.superview == nil {
                 return cache
             }
@@ -468,8 +475,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         if let id = data.id {
-            self.cacheId = id
-            self.cache = (messageView, data, isContinue)
+            self.cacheDict[id] = (messageView, data, isContinue)
+            
+            if self.cacheDict.count > 25 {
+                self.oldCacheDict = self.cacheDict
+                self.cacheDict = [:]
+            }
         }
         
         return (messageView, data, isContinue)
@@ -803,7 +814,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell?.setNeedsLayout()
             }
         })
-        DispatchQueue.main.async {
+        if indexPath.row > 20 {
+            DispatchQueue.main.async {
+                cell.nameLabel.sizeToFit()
+            }
+        } else {
             cell.nameLabel.sizeToFit()
         }
         

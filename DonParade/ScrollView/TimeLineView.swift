@@ -341,6 +341,16 @@ final class TimeLineView: UITableView {
                                 return
                             }
                             
+                            if self.model.inAnimating {
+                                // アニメーション中なので少し待ってから表示
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    if self.waitingStatusList.count > 0 {
+                                        self.analyzeStreamingData(string: nil)
+                                    }
+                                }
+                                return
+                            }
+                            
                             update()
                         }
                     }
@@ -377,6 +387,14 @@ final class TimeLineView: UITableView {
                 }
             } catch { }
         } else {
+            if self.model.inAnimating {
+                // アニメーション中なので少し待ってから表示
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    if self.waitingStatusList.count > 0 {
+                        self.analyzeStreamingData(string: nil)
+                    }
+                }
+            }
             update()
         }
     }
