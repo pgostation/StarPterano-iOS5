@@ -70,6 +70,10 @@ final class TimeLineView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    static func clearAudio() {
+        audioPlayer = nil
+    }
+    
     // タイムラインを消去
     func clear() {
         self.model.clear()

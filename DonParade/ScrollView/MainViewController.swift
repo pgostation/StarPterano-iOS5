@@ -70,6 +70,7 @@ final class MainViewController: MyViewController {
         
         ImageCache.clear()
         APNGImageCache.clear()
+        TimeLineView.clearAudio()
     }
     
     func refreshColor() {
