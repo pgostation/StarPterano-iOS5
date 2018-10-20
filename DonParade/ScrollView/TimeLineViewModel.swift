@@ -600,6 +600,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.addSubview(loadButton)
             loadButton.addTarget(self, action: #selector(reloadOld(_:)), for: .touchUpInside)
             return cell
+        } else if data.id == nil {
+            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            cell.backgroundColor = ThemeColor.viewBgColor
+            cell.selectionStyle = .none
+            return cell
         }
         
         // カスタム絵文字のAPNGアニメーション対応
