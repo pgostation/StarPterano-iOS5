@@ -412,7 +412,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let data = list[index]
         
         if data.emojis == nil, let id = data.id, let cache = self.cacheDict[id] ?? self.oldCacheDict[id] {
-            if !add || cache.0.superview == nil {
+            if cache.0.superview == nil {
                 return cache
             }
         }
@@ -432,19 +432,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if hasLink || (SettingsData.useAnimation && data.emojis != nil && data.emojis!.count > 0) {
             let msgView = dequeueReusableTextView()
             msgView.attributedText = attributedText
-            msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
             msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             msgView.textColor = ThemeColor.messageColor
             msgView.backgroundColor = ThemeColor.cellBgColor
-            msgView.textContainer.lineBreakMode = .byCharWrapping
-            msgView.isOpaque = true
-            msgView.isScrollEnabled = false
-            msgView.isEditable = false
-            msgView.delegate = self // URLタップ用
-            
-            // URL以外の場所タップ用
-            let tapGensture = UITapGestureRecognizer(target: self, action: #selector(tapTextViewAction(_:)))
-            msgView.addGestureRecognizer(tapGensture)
+            msgView.cachingFlag = true
             
             messageView = msgView
         } else {
@@ -478,6 +469,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             self.cacheDict[id] = (messageView, data, isContinue)
             
             if self.cacheDict.count > 25 {
+                for data in self.oldCacheDict {
+                    if let textView = data.value.0 as? MyTextView {
+                        textView.cachingFlag = false
+                    }
+                }
+                
                 self.oldCacheDict = self.cacheDict
                 self.cacheDict = [:]
             }
@@ -487,19 +484,50 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // UITextViewをリサイクル
-    private static var cacheTextView: [UITextView] = []
-    private func dequeueReusableTextView() -> UITextView {
-        if let textView = TimeLineViewModel.cacheTextView.popLast() {
-            textView.isHidden = false
-            return textView
+    private static var cacheTextView: [MyTextView] = []
+    private func dequeueReusableTextView() -> MyTextView {
+        for view in TimeLineViewModel.cacheTextView {
+            if view.cachingFlag == false {
+                if let index = TimeLineViewModel.cacheTextView.firstIndex(of: view) {
+                    TimeLineViewModel.cacheTextView.remove(at: index)
+                }
+                view.isHidden = false
+                return view
+            }
         }
-        return MyTextView()
+        
+        let msgView = MyTextView()
+        msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        msgView.textContainer.lineBreakMode = .byCharWrapping
+        msgView.isOpaque = true
+        msgView.isScrollEnabled = false
+        msgView.isEditable = false
+        msgView.delegate = self // URLタップ用
+        
+        // URL以外の場所タップ用
+        let tapGensture = UITapGestureRecognizer(target: self, action: #selector(tapTextViewAction(_:)))
+        msgView.addGestureRecognizer(tapGensture)
+        
+        return msgView
     }
     
     class MyTextView: UITextView {
+        var cachingFlag = false
+        
         override func removeFromSuperview() {
             super.removeFromSuperview()
-            TimeLineViewModel.cacheTextView.append(self)
+            
+            if !TimeLineViewModel.cacheTextView.contains(self) {
+                TimeLineViewModel.cacheTextView.append(self)
+            }
+        }
+        
+        override func insertSubview(_ view: UIView, at index: Int) {
+            super.insertSubview(view, at: index)
+            
+            if let index = TimeLineViewModel.cacheTextView.firstIndex(of: self) {
+                TimeLineViewModel.cacheTextView.remove(at: index)
+            }
         }
     }
     
@@ -539,23 +567,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 表示用のデータを取得
         let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: { [weak self] in
+            guard let strongSelf = self else { return }
             // あとから絵文字が読み込めた場合の更新処理
             if cell.id != id { return }
-            if let (messageView, _, _) = self?.getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil) {
-                if cell.id != id { return }
-                let isHidden = cell?.messageView?.isHidden ?? false
-                messageView.isHidden = isHidden
-                cell?.messageView?.removeFromSuperview()
-                cell?.messageView = messageView
-                cell?.insertSubview(messageView, at: 1)
-                self?.setCellColor(cell: cell)
-                if cell?.isMiniView != .normal && self?.selectedRow != indexPath.row {
-                    (messageView as? UILabel)?.numberOfLines = 1
-                    messageView.sizeToFit()
-                }
-                let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
-                messageView.frame.origin.y = y
+            let (messageView, _, _) = strongSelf.getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
+            let isHidden = cell?.messageView?.isHidden ?? false
+            messageView.isHidden = isHidden
+            cell?.messageView?.removeFromSuperview()
+            cell?.messageView = messageView
+            cell?.insertSubview(messageView, at: 1)
+            strongSelf.setCellColor(cell: cell)
+            if cell?.isMiniView != .normal && strongSelf.selectedRow != indexPath.row {
+                (messageView as? UILabel)?.numberOfLines = 1
+                messageView.sizeToFit()
             }
+            let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
+            messageView.frame.origin.y = y
         })
         while let apngView = messageView.viewWithTag(5555) as? APNGImageView {
             apngView.stopAnimating()
@@ -814,7 +841,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell?.setNeedsLayout()
             }
         })
-        if indexPath.row > 20 {
+        if indexPath.row > 15 {
             DispatchQueue.main.async {
                 cell.nameLabel.sizeToFit()
             }
