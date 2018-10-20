@@ -542,6 +542,36 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         return msgView
     }
     
+    // キャッシュの色を再設定する
+    func recolorCache() {
+        for view in TimeLineViewModel.cacheTextView {
+            view.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        }
+        
+        for data in self.cacheDict {
+            if let label = data.value.0 as? UILabel {
+                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                label.textColor = ThemeColor.messageColor
+                label.backgroundColor = ThemeColor.cellBgColor
+            } else if let textView = data.value.0 as? MyTextView {
+                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                textView.textColor = ThemeColor.messageColor
+                textView.backgroundColor = ThemeColor.cellBgColor
+            }
+        }
+        for data in self.oldCacheDict {
+            if let label = data.value.0 as? UILabel {
+                label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                label.textColor = ThemeColor.messageColor
+                label.backgroundColor = ThemeColor.cellBgColor
+            } else if let textView = data.value.0 as? MyTextView {
+                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
+                textView.textColor = ThemeColor.messageColor
+                textView.backgroundColor = ThemeColor.cellBgColor
+            }
+        }
+    }
+    
     class MyTextView: UITextView {
         var cachingFlag = false
         

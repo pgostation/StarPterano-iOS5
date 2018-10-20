@@ -90,6 +90,7 @@ final class MainViewController: MyViewController {
             let timelineView = (vc.view as? TimeLineView)
             timelineView?.reloadData()
             timelineView?.backgroundColor = ThemeColor.viewBgColor
+            timelineView?.model.recolorCache()
         }
     }
     
