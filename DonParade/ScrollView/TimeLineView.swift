@@ -11,7 +11,7 @@
 
 import UIKit
 import SwiftyGif
-import AudioToolbox
+import AVFoundation
 
 final class TimeLineView: UITableView {
     let type: TimeLineViewController.TimeLineType
@@ -23,6 +23,7 @@ final class TimeLineView: UITableView {
     private let accessToken = SettingsData.accessToken
     static let gifManager = SwiftyGifManager(memoryLimit: 100)
     var mediaOnly: Bool = false
+    private static var audioPlayer: AVAudioPlayer? = nil
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -348,8 +349,14 @@ final class TimeLineView: UITableView {
                     MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
                     
                     // 効果音を出す
-                    let soundId: SystemSoundID = 1309
-                    AudioServicesPlaySystemSound(soundId)
+                    if TimeLineView.audioPlayer == nil {
+                        let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "mp3")!
+                        let sound = URL(fileURLWithPath: soundFilePath)
+                        TimeLineView.audioPlayer = try? AVAudioPlayer(contentsOf: sound, fileTypeHint:nil)
+                        TimeLineView.audioPlayer?.prepareToPlay()
+                    }
+                    TimeLineView.audioPlayer?.currentTime = 0
+                    TimeLineView.audioPlayer?.play()
                 case "delete":
                     if let deleteId = payload as? String {
                         // waitingStatusListからの削除
