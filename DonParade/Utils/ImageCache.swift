@@ -19,7 +19,7 @@ final class ImageCache {
     private static var oldMemCache: [String: UIImage] = [:]
     private static var waitingDict: [String: [(UIImage)->Void]] = [:]
     private static let fileManager = FileManager()
-    private static let imageQueue = DispatchQueue(label: "ImageCache")
+    private static let imageQueue = DispatchQueue.global()
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
     static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, isPreview: Bool = false, callback: @escaping (UIImage)->Void) {
