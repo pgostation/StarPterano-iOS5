@@ -26,6 +26,7 @@ final class DecodeToot {
         
         // 改行
         text = text.replacingOccurrences(of: "</p><p>", with: "\n\n")
+        text = text.replacingOccurrences(of: "<p>", with: "\n")
         if text.contains("<") {
             text = text.replacingOccurrences(of: "<br />", with: "\n")
             text = text.replacingOccurrences(of: "<br>", with: "\n")

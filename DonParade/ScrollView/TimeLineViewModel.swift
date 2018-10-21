@@ -997,6 +997,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     
                     imageView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
                     imageView.clipsToBounds = true
+                    imageView.layer.borderColor = UIColor.gray.withAlphaComponent(0.2).cgColor
+                    imageView.layer.borderWidth = 1 / UIScreen.main.scale
                     
                     // タップで全画面表示
                     let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.imageTapAction(_:)))

@@ -731,11 +731,11 @@ final class TimeLineViewCell: UITableViewCell {
                 var imageWidth: CGFloat = 0
                 var imageHeight: CGFloat = isDetailMode ? UIScreen.main.bounds.width - 80 : 80
                 let size = image.size
-                let rate = imageHeight / size.height
+                let rate = imageHeight / max(1, size.height)
                 imageWidth = size.width * rate
                 if imageWidth > screenBounds.width - 60 {
                     imageWidth = screenBounds.width - 60
-                    let newRate = imageWidth / size.width
+                    let newRate = imageWidth / max(1, size.width)
                     imageHeight = size.height * newRate
                 }
                 imageView.frame = CGRect(x: nameLeft,

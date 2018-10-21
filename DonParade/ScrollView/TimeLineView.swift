@@ -135,8 +135,6 @@ final class TimeLineView: UITableView {
                 self.refreshContext(id: id)
             }
             return
-            //guard let lastInReplyToId = model.getLastInReplyToId() else { return }
-            //url = URL(string: "https://\(hostName)/api/v1/statuses/\(lastInReplyToId)")
         case .direct:
             url = URL(string: "https://\(hostName)/api/v1/timelines/direct?limit=50\(sinceIdStr)")
         case .list:
