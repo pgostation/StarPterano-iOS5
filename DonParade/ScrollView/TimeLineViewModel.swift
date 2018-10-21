@@ -612,6 +612,18 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
+        if indexPath.row < self.animationCellsCount {
+            let screenCellCount: Int
+            if SettingsData.isMiniView == .superMini {
+                screenCellCount = Int(UIScreen.main.bounds.height / (10 + SettingsData.fontSize))
+            } else {
+                screenCellCount = Int(UIScreen.main.bounds.height / (23 + SettingsData.fontSize * 1.5))
+            }
+            if indexPath.row > screenCellCount {
+                return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            }
+        }
+        
         if index >= list.count {
             if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
                 // 過去のトゥートに遡る
