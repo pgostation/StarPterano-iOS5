@@ -37,6 +37,13 @@ final class ImageViewController: MyViewController {
         self.modalPresentationStyle = .overCurrentContext
         
         ImageViewController.instance = self
+        
+        // 事前にプレビュー画像を読み込んでおく
+        for (i, previewUrl) in previewUrls.enumerated() {
+            if index == i { continue }
+            ImageCache.image(urlStr: previewUrl, isTemp: true, isSmall: false) { (image) in
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
