@@ -136,17 +136,21 @@ final class TootView: UIView {
     func refresh() {
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
         closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        closeButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+        closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.clipsToBounds = true
         closeButton.layer.cornerRadius = 10
+        closeButton.layer.borderColor = ThemeColor.mainButtonsTitleColor.cgColor
+        closeButton.layer.borderWidth = 1 / UIScreen.main.scale
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
         tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        tootButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+        tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 10
+        tootButton.layer.borderColor = ThemeColor.mainButtonsTitleColor.cgColor
+        tootButton.layer.borderWidth = 1 / UIScreen.main.scale
         
         textCountLabel.textColor = ThemeColor.contrastColor
         textCountLabel.font = UIFont.systemFont(ofSize: 18)
