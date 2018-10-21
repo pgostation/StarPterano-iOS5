@@ -81,11 +81,6 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             spoilerText = DecodeToot.encodeEmoji(attributedText: view.spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: view.spoilerTextField.attributedText))
         }
         
-        if text.count + (spoilerText?.count ?? 0) > 500 {
-            Dialog.show(message: I18n.get("ALERT_OVER_500CHARACTERS"))
-            return
-        }
-        
         // 投稿するものがない
         if attributedText.length == 0 && spoilerText == nil && view.imageCheckView.urls.count == 0 { return }
         
@@ -329,6 +324,34 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         // テキストを全削除するとin_reply_toをクリアする
         if textView.text == nil || textView.text!.count == 0 {
             TootView.inReplyToId = nil
+        }
+        
+        do {
+            let text: String
+            if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
+                text = DecodeToot.encodeEmoji(attributedText: textField.attributedText, textStorage: NSTextStorage(attributedString: textField.attributedText))
+            } else {
+                text = ""
+            }
+            
+            let spoilerText: String
+            if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
+                spoilerText = DecodeToot.encodeEmoji(attributedText: spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: spoilerTextField.attributedText))
+            } else {
+                spoilerText = ""
+            }
+            
+            let textCount = text.count + spoilerText.count
+            
+            if let textCountLabel = (self.view as? TootView)?.textCountLabel {
+                textCountLabel.text = "\(textCount) / 500"
+                
+                if textCount > 500 {
+                    textCountLabel.textColor = UIColor.red
+                } else {
+                    textCountLabel.textColor = ThemeColor.contrastColor
+                }
+            }
         }
         
         DispatchQueue.main.async {

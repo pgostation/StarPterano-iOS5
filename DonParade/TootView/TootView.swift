@@ -27,6 +27,7 @@ final class TootView: UIView {
     let spoilerTextField = UITextView()
     let textField = UITextView()
     let tootButton = UIButton()
+    let textCountLabel = UILabel()
     
     // 入力バー
     let inputBar = UIView()
@@ -78,6 +79,7 @@ final class TootView: UIView {
         
         self.addSubview(closeButton)
         self.addSubview(tootButton)
+        self.addSubview(textCountLabel)
         
         self.addSubview(spoilerTextField)
         self.addSubview(textField)
@@ -133,16 +135,26 @@ final class TootView: UIView {
     
     func refresh() {
         closeButton.setTitle(I18n.get("BUTTON_CLOSE"), for: .normal)
+        closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         closeButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         closeButton.clipsToBounds = true
-        closeButton.layer.cornerRadius = 12
+        closeButton.layer.cornerRadius = 10
         
         tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         tootButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         tootButton.clipsToBounds = true
-        tootButton.layer.cornerRadius = 12
+        tootButton.layer.cornerRadius = 10
+        
+        textCountLabel.textColor = ThemeColor.contrastColor
+        textCountLabel.font = UIFont.systemFont(ofSize: 18)
+        textCountLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.3)
+        textCountLabel.textAlignment = .center
+        textCountLabel.adjustsFontSizeToFitWidth = true
+        textCountLabel.clipsToBounds = true
+        textCountLabel.layer.cornerRadius = 10
         
         spoilerTextField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         spoilerTextField.textColor = ThemeColor.messageColor
@@ -165,7 +177,7 @@ final class TootView: UIView {
         textField.layer.borderWidth = 1 / UIScreen.main.scale
         textField.tag = UIUtils.responderTag
         
-        inputBar.backgroundColor = ThemeColor.cellBgColor
+        inputBar.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         
         imagesButton.setTitle("🏞", for: .normal)
         
@@ -208,6 +220,11 @@ final class TootView: UIView {
                                   y: 0,
                                   width: 80,
                                   height: 40)
+        
+        textCountLabel.frame = CGRect(x: screenBounds.width / 2 - 60,
+                                      y: 9,
+                                      width: 120,
+                                      height: 22)
         
         var top: CGFloat = 40
         if spoilerTextField.isHidden == false {
