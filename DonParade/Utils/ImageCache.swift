@@ -19,7 +19,8 @@ final class ImageCache {
     private static var oldMemCache: [String: UIImage] = [:]
     private static var waitingDict: [String: [(UIImage)->Void]] = [:]
     private static let fileManager = FileManager()
-    private static let imageQueue = DispatchQueue.global()
+    private static let imageQueue = DispatchQueue(label: "ImageCache")
+    private static let imageGlobalQueue = DispatchQueue.global()
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
     static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, isPreview: Bool = false, callback: @escaping (UIImage)->Void) {
@@ -73,7 +74,7 @@ final class ImageCache {
         }
         let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
-            imageQueue.async {
+            imageGlobalQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
                     if url.absoluteString.hasSuffix(".gif") {
@@ -204,6 +205,7 @@ final class APNGImageCache {
     private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "APNGImageCache")
+    private static let imageGlobalQueue = DispatchQueue.global()
     
     static func image(urlStr: String?, callback: @escaping (APNGImage)->Void) {
         guard let urlStr = urlStr else { return }
@@ -225,7 +227,7 @@ final class APNGImageCache {
         let cacheDir = NSHomeDirectory() + "/Library/Caches"
         let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
-            imageQueue.async {
+            imageGlobalQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
                     if let image = APNGImage(data: data) {

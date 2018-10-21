@@ -12,6 +12,7 @@ final class MovieCache {
     private static var waitingDict: [String: [(AVPlayer?, Any?, Any?)->Void]] = [:] // AVPlayer or AVPlayerLooper
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "MovieCache")
+    private static let imageGlobalQueue = DispatchQueue.global()
     
     static func movie(urlStr: String?, callback: @escaping (AVPlayer?, Any?, Any?)->Void) {
         guard let urlStr = urlStr else { return }
@@ -20,7 +21,7 @@ final class MovieCache {
         let cacheDir = NSHomeDirectory() + "/Library/Caches"
         let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
-            imageQueue.async {
+            imageGlobalQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 var player: AVPlayer? = nil
                 var queuePlayer: Any? = nil
