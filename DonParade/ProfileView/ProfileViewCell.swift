@@ -155,8 +155,8 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 xAxis.maximumRelativeValue = 200
                 
                 let yAxis = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
-                yAxis.minimumRelativeValue = -20
-                yAxis.maximumRelativeValue = 20
+                yAxis.minimumRelativeValue = -2
+                yAxis.maximumRelativeValue = 2
                 
                 let group = UIMotionEffectGroup()
                 group.motionEffects = [xAxis, yAxis]
