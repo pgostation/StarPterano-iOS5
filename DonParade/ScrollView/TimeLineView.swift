@@ -331,6 +331,7 @@ final class TimeLineView: UITableView {
     //   ホーム(通知含む)、ローカル、連合のみ
     private var streamingObject: MastodonStreaming?
     private var waitingStatusList: [AnalyzeJson.ContentData] = []
+    private var waitingIdDict: [String: Bool] = [:]
     @objc func streaming(streamingType: String) {
         guard let hostName = SettingsData.hostName else { return }
         guard let accessToken = SettingsData.accessToken else { return }
@@ -356,6 +357,7 @@ final class TimeLineView: UITableView {
         func update() {
             self.model.change(tableView: self, addList: self.waitingStatusList, accountList: self.accountList, isStreaming: true)
             self.waitingStatusList = []
+            self.waitingIdDict = [:]
         }
         
         if let data = string?.data(using: String.Encoding.utf8) {
@@ -373,7 +375,12 @@ final class TimeLineView: UITableView {
                             var acct = ""
                             let statusData = AnalyzeJson.analyzeJson(view: self, model: self.model, json: json, acct: &acct, isMerge: isMerge)
                             
-                            self.waitingStatusList.insert(statusData, at: 0)
+                            if self.waitingIdDict[statusData.id ?? ""] == nil {
+                                self.waitingStatusList.insert(statusData, at: 0)
+                                self.waitingIdDict[statusData.id ?? ""] = true
+                            } else {
+                                return
+                            }
                             
                             var offsetY: CGFloat = 0
                             var returnFlag = false
