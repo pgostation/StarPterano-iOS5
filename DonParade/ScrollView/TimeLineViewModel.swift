@@ -1486,8 +1486,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         } else {
             // セルを拡大して表示
             var indexPaths: [IndexPath] = [indexPath]
-            if self.selectedRow != nil {
-                let oldPath = IndexPath(row: self.selectedRow ?? 0, section: 0)
+            if let selectedRow = self.selectedRow, selectedRow < self.cellCount {
+                let oldPath = IndexPath(row: selectedRow, section: 0)
                 indexPaths.append(oldPath)
                 
                 if oldPath.row < indexPath.row {

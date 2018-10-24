@@ -211,7 +211,7 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func tapAccountAction() {
         if TimeLineViewCell.doubleTapFlag { return }
         TimeLineViewCell.doubleTapFlag = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             TimeLineViewCell.doubleTapFlag = false
         }
         
