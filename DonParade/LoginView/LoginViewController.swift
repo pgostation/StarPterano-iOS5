@@ -72,7 +72,7 @@ final class LoginViewController: MyViewController {
         
         let params = paramBase.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         
-        let loginUrl = URL(string: "https://\(hostName)/oauth//authorize?\(params)")!
+        let loginUrl = URL(string: "https://\(hostName)/oauth/authorize?\(params)")!
         
         LoginSafari.login(url: loginUrl, viewController: self)
     }
