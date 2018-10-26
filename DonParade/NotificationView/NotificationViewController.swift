@@ -145,8 +145,19 @@ final class NotificationViewController: MyViewController {
         })
     }
     
+    private var lastSelectedSegmentIndex = 0
     @objc func segmentChanged() {
         guard let view = self.view as? NotificationView else { return }
+        
+        if view.segmentControl.selectedSegmentIndex == 5 {
+            ShowMyAnyList.showDMList(rootVc: self)
+            
+            view.segmentControl.selectedSegmentIndex = self.lastSelectedSegmentIndex
+            
+            return
+        }
+        
+        self.lastSelectedSegmentIndex = view.segmentControl.selectedSegmentIndex
         
         view.tableView.reloadData()
     }
@@ -194,6 +205,7 @@ final class NotificationView: UIView {
         segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_FOLLOW"), at: 2, animated: false)
         segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_FAV"), at: 3, animated: false)
         segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_BOOST"), at: 4, animated: false)
+        segmentControl.insertSegment(withTitle: I18n.get("NOTIFY_SEG_DM"), at: 5, animated: false)
         segmentControl.selectedSegmentIndex = 0
         segmentControl.tintColor = ThemeColor.mainButtonsTitleColor
         segmentControl.backgroundColor = ThemeColor.cellBgColor
@@ -211,8 +223,8 @@ final class NotificationView: UIView {
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         
-        let segAllWidth = min(360, screenBounds.width * 0.98)
-        let segWidth = segAllWidth / 5
+        let segAllWidth = min(360, screenBounds.width)
+        let segWidth = segAllWidth / CGFloat(segmentControl.numberOfSegments)
         for i in 0..<segmentControl.numberOfSegments {
             segmentControl.setWidth(segWidth, forSegmentAt: i)
         }
