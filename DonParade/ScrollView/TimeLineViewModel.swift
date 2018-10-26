@@ -325,7 +325,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         switch SettingsData.isMiniView {
         case .normal:
-            return 60
+            return 65
         case .miniView:
             return 44
         case .superMini:
@@ -418,7 +418,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             reblogOffset = 0
         }
         
-        return max(55, messageView.frame.height + 28 + reblogOffset + imagesOffset + detailOffset)
+        return max(55, messageView.frame.height + 36 + reblogOffset + imagesOffset + detailOffset)
     }
     
     // メッセージのビューとデータを返す
@@ -476,7 +476,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if self.selectedRow == indexPath.row {
             // 詳細表示の場合
         } else {
-            if messageView.frame.size.height >= 180 - 28 {
+            if messageView.frame.size.height >= 200 - 28 {
                 messageView.frame.size.height = 180 - 28
                 isContinue = true
             }
