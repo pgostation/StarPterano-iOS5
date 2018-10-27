@@ -443,7 +443,7 @@ final class SettingsData {
         }
     }
     
-    // 基準アイコンサイズ
+    // 絵文字キーボードサイズ
     static var emojiKeyboardHeight: CGFloat {
         get {
             let value = defaults.double(forKey: "emojiKeyboardHeight")

@@ -6,7 +6,7 @@
 //  Copyright © 2018年 pgostation. All rights reserved.
 //
 
-// ストリーミングAPIを叩きたい
+// ストリーミングAPIを叩く
 
 import Foundation
 import Starscream

@@ -539,7 +539,7 @@ final class TimeLineViewCell: UITableViewCell {
         for (index, imageView) in self.imageViews.enumerated() {
             if imageView == gesture.view {
                 if imageTypes[index] == "unknown" {
-                    // 分からんので内臓ブラウザで開く
+                    // 分からんので内蔵ブラウザで開く
                     guard let url = URL(string: originalUrls[index]) else { return }
                     let safariVC = SFSafariViewController(url: url)
                     UIUtils.getFrontViewController()?.present(safariVC, animated: true, completion: nil)
