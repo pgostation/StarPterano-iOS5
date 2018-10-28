@@ -515,12 +515,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // UITextViewをリサイクル
-    private static var cacheTextView: [MyTextView] = []
+    private var cacheTextView: [MyTextView] = []
     private func dequeueReusableTextView() -> MyTextView {
-        for view in TimeLineViewModel.cacheTextView {
+        for view in self.cacheTextView {
             if view.cachingFlag == false {
-                if let index = TimeLineViewModel.cacheTextView.firstIndex(of: view) {
-                    TimeLineViewModel.cacheTextView.remove(at: index)
+                if let index = self.cacheTextView.firstIndex(of: view) {
+                    self.cacheTextView.remove(at: index)
                 }
                 view.isHidden = false
                 return view
@@ -528,6 +528,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         let msgView = MyTextView()
+        msgView.model = self
         msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         msgView.textContainer.lineBreakMode = .byCharWrapping
         msgView.isOpaque = true
@@ -544,7 +545,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // キャッシュの色を再設定する
     func recolorCache() {
-        for view in TimeLineViewModel.cacheTextView {
+        for view in self.cacheTextView {
             view.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
         }
         
@@ -573,21 +574,22 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     class MyTextView: UITextView {
+        weak var model: TimeLineViewModel?
         var cachingFlag = false
         
         override func removeFromSuperview() {
             super.removeFromSuperview()
             
-            if !TimeLineViewModel.cacheTextView.contains(self) {
-                TimeLineViewModel.cacheTextView.append(self)
+            if model?.cacheTextView.contains(self) == false {
+                model?.cacheTextView.append(self)
             }
         }
         
         override func insertSubview(_ view: UIView, at index: Int) {
             super.insertSubview(view, at: index)
             
-            if let index = TimeLineViewModel.cacheTextView.firstIndex(of: self) {
-                TimeLineViewModel.cacheTextView.remove(at: index)
+            if let index = model?.cacheTextView.firstIndex(of: self) {
+                model?.cacheTextView.remove(at: index)
             }
         }
     }
