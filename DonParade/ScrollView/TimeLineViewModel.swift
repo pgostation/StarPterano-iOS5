@@ -938,7 +938,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 // アイコンの長押しジェスチャー
                 let pressGesture = UILongPressGestureRecognizer(target: cell, action: #selector(cell.pressAccountAction(_:)))
                 cell.iconView?.addGestureRecognizer(pressGesture)
-                let iconSize = SettingsData.iconSize
+                let iconSize = cell.isMiniView != .normal ? SettingsData.iconSize - 4 : SettingsData.iconSize
                 
                 cell.iconView?.frame = CGRect(x: cell.isMiniView != .normal ? 4 : 8,
                                               y: cell.isMiniView == .superMini ? 12 - iconSize / 2 : (cell.isMiniView != .normal ? 6 : 10),

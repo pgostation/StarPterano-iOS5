@@ -95,11 +95,11 @@ final class ImageCache {
                         DispatchQueue.main.async {
                             memCache.updateValue(smallImage, forKey: urlStr)
                             callback(image)
-                        }
-                        
-                        if memCache.count >= 70 { // メモリの使いすぎを防ぐ
-                            oldMemCache = memCache
-                            memCache = [:]
+                            
+                            if memCache.count >= 70 { // メモリの使いすぎを防ぐ
+                                oldMemCache = memCache
+                                memCache = [:]
+                            }
                         }
                     }
                 }
@@ -137,11 +137,11 @@ final class ImageCache {
                         }
                         
                         waitingDict.removeValue(forKey: urlStr)
-                    }
-                    
-                    if gifCache.count >= 20 { // メモリの使いすぎを防ぐ
-                        oldGifCache = gifCache
-                        gifCache = [:]
+                        
+                        if gifCache.count >= 20 { // メモリの使いすぎを防ぐ
+                            oldGifCache = gifCache
+                            gifCache = [:]
+                        }
                     }
                     
                     // ストレージにキャッシュする
@@ -161,11 +161,11 @@ final class ImageCache {
                         }
                         
                         waitingDict.removeValue(forKey: urlStr)
-                    }
-                    
-                    if memCache.count >= 70 { // メモリの使いすぎを防ぐ
-                        oldMemCache = memCache
-                        memCache = [:]
+                        
+                        if memCache.count >= 70 { // メモリの使いすぎを防ぐ
+                            oldMemCache = memCache
+                            memCache = [:]
+                        }
                     }
                     
                     // ストレージにキャッシュする
