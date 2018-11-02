@@ -387,7 +387,7 @@ private final class EmojiInputScrollView: UIScrollView {
         var buttons: [UIButton] = []
         
         for button in self.emojiButtons {
-            if button.key.contains(key) {
+            if button.key.lowercased().contains(key.lowercased()) {
                 buttons.append(button)
             } else {
                 button.frame.origin.x = -100
