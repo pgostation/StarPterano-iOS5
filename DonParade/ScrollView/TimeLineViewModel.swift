@@ -801,7 +801,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 return cell
             }
             
-            if data.visibility == "unlisted" || data.reblog_id != nil || accountList[data.accountId]?.acct?.contains("@") == true || data.in_reply_to_id != nil || data.in_reply_to_account_id != nil {
+            if data.visibility == "unlisted" || data.reblog_id != nil || accountList[data.accountId]?.acct?.contains("@") == true {
                 // バーの色は青
                 barColor(color: ThemeColor.unlistedBar)
             }
