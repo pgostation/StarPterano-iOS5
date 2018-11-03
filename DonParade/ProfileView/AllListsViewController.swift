@@ -77,8 +77,6 @@ final class AllListsViewController: MyViewController {
                 do {
                     guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] else { return }
                     
-                    print(responseJson)
-                    
                     var list: [AnalyzeJson.ListData] = []
                     for json in responseJson {
                         let data = AnalyzeJson.ListData(id: json["id"] as? String,
