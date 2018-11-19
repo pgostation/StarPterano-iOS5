@@ -312,15 +312,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // セルのだいたいの高さ(スクロールバーの表示とスクロール位置の調整用)
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let timelineView = tableView as? TimeLineView {
-            if timelineView.type == .user && indexPath.row == 0 {
-                let accountData = timelineView.accountList[timelineView.option ?? ""]
-                if let count = accountData?.fields?.count {
-                    return 350 + CGFloat(count) * 40
-                } else {
-                    return 350
-                }
-            }
+        if indexPath.row < 100 {
+            return self.tableView(tableView, heightForRowAt: indexPath)
         }
         
         switch SettingsData.isMiniView {
@@ -439,8 +432,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
-        paragrahStyle.minimumLineHeight = SettingsData.fontSize + 10
-        paragrahStyle.maximumLineHeight = SettingsData.fontSize + 10
+        paragrahStyle.minimumLineHeight = SettingsData.fontSize * 1.5
+        paragrahStyle.maximumLineHeight = SettingsData.fontSize * 1.5
         attributedText.addAttributes([NSAttributedStringKey.paragraphStyle : paragrahStyle],
                                      range: NSMakeRange(0, attributedText.length))
         
