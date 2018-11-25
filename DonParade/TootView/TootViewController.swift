@@ -354,9 +354,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             }
         }
         
-        DispatchQueue.main.async {
-            self.view.setNeedsLayout()
-        }
+        self.view.setNeedsLayout()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {

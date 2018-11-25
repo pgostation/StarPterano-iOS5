@@ -24,8 +24,8 @@ final class TootView: UIView {
     let closeButton = UIButton()
     
     // トゥート
-    let spoilerTextField = UITextView()
-    let textField = UITextView()
+    let spoilerTextField = NoAnimationTextView()
+    let textField = NoAnimationTextView()
     let tootButton = UIButton()
     let textCountLabel = UILabel()
     
@@ -244,7 +244,7 @@ final class TootView: UIView {
         textField.frame = CGRect(x: 1,
                                  y: top,
                                  width: screenBounds.width - 2,
-                                 height: min(max(25, textField.frame.height), screenBounds.height - keyBoardHeight - UIUtils.statusBarHeight() - top - 40))
+                                 height: min(max(30, textField.frame.height), screenBounds.height - keyBoardHeight - UIUtils.statusBarHeight() - top - 40))
         
         inputBar.frame = CGRect(x: 0,
                                 y: top + textField.frame.height,
@@ -294,5 +294,11 @@ final class TootView: UIView {
                             width: screenBounds.width,
                             height: viewHeight)
         
+    }
+}
+
+final class NoAnimationTextView: UITextView {
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        super.setContentOffset(contentOffset, animated: false)
     }
 }
