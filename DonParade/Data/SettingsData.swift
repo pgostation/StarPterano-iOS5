@@ -474,4 +474,21 @@ final class SettingsData {
             }
         }
     }
+    
+    // 絶対時間表示
+    static var useAbsoluteTime: Bool {
+        get {
+            if let string = defaults.string(forKey: "useAbsoluteTime") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "useAbsoluteTime")
+            } else {
+                defaults.removeObject(forKey: "useAbsoluteTime")
+            }
+        }
+    }
 }

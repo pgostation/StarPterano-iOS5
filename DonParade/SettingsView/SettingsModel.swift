@@ -64,6 +64,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case loadPreviewImage = "SETTINGS_LOADPREVIEW"
         case nameTappable = "SETTINGS_NAMETAPPABLE" // アカウント名をタップできるか
         case useAnimation = "SETTINGS_USEANIMATION"
+        case useAbsoluteTime = "SETTINGS_ABSOLUTETIME"
         case showFTLButton = "SETTINGS_SHOWFTLBUTTON"
         case showListButton = "SETTINGS_SHOWLISTBUTTON"
     }
@@ -77,6 +78,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .streaming,
                                                   .mergeLocal,
                                                   .useAnimation,
+                                                  .useAbsoluteTime,
                                                   .showListButton,
                                                   .showFTLButton]
     
@@ -269,6 +271,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.useAnimation = isOn
+                    MainViewController.instance?.refreshColor()
+                }
+                return cell
+            case .useAbsoluteTime:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.useAbsoluteTime)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.useAbsoluteTime = isOn
                     MainViewController.instance?.refreshColor()
                 }
                 return cell
