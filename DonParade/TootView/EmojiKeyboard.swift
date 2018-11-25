@@ -207,8 +207,9 @@ final class EmojiKeyboard: UIView {
 }
 
 private final class EmojiInputScrollView: UIScrollView {
-    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
+    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).sorted(by: EmojiInputScrollView.sortFunc)
     private var emojiButtons: [EmojiButton] = []
+    private var hiddenEmojiButtons: [EmojiButton] = []
     var searchText: String?
     
     init() {
@@ -220,7 +221,7 @@ private final class EmojiInputScrollView: UIScrollView {
             // 絵文字データが取れるまでリトライする
             func retry(count: Int) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
+                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).sorted(by: EmojiInputScrollView.sortFunc)
                     if self.emojiList.count > 0 {
                         self.addEmojis()
                         self.setNeedsLayout()
@@ -243,6 +244,10 @@ private final class EmojiInputScrollView: UIScrollView {
             apngView.stopAnimating()
             apngView.removeFromSuperview()
         }
+    }
+    
+    private static func sortFunc(e1: EmojiData.EmojiStruct, e2: EmojiData.EmojiStruct) -> Bool {
+        return (e1.short_code?.lowercased() ?? "") < (e2.short_code?.lowercased() ?? "")
     }
     
     private func addEmojis() {
@@ -277,7 +282,11 @@ private final class EmojiInputScrollView: UIScrollView {
             
             self.addSubview(button)
             
-            emojiButtons.append(button)
+            if emoji.visible_in_picker == 1 {
+                emojiButtons.append(button)
+            } else {
+                hiddenEmojiButtons.append(button)
+            }
         }
     }
     
@@ -358,6 +367,10 @@ private final class EmojiInputScrollView: UIScrollView {
         }
         
         layoutEmojiButtons(emojiButtons: self.emojiButtons)
+        
+        for button in self.hiddenEmojiButtons {
+            button.frame.origin.x = -100
+        }
     }
     
     private func layoutEmojiButtons(emojiButtons: [UIButton]) {
@@ -386,12 +399,25 @@ private final class EmojiInputScrollView: UIScrollView {
     private func getFilteredEmojiButtons(key: String) -> [UIButton] {
         var buttons: [UIButton] = []
         
+        if key == "隠し" {
+            for button in self.hiddenEmojiButtons {
+                buttons.append(button)
+            }
+            for button in self.emojiButtons {
+                button.frame.origin.x = -100
+            }
+            return buttons
+        }
+        
         for button in self.emojiButtons {
             if button.key.lowercased().contains(key.lowercased()) {
                 buttons.append(button)
             } else {
                 button.frame.origin.x = -100
             }
+        }
+        for button in self.hiddenEmojiButtons {
+            button.frame.origin.x = -100
         }
         
         return buttons
