@@ -229,7 +229,7 @@ final class MainView: UIView {
         }
         
         tootButton.frame = CGRect(x: screenBounds.width / 2 - 70 / 2,
-                                  y: screenBounds.height - 70 - bottomOffset,
+                                  y: screenBounds.height - 80 - bottomOffset,
                                   width: 70,
                                   height: 70)
         
