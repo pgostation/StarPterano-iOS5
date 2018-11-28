@@ -22,12 +22,14 @@ final class NotificationTableCell: UITableViewCell {
     let notificationLabel = UILabel()
     var statusLabel = UITextView()
     
-    var followButton: UIButton?
+    //var followButton: UIButton?
+    let replyButton = UIButton()
     
     var accountId: String?
     var date: Date = Date()
     var timer: Timer?
     var accountData: AnalyzeJson.AccountData?
+    var visibility: String?
     
     init(reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
@@ -44,6 +46,7 @@ final class NotificationTableCell: UITableViewCell {
         self.addSubview(dateLabel)
         self.addSubview(notificationLabel)
         self.addSubview(statusLabel)
+        self.addSubview(replyButton)
         self.layer.addSublayer(self.lineLayer)
         
         setProperties()
@@ -95,6 +98,10 @@ final class NotificationTableCell: UITableViewCell {
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
+        
+        self.replyButton.setTitle("↩︎", for: .normal)
+        self.replyButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
+        self.replyButton.addTarget(self, action: #selector(self.replyAction), for: .touchUpInside)
         
         // タイマーで5秒ごとに時刻を更新
         if #available(iOS 10.0, *) {
@@ -170,8 +177,86 @@ final class NotificationTableCell: UITableViewCell {
         }
     }
     
+    // リプライボタンをタップした時の処理
+    @objc func replyAction() {
+        if TootViewController.isShown, let vc = TootViewController.instance, let view = vc.view as? TootView, let text = view.textField.text, text.count > 0 {
+            Dialog.show(message: I18n.get("ALERT_TEXT_EXISTS"))
+        } else {
+            // 返信先を設定
+            TootView.inReplyToId = self.id
+            
+            // トゥート画面を開いていなければ開く
+            if !TootViewController.isShown {
+                MainViewController.instance?.tootAction(nil)
+                
+                // 公開範囲を低い方に合わせる
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    // 公開範囲設定を変更
+                    if let visibility = self.visibility {
+                        guard let view = TootViewController.instance?.view as? TootView else { return }
+                        
+                        var mode = TimeLineViewCell.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
+                                                        m2: SettingsData.protectMode)
+                        if mode == SettingsData.ProtectMode.publicMode {
+                            mode = SettingsData.ProtectMode.unlisted // inreplytoではLTLに流さない
+                        }
+                        view.protectMode = mode
+                        view.refresh()
+                    }
+                }
+            }
+            
+            // @IDを入力する
+            DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 0.0 : 0.2)) {
+                if let vc = TootViewController.instance, let view = vc.view as? TootView {
+                    view.textField.text = "@\(self.idLabel.text ?? "") "
+                }
+            }
+        }
+    }
+    
     // 日時表示を更新
     func refreshDate() {
+        if SettingsData.useAbsoluteTime {
+            refreshDateAbsolute()
+        } else {
+            refreshDateRelated()
+        }
+    }
+    
+    // 絶対時間で表示
+    private static var timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    private static var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd"
+        return formatter
+    }()
+    private static var monthFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy-MM"
+        return formatter
+    }()
+    private func refreshDateAbsolute() {
+        let diffTime = Int(Date().timeIntervalSince(self.date))
+        let dateStr = NotificationTableCell.dateFormatter.string(from: self.date)
+        let nowDateStr = NotificationTableCell.dateFormatter.string(from: Date())
+        if diffTime / 3600 < 18 || (dateStr == nowDateStr && diffTime / 3600 <= 24) {
+            self.dateLabel.text = NotificationTableCell.timeFormatter.string(from: self.date)
+        }
+        else if diffTime / 86400 < 365 {
+            self.dateLabel.text = dateStr
+        }
+        else {
+            self.dateLabel.text = NotificationTableCell.monthFormatter.string(from: self.date)
+        }
+    }
+    
+    // 相対時間で表示
+    private func refreshDateRelated() {
         let diffTime = Int(Date().timeIntervalSince(self.date))
         if diffTime <= 0 {
             self.dateLabel.text = I18n.get("DATETIME_NOW")
@@ -207,16 +292,17 @@ final class NotificationTableCell: UITableViewCell {
         
         self.iconView.frame = CGRect(x: 8,
                                      y: 10,
-                                     width: 36,
-                                     height: 36)
+                                     width: SettingsData.iconSize,
+                                     height: SettingsData.iconSize)
         
-        self.nameLabel.frame = CGRect(x: 50,
+        let left = SettingsData.iconSize + 16
+        self.nameLabel.frame = CGRect(x: left,
                                       y: 7,
                                       width: self.nameLabel.frame.width,
                                       height: SettingsData.fontSize + 1)
         
-        let idWidth = screenBounds.width - (self.nameLabel.frame.width + 50 + 45 + 5)
-        self.idLabel.frame = CGRect(x: 50 + self.nameLabel.frame.width + 5,
+        let idWidth = screenBounds.width - (self.nameLabel.frame.width + left + 45 + 5)
+        self.idLabel.frame = CGRect(x: left + self.nameLabel.frame.width + 5,
                                     y: 7,
                                     width: idWidth,
                                     height: SettingsData.fontSize)
@@ -226,16 +312,21 @@ final class NotificationTableCell: UITableViewCell {
                                       width: 45,
                                       height: SettingsData.fontSize)
         
-        self.notificationLabel.frame = CGRect(x: 50,
+        self.notificationLabel.frame = CGRect(x: left,
                                               y: 10 + SettingsData.fontSize,
-                                              width: screenBounds.width - 50,
+                                              width: screenBounds.width - left,
                                               height: SettingsData.fontSize + 2)
         
-        self.statusLabel.frame.size.width = screenBounds.width - 55
+        self.statusLabel.frame.size.width = screenBounds.width - left - 5
         self.statusLabel.sizeToFit()
-        self.statusLabel.frame = CGRect(x: 50,
+        self.statusLabel.frame = CGRect(x: left,
                                         y: self.notificationLabel.frame.maxY + 6,
                                         width: self.statusLabel.frame.width,
                                         height: self.statusLabel.frame.height)
+        
+        self.replyButton.frame = CGRect(x: 15,
+                                        y: 8 + SettingsData.iconSize + 10,
+                                        width: 32,
+                                        height: 32)
     }
 }

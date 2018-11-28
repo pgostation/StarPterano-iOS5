@@ -128,6 +128,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         cell.id = id
         cell.accountId = account?.id
         cell.accountData = account
+        cell.visibility = data.status?.visibility
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
             if cell.id == id {
@@ -146,9 +147,11 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         cell.idLabel.text = account?.acct
         cell.idLabel.sizeToFit()
         
+        cell.replyButton.isHidden = true
         switch data.type {
         case "mention":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_MENTION")
+            cell.replyButton.isHidden = false
         case "reblog":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_BOOST")
         case "favourite":

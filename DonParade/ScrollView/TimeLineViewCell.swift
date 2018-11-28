@@ -284,7 +284,7 @@ final class TimeLineViewCell: UITableViewCell {
                     if let visibility = self.visibility {
                         guard let view = TootViewController.instance?.view as? TootView else { return }
                         
-                        var mode = self.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
+                        var mode = TimeLineViewCell.lowerVisibility(m1: SettingsData.ProtectMode(rawValue: visibility),
                                                         m2: SettingsData.protectMode)
                         if mode == SettingsData.ProtectMode.publicMode {
                             mode = SettingsData.ProtectMode.unlisted // inreplytoではLTLに流さない
@@ -305,7 +305,7 @@ final class TimeLineViewCell: UITableViewCell {
     }
     
     // 低い方の公開範囲を返す
-    private func lowerVisibility(m1: SettingsData.ProtectMode?, m2: SettingsData.ProtectMode) -> SettingsData.ProtectMode {
+    static func lowerVisibility(m1: SettingsData.ProtectMode?, m2: SettingsData.ProtectMode) -> SettingsData.ProtectMode {
         guard let m1 = m1 else { return m2 }
         
         let v1: Int
