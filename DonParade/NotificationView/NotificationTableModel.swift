@@ -103,7 +103,11 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
                 self.dummyLabel.frame.size.width = UIScreen.main.bounds.width - 55
                 self.dummyLabel.sizeToFit()
                 
-                return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20
+                if data.type == "mention" {
+                    return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20 + 40
+                } else {
+                    return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20
+                }
             }
             return SettingsData.fontSize * 2
         }
@@ -128,6 +132,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         cell.id = id
         cell.accountId = account?.id
         cell.accountData = account
+        cell.statusId = data.status?.id
         cell.visibility = data.status?.visibility
         
         ImageCache.image(urlStr: account?.avatar_static, isTemp: false, isSmall: true) { image in
@@ -148,10 +153,19 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         cell.idLabel.sizeToFit()
         
         cell.replyButton.isHidden = true
+        cell.favoriteButton.isHidden = true
         switch data.type {
         case "mention":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_MENTION")
             cell.replyButton.isHidden = false
+            cell.favoriteButton.isHidden = false
+            if data.status?.favourited == 1 {
+                cell.favoriteButton.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
+                cell.isFaved = true
+            } else {
+                cell.favoriteButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
+                cell.isFaved = false
+            }
         case "reblog":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_BOOST")
         case "favourite":
@@ -170,6 +184,10 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         
         if let status = data.status {
             let attibutedText = DecodeToot.decodeContentFast(content: status.content, emojis: status.emojis) {
+                if cell.id == id {
+                    let attibutedText = DecodeToot.decodeContentFast(content: status.content, emojis: status.emojis) {}
+                    cell.statusLabel.attributedText = attibutedText.0
+                }
             }
             cell.statusLabel.attributedText = attibutedText.0
             cell.statusLabel.textColor = ThemeColor.idColor

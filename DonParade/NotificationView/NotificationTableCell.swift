@@ -24,12 +24,16 @@ final class NotificationTableCell: UITableViewCell {
     
     //var followButton: UIButton?
     let replyButton = UIButton()
+    let favoriteButton = UIButton()
     
     var accountId: String?
     var date: Date = Date()
     var timer: Timer?
     var accountData: AnalyzeJson.AccountData?
+    
+    var statusId: String?
     var visibility: String?
+    var isFaved = false
     
     init(reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
@@ -47,6 +51,7 @@ final class NotificationTableCell: UITableViewCell {
         self.addSubview(notificationLabel)
         self.addSubview(statusLabel)
         self.addSubview(replyButton)
+        self.addSubview(favoriteButton)
         self.layer.addSublayer(self.lineLayer)
         
         setProperties()
@@ -102,6 +107,10 @@ final class NotificationTableCell: UITableViewCell {
         self.replyButton.setTitle("↩︎", for: .normal)
         self.replyButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
         self.replyButton.addTarget(self, action: #selector(self.replyAction), for: .touchUpInside)
+        
+        self.favoriteButton.setTitle("★", for: .normal)
+        self.favoriteButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
+        self.favoriteButton.addTarget(self, action: #selector(self.favoriteAction), for: .touchUpInside)
         
         // タイマーで5秒ごとに時刻を更新
         if #available(iOS 10.0, *) {
@@ -183,7 +192,7 @@ final class NotificationTableCell: UITableViewCell {
             Dialog.show(message: I18n.get("ALERT_TEXT_EXISTS"))
         } else {
             // 返信先を設定
-            TootView.inReplyToId = self.id
+            TootView.inReplyToId = self.statusId
             
             // トゥート画面を開いていなければ開く
             if !TootViewController.isShown {
@@ -210,6 +219,33 @@ final class NotificationTableCell: UITableViewCell {
             DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 0.0 : 0.2)) {
                 if let vc = TootViewController.instance, let view = vc.view as? TootView {
                     view.textField.text = "@\(self.idLabel.text ?? "") "
+                }
+            }
+        }
+    }
+    
+    // お気に入りボタンをタップした時の処理
+    @objc func favoriteAction() {
+        self.favoriteButton.isHidden = true
+        
+        guard let hostName = SettingsData.hostName else { return }
+        guard let id = self.statusId else { return }
+        
+        let url: URL
+        if isFaved {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unfavourite")!
+        } else {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/favourite")!
+        }
+        
+        try? MastodonRequest.post(url: url, body: [:]) { (data, response, error) in
+            DispatchQueue.main.async {
+                self.favoriteButton.isHidden = false
+                
+                if self.isFaved {
+                    self.favoriteButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
+                } else {
+                    self.favoriteButton.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
                 }
             }
         }
@@ -324,9 +360,14 @@ final class NotificationTableCell: UITableViewCell {
                                         width: self.statusLabel.frame.width,
                                         height: self.statusLabel.frame.height)
         
-        self.replyButton.frame = CGRect(x: 15,
-                                        y: 8 + SettingsData.iconSize + 10,
+        self.replyButton.frame = CGRect(x: left + 10,
+                                        y: self.statusLabel.frame.maxY + 8,
                                         width: 32,
                                         height: 32)
+        
+        self.favoriteButton.frame = CGRect(x: left + 100,
+                                           y: self.statusLabel.frame.maxY + 8,
+                                           width: 32,
+                                           height: 32)
     }
 }
