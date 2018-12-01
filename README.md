@@ -1,4 +1,4 @@
-# StarPterano-iOS5
+# StarPterano-iOS
 iPhone用Mastodonクライアント 星プテラノ
 
 ### 特徴
