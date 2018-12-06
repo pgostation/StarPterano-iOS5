@@ -187,6 +187,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
                 if cell.id == id {
                     let attibutedText = DecodeToot.decodeContentFast(content: status.content, emojis: status.emojis) {}
                     cell.statusLabel.attributedText = attibutedText.0
+                    cell.statusLabel.textColor = ThemeColor.idColor
                 }
             }
             cell.statusLabel.attributedText = attibutedText.0
