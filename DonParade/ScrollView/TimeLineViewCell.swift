@@ -16,6 +16,7 @@ import SafariServices
 
 final class TimeLineViewCell: UITableViewCell {
     static var showMoreList: [String] = []
+    static let iconViewTag = 48947229
     
     var id = "" // トゥートのID
     var reblog_id: String? = nil
@@ -190,6 +191,9 @@ final class TimeLineViewCell: UITableViewCell {
             self.iconView?.removeGestureRecognizer(gesture)
         }
         self.iconView = nil
+        if let view = self.viewWithTag(TimeLineViewCell.iconViewTag) {
+            view.removeFromSuperview()
+        }
         
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor

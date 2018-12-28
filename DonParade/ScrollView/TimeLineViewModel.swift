@@ -916,6 +916,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     iconView = WideTouchImageView()
                 }
                 
+                iconView.tag = TimeLineViewCell.iconViewTag
                 cell.iconView = iconView
                 cell.addSubview(iconView)
                 cell.iconView?.image = image
