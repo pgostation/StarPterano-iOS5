@@ -136,7 +136,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             index += 1
                         }
                     }
-                } else if lastDate1 > firstDate2 {
+                } else if lastDate1 > firstDate2 && tableView.type != .user {
                     // 後に付ければ良い
                     self.list = self.list + addList2
                     
@@ -147,7 +147,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     if isStreaming {
                         tableView.reloadData()
                     }
-                } else if lastDate2 > firstDate1 {
+                } else if lastDate2 > firstDate1 && tableView.type != .user {
                     if self.list.count > 5000 && !isStreaming {
                         // 5000トゥートを超えると流石に削除する
                         self.list.removeLast(self.list.count - 5000)
@@ -219,8 +219,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                 flag = true
                                 break
                             }
-                            // タイムラインの方が古いので、その前に追加する
-                            if (listData.id ?? "") < (newContent.id ?? "") {
+                            // タイムラインの方が古いので、その前に追加する （または固定トゥート）
+                            let isOld: Bool
+                            if tableView.type == .user {
+                                if (listData.pinned == 1) == (newContent.pinned == 1) {
+                                    isOld = (listData.id ?? "") < (newContent.id ?? "")
+                                } else if newContent.pinned == 1 {
+                                    isOld = true
+                                } else {
+                                    isOld = false
+                                }
+                            } else {
+                                isOld = (listData.id ?? "") < (newContent.id ?? "")
+                            }
+                            if isOld {
                                 self.list.insert(newContent, at: index)
                                 flag = true
                                 

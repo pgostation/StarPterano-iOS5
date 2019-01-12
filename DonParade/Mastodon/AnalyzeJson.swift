@@ -12,14 +12,14 @@ import Foundation
 
 final class AnalyzeJson {
     // タイムラインのJSONデータを解析して、リストに格納
-    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool, isNewRefresh: Bool = false, isMerge: Bool = false) {
+    static func analyzeJsonArray(view: TimeLineView, model: TimeLineViewModel, jsonList: [AnyObject], isNew: Bool, isNewRefresh: Bool = false, isMerge: Bool = false, isPinned: Bool? = nil) {
         var contentList: [ContentData] = []
         
         var acct: String = ""
         for json in jsonList {
             guard let json = json as? [String: Any] else { continue }
             
-            let data = analyzeJson(view: view, model: model, json: json, acct: &acct, isMerge: isMerge)
+            let data = analyzeJson(view: view, model: model, json: json, acct: &acct, isMerge: isMerge, isPinned: isPinned)
             
             contentList.append(data)
         }
@@ -37,7 +37,7 @@ final class AnalyzeJson {
         model.change(tableView: view, addList: contentList, accountList: view.accountList, isNewRefresh: isNewRefresh)
     }
     
-    static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String, isMerge: Bool = false) -> ContentData {
+    static func analyzeJson(view: TimeLineView?, model: TimeLineViewModel?, json: [String: Any], acct: inout String, isMerge: Bool = false, isPinned: Bool? = nil) -> ContentData {
         if let account = json["account"] as? [String: Any] {
             acct = account["acct"] as? String ?? ""
             let data = analyzeAccountJson(account: account)
@@ -174,7 +174,11 @@ final class AnalyzeJson {
         
         let pinned: Int?
         if reblog_acct == nil {
-            pinned = json["pinned"] as? Int
+            if isPinned == true {
+                pinned = 1
+            } else {
+                pinned = json["pinned"] as? Int
+            }
         } else {
             pinned = reblog?["pinned"] as? Int
         }

@@ -81,7 +81,7 @@ final class TimeLineView: UITableView {
     
     // タイムラインを初回取得/手動更新
     private var isManualLoading = false
-    @objc func refresh() {
+    @objc func refresh(pinned: Bool = false) {
         if self.waitingStatusList.count > 0 {
             DispatchQueue.main.async {
                 self.refreshCon.endRefreshing()
@@ -119,7 +119,10 @@ final class TimeLineView: UITableView {
         case .user:
             guard let option = option else { return }
             let mediaOnlyStr = mediaOnly ? "&only_media=1" : ""
-            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=100\(sinceIdStr)\(mediaOnlyStr)")
+            url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=100\(sinceIdStr)\(mediaOnlyStr)" + (pinned ? "&pinned=1" : ""))
+            if sinceIdStr == "" && mediaOnlyStr == "" && pinned == false {
+                refresh(pinned: true) // 固定トゥートを取得
+            }
         case .favorites:
             url = URL(string: "https://\(hostName)/api/v1/favourites?limit=50\(sinceIdStr)")
         case .localTag:
@@ -166,7 +169,7 @@ final class TimeLineView: UITableView {
             if let data = data {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
-                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh)
+                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isPinned: pinned)
                         
                         // ローカルにホームを統合する場合
                         if SettingsData.mergeLocalTL && self?.type == .home {
