@@ -230,7 +230,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             let date = DecodeToot.decodeTime(text: created_at)
             let dateFormatter = DateFormatter()
             dateFormatter.dateStyle = .medium
-            dateFormatter.timeStyle = .none
+            dateFormatter.timeStyle = .short
             dateLabel.text = "since " + dateFormatter.string(from: date)
         }
         dateLabel.textColor = ThemeColor.idColor

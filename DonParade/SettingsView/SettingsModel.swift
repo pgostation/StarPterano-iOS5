@@ -320,7 +320,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     }
     
     // セルを選択
+    private static var isLocked = false
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if SettingsModel.isLocked { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            SettingsModel.isLocked = false
+        }
+        SettingsModel.isLocked = true
+        
         switch indexPath.section {
         case 0:
             let data = SettingsData.accountList[indexPath.row]

@@ -1439,7 +1439,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // 連打防止
             if self.isAnimating { return }
             self.isAnimating = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.isAnimating = false
             }
             
