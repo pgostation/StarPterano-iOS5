@@ -734,6 +734,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell.isFaved = (data.favourited == 1)
         cell.isBoosted = (data.reblogged == 1)
+        cell.isPinned = (data.pinned == 1)
         
         cell.messageView = messageView
         cell.insertSubview(messageView, at: 1)

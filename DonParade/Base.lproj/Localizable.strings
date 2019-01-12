@@ -42,6 +42,8 @@
 "ALERT_REASON_IS_NIL" = "Reason is empty.";
 "ALERT_REPORT_TOOT_FAILURE" = "Report a toot failure.";
 "ACTION_DESELECT" = "Deselect";
+"ACTION_PIN" = "Pin this toot";
+"ACTION_UNPIN" = "Unpin this toot";
 
 // 何分前
 "DATETIME_NOW" = "now";

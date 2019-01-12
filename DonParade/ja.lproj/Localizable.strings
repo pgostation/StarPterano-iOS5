@@ -42,6 +42,8 @@
 "ALERT_REASON_IS_NIL" = "理由が入力されていません";
 "ALERT_REPORT_TOOT_FAILURE" = "通報に失敗しました";
 "ACTION_DESELECT" = "選択を解除";
+"ACTION_PIN" = "固定トゥートにする";
+"ACTION_UNPIN" = "固定トゥートを解除する";
 
 // 何分前
 "DATETIME_NOW" = "今";

@@ -613,6 +613,38 @@ final class TimeLineView: UITableView {
         }
     }
     
+    // 固定トゥートにする/解除する
+    func pinAction(id: String, isPinned: Bool) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url: URL
+        if isPinned {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unpin")!
+        } else {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/pin")!
+        }
+        
+        try? MastodonRequest.post(url: url, body: [:]) { [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        
+                        DispatchQueue.main.async {
+                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        }
+                    }
+                } catch {
+                    
+                }
+            }
+        }
+    }
+    
     // ミニビューにする
     func enterMiniView() {
         switch SettingsData.isMiniView {

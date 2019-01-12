@@ -172,6 +172,13 @@ final class AnalyzeJson {
         
         let language = json["language"] as? String
         
+        let pinned: Int?
+        if reblog_acct == nil {
+            pinned = json["pinned"] as? Int
+        } else {
+            pinned = reblog?["pinned"] as? Int
+        }
+        
         var muted: Int? = nil
         if reblog_acct == nil {
             muted = json["muted"] as? Int
@@ -248,6 +255,7 @@ final class AnalyzeJson {
                                mediaData: mediaData,
                                mentions: mentions,
                                muted: muted,
+                               pinned: pinned,
                                reblog_acct: reblog_acct,
                                reblog_created_at: reblog_created_at,
                                reblog_id: reblog_id,
@@ -345,6 +353,7 @@ final class AnalyzeJson {
                            mediaData: nil,
                            mentions: nil,
                            muted: nil,
+                           pinned: nil,
                            reblog_acct: nil,
                            reblog_created_at: nil,
                            reblog_id: nil,
@@ -396,6 +405,7 @@ final class AnalyzeJson {
         let mediaData: [MediaData]?
         let mentions: [MentionData]?
         let muted: Int?
+        let pinned: Int?
         let reblog_acct: String?
         let reblog_created_at: String?
         let reblog_id: String?

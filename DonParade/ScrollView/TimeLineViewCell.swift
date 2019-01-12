@@ -76,6 +76,7 @@ final class TimeLineViewCell: UITableViewCell {
     
     var isFaved = false
     var isBoosted = false
+    var isPinned = false
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -495,6 +496,16 @@ final class TimeLineViewCell: UITableViewCell {
                     Dialog.show(message: self.contentData)
                 }
         }))*/
+        
+        // 固定トゥートにする/解除する
+        if self.accountId == SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") {
+            alertController.addAction(UIAlertAction(
+                title: self.isPinned ? I18n.get("ACTION_UNPIN") : I18n.get("ACTION_PIN"),
+                style: UIAlertActionStyle.default,
+                handler: { _ in
+                    self.tableView?.pinAction(id: id, isPinned: self.isPinned)
+            }))
+        }
         
         // キャンセル
         alertController.addAction(UIAlertAction(
