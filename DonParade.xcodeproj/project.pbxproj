@@ -16,7 +16,6 @@
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
 		121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView.swift */; };
 		121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0E12153E32500928DCC /* WaitIndicator.swift */; };
-		12515157217AA73D0068F9AA /* decision21.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 12515156217AA73D0068F9AA /* decision21.mp3 */; };
 		1255A96C215A6A1600DE1CF3 /* MastodonStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A96B215A6A1600DE1CF3 /* MastodonStreaming.swift */; };
 		1255A96E215A7F5900DE1CF3 /* License.text in Resources */ = {isa = PBXBuildFile; fileRef = 1255A96D215A7F5900DE1CF3 /* License.text */; };
 		1255A976215BBD2D00DE1CF3 /* ImageCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */; };
@@ -53,6 +52,7 @@
 		12CD0263214F49E000133A95 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0262214F49E000133A95 /* EmojiData.swift */; };
 		12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0264214FD37700133A95 /* AnalyzeJson.swift */; };
 		12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */; };
+		12E4ABF921ECCBC00029A933 /* decision21.caf in Resources */ = {isa = PBXBuildFile; fileRef = 12E4ABF821ECCAAE0029A933 /* decision21.caf */; };
 		12F6602F215656890049AEE0 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6602E215656890049AEE0 /* ImageUtils.swift */; };
 		12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC77214CA35F00E9E508 /* AppDelegate.swift */; };
 		12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC79214CA35F00E9E508 /* ViewController.swift */; };
@@ -123,6 +123,7 @@
 		12CD0262214F49E000133A95 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
 		12CD0264214FD37700133A95 /* AnalyzeJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeJson.swift; sourceTree = "<group>"; };
 		12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewCell.swift; sourceTree = "<group>"; };
+		12E4ABF821ECCAAE0029A933 /* decision21.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = decision21.caf; sourceTree = "<group>"; };
 		12F6602E215656890049AEE0 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		12F9AC74214CA35F00E9E508 /* DonParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F9AC77214CA35F00E9E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -163,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				12515156217AA73D0068F9AA /* decision21.mp3 */,
+				12E4ABF821ECCAAE0029A933 /* decision21.caf */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -443,9 +445,9 @@
 				121764C82167AB830017E76A /* InfoPlist.strings in Resources */,
 				12F9ACA2214CE9B900E9E508 /* Localizable.strings in Resources */,
 				12F9AC7F214CA36100E9E508 /* Assets.xcassets in Resources */,
-				12515157217AA73D0068F9AA /* decision21.mp3 in Resources */,
 				12F9AC7D214CA35F00E9E508 /* Main.storyboard in Resources */,
 				1255A96E215A7F5900DE1CF3 /* License.text in Resources */,
+				12E4ABF921ECCBC00029A933 /* decision21.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

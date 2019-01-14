@@ -417,7 +417,10 @@ final class TimeLineView: UITableView {
                     
                     // 効果音を出す
                     if TimeLineView.audioPlayer == nil {
-                        let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "mp3")!
+                        // バックグラウンドの音楽再生を止めないようにする
+                        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+                        
+                        let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "caf")!
                         let sound = URL(fileURLWithPath: soundFilePath)
                         TimeLineView.audioPlayer = try? AVAudioPlayer(contentsOf: sound, fileTypeHint:nil)
                         TimeLineView.audioPlayer?.prepareToPlay()
