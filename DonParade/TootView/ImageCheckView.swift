@@ -46,23 +46,33 @@ final class ImageCheckView: UIView {
     
     func add(imageUrl: URL) {
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-        guard let asset = fetchResult.firstObject else { return }
-        
-        var isGIForPNG = false
-        let resources = PHAssetResource.assetResources(for: asset)
-        for resource in resources {
-            if resource.uniformTypeIdentifier == "com.compuserve.gif" {
-                isGIForPNG = true
+        if let asset = fetchResult.firstObject {
+            // iOS10以前
+            var isGIForPNG = false
+            let resources = PHAssetResource.assetResources(for: asset)
+            for resource in resources {
+                if resource.uniformTypeIdentifier == "com.compuserve.gif" {
+                    isGIForPNG = true
+                }
+                if resource.uniformTypeIdentifier == "public.png" {
+                    isGIForPNG = true
+                }
             }
-            if resource.uniformTypeIdentifier == "public.png" {
-                isGIForPNG = true
+            
+            if isGIForPNG {
+                addPNGImage(imageUrl: imageUrl, asset: asset)
+            } else {
+                addNormalImage(imageUrl: imageUrl, asset: asset)
             }
-        }
-        
-        if isGIForPNG {
-            addPNGImage(imageUrl: imageUrl, asset: asset)
         } else {
-            addNormalImage(imageUrl: imageUrl, asset: asset)
+            guard let data = try? Data(contentsOf: imageUrl) else { return }
+            
+            let gifImage = UIImage(gifData: data)
+            if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                addImage(imageUrl: imageUrl, image: gifImage)
+            } else if let image = UIImage(contentsOfFile: imageUrl.path) {
+                addImage(imageUrl: imageUrl, image: image)
+            }
         }
     }
     
@@ -72,37 +82,15 @@ final class ImageCheckView: UIView {
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
         options.version = .original
-        manager.requestImageData(for: asset, options: options) { (data, string, orientation, infoDict) in
+        manager.requestImageData(for: asset, options: options) { [weak self] (data, string, orientation, infoDict) in
             guard let data = data else { return }
             
-            if !self.urls.contains(imageUrl) {
-                self.urls.append(imageUrl)
+            let gifImage = UIImage(gifData: data)
+            if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                self?.addImage(imageUrl: imageUrl, image: gifImage)
+            } else if let image = UIImage(contentsOfFile: imageUrl.path) {
+                self?.addImage(imageUrl: imageUrl, image: image)
             }
-            
-            let imageView: UIView
-            if imageUrl.absoluteString.lowercased().contains(".gif") {
-                let image = UIImage(gifData: data)
-                imageView = UIImageView(gifImage: image)
-                (imageView as? UIImageView)?.contentMode = .scaleAspectFit
-            } else {
-                let image = UIImage(data: data)
-                imageView = UIImageView(image: image)
-                (imageView as? UIImageView)?.contentMode = .scaleAspectFit
-            }
-            self.addSubview(imageView)
-            self.imageViews.append(imageView)
-            
-            let deleteButton = UIButton()
-            deleteButton.setTitle(I18n.get("BUTTON_DELETE_IMAGE"), for: .normal)
-            deleteButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
-            deleteButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-            deleteButton.clipsToBounds = true
-            deleteButton.layer.cornerRadius = 12
-            self.addSubview(deleteButton)
-            self.deleteButtons.append(deleteButton)
-            deleteButton.addTarget(self, action: #selector(self.deleteAction(_:)), for: .touchUpInside)
-            
-            self.setNeedsLayout()
         }
     }
     
@@ -111,31 +99,39 @@ final class ImageCheckView: UIView {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
-        manager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) { (image, info) in
+        manager.requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: options) { [weak self] (image, info) in
             guard let image = image else { return }
             
-            if !self.urls.contains(imageUrl) {
-                self.urls.append(imageUrl)
-            }
-            
-            let imageView = UIImageView()
-            imageView.image = image
-            imageView.contentMode = .scaleAspectFit
-            self.addSubview(imageView)
-            self.imageViews.append(imageView)
-            
-            let deleteButton = UIButton()
-            deleteButton.setTitle(I18n.get("BUTTON_DELETE_IMAGE"), for: .normal)
-            deleteButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
-            deleteButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
-            deleteButton.clipsToBounds = true
-            deleteButton.layer.cornerRadius = 12
-            self.addSubview(deleteButton)
-            self.deleteButtons.append(deleteButton)
-            deleteButton.addTarget(self, action: #selector(self.deleteAction(_:)), for: .touchUpInside)
-            
-            self.setNeedsLayout()
+            self?.addImage(imageUrl: imageUrl, image: image)
         }
+    }
+    
+    private func addImage(imageUrl: URL, image: UIImage) {
+        if !self.urls.contains(imageUrl) {
+            self.urls.append(imageUrl)
+        }
+        
+        let imageView: UIImageView
+        if imageUrl.absoluteString.lowercased().contains(".gif") {
+            imageView = UIImageView(gifImage: image)
+        } else {
+            imageView = UIImageView(image: image)
+        }
+        imageView.contentMode = .scaleAspectFit
+        self.addSubview(imageView)
+        self.imageViews.append(imageView)
+        
+        let deleteButton = UIButton()
+        deleteButton.setTitle(I18n.get("BUTTON_DELETE_IMAGE"), for: .normal)
+        deleteButton.backgroundColor = ThemeColor.opaqueButtonsBgColor
+        deleteButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        deleteButton.clipsToBounds = true
+        deleteButton.layer.cornerRadius = 12
+        self.addSubview(deleteButton)
+        self.deleteButtons.append(deleteButton)
+        deleteButton.addTarget(self, action: #selector(self.deleteAction(_:)), for: .touchUpInside)
+        
+        self.setNeedsLayout()
     }
     
     @objc func deleteAction(_ sender: UIButton) {

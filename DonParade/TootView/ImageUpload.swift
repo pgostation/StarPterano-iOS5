@@ -19,24 +19,54 @@ final class ImageUpload {
         
         // imageData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [imageUrl], options: nil)
-        guard let asset = fetchResult.firstObject else { return }
         
-        var isGIF = false
-        var isPNG = false
-        let resources = PHAssetResource.assetResources(for: asset)
-        for resource in resources {
-            if resource.uniformTypeIdentifier == "com.compuserve.gif" {
-                isGIF = true
+        if let asset = fetchResult.firstObject {
+            // iOS10以前
+            var isGIF = false
+            var isPNG = false
+            let resources = PHAssetResource.assetResources(for: asset)
+            for resource in resources {
+                if resource.uniformTypeIdentifier == "com.compuserve.gif" {
+                    isGIF = true
+                }
+                if resource.uniformTypeIdentifier == "public.png" {
+                    isPNG = true
+                }
             }
-            if resource.uniformTypeIdentifier == "public.png" {
-                isPNG = true
+            
+            if isGIF || isPNG {
+                uploadPNG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, isPNG: isPNG, callback: callback)
+            } else {
+                uploadJPEG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, callback: callback)
             }
-        }
-        
-        if isGIF || isPNG {
-            uploadPNG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, isPNG: isPNG, callback: callback)
         } else {
-            uploadJPEG(httpMethod: httpMethod, imageUrl: imageUrl, uploadUrl: uploadUrl, filePathKey: filePathKey, asset: asset, callback: callback)
+            // iOS11
+            if imageUrl.path.lowercased().hasSuffix(".gif") {
+                self.filename = "image.gif"
+                self.mimetype = "image/gif"
+                guard let data = try? Data(contentsOf: imageUrl) else { return }
+                uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: data, callback: callback)
+            } else if imageUrl.path.lowercased().hasSuffix(".png") {
+                self.filename = "image.png"
+                self.mimetype = "image/png"
+                guard let data = try? Data(contentsOf: imageUrl) else { return }
+                uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: data, callback: callback)
+            } else {
+                guard let image = UIImage.init(contentsOfFile: imageUrl.path) else { return }
+                
+                // JPEG圧縮
+                let imageData: Data
+                if filePathKey == "avatar" || filePathKey == "header" {
+                    let smallImage = ImageUtils.smallIcon(image: image, size: 800)
+                    imageData = UIImageJPEGRepresentation(smallImage, 0.8)!
+                } else {
+                    imageData = UIImageJPEGRepresentation(image, 0.8)!
+                }
+                
+                self.filename = "image.jpeg"
+                self.mimetype = "image/jpeg"
+                self.uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: imageData, callback: callback)
+            }
         }
     }
     
@@ -89,59 +119,60 @@ final class ImageUpload {
         
         // movieData生成
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [movieUrl], options: nil)
-        guard let asset = fetchResult.firstObject else { return }
         
-        let manager = PHImageManager.default()
-        manager.requestAVAsset(forVideo: asset, options: nil) { (asset, audioMix, infoDictionary) in
-            guard let assetUrl = asset as? AVURLAsset else { return }
-            guard let videoData = try? Data(contentsOf: assetUrl.url) else { return }
-            
-            // 圧縮して送信
-            print("videoData = \(videoData.count / 1000)KB")
-            if let asset = asset {
-                let presetname: String
-                if videoData.count < 5000000 {
-                    presetname = AVAssetExportPresetHighestQuality
-                } else if videoData.count < 20000000 {
-                    presetname = AVAssetExportPresetMediumQuality
-                } else {
-                    presetname = AVAssetExportPresetLowQuality
-                }
-                guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetname) else { return }
+        if let asset = fetchResult.firstObject {
+            let manager = PHImageManager.default()
+            manager.requestAVAsset(forVideo: asset, options: nil) { (asset, audioMix, infoDictionary) in
+                guard let assetUrl = asset as? AVURLAsset else { return }
+                guard let videoData = try? Data(contentsOf: assetUrl.url) else { return }
                 
-                var waitIndicator: WaitIndicator? = nil
-                DispatchQueue.main.async {
-                    waitIndicator = WaitIndicator()
-                    UIUtils.getFrontViewController()?.view.addSubview(waitIndicator!)
-                }
-                
-                let filePath = NSTemporaryDirectory() + "/temp.mov"
-                let fileUrl = URL(fileURLWithPath: filePath)
-                try? FileManager.default.removeItem(atPath: filePath)
-                exportSession.outputURL = fileUrl
-                exportSession.outputFileType = AVFileType.mp4
-                
-                exportSession.exportAsynchronously(completionHandler: {
+                // 圧縮して送信
+                print("videoData = \(videoData.count / 1000)KB")
+                if let asset = asset {
+                    let presetname: String
+                    if videoData.count < 5000000 {
+                        presetname = AVAssetExportPresetHighestQuality
+                    } else if videoData.count < 20000000 {
+                        presetname = AVAssetExportPresetMediumQuality
+                    } else {
+                        presetname = AVAssetExportPresetLowQuality
+                    }
+                    guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetname) else { return }
+                    
+                    var waitIndicator: WaitIndicator? = nil
                     DispatchQueue.main.async {
-                        waitIndicator?.removeFromSuperview()
+                        waitIndicator = WaitIndicator()
+                        UIUtils.getFrontViewController()?.view.addSubview(waitIndicator!)
                     }
                     
-                    switch exportSession.status {
-                    case .completed:
-                        self.filename = "movie.mp4"
-                        self.mimetype = "video/mp4"
-                        if let compressedData = try? Data(contentsOf: fileUrl) {
-                            print("compressedData = \(compressedData.count / 1000)KB")
-                            self.uploadData(httpMethod: "POST", uploadUrl: uploadUrl, filePathKey: filePathKey, data: compressedData, callback: callback)
+                    let filePath = NSTemporaryDirectory() + "/temp.mov"
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    try? FileManager.default.removeItem(atPath: filePath)
+                    exportSession.outputURL = fileUrl
+                    exportSession.outputFileType = AVFileType.mp4
+                    
+                    exportSession.exportAsynchronously(completionHandler: {
+                        DispatchQueue.main.async {
+                            waitIndicator?.removeFromSuperview()
                         }
-                    case .failed:
-                        break
-                    case .cancelled:
-                        break
-                    default:
-                        break
-                    }
-                })
+                        
+                        switch exportSession.status {
+                        case .completed:
+                            self.filename = "movie.mp4"
+                            self.mimetype = "video/mp4"
+                            if let compressedData = try? Data(contentsOf: fileUrl) {
+                                print("compressedData = \(compressedData.count / 1000)KB")
+                                self.uploadData(httpMethod: "POST", uploadUrl: uploadUrl, filePathKey: filePathKey, data: compressedData, callback: callback)
+                            }
+                        case .failed:
+                            break
+                        case .cancelled:
+                            break
+                        default:
+                            break
+                        }
+                    })
+                }
             }
         }
     }

@@ -88,7 +88,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         let display_name = DecodeToot.encodeEmoji(attributedText: view.nameField.attributedText, textStorage: view.nameField.textStorage)
         let note = DecodeToot.encodeEmoji(attributedText: view.noteView.attributedText, textStorage: view.noteView.textStorage)
         
-        var body: [String: Any] = [
+        let body: [String: Any] = [
             "display_name": display_name,
             "note": note,
             "locked": view.lockedSwitch.isOn ? 1 : 0
@@ -137,26 +137,36 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
     
     private func selectImage(isIcon: Bool) {
         // 画像ピッカーを表示
-        MyImagePickerController.show(useMovie: false, callback: { url in
+        MyImagePickerController.show(useMovie: false, callback: { [weak self] url in
             if let url = url {
                 let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [url], options: nil)
-                guard let asset = fetchResult.firstObject else { return }
-                
-                var isGIForPNG = false
-                let resources = PHAssetResource.assetResources(for: asset)
-                for resource in resources {
-                    if resource.uniformTypeIdentifier == "com.compuserve.gif" {
-                        isGIForPNG = true
+                if let asset = fetchResult.firstObject {
+                    // iOS10以前
+                    var isGIForPNG = false
+                    let resources = PHAssetResource.assetResources(for: asset)
+                    for resource in resources {
+                        if resource.uniformTypeIdentifier == "com.compuserve.gif" {
+                            isGIForPNG = true
+                        }
+                        if resource.uniformTypeIdentifier == "public.png" {
+                            isGIForPNG = true
+                        }
                     }
-                    if resource.uniformTypeIdentifier == "public.png" {
-                        isGIForPNG = true
+                    
+                    if isGIForPNG {
+                        self?.addPNGImage(imageUrl: url, asset: asset, isIcon: isIcon)
+                    } else {
+                        self?.addNormalImage(imageUrl: url, asset: asset, isIcon: isIcon)
                     }
-                }
-                
-                if isGIForPNG {
-                    self.addPNGImage(imageUrl: url, asset: asset, isIcon: isIcon)
                 } else {
-                    self.addNormalImage(imageUrl: url, asset: asset, isIcon: isIcon)
+                    guard let data = try? Data(contentsOf: url) else { return }
+                    
+                    let gifImage = UIImage(gifData: data)
+                    if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                        self?.addImage(imageUrl: url, image: gifImage, isIcon: isIcon)
+                    } else if let image = UIImage(contentsOfFile: url.path) {
+                        self?.addImage(imageUrl: url, image: image, isIcon: isIcon)
+                    }
                 }
             }
         })
@@ -168,33 +178,15 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
         options.version = .original
-        manager.requestImageData(for: asset, options: options) { (data, string, orientation, infoDict) in
+        manager.requestImageData(for: asset, options: options) { [weak self] (data, string, orientation, infoDict) in
             guard let data = data else { return }
-            guard let view = self.view as? ProfileEditView else { return }
             
-            let imageView: UIImageView
-            if imageUrl.absoluteString.lowercased().contains(".gif") {
-                let image = UIImage(gifData: data)
-                imageView = UIImageView(gifImage: image)
-                imageView.contentMode = .scaleAspectFit
+            let gifImage = UIImage(gifData: data)
+            if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                self?.addImage(imageUrl: imageUrl, image: gifImage, isIcon: isIcon)
             } else {
-                let image = UIImage(data: data)
-                imageView = UIImageView(image: image)
-                imageView.contentMode = .scaleAspectFit
-            }
-            
-            if isIcon {
-                self.iconUrl = imageUrl
-                view.iconView?.removeFromSuperview()
-                view.iconView = imageView
-                view.insertSubview(imageView, at: 1)
-                view.setNeedsLayout()
-            } else {
-                self.headerUrl = imageUrl
-                view.headerView?.removeFromSuperview()
-                view.headerView = imageView
-                view.insertSubview(imageView, at: 0)
-                view.setNeedsLayout()
+                guard let image = UIImage(data: data) else { return }
+                self?.addImage(imageUrl: imageUrl, image: image, isIcon: isIcon)
             }
         }
     }
@@ -204,27 +196,38 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         let manager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat // これを指定しないとプレビュー画像も呼ばれる
-        manager.requestImage(for: asset, targetSize: CGSize(width: 500, height: 500), contentMode: .aspectFill, options: options) { (image, info) in
+        manager.requestImage(for: asset, targetSize: CGSize(width: 500, height: 500), contentMode: .aspectFill, options: options) { [weak self] (image, info) in
             guard let image = image else { return }
-            guard let view = self.view as? ProfileEditView else { return }
             
-            let imageView = UIImageView()
-            imageView.image = image
-            imageView.contentMode = .scaleAspectFit
-            
-            if isIcon {
-                self.iconUrl = imageUrl
-                view.iconView?.removeFromSuperview()
-                view.iconView = imageView
-                view.insertSubview(imageView, at: 1)
-                view.setNeedsLayout()
-            } else {
-                self.headerUrl = imageUrl
-                view.headerView?.removeFromSuperview()
-                view.headerView = imageView
-                view.insertSubview(imageView, at: 0)
-                view.setNeedsLayout()
-            }
+            self?.addImage(imageUrl: imageUrl, image: image, isIcon: isIcon)
+        }
+    }
+    
+    private func addImage(imageUrl: URL, image: UIImage, isIcon: Bool) {
+        guard let view = self.view as? ProfileEditView else { return }
+        
+        let imageView: UIImageView
+        if imageUrl.absoluteString.lowercased().contains(".gif") {
+            imageView = UIImageView(gifImage: image)
+        } else {
+            imageView = UIImageView(image: image)
+        }
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFit
+        
+        if isIcon {
+            self.iconUrl = imageUrl
+            view.iconView?.removeFromSuperview()
+            view.iconView = imageView
+            view.insertSubview(imageView, at: 1)
+            view.setNeedsLayout()
+        } else {
+            self.headerUrl = imageUrl
+            view.headerView?.removeFromSuperview()
+            view.headerView = imageView
+            view.insertSubview(imageView, at: 0)
+            view.setNeedsLayout()
         }
     }
     
