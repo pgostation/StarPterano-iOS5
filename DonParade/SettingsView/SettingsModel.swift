@@ -135,7 +135,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: reuseIdentifier)
         
-        cell.selectionStyle = .none
         cell.accessoryType = .none
         cell.backgroundColor = ThemeColor.viewBgColor
         cell.textLabel?.textColor = ThemeColor.idColor
@@ -404,7 +403,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             break
         }
         
-        tableView.deselectRow(at: indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // セルが削除対応かどうかを決める
