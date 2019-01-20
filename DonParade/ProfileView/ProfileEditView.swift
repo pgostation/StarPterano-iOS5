@@ -278,7 +278,7 @@ final class ProfileEditView: UIScrollView {
         nameField.frame = CGRect(x: 10,
                                  y: top,
                                  width: screenBounds.width - 20,
-                                 height: 30)
+                                 height: 40)
         top = nameField.frame.maxY
         
         noteLabel.frame = CGRect(x: 10,

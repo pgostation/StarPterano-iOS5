@@ -40,12 +40,6 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
     // 選択完了時に呼ばれる
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let imageUrl = (info["PHImageFileURLKey"] ?? info["UIImagePickerControllerImageURL"] ?? info["UIImagePickerControllerReferenceURL"]) as? URL
-        if let cropRect = info[UIImagePickerControllerCropRect] as? CGRect {
-            print("#### cropRect=\(cropRect)")
-        }
-        print("#### info[PHImageFileURLKey]=\(info["PHImageFileURLKey"])")
-        print("#### info[UIImagePickerControllerImageURL]=\(info["UIImagePickerControllerImageURL"])")
-        print("#### info[UIImagePickerControllerReferenceURL]=\(info["UIImagePickerControllerReferenceURL"])")
         self.callback(imageUrl)
         MyImagePickerController.instance = nil
         
