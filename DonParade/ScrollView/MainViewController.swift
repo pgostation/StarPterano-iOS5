@@ -101,7 +101,7 @@ final class MainViewController: MyViewController {
         if let oldViewController = self.timelineViewController, sender != nil {
             if oldViewController.type == .home {
                 // 一番上までスクロール
-                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
                 return
             }
         }
@@ -122,7 +122,7 @@ final class MainViewController: MyViewController {
         }
         
         // 一番下にタイムラインビューを入れる
-        self.addChildViewController(self.timelineViewController!)
+        self.addChild(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
@@ -134,7 +134,7 @@ final class MainViewController: MyViewController {
         if let oldViewController = self.timelineViewController {
             if oldViewController.type == .local {
                 // 一番上までスクロール
-                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
                 return
             }
         }
@@ -155,7 +155,7 @@ final class MainViewController: MyViewController {
         }
         
         // 一番下にタイムラインビューを入れる
-        self.addChildViewController(self.timelineViewController!)
+        self.addChild(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
@@ -172,7 +172,7 @@ final class MainViewController: MyViewController {
         if let oldViewController = self.timelineViewController {
             if oldViewController.type == .federation {
                 // 一番上までスクロール
-                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+                (oldViewController.view as? UITableView)?.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
                 return
             }
         }
@@ -193,7 +193,7 @@ final class MainViewController: MyViewController {
         }
         
         // 一番下にタイムラインビューを入れる
-        self.addChildViewController(self.timelineViewController!)
+        self.addChild(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
@@ -235,7 +235,7 @@ final class MainViewController: MyViewController {
         }
         
         // 一番下にタイムラインビューを入れる
-        self.addChildViewController(self.timelineViewController!)
+        self.addChild(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 0)
         self.timelineViewController!.view.frame = UIUtils.fullScreen()
         
@@ -293,7 +293,7 @@ final class MainViewController: MyViewController {
         }
         
         let vc = SearchViewController()
-        self.addChildViewController(vc)
+        self.addChild(vc)
         self.view.addSubview(vc.view)
         
         vc.view.frame = CGRect(x: UIScreen.main.bounds.width,
@@ -316,13 +316,13 @@ final class MainViewController: MyViewController {
         if TootViewController.isShown {
             for (index, subview) in self.view.subviews.enumerated() {
                 if subview is TootView {
-                    self.addChildViewController(vc)
+                    self.addChild(vc)
                     self.view.insertSubview(vc.view, at: index)
                     break
                 }
             }
         } else {
-            self.addChildViewController(vc)
+            self.addChild(vc)
             self.view.addSubview(vc.view)
         }
         
@@ -344,12 +344,12 @@ final class MainViewController: MyViewController {
         let title = (SettingsData.hostName ?? "") + " - " + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "")
         let alertController = UIAlertController(title: title,
                                                 message: nil,
-                                                preferredStyle: UIAlertControllerStyle.actionSheet)
+                                                preferredStyle: UIAlertController.Style.actionSheet)
         
         // プロフィール編集
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_PROFILE"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 ShowMyAnyList.editProfile(rootVc: self)
         }))
@@ -357,7 +357,7 @@ final class MainViewController: MyViewController {
         // DMを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_DMLIST"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 ShowMyAnyList.showDMList(rootVc: self)
         }))
@@ -365,7 +365,7 @@ final class MainViewController: MyViewController {
         // お気に入りを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_FAVORITELIST"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 ShowMyAnyList.showFavoriteList(rootVc: self)
         }))
@@ -373,7 +373,7 @@ final class MainViewController: MyViewController {
         // 自分のページを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_MYPAGE"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 ShowMyAnyList.showMyPage(rootVc: self)
         }))
@@ -382,7 +382,7 @@ final class MainViewController: MyViewController {
             // フォローリクエストを表示
             alertController.addAction(UIAlertAction(
                 title: I18n.get("SETTINGS_FOLLOWREQUESTLIST"),
-                style: UIAlertActionStyle.default,
+                style: UIAlertAction.Style.default,
                 handler: { _ in
                     ShowMyAnyList.showFollowRequestList(rootVc: self)
             }))
@@ -391,7 +391,7 @@ final class MainViewController: MyViewController {
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
-            style: UIAlertActionStyle.cancel,
+            style: UIAlertAction.Style.cancel,
             handler: { _ in
         }))
         
@@ -431,7 +431,7 @@ final class MainViewController: MyViewController {
         }
         
         // タイムラインビューを入れる
-        self.addChildViewController(self.timelineViewController!)
+        self.addChild(self.timelineViewController!)
         self.view.insertSubview(self.timelineViewController!.view, at: 1)
         
         let screenBounds = UIScreen.main.bounds
@@ -466,7 +466,7 @@ final class MainViewController: MyViewController {
                                                                height: screenBounds.height)
             }
         }, completion: { _ in
-            oldTimelineViewController?.removeFromParentViewController()
+            oldTimelineViewController?.removeFromParent()
             oldTimelineViewController?.view.removeFromSuperview()
         })
         
@@ -490,7 +490,7 @@ final class MainViewController: MyViewController {
     // 前のビューを外す
     private func removeOldView() {
         if let oldViewController = self.timelineViewController {
-            oldViewController.removeFromParentViewController()
+            oldViewController.removeFromParent()
             oldViewController.view.removeFromSuperview()
         }
     }
@@ -585,7 +585,7 @@ final class MainViewController: MyViewController {
         let tootViewController = TootViewController()
         tootViewController.view.backgroundColor = UIColor.clear
         if let rootVc = UIUtils.getFrontViewController() {
-            rootVc.addChildViewController(tootViewController)
+            rootVc.addChild(tootViewController)
             rootVc.view.addSubview(tootViewController.view)
         }
     }

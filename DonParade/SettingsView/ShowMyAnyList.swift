@@ -88,7 +88,7 @@ final class ShowMyAnyList {
     
     // 設定画面のさらに上に表示する
     private static func show(rootVc: UIViewController, vc: UIViewController) {
-        rootVc.addChildViewController(vc)
+        rootVc.addChild(vc)
         rootVc.view.addSubview(vc.view)
         vc.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                y: 0,

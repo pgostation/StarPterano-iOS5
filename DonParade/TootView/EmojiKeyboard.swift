@@ -27,7 +27,7 @@ final class EmojiKeyboard: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIViewNoIntrinsicMetric, height: self.intrinsicHeight)
+        return CGSize(width: UIView.noIntrinsicMetric, height: self.intrinsicHeight)
     }
     
     init() {

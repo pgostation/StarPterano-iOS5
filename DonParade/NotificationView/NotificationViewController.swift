@@ -169,7 +169,7 @@ final class NotificationViewController: MyViewController {
                                      width: UIScreen.main.bounds.width,
                                      height: UIScreen.main.bounds.height)
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
         })
     }
@@ -250,7 +250,7 @@ private final class NotificationTableView: UITableView {
     let model = NotificationTableModel()
     
     init() {
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model

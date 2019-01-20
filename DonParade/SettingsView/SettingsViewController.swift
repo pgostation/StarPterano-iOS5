@@ -62,7 +62,7 @@ private final class SettingsView: UITableView {
                            width: screenBounds.width,
                            height: screenBounds.height - UIUtils.statusBarHeight() - 50)
         super.init(frame: frame,
-                   style: UITableViewStyle.grouped)
+                   style: UITableView.Style.grouped)
         
         self.delegate = model
         self.dataSource = model

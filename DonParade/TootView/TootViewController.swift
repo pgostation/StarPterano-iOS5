@@ -283,7 +283,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     // 画面を閉じる
     @objc func closeAction() {
         self.view.removeFromSuperview()
-        self.removeFromParentViewController()
+        self.removeFromParent()
         
         TootViewController.isShown = false
         

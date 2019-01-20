@@ -32,7 +32,7 @@ final class TimeLineView: UITableView {
         self.option = option
         self.refreshCon = UIRefreshControl()
         
-        super.init(frame: UIUtils.fullScreen(), style: UITableViewStyle.plain)
+        super.init(frame: UIUtils.fullScreen(), style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model
@@ -43,7 +43,7 @@ final class TimeLineView: UITableView {
         if type != .mentions {
             // 引っ張って更新するやつを追加
             self.refreshCon.attributedTitle = NSAttributedString(string: I18n.get("REFRESH_TIMELINE"))
-            self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+            self.refreshCon.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
             if #available(iOS 10.0, *) {
                 self.refreshControl = self.refreshCon
             } else {
@@ -418,7 +418,11 @@ final class TimeLineView: UITableView {
                     // 効果音を出す
                     if TimeLineView.audioPlayer == nil {
                         // バックグラウンドの音楽再生を止めないようにする
-                        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+                        if #available(iOS 10.0, *) {
+                            try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient,
+                                                                             mode: AVAudioSession.Mode.default,
+                                                                             options: AVAudioSession.CategoryOptions.allowBluetooth)
+                        }
                         
                         let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "caf")!
                         let sound = URL(fileURLWithPath: soundFilePath)

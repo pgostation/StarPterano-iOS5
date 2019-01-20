@@ -9,7 +9,7 @@
 import UIKit
 
 final class WideTouchButton: UIButton {
-    var insets = UIEdgeInsetsMake(0, 0, 0, 0)
+    var insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var rect = bounds
@@ -24,7 +24,7 @@ final class WideTouchButton: UIButton {
 }
 
 final class WideTouchImageView: UIImageView {
-    var insets = UIEdgeInsetsMake(0, 0, 0, 0)
+    var insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var rect = bounds

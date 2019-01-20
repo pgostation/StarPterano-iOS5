@@ -201,14 +201,14 @@ final class TimeLineViewController: MyViewController {
                                      width: UIScreen.main.bounds.width,
                                      height: UIScreen.main.bounds.height)
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
             
             // 閉じるボタンは不要なので削除
             TimeLineViewController.closeButtons.removeLast()
         })
         
-        if let childs = self.parent?.childViewControllers, childs.count >= 2 {
+        if let childs = self.parent?.children, childs.count >= 2 {
             if let brother = childs[childs.count - 2] as? TimeLineViewController {
                 brother.viewDidAppear(false)
             }

@@ -17,7 +17,7 @@ final class ListSelectTableViewCell: UITableViewCell {
     let editButton = UIButton()
     
     init(reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのビューは不要
         self.textLabel?.removeFromSuperview()
@@ -74,7 +74,7 @@ final class ListSelectTableViewCell: UITableViewCell {
         
         let vc = ListEditViewController(name: self.nameLabel.text, id: self.id)
         if let rootVc = UIUtils.getFrontViewController() {
-            rootVc.addChildViewController(vc)
+            rootVc.addChild(vc)
             rootVc.view.addSubview(vc.view)
             
             vc.view.frame.origin.x = UIScreen.main.bounds.width

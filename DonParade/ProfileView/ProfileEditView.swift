@@ -69,13 +69,13 @@ final class ProfileEditView: UIScrollView {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.keyboardWillShow(_:)),
-            name: NSNotification.Name.UIKeyboardWillShow,
+            name: UIResponder.keyboardWillShowNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.keyboardWillHide(_:)),
-            name: NSNotification.Name.UIKeyboardWillHide,
+            name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
     }
@@ -128,7 +128,7 @@ final class ProfileEditView: UIScrollView {
             self.noteView.textColor = ThemeColor.idColor
             self.noteView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
         }).0
-        self.noteView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        self.noteView.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
         self.noteView.textColor = ThemeColor.idColor
         self.noteView.backgroundColor = ThemeColor.cellBgColor
         self.noteView.layer.borderWidth = 1
@@ -236,9 +236,9 @@ final class ProfileEditView: UIScrollView {
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let curve = UIViewKeyframeAnimationOptions(rawValue: UInt(truncating: userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber))
-            let duration = TimeInterval(truncating: userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber)
-            if let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let curve = UIView.KeyframeAnimationOptions(rawValue: UInt(truncating: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber))
+            let duration = TimeInterval(truncating: userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber)
+            if let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 self.keyBoardHeight = keyboardFrame.height
                 UIView.animateKeyframes(withDuration: duration, delay: 0, options: [curve], animations: {
                     self.layoutSubviews()

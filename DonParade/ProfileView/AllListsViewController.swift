@@ -140,7 +140,7 @@ final class AllListsTableView: UITableView {
     init(accountId: String) {
         self.model = AllListsTableModel(accountId: accountId)
         
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model
@@ -177,7 +177,7 @@ final class AllListsTableModel: NSObject, UITableViewDataSource, UITableViewDele
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= list.count {
-            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.cellBgColor
             return cell
         }
@@ -227,7 +227,7 @@ private final class AllListsTableCell: UITableViewCell {
     let removeButton = UIButton()
     
     init(reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのビューは不要
         self.textLabel?.removeFromSuperview()

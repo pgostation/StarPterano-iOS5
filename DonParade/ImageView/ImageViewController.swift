@@ -99,12 +99,12 @@ final class ImageViewController: MyViewController {
         guard let view = self.view as? ImageView else { return }
         guard let image = view.imageScrollView.imageView.image else { return }
         
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // ブラウザで開く
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 guard let url = URL(string: self.imagesUrls[self.index]) else { return }
                 if #available(iOS 10.0, *) {
@@ -117,7 +117,7 @@ final class ImageViewController: MyViewController {
         // URLをコピー
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_COPY_URL"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 UIPasteboard.general.string = self.imagesUrls[self.index]
         }))
@@ -125,7 +125,7 @@ final class ImageViewController: MyViewController {
         // アルバムに保存
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_SAVE_IMAGE_TO_ALBUM"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 let netUrlStr = self.imagesUrls[self.index]
                 let cacheDir = NSHomeDirectory() + "/Library/Caches/"
@@ -143,7 +143,7 @@ final class ImageViewController: MyViewController {
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
-            style: UIAlertActionStyle.cancel,
+            style: UIAlertAction.Style.cancel,
             handler: { _ in
         }))
         

@@ -148,7 +148,7 @@ private final class ListSelectTableView: UITableView {
     let model = ListSelectTableModel()
     
     init() {
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model
@@ -269,16 +269,16 @@ private final class ListSelectTableModel: NSObject, UITableViewDataSource, UITab
     }
     
     // セルが削除対応かどうかを決める
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row >= list.count {
-            return UITableViewCellEditingStyle.none
+            return UITableViewCell.EditingStyle.none
         }
         
-        return UITableViewCellEditingStyle.delete
+        return UITableViewCell.EditingStyle.delete
     }
     
     // スワイプでの削除
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let data = list[indexPath.row]
         
         if editingStyle == .delete {

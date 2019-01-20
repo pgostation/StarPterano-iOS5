@@ -214,7 +214,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         noteLabel.delegate = self
         noteLabel.attributedText = DecodeToot.decodeContent(content: data.note, emojis: data.emojis, callback: nil).0
         noteLabel.textColor = ThemeColor.contrastColor
-        noteLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        noteLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
         noteLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
         noteLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         noteLabel.layer.shadowOpacity = 1.0
@@ -257,7 +257,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 valueLabel.attributedText = DecodeToot.decodeContentFast(content: field["value"] as? String, emojis: data.emojis, callback: nil).0
             }).0
             valueLabel.textColor = ThemeColor.idColor
-            valueLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+            valueLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
             valueLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             valueLabel.isSelectable = true
             valueLabel.isEditable = false
@@ -410,13 +410,13 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         let uri = self.uri
         
         let myUserName = SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? ""
-        let alertController = UIAlertController(title: nil, message: myUserName + "@" + (SettingsData.hostName ?? ""), preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alertController = UIAlertController(title: nil, message: myUserName + "@" + (SettingsData.hostName ?? ""), preferredStyle: UIAlertController.Style.actionSheet)
         
         if relationshipData.following == 1 {
             // アンフォローする
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_UNFOLLOW"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     ProfileAction.unfollow(id: id)
             }))
@@ -425,7 +425,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 // ブーストを表示しない
                 alertController.addAction(UIAlertAction(
                     title: I18n.get("ACTION_HIDE_BOOST"),
-                    style: UIAlertActionStyle.default,
+                    style: UIAlertAction.Style.default,
                     handler: { _ in
                         ProfileAction.hideBoost(id: id)
                 }))
@@ -433,7 +433,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 // ブーストを表示する
                 alertController.addAction(UIAlertAction(
                     title: I18n.get("ACTION_SHOW_BOOST"),
-                    style: UIAlertActionStyle.default,
+                    style: UIAlertAction.Style.default,
                     handler: { _ in
                         ProfileAction.showBoost(id: id)
                 }))
@@ -443,7 +443,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 // リモートフォローする
                 alertController.addAction(UIAlertAction(
                     title: I18n.get("ACTION_REMOTE_FOLLOW"),
-                    style: UIAlertActionStyle.default,
+                    style: UIAlertAction.Style.default,
                     handler: { _ in
                         ProfileAction.remoteFollow(uri: uri)
                 }))
@@ -451,7 +451,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 // フォローする
                 alertController.addAction(UIAlertAction(
                     title: I18n.get("ACTION_FOLLOW"),
-                    style: UIAlertActionStyle.default,
+                    style: UIAlertAction.Style.default,
                     handler: { _ in
                         ProfileAction.follow(id: id)
                 }))
@@ -462,7 +462,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             // アンブロックする
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_UNBLOCK"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     ProfileAction.unblock(id: id)
             }))
@@ -470,7 +470,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             // ブロックする
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_BLOCK"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     ProfileAction.block(id: id)
             }))
@@ -480,7 +480,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             // アンミュートする
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_UNMUTE"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     ProfileAction.unmute(id: id)
             }))
@@ -488,7 +488,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             // ミュートする
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_MUTE"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     ProfileAction.mute(id: id)
             }))
@@ -497,7 +497,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         // リストに追加
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_ADD_TO_LIST"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 let vc = AllListsViewController(accountId: id)
                 UIUtils.getFrontViewController()?.present(vc, animated: true, completion: nil)
@@ -506,7 +506,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         // Safariで表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 guard let url = URL(string: self.urlStr) else { return }
                 if #available(iOS 10.0, *) {
@@ -519,7 +519,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
-            style: UIAlertActionStyle.cancel,
+            style: UIAlertAction.Style.cancel,
             handler: { _ in
         }))
         

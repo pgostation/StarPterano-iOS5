@@ -140,7 +140,7 @@ final class ProfileAction {
         DispatchQueue.main.async {
             if let view = self.timelineView {
                 if view.type == .user {
-                    view.reloadRows(at: [IndexPath.init(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+                    view.reloadRows(at: [IndexPath.init(row: 0, section: 0)], with: UITableView.RowAnimation.none)
                 }
             }
         }

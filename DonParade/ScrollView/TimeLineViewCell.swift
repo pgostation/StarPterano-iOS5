@@ -237,7 +237,7 @@ final class TimeLineViewCell: UITableViewCell {
             if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                 timelineView.accountList.updateValue(accountData, forKey: accountId)
             }
-            UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+            UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
             UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
             accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                               y: 0,
@@ -369,12 +369,12 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 「・・・」ボタンをタップした時の処理
     @objc func detailAction() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // 選択解除
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_DESELECT"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 self.tableView?.model.clearSelection()
                 self.tableView?.reloadData()
@@ -384,7 +384,7 @@ final class TimeLineViewCell: UITableViewCell {
             // トゥートを削除
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_DELETE_TOOT"),
-                style: UIAlertActionStyle.destructive,
+                style: UIAlertAction.Style.destructive,
                 handler: { _ in
                     guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(self.id)") else { return }
                     try? MastodonRequest.delete(url: url, completionHandler: { (data, response, error) in
@@ -401,7 +401,7 @@ final class TimeLineViewCell: UITableViewCell {
         
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_REPORT_TOOT"),
-            style: UIAlertActionStyle.destructive,
+            style: UIAlertAction.Style.destructive,
             handler: { _ in
                 Dialog.showWithTextInput(
                     message: I18n.get("ALERT_INPUT_REPORT_REASON"),
@@ -443,7 +443,7 @@ final class TimeLineViewCell: UITableViewCell {
         // ペーストボードにコピー
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_COPY_TOOT"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 let spoilerText: String
                 if let attrtext = self.spolerTextLabel?.attributedText {
@@ -476,7 +476,7 @@ final class TimeLineViewCell: UITableViewCell {
         // Safariで開く
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_OPEN_WITH_SAFARI"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 guard let url = URL(string: self.urlStr) else { return }
                 if #available(iOS 10.0, *) {
@@ -501,7 +501,7 @@ final class TimeLineViewCell: UITableViewCell {
         if self.accountId == SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") {
             alertController.addAction(UIAlertAction(
                 title: self.isPinned ? I18n.get("ACTION_UNPIN") : I18n.get("ACTION_PIN"),
-                style: UIAlertActionStyle.default,
+                style: UIAlertAction.Style.default,
                 handler: { _ in
                     self.tableView?.pinAction(id: id, isPinned: self.isPinned)
             }))
@@ -510,7 +510,7 @@ final class TimeLineViewCell: UITableViewCell {
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
-            style: UIAlertActionStyle.cancel,
+            style: UIAlertAction.Style.cancel,
             handler: { _ in
         }))
         

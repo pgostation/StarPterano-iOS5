@@ -133,7 +133,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuseIdentifier = "SettingsModel"
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) ?? UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: reuseIdentifier)
         
         cell.accessoryType = .none
         cell.backgroundColor = ThemeColor.viewBgColor
@@ -193,7 +193,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     SettingsData.isDarkMode = isOn
                     
                     // アニメーションで変更
-                    tableView.reloadRows(at: tableView.indexPathsForVisibleRows ?? [], with: UITableViewRowAnimation.fade)
+                    tableView.reloadRows(at: tableView.indexPathsForVisibleRows ?? [], with: UITableView.RowAnimation.fade)
                     UIView.animate(withDuration: 0.2) {
                         tableView.backgroundColor = ThemeColor.cellBgColor
                     }
@@ -407,16 +407,16 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     }
     
     // セルが削除対応かどうかを決める
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.section == 0 {
-            return UITableViewCellEditingStyle.delete
+            return UITableViewCell.EditingStyle.delete
         }
         
-        return UITableViewCellEditingStyle.none
+        return UITableViewCell.EditingStyle.none
     }
     
     // スワイプでの削除
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.section == 0 && indexPath.row < SettingsData.accountList.count {
                 Dialog.show(message: I18n.get("DIALOG_REMOVE_ACCOUNT"),

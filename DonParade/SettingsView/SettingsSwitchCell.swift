@@ -13,7 +13,7 @@ import UIKit
 class SettingsSwitchCell: UITableViewCell {
     var callback: ((Bool)->Void)?
     
-    init(style: UITableViewCellStyle, isOn: Bool) {
+    init(style: UITableViewCell.CellStyle, isOn: Bool) {
         super.init(style: style, reuseIdentifier: nil)
         
         self.selectionStyle = .none

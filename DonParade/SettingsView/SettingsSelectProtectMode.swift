@@ -13,12 +13,12 @@ import UIKit
 
 final class SettingsSelectProtectMode {
     static func showActionSheet(callback: @escaping ((SettingsData.ProtectMode)->Void)) {
-        let alertController = UIAlertController(title: nil, message: I18n.get("TITLE_PROTECTMODE"), preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alertController = UIAlertController(title: nil, message: I18n.get("TITLE_PROTECTMODE"), preferredStyle: UIAlertController.Style.actionSheet)
         
         // 公開
         alertController.addAction(UIAlertAction(
             title: I18n.get("PROTECTMODE_PUBLIC"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 callback(SettingsData.ProtectMode.publicMode)
         }))
@@ -26,7 +26,7 @@ final class SettingsSelectProtectMode {
         // 未収載
         alertController.addAction(UIAlertAction(
             title: I18n.get("PROTECTMODE_UNLISTED"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 callback(SettingsData.ProtectMode.unlisted)
         }))
@@ -34,7 +34,7 @@ final class SettingsSelectProtectMode {
         // フォロワー限定
         alertController.addAction(UIAlertAction(
             title: I18n.get("PROTECTMODE_PRIVATE"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 callback(SettingsData.ProtectMode.privateMode)
         }))
@@ -42,7 +42,7 @@ final class SettingsSelectProtectMode {
         // ダイレクト
         alertController.addAction(UIAlertAction(
             title: I18n.get("PROTECTMODE_DIRECT"),
-            style: UIAlertActionStyle.default,
+            style: UIAlertAction.Style.default,
             handler: { _ in
                 callback(SettingsData.ProtectMode.direct)
         }))
@@ -50,7 +50,7 @@ final class SettingsSelectProtectMode {
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
-            style: UIAlertActionStyle.cancel,
+            style: UIAlertAction.Style.cancel,
             handler: { _ in
         }))
         

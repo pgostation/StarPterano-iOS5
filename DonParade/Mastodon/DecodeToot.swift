@@ -79,7 +79,7 @@ final class DecodeToot {
         // リンクを追加
         for link in linkList {
             if link.0.encodedOffset + link.2.count > attributedText.length { continue }
-            attributedText.addAttribute(NSAttributedStringKey.link,
+            attributedText.addAttribute(NSAttributedString.Key.link,
                                         value: link.1,
                                         range: NSRange(location: link.0.encodedOffset, length: link.2.count))
         }
@@ -277,7 +277,7 @@ final class DecodeToot {
             while location < range.length {
                 var r = NSRange()
                 let attrDictionary = attrString.attributes(at: location, effectiveRange: &r)
-                let attachment = attrDictionary[NSAttributedStringKey.attachment] as? NSTextAttachment
+                let attachment = attrDictionary[NSAttributedString.Key.attachment] as? NSTextAttachment
                 if let image = attachment?.image {
                     list.append((r, (image as? EmojiImage)?.shortcode ?? ""))
                 }
@@ -305,7 +305,7 @@ final class DecodeToot {
             while location < range.length {
                 var r = NSRange()
                 let attrDictionary = attrString.attributes(at: location, effectiveRange: &r)
-                let attachment = attrDictionary[NSAttributedStringKey.attachment] as? NSTextAttachment
+                let attachment = attrDictionary[NSAttributedString.Key.attachment] as? NSTextAttachment
                 if let image = attachment?.image {
                     list.append((r, (image as? EmojiImage)?.shortcode ?? ""))
                 }

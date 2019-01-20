@@ -42,7 +42,7 @@ final class SearchViewController: MyViewController {
                                      width: UIScreen.main.bounds.width,
                                      height: UIScreen.main.bounds.height)
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
         })
     }

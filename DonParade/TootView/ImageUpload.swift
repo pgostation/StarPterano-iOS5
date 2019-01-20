@@ -58,9 +58,9 @@ final class ImageUpload {
                 let imageData: Data
                 if filePathKey == "avatar" || filePathKey == "header" {
                     let smallImage = ImageUtils.smallIcon(image: image, size: 800)
-                    imageData = UIImageJPEGRepresentation(smallImage, 0.8)!
+                    imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 } else {
-                    imageData = UIImageJPEGRepresentation(image, 0.8)!
+                    imageData = image.jpegData(compressionQuality: 0.8)!
                 }
                 
                 self.filename = "image.jpeg"
@@ -101,9 +101,9 @@ final class ImageUpload {
             let imageData: Data
             if filePathKey == "avatar" || filePathKey == "header" {
                 let smallImage = ImageUtils.smallIcon(image: image, size: 800)
-                imageData = UIImageJPEGRepresentation(smallImage, 0.8)!
+                imageData = smallImage.jpegData(compressionQuality: 0.8)!
             } else {
-                imageData = UIImageJPEGRepresentation(image, 0.8)!
+                imageData = image.jpegData(compressionQuality: 0.8)!
             }
             
             self.filename = "image.jpeg"

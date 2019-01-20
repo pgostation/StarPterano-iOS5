@@ -178,7 +178,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             let oldOffsetY = tableView.contentOffset.y
                             let indexPath = IndexPath(row: min(self.cellCount, addList2.count), section: 0)
                             tableView.scrollToRow(at: indexPath,
-                                                  at: UITableViewScrollPosition.top,
+                                                  at: UITableView.ScrollPosition.top,
                                                   animated: false)
                             tableView.contentOffset.y = max(0, tableView.contentOffset.y + oldOffsetY)
                         }
@@ -195,7 +195,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             for i in 0..<self.animationCellsCount {
                                 indexPathList.append(IndexPath(item: i, section: 0))
                             }
-                            tableView.reloadRows(at: indexPathList, with: UITableViewRowAnimation.none)
+                            tableView.reloadRows(at: indexPathList, with: UITableView.RowAnimation.none)
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                 self.inAnimating = false
@@ -279,7 +279,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // 削除
                     self.list.remove(at: index)
                     tableView.beginUpdates()
-                    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.fade)
+                    tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: UITableView.RowAnimation.fade)
                     tableView.endUpdates()
                     break
                 }
@@ -446,7 +446,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let paragrahStyle = NSMutableParagraphStyle()
         paragrahStyle.minimumLineHeight = SettingsData.fontSize * 1.5
         paragrahStyle.maximumLineHeight = SettingsData.fontSize * 1.5
-        attributedText.addAttributes([NSAttributedStringKey.paragraphStyle : paragrahStyle],
+        attributedText.addAttributes([NSAttributedString.Key.paragraphStyle : paragrahStyle],
                                      range: NSMakeRange(0, attributedText.length))
         
         // プロパティ設定
@@ -534,7 +534,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         let msgView = MyTextView()
         msgView.model = self
-        msgView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        msgView.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
         msgView.textContainer.lineBreakMode = .byCharWrapping
         msgView.isOpaque = true
         msgView.isScrollEnabled = false
@@ -551,7 +551,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     // キャッシュの色を再設定する
     func recolorCache() {
         for view in self.cacheTextView {
-            view.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+            view.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
         }
         
         for data in self.cacheDict {
@@ -604,7 +604,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         var index = indexPath.row
         
         guard let timelineView = tableView as? TimeLineView else {
-            return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            return UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
         }
         
         if timelineView.type == .user {
@@ -627,7 +627,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 screenCellCount = Int(UIScreen.main.bounds.height / (23 + SettingsData.fontSize * 1.5))
             }
             if indexPath.row > screenCellCount {
-                return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+                return UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             }
         }
         
@@ -636,7 +636,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 // 過去のトゥートに遡る
                 timelineView.refreshOld(id: timelineView.model.getLastTootId())
             }
-            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
             cell.selectionStyle = .none
             return cell
@@ -681,7 +681,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             loadButton.addTarget(self, action: #selector(reloadOld(_:)), for: .touchUpInside)
             return cell
         } else if data.id == nil {
-            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
             cell.selectionStyle = .none
             return cell
@@ -801,7 +801,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // 過去のトゥートに遡る
                     timelineView.refreshOld(id: timelineView.model.getLastTootId())
                 }
-                let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+                let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
                 cell.backgroundColor = ThemeColor.viewBgColor
                 cell.selectionStyle = .none
                 return cell
@@ -935,7 +935,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.iconView?.image = image
                 cell.iconView?.layer.cornerRadius = 5
                 cell.iconView?.clipsToBounds = true
-                cell.iconView?.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+                cell.iconView?.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                 
                 // アイコンのタップジェスチャー
                 let tapGesture = UITapGestureRecognizer(target: cell, action: #selector(cell.tapAccountAction))
@@ -1297,7 +1297,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                     timelineView.accountList.updateValue(accountData, forKey: accountId)
                 }
-                UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+                UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
                 UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
                 accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                                   y: 0,
@@ -1460,7 +1460,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
             let mentionsData = getMentionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
-            UIUtils.getFrontViewController()?.addChildViewController(viewController)
+            UIUtils.getFrontViewController()?.addChild(viewController)
             UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                y: 0,
@@ -1513,7 +1513,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             self.selectedRow = indexPath.row
             
-            tableView.reloadRows(at: indexPaths, with: UITableViewRowAnimation.none)
+            tableView.reloadRows(at: indexPaths, with: UITableView.RowAnimation.none)
         }
     }
     
@@ -1539,7 +1539,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // ハッシュタグの場合
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.federationTag,
                                                         option: String(Url.path.suffix(Url.path.count - 6)))
-            UIUtils.getFrontViewController()?.addChildViewController(viewController)
+            UIUtils.getFrontViewController()?.addChild(viewController)
             UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
             viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                y: 0,
@@ -1565,7 +1565,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                                             option: id)
                 
                 func show() {
-                    UIUtils.getFrontViewController()?.addChildViewController(viewController)
+                    UIUtils.getFrontViewController()?.addChild(viewController)
                     UIUtils.getFrontViewController()?.view.addSubview(viewController.view)
                     viewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                        y: 0,

@@ -306,7 +306,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
                                      width: UIScreen.main.bounds.width,
                                      height: UIScreen.main.bounds.height)
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
         })
     }

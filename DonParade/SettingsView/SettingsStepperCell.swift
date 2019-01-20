@@ -13,7 +13,7 @@ import UIKit
 class SettingsStepperCell: UITableViewCell {
     var callback: ((Double)->Void)?
     
-    init(style: UITableViewCellStyle, value: Double, minValue: Double, maxValue: Double, step: Double) {
+    init(style: UITableViewCell.CellStyle, value: Double, minValue: Double, maxValue: Double, step: Double) {
         super.init(style: style, reuseIdentifier: nil)
         
         self.selectionStyle = .none

@@ -106,7 +106,7 @@ final class ListEditViewController: MyViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.view.frame.origin.x = UIScreen.main.bounds.width
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
         })
     }
@@ -197,7 +197,7 @@ private final class ListEditTableView: UITableView {
     init(id: String) {
         self.model = ListEditTableModel(listId: id)
         
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model

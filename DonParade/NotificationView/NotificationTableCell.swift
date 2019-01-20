@@ -36,7 +36,7 @@ final class NotificationTableCell: UITableViewCell {
     var isFaved = false
     
     init(reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのビューは不要
         self.textLabel?.removeFromSuperview()
@@ -94,7 +94,7 @@ final class NotificationTableCell: UITableViewCell {
         self.notificationLabel.isOpaque = true
         
         self.statusLabel.textColor = ThemeColor.idColor
-        self.statusLabel.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: ThemeColor.linkTextColor]
+        self.statusLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
         self.statusLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         self.statusLabel.backgroundColor = ThemeColor.toMentionBgColor
         self.statusLabel.isOpaque = true
@@ -152,7 +152,7 @@ final class NotificationTableCell: UITableViewCell {
             if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                 timelineView.accountList.updateValue(accountData, forKey: accountId)
             }
-            UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+            UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
             UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
             accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                               y: 0,

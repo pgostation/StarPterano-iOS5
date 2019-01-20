@@ -108,7 +108,7 @@ final class FollowRequestViewController: MyViewController {
                                      width: UIScreen.main.bounds.width,
                                      height: UIScreen.main.bounds.height)
         }, completion: { _ in
-            self.removeFromParentViewController()
+            self.removeFromParent()
             self.view.removeFromSuperview()
         })
     }
@@ -150,7 +150,7 @@ final class FollowRequestTableView: UITableView {
     let model = FollowRequestTableModel()
     
     init() {
-        super.init(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        super.init(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         
         self.delegate = model
         self.dataSource = model
@@ -202,7 +202,7 @@ final class FollowRequestTableModel: NSObject, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= list.count {
-            let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.cellBgColor
             
             if let vc = UIUtils.getFrontViewController() as? FollowRequestViewController {
@@ -257,7 +257,7 @@ private final class FollowRequestTableCell: UITableViewCell {
     var accountData: AnalyzeJson.AccountData?
     
     init(reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのビューは不要
         self.textLabel?.removeFromSuperview()
@@ -288,7 +288,7 @@ private final class FollowRequestTableCell: UITableViewCell {
         
         self.iconView.layer.cornerRadius = 5
         self.iconView.clipsToBounds = true
-        self.iconView.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        self.iconView.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
         self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
@@ -335,7 +335,7 @@ private final class FollowRequestTableCell: UITableViewCell {
         if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
             timelineView.accountList.updateValue(accountData, forKey: accountData.id ?? "")
         }
-        UIUtils.getFrontViewController()?.addChildViewController(accountTimeLineViewController)
+        UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
         UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
         accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                           y: 0,

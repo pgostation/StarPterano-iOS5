@@ -55,7 +55,7 @@ final class MainView: UIView {
     private func setProperties() {
         self.backgroundColor = ThemeColor.viewBgColor
         
-        tlButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        tlButton.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         tlButton.setTitle(I18n.get("BUTTON_TL"), for: .normal)
         tlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         tlButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -72,7 +72,7 @@ final class MainView: UIView {
             tlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
         
-        ltlButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        ltlButton.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         ltlButton.setTitle(I18n.get("BUTTON_LTL"), for: .normal)
         ltlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         ltlButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -89,7 +89,7 @@ final class MainView: UIView {
             ltlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
         
-        ftlButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        ftlButton.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         ftlButton.setTitle(I18n.get("BUTTON_FTL"), for: .normal)
         ftlButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         ftlButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -106,7 +106,7 @@ final class MainView: UIView {
             ftlButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
         
-        listButton.insets = UIEdgeInsetsMake(0, 5, 5, 0)
+        listButton.insets = UIEdgeInsets(top: 0, left: 5, bottom: 5, right: 0)
         listButton.setTitle(I18n.get("BUTTON_LIST"), for: .normal)
         listButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         listButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -136,7 +136,7 @@ final class MainView: UIView {
         tootButton.layer.cornerRadius = 35
         tootButton.isExclusiveTouch = true
         
-        searchButton.insets = UIEdgeInsetsMake(0, 0, 5, 5)
+        searchButton.insets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 5)
         searchButton.setTitle(I18n.get("BUTTON_SEARCH"), for: .normal)
         searchButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         searchButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -153,7 +153,7 @@ final class MainView: UIView {
             searchButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
         
-        notificationsButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        notificationsButton.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         notificationsButton.setTitle(I18n.get("BUTTON_NOTIFY"), for: .normal)
         notificationsButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         notificationsButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -170,7 +170,7 @@ final class MainView: UIView {
             notificationsButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         }
         
-        accountButton.insets = UIEdgeInsetsMake(5, 5, 5, 5)
+        accountButton.insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         accountButton.setTitle("", for: .normal)
         accountButton.backgroundColor = ThemeColor.mainButtonsBgColor
         accountButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)

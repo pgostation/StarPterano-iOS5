@@ -21,7 +21,7 @@ final class ListEditTableViewCell: UITableViewCell {
     let removeButton = UIButton()
     
     init(reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.default, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
         // デフォルトのビューは不要
         self.textLabel?.removeFromSuperview()
