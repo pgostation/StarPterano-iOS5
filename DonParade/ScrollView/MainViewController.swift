@@ -313,8 +313,18 @@ final class MainViewController: MyViewController {
         }
         
         let vc = NotificationViewController()
-        self.addChildViewController(vc)
-        self.view.addSubview(vc.view)
+        if TootViewController.isShown {
+            for (index, subview) in self.view.subviews.enumerated() {
+                if subview is TootView {
+                    self.addChildViewController(vc)
+                    self.view.insertSubview(vc.view, at: index)
+                    break
+                }
+            }
+        } else {
+            self.addChildViewController(vc)
+            self.view.addSubview(vc.view)
+        }
         
         vc.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                y: 0,
