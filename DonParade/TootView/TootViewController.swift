@@ -112,7 +112,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                     })
                 } else {
                     // 静止画
-                    ImageUpload.upload(httpMethod: "POST", imageUrl: url, callback: { json in
+                    ImageUpload.upload(httpMethod: "POST", imageUrl: url, count: view.imageCheckView.urls.count,  callback: { json in
                         if let json = json {
                             if let id = json["id"] as? String {
                                 idList.append(id)

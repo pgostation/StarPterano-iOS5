@@ -13,7 +13,7 @@ final class ImageUpload {
     private init() { }
     
     // 画像のアップロード
-    static func upload(httpMethod: String, imageUrl: URL, uploadUrl: URL? = nil, filePathKey: String = "file", callback: @escaping ([String: Any]?)->Void) {
+    static func upload(httpMethod: String, imageUrl: URL, count: Int, uploadUrl: URL? = nil, filePathKey: String = "file", callback: @escaping ([String: Any]?)->Void) {
         // 画像アップロード先URL
         guard let uploadUrl = uploadUrl ?? URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/media") else { return }
         
@@ -55,12 +55,16 @@ final class ImageUpload {
                 guard let image = UIImage.init(contentsOfFile: imageUrl.path) else { return }
                 
                 // JPEG圧縮
-                let imageData: Data
+                var imageData: Data
                 if filePathKey == "avatar" || filePathKey == "header" {
                     let smallImage = ImageUtils.smallIcon(image: image, size: 800)
                     imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 } else {
                     imageData = image.jpegData(compressionQuality: 0.8)!
+                    if imageData.count > 4_000_000 / count {
+                        // サイズが大きい場合はさらに圧縮する
+                        imageData = image.jpegData(compressionQuality: 0.5)!
+                    }
                 }
                 
                 self.filename = "image.jpeg"
@@ -98,12 +102,20 @@ final class ImageUpload {
         manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { (image, info) in
             guard let image = image else { return }
             
-            let imageData: Data
+            var imageData: Data
             if filePathKey == "avatar" || filePathKey == "header" {
                 let smallImage = ImageUtils.smallIcon(image: image, size: 800)
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
             } else {
                 imageData = image.jpegData(compressionQuality: 0.8)!
+                if imageData.count > 1_000_000 {
+                    // サイズが大きい場合はさらに圧縮する
+                    imageData = image.jpegData(compressionQuality: 0.5)!
+                    if imageData.count > 1_000_000 {
+                        // サイズが大きい場合はさらに圧縮する
+                        imageData = image.jpegData(compressionQuality: 0.2)!
+                    }
+                }
             }
             
             self.filename = "image.jpeg"

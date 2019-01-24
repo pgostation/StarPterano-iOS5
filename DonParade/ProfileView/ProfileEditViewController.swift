@@ -121,7 +121,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
     private func sendImage(type: String, imageUrl: URL) {
         let url = URL(string: "https://\(SettingsData.hostName!)/api/v1/accounts/update_credentials")!
         
-        ImageUpload.upload(httpMethod: "PATCH", imageUrl: imageUrl, uploadUrl: url, filePathKey: type) { (infoDict) in
+        ImageUpload.upload(httpMethod: "PATCH", imageUrl: imageUrl, count: 1, uploadUrl: url, filePathKey: type) { (infoDict) in
         }
     }
     
