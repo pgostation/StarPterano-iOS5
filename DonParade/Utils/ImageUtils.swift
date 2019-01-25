@@ -70,6 +70,28 @@ final class ImageUtils {
         return image
     }
     
+    // 画像をピクセル数以内に縮小する
+    static func small(image: UIImage, pixels: CGFloat) -> UIImage {
+        if image.size.width * image.size.height < pixels { return image }
+        
+        let rate = sqrt(pixels / (image.size.width * image.size.height))
+        
+        let resizedSize = CGSize(width: floor(image.size.width * rate), height: floor(image.size.height * rate))
+        
+        UIGraphicsBeginImageContextWithOptions(resizedSize, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: resizedSize))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if let resizedImage = resizedImage {
+            if let data = resizedImage.pngData() {
+                return UIImage(data: data) ?? image
+            }
+        }
+        
+        return image
+    }
+    
     // 指定色のUIImageを作成
     static func colorImage(color: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0.0)

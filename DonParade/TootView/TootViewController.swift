@@ -89,48 +89,50 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         let nsfw = (!view.spoilerTextField.isHidden) || view.imageCheckView.nsfwSw.isOn
         
         if view.imageCheckView.urls.count > 0 {
-            // 画像をアップロードしてから投稿
-            let group = DispatchGroup()
-            
-            var idList: [String] = []
-            for url in view.imageCheckView.urls {
-                group.enter()
-                let lowUrlStr = url.absoluteString.lowercased()
-                if lowUrlStr.contains(".mp4") || lowUrlStr.contains(".m4v") || lowUrlStr.contains(".mov") {
-                    // 動画
-                    ImageUpload.upload(movieUrl: url, callback: { json in
-                        if let json = json {
-                            if let id = json["id"] as? String {
-                                idList.append(id)
-                            }
-                            group.leave()
-                        } else {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                // 画像をアップロードしてから投稿
+                let group = DispatchGroup()
+                
+                var idList: [String] = []
+                for url in view.imageCheckView.urls {
+                    group.enter()
+                    let lowUrlStr = url.absoluteString.lowercased()
+                    if lowUrlStr.contains(".mp4") || lowUrlStr.contains(".m4v") || lowUrlStr.contains(".mov") {
+                        // 動画
+                        ImageUpload.upload(movieUrl: url, callback: { json in
+                            if let json = json {
+                                if let id = json["id"] as? String {
+                                    idList.append(id)
+                                }
                                 group.leave()
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    group.leave()
+                                }
                             }
-                        }
-                    })
-                } else {
-                    // 静止画
-                    ImageUpload.upload(httpMethod: "POST", imageUrl: url, count: view.imageCheckView.urls.count,  callback: { json in
-                        if let json = json {
-                            if let id = json["id"] as? String {
-                                idList.append(id)
-                            }
-                            group.leave()
-                        } else {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        })
+                    } else {
+                        // 静止画
+                        ImageUpload.upload(httpMethod: "POST", imageUrl: url, count: view.imageCheckView.urls.count,  callback: { json in
+                            if let json = json {
+                                if let id = json["id"] as? String {
+                                    idList.append(id)
+                                }
                                 group.leave()
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    group.leave()
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
-            }
-            
-            // 画像を全てアップロードし終わったら投稿
-            group.notify(queue: DispatchQueue.main) {
-                let addJson: [String: Any] = ["media_ids": idList]
-                self.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson)
+                
+                // 画像を全てアップロードし終わったら投稿
+                group.notify(queue: DispatchQueue.main) {
+                    let addJson: [String: Any] = ["media_ids": idList]
+                    self.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson)
+                }
             }
         } else {
             // テキストだけなのですぐに投稿

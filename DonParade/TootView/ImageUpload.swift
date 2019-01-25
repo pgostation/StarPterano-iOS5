@@ -49,21 +49,32 @@ final class ImageUpload {
             } else if imageUrl.path.lowercased().hasSuffix(".png") {
                 self.filename = "image.png"
                 self.mimetype = "image/png"
-                guard let data = try? Data(contentsOf: imageUrl) else { return }
+                var imageData: Data?
+                guard let image = UIImage(contentsOfFile: imageUrl.path) else { return }
+                if filePathKey == "avatar" || filePathKey == "header" {
+                    let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
+                    imageData = smallImage.pngData()
+                } else {
+                    let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
+                    imageData = smallImage.pngData()
+                }
+                
+                let data: Data = imageData ?? (try! Data(contentsOf: imageUrl))
                 uploadData(httpMethod: httpMethod, uploadUrl: uploadUrl, filePathKey: filePathKey, data: data, callback: callback)
             } else {
-                guard let image = UIImage.init(contentsOfFile: imageUrl.path) else { return }
+                guard let image = UIImage(contentsOfFile: imageUrl.path) else { return }
                 
                 // JPEG圧縮
                 var imageData: Data
                 if filePathKey == "avatar" || filePathKey == "header" {
-                    let smallImage = ImageUtils.smallIcon(image: image, size: 800)
+                    let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
                     imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 } else {
-                    imageData = image.jpegData(compressionQuality: 0.8)!
+                    let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
+                    imageData = smallImage.jpegData(compressionQuality: 0.8)!
                     if imageData.count > 4_000_000 / count {
                         // サイズが大きい場合はさらに圧縮する
-                        imageData = image.jpegData(compressionQuality: 0.5)!
+                        imageData = smallImage.jpegData(compressionQuality: 0.5)!
                     }
                 }
                 
@@ -104,18 +115,14 @@ final class ImageUpload {
             
             var imageData: Data
             if filePathKey == "avatar" || filePathKey == "header" {
-                let smallImage = ImageUtils.smallIcon(image: image, size: 800)
+                let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
             } else {
-                let smallImage = ImageUtils.smallIcon(image: image, size: 1920)
+                let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 if imageData.count > 1_000_000 {
                     // サイズが大きい場合はさらに圧縮する
                     imageData = smallImage.jpegData(compressionQuality: 0.5)!
-                    if imageData.count > 1_000_000 {
-                        // サイズが大きい場合はさらに圧縮する
-                        imageData = smallImage.jpegData(compressionQuality: 0.2)!
-                    }
                 }
             }
             
