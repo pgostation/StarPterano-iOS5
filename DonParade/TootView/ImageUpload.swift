@@ -107,13 +107,14 @@ final class ImageUpload {
                 let smallImage = ImageUtils.smallIcon(image: image, size: 800)
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
             } else {
-                imageData = image.jpegData(compressionQuality: 0.8)!
+                let smallImage = ImageUtils.smallIcon(image: image, size: 1920)
+                imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 if imageData.count > 1_000_000 {
                     // サイズが大きい場合はさらに圧縮する
-                    imageData = image.jpegData(compressionQuality: 0.5)!
+                    imageData = smallImage.jpegData(compressionQuality: 0.5)!
                     if imageData.count > 1_000_000 {
                         // サイズが大きい場合はさらに圧縮する
-                        imageData = image.jpegData(compressionQuality: 0.2)!
+                        imageData = smallImage.jpegData(compressionQuality: 0.2)!
                     }
                 }
             }
