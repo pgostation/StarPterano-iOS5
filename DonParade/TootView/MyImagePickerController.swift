@@ -38,8 +38,13 @@ final class MyImagePickerController: NSObject, UIImagePickerControllerDelegate, 
     }
     
     // 選択完了時に呼ばれる
-    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let imageUrl = (info["PHImageFileURLKey"] ?? info["UIImagePickerControllerImageURL"] ?? info["UIImagePickerControllerReferenceURL"]) as? URL
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let imageUrl: URL?
+        if #available(iOS 11.0, *) {
+            imageUrl = (info[UIImagePickerController.InfoKey.imageURL] ?? info[UIImagePickerController.InfoKey.mediaURL] ?? info[UIImagePickerController.InfoKey.referenceURL]) as? URL
+        } else {
+            imageUrl = (info[UIImagePickerController.InfoKey.mediaURL] ?? info[UIImagePickerController.InfoKey.referenceURL]) as? URL
+        }
         self.callback(imageUrl)
         MyImagePickerController.instance = nil
         
