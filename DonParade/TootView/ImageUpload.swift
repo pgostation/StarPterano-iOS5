@@ -55,7 +55,7 @@ final class ImageUpload {
                     let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
                     imageData = smallImage.pngData()
                 } else {
-                    let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
+                    let smallImage = ImageUtils.small(image: image, pixels: ImageUtils.maxPixels())
                     imageData = smallImage.pngData()
                 }
                 
@@ -70,7 +70,7 @@ final class ImageUpload {
                     let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
                     imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 } else {
-                    let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
+                    let smallImage = ImageUtils.small(image: image, pixels: ImageUtils.maxPixels())
                     imageData = smallImage.jpegData(compressionQuality: 0.8)!
                     if imageData.count > 4_000_000 / count {
                         // サイズが大きい場合はさらに圧縮する
@@ -118,7 +118,7 @@ final class ImageUpload {
                 let smallImage = ImageUtils.small(image: image, pixels: 800 * 800)
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
             } else {
-                let smallImage = ImageUtils.small(image: image, pixels: 1280 * 1280)
+                let smallImage = ImageUtils.small(image: image, pixels: ImageUtils.maxPixels())
                 imageData = smallImage.jpegData(compressionQuality: 0.8)!
                 if imageData.count > 1_000_000 {
                     // サイズが大きい場合はさらに圧縮する

@@ -121,4 +121,14 @@ final class ImageUtils {
         
         return capture
     }
+    
+    // 画像の最大ピクセル数
+    static func maxPixels() -> CGFloat {
+        // imastodonでは1920 * 1920
+        if SettingsData.hostName == "imastodon.net" {
+            return 1920 * 1920
+        }
+        // デフォルト
+        return 1280 * 1280
+    }
 }
