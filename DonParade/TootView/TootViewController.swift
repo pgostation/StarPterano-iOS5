@@ -55,7 +55,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         view.imagesCountButton.addTarget(self, action: #selector(showImagesAction), for: .touchUpInside)
         view.protectButton.addTarget(self, action: #selector(protectAction), for: .touchUpInside)
         view.cwButton.addTarget(self, action: #selector(cwAction), for: .touchUpInside)
-        //view.saveButton.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
+        view.scheduledButton.addTarget(self, action: #selector(scheduleAction), for: .touchUpInside)
         view.emojiButton.addTarget(self, action: #selector(emojiAction), for: .touchUpInside)
         
         // 添付画像の復帰
@@ -163,6 +163,17 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         for data in addJson {
             bodyJson.updateValue(data.value, forKey: data.key)
         }
+        if let scheduledDate = TootView.scheduledDate {
+            let dateFormatter: DateFormatter = {
+                let formatter = DateFormatter()
+                let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+                formatter.locale = enUSPosixLocale
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+                return formatter
+            }()
+            let str = dateFormatter.string(from: scheduledDate)
+            bodyJson.updateValue(str, forKey: "scheduled_at")
+        }
         
         try? MastodonRequest.post(url: url, body: bodyJson) { (data, response, error) in
             if let error = error {
@@ -170,10 +181,17 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             } else {
                 if let response = response as? HTTPURLResponse {
                     if response.statusCode == 200 {
-                        TootView.savedText = nil
-                        TootView.savedSpoilerText = nil
-                        TootView.savedImages = []
-                        TootView.inReplyToId = nil
+                        DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 1 : 0) ) {
+                            TootView.isTooted = true
+                            TootView.savedText = nil
+                            TootView.savedSpoilerText = nil
+                            TootView.savedImages = []
+                            TootView.inReplyToId = nil
+                            TootView.scheduledDate = nil
+                            if let view = self.view as? TootView {
+                                view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+                            }
+                        }
                     } else {
                         Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
                     }
@@ -253,8 +271,49 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    // 下書きにする / 下書きを復帰する
-    @objc func saveAction() {
+    // スケジュール設定/解除/スケジュール投稿確認
+    @objc func scheduleAction() {
+        let rootVC = UIUtils.getFrontViewController()
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        
+        // スケジュール設定
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_SET_SCHEDULE"),
+            style: UIAlertAction.Style.default) { _ in
+                SetScheduleViewController.show()
+        })
+        
+        if TootView.scheduledDate != nil {
+            // スケジュール解除
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_CLEAR_SCHEDULE"),
+                style: UIAlertAction.Style.destructive) { _ in
+                    TootView.scheduledDate = nil
+                    if let view = self.view as? TootView {
+                        view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+                    }
+            })
+        }
+        
+        // スケジュール投稿の確認
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_SHOW_SCHEDULE"),
+            style: UIAlertAction.Style.default) { _ in
+                if let view = self.view as? TootView {
+                    view.textField.resignFirstResponder()
+                    view.spoilerTextField.resignFirstResponder()
+                }
+                ShowMyAnyList.showScheduledList(rootVc: rootVC!)
+        })
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertAction.Style.cancel) { _ in
+        })
+        
+        rootVC?.present(alertController, animated: true, completion: nil)
     }
     
     // カスタム絵文字キーボードを表示する

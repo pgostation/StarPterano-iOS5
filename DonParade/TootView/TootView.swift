@@ -10,10 +10,12 @@ import UIKit
 
 final class TootView: UIView {
     // 下書き保存
+    static var isTooted = false
     static var savedText: String?
     static var savedSpoilerText: String?
     static var savedImages: [URL] = []
     static var inReplyToId: String? = nil
+    static var scheduledDate: Date? = nil
     
     //----
     
@@ -35,7 +37,7 @@ final class TootView: UIView {
     let imagesCountButton = UIButton()
     let protectButton = UIButton()
     let cwButton = UIButton()
-    //let saveButton = UIButton()
+    let scheduledButton = UIButton()
     let emojiButton = UIButton()
     
     // 画像チェック画面
@@ -89,7 +91,7 @@ final class TootView: UIView {
         inputBar.addSubview(imagesCountButton)
         inputBar.addSubview(protectButton)
         inputBar.addSubview(cwButton)
-        //inputBar.addSubview(saveButton)
+        inputBar.addSubview(scheduledButton)
         inputBar.addSubview(emojiButton)
         
         self.addSubview(imageCheckView)
@@ -108,9 +110,12 @@ final class TootView: UIView {
     
     deinit {
         // 閉じる時に下書きに保存
-        TootView.savedText = DecodeToot.encodeEmoji(attributedText: self.textField.attributedText, textStorage: self.textField.textStorage)
-        TootView.savedSpoilerText = DecodeToot.encodeEmoji(attributedText: self.spoilerTextField.attributedText, textStorage: self.spoilerTextField.textStorage)
-        TootView.savedImages = self.imageCheckView.urls
+        if !TootView.isTooted {
+            TootView.savedText = DecodeToot.encodeEmoji(attributedText: self.textField.attributedText, textStorage: self.textField.textStorage)
+            TootView.savedSpoilerText = DecodeToot.encodeEmoji(attributedText: self.spoilerTextField.attributedText, textStorage: self.spoilerTextField.textStorage)
+            TootView.savedImages = self.imageCheckView.urls
+        }
+        TootView.isTooted = false
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
@@ -143,7 +148,11 @@ final class TootView: UIView {
         closeButton.layer.borderColor = ThemeColor.mainButtonsTitleColor.cgColor
         closeButton.layer.borderWidth = 1 / UIScreen.main.scale
         
-        tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        if TootView.scheduledDate != nil {
+            tootButton.setTitle(I18n.get("BUTTON_SCHEDULED_TOOT"), for: .normal)
+        } else {
+            tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
+        }
         tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
@@ -207,7 +216,7 @@ final class TootView: UIView {
         cwButton.setTitle("CW", for: .normal)
         cwButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
-        //saveButton.setTitle("📄", for: .normal)
+        scheduledButton.setTitle("🕒", for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
     }
@@ -251,8 +260,8 @@ final class TootView: UIView {
                                 width: screenBounds.width,
                                 height: 40)
         
-        let buttonWidthSum: CGFloat = 40 * 4 + (imagesCountButton.titleLabel?.text != nil ? 40 : 10)
-        let margin: CGFloat = floor((screenBounds.width - buttonWidthSum) / 4)
+        let buttonWidthSum: CGFloat = 40 * 5 + (imagesCountButton.titleLabel?.text != nil ? 40 : 10)
+        let margin: CGFloat = floor((screenBounds.width - buttonWidthSum) / 5)
         
         imagesButton.frame = CGRect(x: margin / 2,
                                     y: 0,
@@ -274,7 +283,12 @@ final class TootView: UIView {
                                 width: 40,
                                 height: 40)
         
-        emojiButton.frame = CGRect(x: cwButton.frame.maxX + margin,
+        scheduledButton.frame = CGRect(x: cwButton.frame.maxX + margin,
+                                       y: 0,
+                                       width: 40,
+                                       height: 40)
+        
+        emojiButton.frame = CGRect(x: scheduledButton.frame.maxX + margin,
                                    y: 0,
                                    width: 40,
                                    height: 40)

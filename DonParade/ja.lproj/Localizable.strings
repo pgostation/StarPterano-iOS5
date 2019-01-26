@@ -65,6 +65,12 @@
 "ALERT_OVER_500CHARACTERS" = "500文字を超えています";
 "ALERT_IMAGE_COUNT_MAX" = "画像は最大4枚です";
 "DIALOG_SEARCH_EMOJI" = "絵文字検索";
+"BUTTON_SCHEDULED_TOOT" = "予約投稿";
+
+// 予約投稿
+"ACTION_SET_SCHEDULE" = "予約投稿設定";
+"ACTION_CLEAR_SCHEDULE" = "予約投稿解除";
+"ACTION_SHOW_SCHEDULE" = "予約投稿一覧";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "公開範囲";

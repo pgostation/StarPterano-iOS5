@@ -65,6 +65,12 @@
 "ALERT_OVER_500CHARACTERS" = "Message is over 500 characters";
 "ALERT_IMAGE_COUNT_MAX" = "Images maximum 4.";
 "DIALOG_SEARCH_EMOJI" = "Emoji Search";
+"BUTTON_SCHEDULED_TOOT" = "Set toot";
+
+// 予約投稿
+"ACTION_SET_SCHEDULE" = "Set schedule";
+"ACTION_CLEAR_SCHEDULE" = "Clear schedule";
+"ACTION_SHOW_SCHEDULE" = "Show scheduled toots";
 
 // 公開範囲
 "TITLE_PROTECTMODE" = "Privacy";

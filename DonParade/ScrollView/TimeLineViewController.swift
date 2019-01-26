@@ -22,6 +22,7 @@ final class TimeLineViewController: MyViewController {
         case mentions // 単一トゥート(と会話)
         case direct // ダイレクトメッセージ
         case list // リスト
+        case scheduled // 予約投稿の一覧
     }
     
     static var closeButtons: [UIButton] = []
@@ -98,7 +99,7 @@ final class TimeLineViewController: MyViewController {
     }
     
     override func loadView() {
-        if self.type == .user || self.type == .mentions || self.type == .localTag || self.type == .federationTag || self.type == .direct || self.type == .favorites {
+        if self.type == .user || self.type == .mentions || self.type == .localTag || self.type == .federationTag || self.type == .direct || self.type == .favorites || self.type == .scheduled {
             let view = TimeLineView(type: self.type, option: self.option, mentions: mentions)
             self.view = view
             

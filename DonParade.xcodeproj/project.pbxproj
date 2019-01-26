@@ -52,6 +52,7 @@
 		12CD0263214F49E000133A95 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0262214F49E000133A95 /* EmojiData.swift */; };
 		12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0264214FD37700133A95 /* AnalyzeJson.swift */; };
 		12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */; };
+		12D5300821FC17BD00061A87 /* SetScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */; };
 		12E4ABF921ECCBC00029A933 /* decision21.caf in Resources */ = {isa = PBXBuildFile; fileRef = 12E4ABF821ECCAAE0029A933 /* decision21.caf */; };
 		12F6602F215656890049AEE0 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6602E215656890049AEE0 /* ImageUtils.swift */; };
 		12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9AC77214CA35F00E9E508 /* AppDelegate.swift */; };
@@ -123,6 +124,7 @@
 		12CD0262214F49E000133A95 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
 		12CD0264214FD37700133A95 /* AnalyzeJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeJson.swift; sourceTree = "<group>"; };
 		12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewCell.swift; sourceTree = "<group>"; };
+		12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScheduleViewController.swift; sourceTree = "<group>"; };
 		12E4ABF821ECCAAE0029A933 /* decision21.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = decision21.caf; sourceTree = "<group>"; };
 		12F6602E215656890049AEE0 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		12F9AC74214CA35F00E9E508 /* DonParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -336,6 +338,7 @@
 				127A37BD2157B45100347880 /* MyImagePickerController.swift */,
 				127A37BF2157C63500347880 /* ImageUpload.swift */,
 				1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */,
+				12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */,
 			);
 			path = TootView;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */,
 				121DC0DA2152955F00928DCC /* TootViewController.swift in Sources */,
 				12B8B42C2166186300869496 /* ListEditTableViewCell.swift in Sources */,
+				12D5300821FC17BD00061A87 /* SetScheduleViewController.swift in Sources */,
 				12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */,
 				1286DF6521551824008FFFAC /* TootView.swift in Sources */,
 				12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */,

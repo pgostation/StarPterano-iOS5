@@ -149,6 +149,8 @@ final class TimeLineView: UITableView {
                 return
             }
             url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(sinceIdStr)")
+        case .scheduled:
+            url = URL(string: "https://\(hostName)/api/v1/scheduled_statuses")
         }
         
         guard let requestUrl = url else { return }
@@ -507,6 +509,8 @@ final class TimeLineView: UITableView {
                 return
             }
             url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(maxIdStr)")
+        case .scheduled:
+            return
         }
         
         guard let requestUrl = url else { return }

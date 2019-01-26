@@ -68,6 +68,14 @@ final class ShowMyAnyList {
         }
     }
     
+    // 予約投稿の一覧
+    static func showScheduledList(rootVc: UIViewController) {
+        DispatchQueue.main.async {
+            let vc = TimeLineViewController(type: .scheduled)
+            show(rootVc: rootVc, vc: vc)
+        }
+    }
+    
     // ブロック
     static func showBlockList(rootVc: UIViewController) {
         // ####
