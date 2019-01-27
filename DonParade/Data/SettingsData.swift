@@ -130,6 +130,15 @@ final class SettingsData {
         }
     }
     
+    // インスタンスのversionを保持
+    static func instanceVersion(hostName: String) -> Double {
+        return defaults.double(forKey: "instanceVersion_\(hostName)")
+    }
+    static func setInstanceVersion(hostName: String, value: Double) {
+        defaults.set(value, forKey: "instanceVersion_\(hostName)")
+    }
+    
+    
     // ログインがアプリ起動後初めてかどうか（ユーザ名を取得するかどうかを判定するために使う）
     static var loginedAccessTokenList: [String] = []
     

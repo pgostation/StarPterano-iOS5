@@ -450,32 +450,7 @@ final class TimeLineViewCell: UITableViewCell {
             title: I18n.get("ACTION_COPY_TOOT"),
             style: UIAlertAction.Style.default,
             handler: { _ in
-                let spoilerText: String
-                if let attrtext = self.spolerTextLabel?.attributedText {
-                    spoilerText = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
-                } else {
-                    spoilerText = ""
-                }
-                
-                let text: String
-                if let label = self.messageView as? UILabel, let attrtext = label.attributedText {
-                    text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
-                } else if let textView = self.messageView as? UITextView, let attrtext = textView.attributedText {
-                    text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: textView.textStorage)
-                } else {
-                    text = ""
-                }
-                
-                let finalText: String
-                if spoilerText != "" && text != "" {
-                    finalText = spoilerText + "\n" + text
-                } else if spoilerText != "" {
-                    finalText = spoilerText
-                } else {
-                    finalText = text
-                }
-                
-                UIPasteboard.general.string = finalText
+                self.copyToot()
         }))
         
         // Safariで開く
@@ -549,6 +524,14 @@ final class TimeLineViewCell: UITableViewCell {
                 })
         }))
         
+        // ペーストボードにコピー
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_COPY_TOOT"),
+            style: UIAlertAction.Style.default,
+            handler: { _ in
+                self.copyToot()
+        }))
+        
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),
@@ -557,6 +540,36 @@ final class TimeLineViewCell: UITableViewCell {
         }))
         
         UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
+    }
+    
+    // ペーストボードにコピー
+    private func copyToot() {
+        let spoilerText: String
+        if let attrtext = self.spolerTextLabel?.attributedText {
+            spoilerText = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
+        } else {
+            spoilerText = ""
+        }
+        
+        let text: String
+        if let label = self.messageView as? UILabel, let attrtext = label.attributedText {
+            text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
+        } else if let textView = self.messageView as? UITextView, let attrtext = textView.attributedText {
+            text = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: textView.textStorage)
+        } else {
+            text = ""
+        }
+        
+        let finalText: String
+        if spoilerText != "" && text != "" {
+            finalText = spoilerText + "\n" + text
+        } else if spoilerText != "" {
+            finalText = spoilerText
+        } else {
+            finalText = text
+        }
+        
+        UIPasteboard.general.string = finalText
     }
     
     // もっと見る

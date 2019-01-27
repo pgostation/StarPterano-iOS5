@@ -80,6 +80,30 @@ final class TimeLineViewController: MyViewController {
                         }
                     })
                 }
+                
+                if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7.0rc1以上
+                    // バージョンチェック不要
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        guard let hostName = SettingsData.hostName else { return }
+                        guard let url = URL(string: "https://\(hostName)/api/v1/instance/") else { return }
+                        
+                        try? MastodonRequest.get(url: url, completionHandler: { (data, response, error) in
+                            if let data = data {
+                                do {
+                                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                                        let instanceData = AnalyzeJson.analyzeInstanceJson(json: responseJson)
+                                        
+                                        if let version = instanceData.version, SettingsData.instanceVersion(hostName: hostName) != version {
+                                            SettingsData.setInstanceVersion(hostName: hostName, value: version)
+                                        }
+                                    }
+                                } catch {
+                                }
+                            }
+                        })
+                    }
+                }
             }
             
             if let iconStr = SettingsData.accountIconUrl(accessToken: accessToken) {

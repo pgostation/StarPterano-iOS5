@@ -288,6 +288,12 @@ final class TootView: UIView {
                                        width: 40,
                                        height: 40)
         
+        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7.0rc1以上
+            scheduledButton.isHidden = false
+        } else {
+            scheduledButton.isHidden = true
+        }
+        
         emojiButton.frame = CGRect(x: scheduledButton.frame.maxX + margin,
                                    y: 0,
                                    width: 40,

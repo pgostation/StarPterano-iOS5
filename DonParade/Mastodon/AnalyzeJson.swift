@@ -276,6 +276,7 @@ final class AnalyzeJson {
         return data
     }
     
+    // アカウント
     static func analyzeAccountJson(account: [String: Any]) -> AccountData {
         let acct = account["acct"] as? String ?? ""
         let avatar = account["avatar"] as? String
@@ -317,6 +318,7 @@ final class AnalyzeJson {
         return data
     }
     
+    // フォロー関係
     static func analyzeRelationshipJson(json: [String: Any]) -> RelationshipData {
         let id = json["id"] as? String
         let following = json["following"] as? Int
@@ -339,6 +341,16 @@ final class AnalyzeJson {
                                     domain_blocking: domain_blocking,
                                     showing_reblogs: showing_reblogs,
                                     endorsed: endorsed)
+        return data
+    }
+    
+    // インスタンス情報 (バージョンとか)
+    static func analyzeInstanceJson(json: [String: Any]) -> InstanceData {
+        let versionStr = json["version"] as? String
+        let versionStr2 = versionStr?.replacingOccurrences(of: ".", with: "").replacingOccurrences(of: "rc", with: ".")
+        let version = Double(versionStr2 ?? "0")
+        
+        let data = InstanceData(version: version)
         return data
     }
     
@@ -469,5 +481,9 @@ final class AnalyzeJson {
         let domain_blocking: Int?
         let showing_reblogs: Int?
         let endorsed: Int?
+    }
+    
+    struct InstanceData {
+        let version: Double?
     }
 }
