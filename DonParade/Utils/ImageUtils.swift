@@ -128,6 +128,12 @@ final class ImageUtils {
         if SettingsData.hostName == "imastodon.net" {
             return 1920 * 1920
         }
+        
+        // bbbdn.jpでは2560 * 1280
+        if SettingsData.hostName == "bbbdn.jp" {
+            return 2560 * 1280
+        }
+        
         // デフォルト
         return 1280 * 1280
     }
