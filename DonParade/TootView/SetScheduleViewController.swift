@@ -69,7 +69,7 @@ private class SetScheduleView: UIView {
         backView.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
         
         datePicker.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-        datePicker.date = TootView.scheduledDate ?? (Date() + 10 * 60) // 10分後以降 (5分毎のタイマーらしいので)
+        datePicker.date = TootView.scheduledDate ?? (Date() + 6 * 60) // 5分後以降の時間らしいので、とりあえず6分後以降
         datePicker.datePickerMode = .dateAndTime
         datePicker.minimumDate = Date() + 60
         

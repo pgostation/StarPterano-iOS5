@@ -122,7 +122,7 @@ final class AnalyzeJson {
         let created_at: String?
         let reblog_created_at: String?
         if reblog_acct == nil {
-            created_at = json["created_at"] as? String
+            created_at = json["created_at"] as? String ?? json["scheduled_at"] as? String
             reblog_created_at = nil
         } else {
             created_at = reblog?["created_at"] as? String

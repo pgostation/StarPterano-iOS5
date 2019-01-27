@@ -369,6 +369,11 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 「・・・」ボタンをタップした時の処理
     @objc func detailAction() {
+        if self.tableView?.type == .scheduled {
+            detailScheduledAction()
+            return
+        }
+        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // 選択解除
@@ -487,15 +492,15 @@ final class TimeLineViewCell: UITableViewCell {
         }))
         
         /*
-        // 生データを表示
-        alertController.addAction(UIAlertAction(
-            title: "生データを表示",
-            style: UIAlertActionStyle.default,
-            handler: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    Dialog.show(message: self.contentData)
-                }
-        }))*/
+         // 生データを表示
+         alertController.addAction(UIAlertAction(
+         title: "生データを表示",
+         style: UIAlertActionStyle.default,
+         handler: { _ in
+         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+         Dialog.show(message: self.contentData)
+         }
+         }))*/
         
         // 固定トゥートにする/解除する
         if self.accountId == SettingsData.accountNumberID(accessToken: SettingsData.accessToken ?? "") {
@@ -506,6 +511,43 @@ final class TimeLineViewCell: UITableViewCell {
                     self.tableView?.pinAction(id: id, isPinned: self.isPinned)
             }))
         }
+        
+        // キャンセル
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("BUTTON_CANCEL"),
+            style: UIAlertAction.Style.cancel,
+            handler: { _ in
+        }))
+        
+        UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
+    }
+    
+    // 「・・・」ボタンをタップした時の処理
+    @objc func detailScheduledAction() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        
+        // トゥートを削除
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("ACTION_DELETE_TOOT"),
+            style: UIAlertAction.Style.destructive,
+            handler: { _ in
+                guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/scheduled_statuses/\(self.id)") else { return }
+                try? MastodonRequest.delete(url: url, completionHandler: { (data, response, error) in
+                    if let error = error {
+                        Dialog.show(message: I18n.get("ALERT_DELETE_TOOT_FAILURE") + "\n " + error.localizedDescription)
+                    } else {
+                        DispatchQueue.main.async {
+                            var vc = UIUtils.getFrontViewController()
+                            while vc?.children.last != nil {
+                                vc = vc?.children.last
+                            }
+                            if let vc = vc as? TimeLineViewController, let view = vc.view as? TimeLineView, view.type == .scheduled {
+                                vc.closeAction()
+                            }
+                        }
+                    }
+                })
+        }))
         
         // キャンセル
         alertController.addAction(UIAlertAction(
@@ -609,10 +651,32 @@ final class TimeLineViewCell: UITableViewCell {
     
     // 日時表示を更新
     func refreshDate() {
-        if SettingsData.useAbsoluteTime {
+        if self.tableView?.type == .scheduled {
+            refreshDateAbsoluteLong()
+        } else if SettingsData.useAbsoluteTime || (self.tableView?.type == .scheduled) {
             refreshDateAbsolute()
         } else {
             refreshDateRelated()
+        }
+    }
+    
+    // 絶対時間で表示
+    private static var timeLongFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd HH:mm"
+        return formatter
+    }()
+    private static var monthLongFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy-MM-dd"
+        return formatter
+    }()
+    private func refreshDateAbsoluteLong() {
+        let diffTime = Int(Date().timeIntervalSince(self.date))
+        if diffTime / 86400 < 365 {
+            self.dateLabel.text = TimeLineViewCell.timeLongFormatter.string(from: self.date)
+        } else {
+            self.dateLabel.text = TimeLineViewCell.monthLongFormatter.string(from: self.date)
         }
     }
     
@@ -713,10 +777,17 @@ final class TimeLineViewCell: UITableViewCell {
                                     width: idWidth,
                                     height: SettingsData.fontSize)
         
-        self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
-                                      y: isMiniView != .normal ? 3 : 6,
-                                      width: 45,
-                                      height: SettingsData.fontSize)
+        if self.tableView?.type == .scheduled {
+            self.dateLabel.frame = CGRect(x: screenBounds.width - 100,
+                                          y: isMiniView != .normal ? 3 : 6,
+                                          width: 90,
+                                          height: SettingsData.fontSize)
+        } else {
+            self.dateLabel.frame = CGRect(x: screenBounds.width - 50,
+                                          y: isMiniView != .normal ? 3 : 6,
+                                          width: 45,
+                                          height: SettingsData.fontSize)
+        }
         
         self.detailDateLabel?.frame = CGRect(x: 50,
                                              y: 22,
@@ -813,35 +884,41 @@ final class TimeLineViewCell: UITableViewCell {
         if self.replyButton != nil {
             var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
-            self.replyButton?.frame = CGRect(x: 50,
-                                             y: top,
-                                             width: 40,
-                                             height: 40)
-            
-            self.repliedLabel?.frame = CGRect(x: 85,
-                                              y: top + 10,
-                                              width: 20,
-                                              height: 20)
-            
-            self.boostButton?.frame = CGRect(x: 110,
-                                             y: top + 3,
-                                             width: 40,
-                                             height: 34)
-            
-            self.boostedLabel?.frame = CGRect(x: 145,
-                                              y: top + 10,
-                                              width: 20,
-                                              height: 20)
-            
-            self.favoriteButton?.frame = CGRect(x: 170,
-                                                y: top + 3,
-                                                width: 40,
-                                                height: 34)
-            
-            self.favoritedLabel?.frame = CGRect(x: 205,
-                                                y: top + 10,
-                                                width: 20,
-                                                height: 20)
+            if self.tableView?.type == .scheduled {
+                self.replyButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)
+                self.boostButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)
+                self.favoriteButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)
+            } else {
+                self.replyButton?.frame = CGRect(x: 50,
+                                                 y: top,
+                                                 width: 40,
+                                                 height: 40)
+                
+                self.repliedLabel?.frame = CGRect(x: 85,
+                                                  y: top + 10,
+                                                  width: 20,
+                                                  height: 20)
+                
+                self.boostButton?.frame = CGRect(x: 110,
+                                                 y: top + 3,
+                                                 width: 40,
+                                                 height: 34)
+                
+                self.boostedLabel?.frame = CGRect(x: 145,
+                                                  y: top + 10,
+                                                  width: 20,
+                                                  height: 20)
+                
+                self.favoriteButton?.frame = CGRect(x: 170,
+                                                    y: top + 3,
+                                                    width: 40,
+                                                    height: 34)
+                
+                self.favoritedLabel?.frame = CGRect(x: 205,
+                                                    y: top + 10,
+                                                    width: 20,
+                                                    height: 20)
+            }
             
             self.detailButton?.frame = CGRect(x: 230,
                                               y: top,
