@@ -169,6 +169,7 @@ final class ImageUpload {
                     var waitIndicator: WaitIndicator? = nil
                     DispatchQueue.main.async {
                         waitIndicator = WaitIndicator()
+                        waitIndicator?.alpha = 0.6
                         UIUtils.getFrontViewController()?.view.addSubview(waitIndicator!)
                     }
                     
@@ -221,6 +222,7 @@ final class ImageUpload {
         var waitIndicator: WaitIndicator? = nil
         DispatchQueue.main.async {
             waitIndicator = WaitIndicator()
+            waitIndicator?.alpha = 0.6
             UIUtils.getFrontViewController()?.view.addSubview(waitIndicator!)
         }
         
