@@ -122,6 +122,28 @@ final class ImageUtils {
         return capture
     }
     
+    // 画像に透明なピクセルがあるかどうかを調べる
+    static func hasAlpha(image: UIImage) -> Bool {
+        guard let imageData = image.cgImage?.dataProvider?.data else { return false }
+        let data : UnsafePointer = CFDataGetBytePtr(imageData)
+        let scale = Int(image.scale)
+        let bytesPerPixel = image.cgImage!.bitsPerPixel / 8
+        for y in 0..<Int(image.size.height) {
+            for x in 0..<Int(image.size.width) {
+                let address : Int = ((Int(image.size.width) * (y * scale)) + (x * scale)) * bytesPerPixel
+                //let r = CGFloat(data[address])
+                //let g = CGFloat(data[address+1])
+                //let b = CGFloat(data[address+2])
+                let a = CGFloat(data[address+3])
+                
+                if a < 255 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
     // 画像の最大ピクセル数
     static func maxPixels() -> CGFloat {
         // imastodonでは1920 * 1920

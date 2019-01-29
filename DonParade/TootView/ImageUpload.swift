@@ -56,7 +56,14 @@ final class ImageUpload {
                     imageData = smallImage.pngData()
                 } else {
                     let smallImage = ImageUtils.small(image: image, pixels: ImageUtils.maxPixels())
-                    imageData = smallImage.pngData()
+                    if ImageUtils.hasAlpha(image: smallImage) {
+                        imageData = smallImage.pngData()
+                    } else {
+                        // 透明部分がないので、JPEGでアップロード
+                        self.filename = "image.jpeg"
+                        self.mimetype = "image/jpeg"
+                        imageData = smallImage.jpegData(compressionQuality: 0.8)!
+                    }
                 }
                 
                 let data: Data = imageData ?? (try! Data(contentsOf: imageUrl))
