@@ -1297,12 +1297,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 if let timelineView = accountTimeLineViewController.view as? TimeLineView, let accountData = self.accountData {
                     timelineView.accountList.updateValue(accountData, forKey: accountId)
                 }
-                UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
-                UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
                 accountTimeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
                                                                   y: 0,
                                                                   width: UIScreen.main.bounds.width,
                                                                   height: UIScreen.main.bounds.height)
+                UIUtils.getFrontViewController()?.addChild(accountTimeLineViewController)
+                UIUtils.getFrontViewController()?.view.addSubview(accountTimeLineViewController.view)
                 UIView.animate(withDuration: 0.3) {
                     accountTimeLineViewController.view.frame.origin.x = 0
                 }

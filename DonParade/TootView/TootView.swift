@@ -143,10 +143,12 @@ final class TootView: UIView {
         closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         closeButton.backgroundColor = ThemeColor.mainButtonsBgColor
         closeButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        closeButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        closeButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         closeButton.clipsToBounds = true
         closeButton.layer.cornerRadius = 10
         closeButton.layer.borderColor = ThemeColor.mainButtonsTitleColor.cgColor
-        closeButton.layer.borderWidth = 1 / UIScreen.main.scale
+        closeButton.layer.borderWidth = 2 / UIScreen.main.scale
         
         if TootView.scheduledDate != nil {
             tootButton.setTitle(I18n.get("BUTTON_SCHEDULED_TOOT"), for: .normal)
@@ -156,10 +158,12 @@ final class TootView: UIView {
         tootButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         tootButton.backgroundColor = ThemeColor.mainButtonsBgColor
         tootButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
+        tootButton.setTitleShadowColor(ThemeColor.viewBgColor, for: .normal)
+        tootButton.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
         tootButton.clipsToBounds = true
         tootButton.layer.cornerRadius = 10
         tootButton.layer.borderColor = ThemeColor.mainButtonsTitleColor.cgColor
-        tootButton.layer.borderWidth = 1 / UIScreen.main.scale
+        tootButton.layer.borderWidth = 2 / UIScreen.main.scale
         
         textCountLabel.textColor = ThemeColor.contrastColor
         textCountLabel.font = UIFont.systemFont(ofSize: 18)
