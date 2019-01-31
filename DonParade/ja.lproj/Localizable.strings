@@ -188,7 +188,8 @@
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";
-"SETTINGS_SHOW_ICONS" = "キャッシュされたアイコンを見る";
+"ALERT_%D_COUNT_%D_SIZE" = "ファイル数: %d\n合計サイズ: %0.1fMB";
+"BUTTON_CLEAR_CACHE" = "クリアする";
 
 // 設定画面(その他)
 "SETTINGS_SEARCH" = "タイムライン内を検索";

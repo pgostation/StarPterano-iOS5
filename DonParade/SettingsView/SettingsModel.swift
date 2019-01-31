@@ -82,20 +82,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .showListButton,
                                                   .showFTLButton]
     
-    // 5.キャッシュ
-    private enum Cache: String {
-        case clearCache = "SETTINGS_CLEAR_CACHE"
-        //case showIcons = "SETTINGS_SHOW_ICONS"
-    }
-    private let cacheList: [Cache] = [.clearCache]
-    
-    // 6.その他
+    // 5.その他
     private enum Other: String {
         case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
+        case clearCache = "SETTINGS_CLEAR_CACHE"
     }
     private let otherList: [Other] = [.license,
-                                      .version]
+                                      .version,
+                                      .clearCache]
     
     // セクションの数
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -307,6 +302,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 let data = Bundle.main.infoDictionary
                 let version = data?["CFBundleShortVersionString"] as? String
                 subtitle = version
+            case .clearCache:
+                cell.accessoryType = .disclosureIndicator
+                
+                let cacheDir = NSHomeDirectory() + "/Library/Caches"
+                let cacheDirUrl = URL(fileURLWithPath: cacheDir)
+                if let urls = try? FileManager.default.contentsOfDirectory(at: cacheDirUrl, includingPropertiesForKeys: nil, options: .skipsPackageDescendants) {
+                    subtitle = "\(urls.count)"
+                }
             }
         default:
             break
@@ -398,6 +401,30 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 Dialog.show(message: licenseStr)
             case .version:
                 break
+            case .clearCache:
+                let cacheDir = NSHomeDirectory() + "/Library/Caches"
+                let cacheDirUrl = URL(fileURLWithPath: cacheDir)
+                let urls = try? FileManager.default.contentsOfDirectory(at: cacheDirUrl, includingPropertiesForKeys: nil, options: .skipsPackageDescendants)
+                var fileCount = 0
+                var totalSize = 0
+                for url in urls ?? [] {
+                    let attr = try? FileManager.default.attributesOfItem(atPath: url.path)
+                    if let size = attr?[.size] {
+                        totalSize += Int(truncating: (size as? NSNumber)!)
+                        fileCount += 1
+                    }
+                }
+                let str = String(format: I18n.get("ALERT_%D_COUNT_%D_SIZE"), fileCount, Double(totalSize) / 1000000)
+                Dialog.show(message: str,
+                            okName: I18n.get("BUTTON_CLEAR_CACHE"),
+                            cancelName: I18n.get("BUTTON_CANCEL"),
+                            callback: { result in
+                                if !result { return }
+                                
+                                for url in urls ?? [] {
+                                    try? FileManager.default.removeItem(at: url)
+                                }
+                })
             }
         default:
             break

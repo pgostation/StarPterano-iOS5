@@ -188,7 +188,8 @@
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";
-"SETTINGS_SHOW_ICONS" = "Show icons";
+"ALERT_%D_COUNT_%D_SIZE" = "Files: %d\nTotal size: %0.1fMB";
+"BUTTON_CLEAR_CACHE" = "Clear cache";
 
 // 設定画面(その他)
 "SETTINGS_SEARCH" = "Search in timeline";
