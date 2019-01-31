@@ -214,7 +214,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.callback = { [weak cell] value in
                     SettingsData.fontSize = CGFloat(value)
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.fontSize))pt"
-                    MainViewController.instance?.refreshColor()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if SettingsData.fontSize != CGFloat(value) { return }
+                        MainViewController.instance?.refreshColor()
+                    }
                 }
                 return cell
             case .streaming:
@@ -257,7 +260,10 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.callback = { [weak cell] value in
                     SettingsData.iconSize = CGFloat(value)
                     cell?.textLabel?.text = title + " : " + "\(Int(SettingsData.iconSize))pt"
-                    MainViewController.instance?.refreshColor()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if SettingsData.iconSize != CGFloat(value) { return }
+                        MainViewController.instance?.refreshColor()
+                    }
                 }
                 return cell
             case .useAnimation:
