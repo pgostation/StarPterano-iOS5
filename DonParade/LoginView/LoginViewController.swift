@@ -25,7 +25,7 @@ final class LoginViewController: MyViewController {
         
         sender.backgroundColor = UIColor.darkGray
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            sender.backgroundColor = UIColor.lightGray
+            sender.backgroundColor = UIColor(white: 0.85, alpha: 1)
         }
         
         let hostName = (view.hostField.text ?? "").replacingOccurrences(of: "/ ", with: "")
@@ -160,8 +160,10 @@ final class LoginView: UIView {
         hostField.keyboardType = .URL
         
         authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
-        authButton.backgroundColor = UIColor.lightGray
-        authButton.setTitleColor(UIColor.blue, for: .normal)
+        authButton.backgroundColor = UIColor.blue
+        authButton.setTitleColor(UIColor.white, for: .normal)
+        authButton.layer.cornerRadius = 8
+        authButton.clipsToBounds = true
         
         inputCodeField.placeholder = I18n.get("PLACEHOLDER_INPUT_CODE")
         inputCodeField.layer.borderColor = UIColor.gray.cgColor
@@ -169,8 +171,10 @@ final class LoginView: UIView {
         inputCodeField.keyboardType = .alphabet
         
         codeEnterButton.setTitle(I18n.get("BUTTON_ENTER_CODE"), for: .normal)
-        codeEnterButton.backgroundColor = UIColor.lightGray
-        codeEnterButton.setTitleColor(UIColor.blue, for: .normal)
+        codeEnterButton.backgroundColor = UIColor.blue
+        codeEnterButton.setTitleColor(UIColor.white, for: .normal)
+        codeEnterButton.layer.cornerRadius = 8
+        codeEnterButton.clipsToBounds = true
         
         resetButton.setTitle("×", for: .normal)
         resetButton.setTitleColor(UIColor.blue, for: .normal)
