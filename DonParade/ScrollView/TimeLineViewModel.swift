@@ -924,7 +924,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if hasCard {
             // card表示
-            let cardView = CardView(id: data.reblog_id ?? data.id)
+            let cardView = CardView(id: data.reblog_id ?? data.id, dateStr: data.created_at)
             cardView.isHidden = messageView.isHidden
             cell.cardView = cardView
             cell.addSubview(cardView)

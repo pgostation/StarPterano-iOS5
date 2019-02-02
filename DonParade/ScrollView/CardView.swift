@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class CardView: UIView {
     private let imageView = UIImageView()
@@ -14,8 +15,15 @@ final class CardView: UIView {
     private let bodyLabel = UILabel()
     private let domainLabel = UILabel()
     private var url: URL?
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = enUSPosixLocale
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        return formatter
+    }()
     
-    init(id: String?) {
+    init(id: String?, dateStr: String?) {
         let rect = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 200)
         super.init(frame: rect)
         
@@ -27,7 +35,16 @@ final class CardView: UIView {
         setProperties()
         
         if let id = id {
-            request(id: id)
+            let date = CardView.dateFormatter.date(from: dateStr ?? "")
+            if let date = date, date.timeIntervalSinceNow >= -2 {
+                // 少し待ってからカード情報を取得
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                    self?.request(id: id)
+                }
+            } else {
+                // 今すぐカード情報を取得
+                request(id: id)
+            }
         }
         
         self.setNeedsLayout()
@@ -140,11 +157,8 @@ final class CardView: UIView {
     
     @objc func tapAction() {
         if let url = self.url {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            let controller = SFSafariViewController(url: url)
+            MainViewController.instance?.present(controller, animated: true)
         }
     }
     
