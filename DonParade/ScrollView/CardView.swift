@@ -38,11 +38,12 @@ final class CardView: UIView {
     }
     
     private func setProperties() {
+        self.isHidden = true
         self.clipsToBounds = true
         self.backgroundColor = ThemeColor.viewBgColor
         self.layer.cornerRadius = 8
         self.layer.borderWidth = 1 / UIScreen.main.scale
-        self.layer.borderColor = ThemeColor.buttonBorderColor.cgColor
+        self.layer.borderColor = ThemeColor.nameColor.cgColor
         
         imageView.contentMode = .scaleAspectFill
         imageView.alpha = 0.6
@@ -75,6 +76,13 @@ final class CardView: UIView {
     }
     
     private func request(id: String) {
+        // キャッシュにあるものを利用する
+        if let card = CardView.cache[id] {
+            draw(card: card)
+            return
+        }
+        
+        // リクエスト
         guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(id)/card") else { return }
         try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
             guard let strongSelf = self else { return }
@@ -84,29 +92,45 @@ final class CardView: UIView {
                 if responseJson != nil {
                     let card = AnalyzeJson.analyzeCard(json: responseJson!!)
                     
-                    // テキスト
+                    CardView.addCache(id: id, card: card)
+                    
                     DispatchQueue.main.async {
-                        strongSelf.titleLabel.text = card.title
-                        
-                        strongSelf.bodyLabel.text = card.description
-                        
-                        // 画像を取得して設定
-                        ImageCache.image(urlStr: card.image, isTemp: true, isSmall: false, shortcode: nil, isPreview: true) { (image) in
-                            strongSelf.imageView.image = image
-                            strongSelf.setNeedsLayout()
-                        }
-                        
-                        // タップ時のリンク先
-                        let url = URL(string: card.url ?? "")
-                        strongSelf.url = url
-                        let tapGesture = UITapGestureRecognizer(target: strongSelf, action: #selector(strongSelf.tapAction))
-                        strongSelf.addGestureRecognizer(tapGesture)
-                        
-                        strongSelf.domainLabel.text = url?.host
+                        strongSelf.draw(card: card)
+                    }
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    if let card = CardView.cache[id] {
+                        self?.draw(card: card)
                     }
                 }
             }
         }
+    }
+    
+    private func draw(card: AnalyzeJson.CardData) {
+        if card.url == nil { return }
+        
+        // テキスト
+        self.isHidden = false
+        
+        self.titleLabel.text = card.title
+        
+        self.bodyLabel.text = card.description
+        
+        // 画像を取得して設定
+        ImageCache.image(urlStr: card.image, isTemp: true, isSmall: false, shortcode: nil, isPreview: true) { (image) in
+            self.imageView.image = image
+            self.setNeedsLayout()
+        }
+        
+        // タップ時のリンク先
+        let url = URL(string: card.url ?? "")
+        self.url = url
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapAction))
+        self.addGestureRecognizer(tapGesture)
+        
+        self.domainLabel.text = url?.host
     }
     
     @objc func tapAction() {
@@ -117,6 +141,16 @@ final class CardView: UIView {
                 UIApplication.shared.openURL(url)
             }
         }
+    }
+    
+    private static var cache: [String: AnalyzeJson.CardData] = [:]
+    private static var oldCache: [String: AnalyzeJson.CardData] = [:]
+    private static func addCache(id: String, card: AnalyzeJson.CardData) {
+        if cache.count >= 20 {
+            oldCache = cache
+        }
+        
+        cache[id] = card
     }
     
     override func layoutSubviews() {
@@ -132,9 +166,9 @@ final class CardView: UIView {
         titleLabel.sizeToFit()
         
         bodyLabel.frame = CGRect(x: 10,
-                                 y: 70,
+                                 y: titleLabel.frame.maxY + 10,
                                  width: self.frame.width - 20,
-                                 height: self.frame.height - 90)
+                                 height: self.frame.height - (titleLabel.frame.maxY + 10) - 20)
         
         domainLabel.frame = CGRect(x: 10,
                                    y: self.frame.height - 20,

@@ -186,7 +186,6 @@ final class TimeLineViewCell: UITableViewCell {
             self.favoritedLabel?.removeFromSuperview()
             self.detailButton?.removeFromSuperview()
             self.applicationLabel?.removeFromSuperview()
-            self.cardView?.removeFromSuperview()
         }
         self.iconView?.removeFromSuperview()
         self.iconView?.image = nil
@@ -197,6 +196,7 @@ final class TimeLineViewCell: UITableViewCell {
         if let view = self.viewWithTag(TimeLineViewCell.iconViewTag) {
             view.removeFromSuperview()
         }
+        self.cardView?.removeFromSuperview()
         
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
@@ -209,8 +209,6 @@ final class TimeLineViewCell: UITableViewCell {
         self.dateLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
         
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
-        
-        
     }
     
     // アイコンをタップした時の処理
@@ -968,6 +966,11 @@ final class TimeLineViewCell: UITableViewCell {
                                      height: SettingsData.fontSize)
                 
                 top += SettingsData.fontSize + 4
+            }
+        } else {
+            if let cardView = self.cardView {
+                let top = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+                cardView.frame.origin.y = top
             }
         }
     }

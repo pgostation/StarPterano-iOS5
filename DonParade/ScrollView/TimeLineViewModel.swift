@@ -391,11 +391,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        if detailOffset > 0 {
-            if hasCard {
-                // card表示用
-                detailOffset += 200
-            }
+        if hasCard {
+            // card表示用
+            detailOffset += 200
         }
         
         if (data.sensitive == 1 && data.mediaData != nil) { // もっと見る
@@ -918,15 +916,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
                 cell.applicationLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
             }
-            
-            if hasCard {
-                // card表示
-                let cardView = CardView(id: data.reblog_id ?? data.id)
-                cell.cardView = cardView
-                cell.addSubview(cardView)
-            }
         } else {
             setCellColor(cell: cell)
+        }
+        
+        if hasCard {
+            // card表示
+            let cardView = CardView(id: data.reblog_id ?? data.id)
+            cell.cardView = cardView
+            cell.addSubview(cardView)
         }
         
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in
