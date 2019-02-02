@@ -521,7 +521,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        return (messageView, data, isContinue, hasCard)
+        let trueHasCard = hasCard && (data.spoiler_text == nil || data.spoiler_text == "")
+        
+        return (messageView, data, isContinue, trueHasCard)
     }
     
     // UITextViewをリサイクル
@@ -923,6 +925,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if hasCard {
             // card表示
             let cardView = CardView(id: data.reblog_id ?? data.id)
+            cardView.isHidden = messageView.isHidden
             cell.cardView = cardView
             cell.addSubview(cardView)
         }

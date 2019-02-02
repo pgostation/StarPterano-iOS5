@@ -588,6 +588,7 @@ final class TimeLineViewCell: UITableViewCell {
             for imageView in self.imageViews {
                 imageView.isHidden = true
             }
+            cardView?.isHidden = true
             self.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             return
         }
@@ -596,6 +597,7 @@ final class TimeLineViewCell: UITableViewCell {
         for imageView in self.imageViews {
             imageView.isHidden = false
         }
+        cardView?.isHidden = false
         
         self.showMoreButton?.setTitle(I18n.get("BUTTON_HIDE_REDO"), for: .normal)
         

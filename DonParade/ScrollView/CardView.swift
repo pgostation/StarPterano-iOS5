@@ -38,7 +38,7 @@ final class CardView: UIView {
     }
     
     private func setProperties() {
-        self.isHidden = true
+        self.alpha = 0
         self.clipsToBounds = true
         self.backgroundColor = ThemeColor.viewBgColor
         self.layer.cornerRadius = 8
@@ -111,17 +111,19 @@ final class CardView: UIView {
     private func draw(card: AnalyzeJson.CardData) {
         if card.url == nil { return }
         
-        // テキスト
-        self.isHidden = false
+        self.alpha = 1
         
+        // テキスト
         self.titleLabel.text = card.title
         
         self.bodyLabel.text = card.description
         
-        // 画像を取得して設定
-        ImageCache.image(urlStr: card.image, isTemp: true, isSmall: false, shortcode: nil, isPreview: true) { (image) in
-            self.imageView.image = image
-            self.setNeedsLayout()
+        if SettingsData.isLoadPreviewImage {
+            // 画像を取得して設定
+            ImageCache.image(urlStr: card.image, isTemp: true, isSmall: false, shortcode: nil, isPreview: true) { (image) in
+                self.imageView.image = image
+                self.setNeedsLayout()
+            }
         }
         
         // タップ時のリンク先
@@ -131,6 +133,8 @@ final class CardView: UIView {
         self.addGestureRecognizer(tapGesture)
         
         self.domainLabel.text = url?.host
+        
+        self.setNeedsLayout()
     }
     
     @objc func tapAction() {
