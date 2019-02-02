@@ -135,6 +135,7 @@ final class CardView: UIView {
         self.domainLabel.text = url?.host
         
         self.setNeedsLayout()
+        self.superview?.setNeedsLayout()
     }
     
     @objc func tapAction() {

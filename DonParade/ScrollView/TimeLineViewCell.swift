@@ -197,6 +197,7 @@ final class TimeLineViewCell: UITableViewCell {
             view.removeFromSuperview()
         }
         self.cardView?.removeFromSuperview()
+        self.cardView = nil
         
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
@@ -899,7 +900,7 @@ final class TimeLineViewCell: UITableViewCell {
         if self.replyButton != nil {
             var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
-            if let cardView = self.cardView {
+            if let cardView = self.cardView, cardView.alpha > 0 {
                 cardView.frame.origin.y = top
                 
                 top = cardView.frame.maxY
