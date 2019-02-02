@@ -21,6 +21,7 @@
 		1255A976215BBD2D00DE1CF3 /* ImageCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */; };
 		1255A978215D1B2600DE1CF3 /* ShowMyAnyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A977215D1B2600DE1CF3 /* ShowMyAnyList.swift */; };
 		1255A97A215DF97100DE1CF3 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A979215DF97100DE1CF3 /* FollowingViewController.swift */; };
+		1263CEBF22051EB300CA2E97 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1263CEBE22051EB300CA2E97 /* CardView.swift */; };
 		127A37B221570B5600347880 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B121570B5600347880 /* NotificationViewController.swift */; };
 		127A37B52157250700347880 /* ListSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B42157250700347880 /* ListSelectViewController.swift */; };
 		127A37B7215733B400347880 /* NotificationTableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127A37B6215733B400347880 /* NotificationTableModel.swift */; };
@@ -93,6 +94,7 @@
 		1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCheckView.swift; sourceTree = "<group>"; };
 		1255A977215D1B2600DE1CF3 /* ShowMyAnyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMyAnyList.swift; sourceTree = "<group>"; };
 		1255A979215DF97100DE1CF3 /* FollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
+		1263CEBE22051EB300CA2E97 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		127A37B121570B5600347880 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		127A37B42157250700347880 /* ListSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectViewController.swift; sourceTree = "<group>"; };
 		127A37B6215733B400347880 /* NotificationTableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableModel.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				121DC0DD2153CF7F00928DCC /* TimeLineView.swift */,
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
 				12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */,
+				1263CEBE22051EB300CA2E97 /* CardView.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,
 				129771E321624204003728FC /* WideTouchButton.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,
+				1263CEBF22051EB300CA2E97 /* CardView.swift in Sources */,
 				1286DF5F2154A9CA008FFFAC /* SettingsStepperCell.swift in Sources */,
 				12F9ACA1214CE18400E9E508 /* I18n.swift in Sources */,
 				12B8B4262165BAA900869496 /* ListSelectTableViewCell.swift in Sources */,

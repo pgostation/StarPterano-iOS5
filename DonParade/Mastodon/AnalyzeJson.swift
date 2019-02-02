@@ -354,6 +354,21 @@ final class AnalyzeJson {
         return data
     }
     
+    static func analyzeCard(json: [String: Any]) -> CardData {
+        let url = json["url"] as? String
+        let title = json["title"] as? String
+        let description = json["description"] as? String
+        let image = json["image"] as? String
+        let type = json["type"] as? String
+        
+        let data = CardData(url: url,
+                            title: title,
+                            description: description,
+                            image: image,
+                            type: type)
+        return data
+    }
+    
     static func emptyContentData() -> ContentData {
         return ContentData(accountId: "",
                            application: nil,
@@ -485,5 +500,13 @@ final class AnalyzeJson {
     
     struct InstanceData {
         let version: Double?
+    }
+    
+    struct CardData {
+        let url: String?
+        let title: String?
+        let description: String?
+        let image: String?
+        let type: String? // "link", "photo", "video", or "rich"
     }
 }

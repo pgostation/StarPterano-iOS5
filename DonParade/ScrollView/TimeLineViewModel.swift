@@ -140,17 +140,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // 後に付ければ良い
                     self.list = self.list + addList2
                     
-                    if self.list.count > 5000 {
-                        // 5000トゥートを超えると削除する
-                        self.list.removeFirst(self.list.count - 5000)
+                    if self.list.count > 1000 {
+                        // 1000トゥートを超えると削除する
+                        self.list.removeFirst(self.list.count - 1000)
                     }
                     if isStreaming {
                         tableView.reloadData()
                     }
                 } else if lastDate2 > firstDate1 && tableView.type != .user {
-                    if self.list.count > 5000 && !isStreaming {
-                        // 5000トゥートを超えると流石に削除する
-                        self.list.removeLast(self.list.count - 5000)
+                    if self.list.count > 1000 && !isStreaming {
+                        // 1000トゥートを超えると流石に削除する
+                        self.list.removeLast(self.list.count - 1000)
                     }
                     
                     if isStreaming {
@@ -374,7 +374,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // メッセージのビューを一度作り、高さを求める
-        let (messageView, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: false, callback: nil)
+        let (messageView, data, _, hasCard) = getMessageViewAndData(index: index, indexPath: indexPath, add: false, callback: nil)
         
         // セルを拡大表示するかどうか
         var detailOffset: CGFloat = isSelected ? 40 : 0
@@ -388,6 +388,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // お気に入りした人の名前を表示
             if let favourites_count = data.favourites_count, favourites_count > 0 {
                 detailOffset += (SettingsData.fontSize + 4) * CGFloat(min(10, favourites_count)) + 4
+            }
+        }
+        
+        if detailOffset > 0 {
+            if hasCard {
+                // card表示用
+                detailOffset += 200
             }
         }
         
@@ -427,9 +434,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // メッセージのビューとデータを返す
-    private var cacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool)] = [:]
-    private var oldCacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool)] = [:]
-    private func getMessageViewAndData(index: Int, indexPath: IndexPath, add: Bool, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool) {
+    private var cacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool, Bool)] = [:]
+    private var oldCacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool, Bool)] = [:]
+    private func getMessageViewAndData(index: Int, indexPath: IndexPath, add: Bool, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool, Bool) {
         let data = list[index]
         
         if data.emojis == nil, let id = data.id, let cache = self.cacheDict[id] ?? self.oldCacheDict[id] {
@@ -440,7 +447,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         // content解析
-        let (attributedText, hasLink) = DecodeToot.decodeContentFast(content: data.content, emojis: data.emojis, callback: callback)
+        let (attributedText, hasLink, hasCard) = DecodeToot.decodeContentFast(content: data.content, emojis: data.emojis, callback: callback)
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
@@ -500,7 +507,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
                 self.cacheDict[id] = nil
             }
-            self.cacheDict[id] = (messageView, data, isContinue)
+            self.cacheDict[id] = (messageView, data, isContinue, hasCard)
             
             // 破棄候補を破棄して、キャッシュを破棄候補に移す
             if self.cacheDict.count > 10 {
@@ -516,7 +523,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        return (messageView, data, isContinue)
+        return (messageView, data, isContinue, hasCard)
     }
     
     // UITextViewをリサイクル
@@ -646,11 +653,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         var id: String = ""
         
         // 表示用のデータを取得
-        let (messageView, data, isContinue) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: { [weak self] in
+        let (messageView, data, isContinue, hasCard) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: { [weak self] in
             guard let strongSelf = self else { return }
             // あとから絵文字が読み込めた場合の更新処理
             if cell.id != id { return }
-            let (messageView, _, _) = strongSelf.getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
+            let (messageView, _, _, _) = strongSelf.getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
             let isHidden = cell?.messageView?.isHidden ?? false
             messageView.isHidden = isHidden
             cell?.messageView?.removeFromSuperview()
@@ -910,6 +917,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.applicationLabel?.textAlignment = .right
                 cell.applicationLabel?.adjustsFontSizeToFitWidth = true
                 cell.applicationLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize - 2)
+            }
+            
+            if hasCard {
+                // card表示
+                let cardView = CardView(id: data.reblog_id ?? data.id)
+                cell.cardView = cardView
+                cell.addSubview(cardView)
             }
         } else {
             setCellColor(cell: cell)
@@ -1457,7 +1471,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
             
             // トゥート詳細画面に移動
-            let (_, data, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
+            let (_, data, _, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
             let mentionsData = getMentionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
             UIUtils.getFrontViewController()?.addChild(viewController)

@@ -51,6 +51,7 @@ final class TimeLineViewCell: UITableViewCell {
     var favoritedLabel: UILabel?
     var detailButton: UIButton?
     var applicationLabel: UILabel?
+    var cardView: CardView?
     
     // お気に入りした人やブーストした人の名前表示
     var rebologerLabels: [UILabel] = []
@@ -185,6 +186,7 @@ final class TimeLineViewCell: UITableViewCell {
             self.favoritedLabel?.removeFromSuperview()
             self.detailButton?.removeFromSuperview()
             self.applicationLabel?.removeFromSuperview()
+            self.cardView?.removeFromSuperview()
         }
         self.iconView?.removeFromSuperview()
         self.iconView?.image = nil
@@ -859,9 +861,9 @@ final class TimeLineViewCell: UITableViewCell {
                                           height: 20)
         }
         
-        self.DMBarLeft?.frame = CGRect(x: 0, y: 0, width: 5, height: 300)
+        self.DMBarLeft?.frame = CGRect(x: 0, y: 0, width: 5, height: 500)
         
-        self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 300)
+        self.DMBarRight?.frame = CGRect(x: screenBounds.width - 5, y: 0, width: 5, height: 500)
         
         var imageTop: CGFloat = (self.messageView?.frame.maxY ?? self.showMoreButton?.frame.maxY ?? 20) + 10
         for imageView in self.imageViews {
@@ -896,6 +898,12 @@ final class TimeLineViewCell: UITableViewCell {
         
         if self.replyButton != nil {
             var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+            
+            if let cardView = self.cardView {
+                cardView.frame.origin.y = top
+                
+                top = cardView.frame.maxY
+            }
             
             if self.tableView?.type == .scheduled {
                 self.replyButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)

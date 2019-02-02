@@ -13,7 +13,7 @@ import UIKit
 
 final class DecodeToot {
     // 自前でHTML解析
-    static func decodeContentFast(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> (NSMutableAttributedString, Bool) {
+    static func decodeContentFast(content: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> (NSMutableAttributedString, Bool, Bool) {
         var text = content ?? ""
         
         // 先頭と最後の<p></p>を取り除く
@@ -115,7 +115,16 @@ final class DecodeToot {
             }
         }
         
-        return (attributedText, linkList.count > 0)
+        var hasCard = false
+        if linkList.count > 0 {
+            for link in linkList {
+                if link.2.hasPrefix("#") { continue }
+                if link.2.hasPrefix("@") { continue }
+                hasCard = true
+            }
+        }
+        
+        return (attributedText, linkList.count > 0, hasCard)
     }
     
     // https://qiita.com/kumetter/items/91b433cd4d30abe507c5
