@@ -122,6 +122,8 @@ final class DecodeToot {
                 if link.2.hasPrefix("@") { continue }
                 hasCard = true
             }
+        } else if text.contains("http://") && text.contains(" href=\"") {
+            hasCard = true
         }
         
         return (attributedText, linkList.count > 0, hasCard)
