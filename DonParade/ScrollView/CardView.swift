@@ -149,12 +149,25 @@ final class CardView: UIView {
     
     private static var cache: [String: AnalyzeJson.CardData] = [:]
     private static var oldCache: [String: AnalyzeJson.CardData] = [:]
+    
+    // キャッシュに追加
     private static func addCache(id: String, card: AnalyzeJson.CardData) {
         if cache.count >= 20 {
             oldCache = cache
         }
         
         cache[id] = card
+    }
+    
+    // カードがあるかどうかをキャッシュから判断
+    static func hasNotCard(id: String) -> Bool {
+        if let data = cache[id], data.url == nil {
+            return true
+        }
+        if let data = oldCache[id], data.url == nil {
+            return true
+        }
+        return false
     }
     
     override func layoutSubviews() {

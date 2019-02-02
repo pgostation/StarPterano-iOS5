@@ -521,7 +521,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        let trueHasCard = hasCard && (data.spoiler_text == nil || data.spoiler_text == "")
+        let trueHasCard = hasCard && (data.spoiler_text == nil || data.spoiler_text == "") && !CardView.hasNotCard(id: data.id ?? "")
         
         return (messageView, data, isContinue, trueHasCard)
     }
