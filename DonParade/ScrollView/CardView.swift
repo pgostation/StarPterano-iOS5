@@ -76,7 +76,7 @@ final class CardView: UIView {
         
         bodyLabel.numberOfLines = 0
         bodyLabel.lineBreakMode = .byCharWrapping
-        bodyLabel.textColor = ThemeColor.messageColor
+        bodyLabel.textColor = ThemeColor.contrastColor
         bodyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         bodyLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
         bodyLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)

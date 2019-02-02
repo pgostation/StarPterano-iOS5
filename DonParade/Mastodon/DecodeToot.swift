@@ -64,8 +64,16 @@ final class DecodeToot {
                 linkStr = String(tmpHrefStr2.suffix(tmpHrefStr2.count - linkStartIndex.encodedOffset).prefix(endIndex.encodedOffset - linkStartIndex.encodedOffset - 4))
             }
             
+            var offset = 0
+            do {
+                let beforeString = text.prefix(startIndex.encodedOffset)
+                let beforeCount = beforeString.count
+                let afterCount = beforeString.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "'").replacingOccurrences(of: "&amp;", with: "&").count
+                offset = afterCount - beforeCount
+            }
+            
             // リストに追加
-            linkList.append((startIndex, String(urlStr), linkStr))
+            linkList.append((text.index(startIndex, offsetBy: offset) , String(urlStr), linkStr))
             text = String(text.prefix(upTo: startIndex)) + linkStr + String(text.suffix(from: endIndex))
             
             loopCount += 1
@@ -78,10 +86,15 @@ final class DecodeToot {
         
         // リンクを追加
         for link in linkList {
-            if link.0.encodedOffset + link.2.count > attributedText.length { continue }
+            var textLength = link.2.count
+            if link.0.encodedOffset + textLength > attributedText.length {
+                textLength = attributedText.length - link.0.encodedOffset
+                if textLength <= 0 { continue }
+            }
             attributedText.addAttribute(NSAttributedString.Key.link,
                                         value: link.1,
-                                        range: NSRange(location: link.0.encodedOffset, length: link.2.count))
+                                        range: NSRange(location: link.0.encodedOffset,
+                                                       length: textLength))
         }
         
         // 絵文字に変える
