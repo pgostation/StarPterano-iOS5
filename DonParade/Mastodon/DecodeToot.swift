@@ -82,6 +82,10 @@ final class DecodeToot {
         // &lt;などをデコード
         text = text.replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "'").replacingOccurrences(of: "&amp;", with: "&")
         
+        if SettingsData.hiraganaMode {
+            text = TextConverter.convert(text, to: TextConverter.JPCharacter.hiragana)
+        }
+        
         let attributedText = NSMutableAttributedString(string: text)
         
         // リンクを追加

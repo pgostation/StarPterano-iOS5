@@ -185,6 +185,7 @@
 "SETTINGS_SHOWLISTBUTTON" = "リストボタンを表示";
 "SETTINGS_MERGELOCAL" = "ローカルにホームを統合表示";
 "SETTINGS_ABSOLUTETIME" = "絶対時間で表示";
+"SETTINGS_HIRAGANA" = "ひらがなにする";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

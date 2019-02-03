@@ -185,6 +185,7 @@
 "SETTINGS_SHOWLISTBUTTON" = "Show list button";
 "SETTINGS_MERGELOCAL" = "Merge home to local TL";
 "SETTINGS_ABSOLUTETIME" = "Use absolute time";
+"SETTINGS_HIRAGANA" = "To hiragana";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";
