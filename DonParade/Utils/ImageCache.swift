@@ -102,6 +102,9 @@ final class ImageCache {
                             }
                         }
                     }
+                    
+                    // 最終アクセス時刻を更新
+                    try? fileManager.setAttributes([FileAttributeKey.modificationDate : Date()], ofItemAtPath: url.path)
                 }
             }
             return
@@ -178,7 +181,7 @@ final class ImageCache {
                     let nowDate = Date()
                     for url in urls ?? [] {
                         if let attr = try? fileManager.attributesOfItem(atPath: url.path) {
-                            if let fileDate = attr[FileAttributeKey.creationDate] as? Date {
+                            if let fileDate = attr[FileAttributeKey.modificationDate] as? Date {
                                 let time: Double = isTemp ? 3600 * 8 : 86400 * 30
                                 if nowDate.timeIntervalSince(fileDate) > time {
                                     try? fileManager.removeItem(at: url)
@@ -241,6 +244,9 @@ final class APNGImageCache {
                             }
                         }
                     }
+                    
+                    // 最終アクセス時刻を更新
+                    try? fileManager.setAttributes([FileAttributeKey.modificationDate : Date()], ofItemAtPath: url.path)
                 }
             }
             return
