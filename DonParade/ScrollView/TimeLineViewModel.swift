@@ -393,7 +393,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if hasCard {
             if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 2.6 {
-                if data.card != nil {
+                if data.card != nil || CardView.hasCard(id: data.id ?? "") == true {
                     // card表示用
                     detailOffset += 200
                 }
@@ -528,7 +528,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        let trueHasCard = hasCard && (data.spoiler_text == nil || data.spoiler_text == "") && !CardView.hasNotCard(id: data.id ?? "")
+        let trueHasCard = hasCard && (data.spoiler_text == nil || data.spoiler_text == "") && (data.card != nil || CardView.hasCard(id: data.id ?? "") == true)
         
         return (messageView, data, isContinue, trueHasCard)
     }
@@ -930,14 +930,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         if hasCard {
-            if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 2.6 {
-                if let card = data.card {
-                    // card表示
-                    let cardView = CardView(card: card)
-                    cardView.isHidden = messageView.isHidden
-                    cell.cardView = cardView
-                    cell.addSubview(cardView)
-                }
+            if let card = data.card {
+                // card表示
+                let cardView = CardView(card: card)
+                cardView.isHidden = messageView.isHidden
+                cell.cardView = cardView
+                cell.addSubview(cardView)
             } else {
                 // card表示
                 let cardView = CardView(id: data.reblog_id ?? data.id, dateStr: data.created_at)

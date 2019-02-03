@@ -36,9 +36,9 @@ final class CardView: UIView {
         
         if let id = id {
             let date = CardView.dateFormatter.date(from: dateStr ?? "")
-            if let date = date, date.timeIntervalSinceNow >= -2 {
+            if let date = date, date.timeIntervalSinceNow >= -3 {
                 // 少し待ってからカード情報を取得
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                     self?.request(id: id)
                 }
             } else {
@@ -182,7 +182,7 @@ final class CardView: UIView {
     private static var oldCache: [String: AnalyzeJson.CardData] = [:]
     
     // キャッシュに追加
-    private static func addCache(id: String, card: AnalyzeJson.CardData) {
+    static func addCache(id: String, card: AnalyzeJson.CardData) {
         if cache.count >= 20 {
             oldCache = cache
             cache = [:]
@@ -192,14 +192,14 @@ final class CardView: UIView {
     }
     
     // カードがあるかどうかをキャッシュから判断
-    static func hasNotCard(id: String) -> Bool {
-        if let data = cache[id], data.url == nil {
-            return true
+    static func hasCard(id: String) -> Bool? {
+        if let data = cache[id] {
+            return data.url != nil
         }
-        if let data = oldCache[id], data.url == nil {
-            return true
+        if let data = oldCache[id] {
+            return data.url != nil
         }
-        return false
+        return nil
     }
     
     override func layoutSubviews() {
