@@ -63,13 +63,24 @@ final class TextConverter {
         
         var tokenType = CFStringTokenizerGoToTokenAtIndex(tokenizer, 0)
         while (tokenType.rawValue != 0) {
-            if let text = (CFStringTokenizerCopyCurrentTokenAttribute(tokenizer, kCFStringTokenizerAttributeLatinTranscription) as? NSString).map({ $0.mutableCopy() }) {
-                CFStringTransform((text as! CFMutableString), nil, jpCharacter.transform, false)
-                output.append(text as! String)
-                output.append(" ") // 区切りに空白を入れる
+            if tokenType.contains(.isCJWordMask) {
+                if let text = (CFStringTokenizerCopyCurrentTokenAttribute(tokenizer, kCFStringTokenizerAttributeLatinTranscription) as? NSString).map({ $0.mutableCopy() }) {
+                    CFStringTransform((text as! CFMutableString), nil, jpCharacter.transform, false)
+                    output.append(text as! String)
+                    output.append(" ") // 区切りに空白を入れる
+                }
+            } else {
+                if let text = (CFStringTokenizerCopyCurrentTokenAttribute(tokenizer, kCFStringTokenizerAttributeLatinTranscription) as? NSString).map({ $0.mutableCopy() }) {
+                    output.append(text as! String)
+                }
             }
             tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer)
         }
         return output
+    }
+    
+    private static func isKanji(text: String) -> Bool {
+        let range = "^[\u{3005}\u{3007}\u{303b}\u{3400}-\u{9fff}\u{f900}-\u{faff}\u{20000}-\u{2ffff}]+$"
+        return NSPredicate(format: "SELF MATCHES %@", range).evaluate(with: text)
     }
 }
