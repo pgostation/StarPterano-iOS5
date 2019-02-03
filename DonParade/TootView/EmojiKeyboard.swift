@@ -208,6 +208,7 @@ final class EmojiKeyboard: UIView {
 
 private final class EmojiInputScrollView: UIScrollView {
     private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).sorted(by: EmojiInputScrollView.sortFunc)
+    private var recentEmojiButtons: [EmojiButton] = []
     private var emojiButtons: [EmojiButton] = []
     private var hiddenEmojiButtons: [EmojiButton] = []
     var searchText: String?
@@ -251,8 +252,20 @@ private final class EmojiInputScrollView: UIScrollView {
     }
     
     private func addEmojis() {
+        var recentList: [EmojiData.EmojiStruct] = []
+        for key in SettingsData.recentEmojiList {
+            for emojiData in self.emojiList {
+                if key == emojiData.short_code {
+                    recentList.append(emojiData)
+                    break
+                }
+            }
+        }
+        
+        let list = recentList + self.emojiList
+        
         // 絵文字ボタンの追加
-        for emoji in self.emojiList {
+        for (index, emoji) in list.enumerated() {
             let button = EmojiButton(key: emoji.short_code ?? "")
             if SettingsData.useAnimation && emoji.url?.hasSuffix(".png") == true {
                 APNGImageCache.image(urlStr: emoji.url) { image in
@@ -282,7 +295,9 @@ private final class EmojiInputScrollView: UIScrollView {
             
             self.addSubview(button)
             
-            if emoji.visible_in_picker == 1 {
+            if index < recentList.count {
+                recentEmojiButtons.append(button)
+            } else if emoji.visible_in_picker == 1 {
                 emojiButtons.append(button)
             } else {
                 hiddenEmojiButtons.append(button)
@@ -335,6 +350,8 @@ private final class EmojiInputScrollView: UIScrollView {
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
         }
+        
+        addRecent(key: button.key)
     }
     
     // 絵文字情報を表示
@@ -359,29 +376,45 @@ private final class EmojiInputScrollView: UIScrollView {
     }
     
     override func layoutSubviews() {
-        if let searchText = self.searchText {
+        if let searchText = self.searchText, searchText != "" {
             let filteredEmojiButtons = getFilteredEmojiButtons(key: searchText)
             
-            layoutEmojiButtons(emojiButtons: filteredEmojiButtons)
+            layoutEmojiButtons(recentEmojiButtons: nil, emojiButtons: filteredEmojiButtons)
             return
         }
         
-        layoutEmojiButtons(emojiButtons: self.emojiButtons)
+        layoutEmojiButtons(recentEmojiButtons: self.recentEmojiButtons, emojiButtons: self.emojiButtons)
         
         for button in self.hiddenEmojiButtons {
             button.frame.origin.x = -100
         }
     }
     
-    private func layoutEmojiButtons(emojiButtons: [UIButton]) {
+    private func layoutEmojiButtons(recentEmojiButtons: [UIButton]?, emojiButtons: [UIButton]) {
         let buttonSize: CGFloat = 22 + SettingsData.fontSize
         let margin: CGFloat = 2
         let screenBounds = UIScreen.main.bounds
         let xCount = floor(screenBounds.width / (buttonSize + margin)) // ボタンの横に並ぶ数
-        let yCount = ceil(CGFloat(emojiButtons.count) / xCount) // ボタンの縦に並ぶ数
-        let viewHeight = (buttonSize + margin) * yCount
+        let yCount = ceil(CGFloat(recentEmojiButtons?.count ?? 0) / xCount) + ceil(CGFloat(emojiButtons.count) / xCount) // ボタンの縦に並ぶ数
+        let recentYCount = ceil(CGFloat(recentEmojiButtons?.count ?? 0) / xCount)
+        let offset: CGFloat = (recentEmojiButtons != nil) ? 12 : 0
+        let viewHeight = (buttonSize + margin) * yCount + offset
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
+        
+        if let recentEmojiButtons = recentEmojiButtons {
+            for y in 0..<Int(recentYCount) {
+                for x in 0..<Int(xCount) {
+                    let index = y * Int(xCount) + x
+                    if index >= recentEmojiButtons.count { break }
+                    let button = recentEmojiButtons[index]
+                    button.frame = CGRect(x: CGFloat(x) * (buttonSize + margin),
+                                          y: CGFloat(y) * (buttonSize + margin),
+                                          width: buttonSize,
+                                          height: buttonSize)
+                }
+            }
+        }
         
         for y in 0..<Int(yCount) {
             for x in 0..<Int(xCount) {
@@ -389,7 +422,7 @@ private final class EmojiInputScrollView: UIScrollView {
                 if index >= emojiButtons.count { break }
                 let button = emojiButtons[index]
                 button.frame = CGRect(x: CGFloat(x) * (buttonSize + margin),
-                                      y: CGFloat(y) * (buttonSize + margin),
+                                      y: (CGFloat(y) + CGFloat(recentYCount)) * (buttonSize + margin) + offset,
                                       width: buttonSize,
                                       height: buttonSize)
             }
@@ -402,6 +435,9 @@ private final class EmojiInputScrollView: UIScrollView {
         if key == "隠し" {
             for button in self.hiddenEmojiButtons {
                 buttons.append(button)
+            }
+            for button in self.recentEmojiButtons {
+                button.frame.origin.x = -100
             }
             for button in self.emojiButtons {
                 button.frame.origin.x = -100
@@ -416,11 +452,19 @@ private final class EmojiInputScrollView: UIScrollView {
                 button.frame.origin.x = -100
             }
         }
+        for button in self.recentEmojiButtons {
+            button.frame.origin.x = -100
+        }
         for button in self.hiddenEmojiButtons {
             button.frame.origin.x = -100
         }
         
         return buttons
+    }
+    
+    // 最近使った絵文字に追加
+    private func addRecent(key: String) {
+        SettingsData.addRecentEmoji(key: key)
     }
 }
 

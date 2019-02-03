@@ -500,4 +500,35 @@ final class SettingsData {
             }
         }
     }
+    
+    // 最近使った絵文字に追加
+    static func addRecentEmoji(key: String) {
+        var list = recentEmojiList
+        if list.count > 0 && list[0] == key { return }
+        if let index = list.firstIndex(of: key) {
+            list.remove(at: index)
+        }
+        list.insert(key, at: 0)
+        
+        if list.count > 16 {
+            list.remove(at: 16)
+        }
+        
+        let str = list.joined(separator: "\n")
+        
+        defaults.set(str, forKey: "recentEmojiList_" + (SettingsData.accessToken ?? ""))
+    }
+    
+    // 最近使った絵文字を取得
+    static var recentEmojiList: [String] {
+        let str = defaults.string(forKey: "recentEmojiList_" + (SettingsData.accessToken ?? ""))
+        
+        let tmpArray = (str ?? "").split(separator: "\n")
+        var array: [String] = []
+        for substr in tmpArray {
+            array.append(String(substr))
+        }
+        
+        return array
+    }
 }
