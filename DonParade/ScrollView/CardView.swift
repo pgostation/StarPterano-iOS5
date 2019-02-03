@@ -50,6 +50,22 @@ final class CardView: UIView {
         self.setNeedsLayout()
     }
     
+    init(card: AnalyzeJson.CardData) {
+        let rect = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 200)
+        super.init(frame: rect)
+        
+        self.addSubview(imageView)
+        self.addSubview(titleLabel)
+        self.addSubview(bodyLabel)
+        self.addSubview(domainLabel)
+        
+        setProperties()
+        
+        draw(card: card)
+        
+        self.setNeedsLayout()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

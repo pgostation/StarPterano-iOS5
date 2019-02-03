@@ -392,8 +392,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         if hasCard {
-            // card表示用
-            detailOffset += 200
+            if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 2.6 {
+                if data.card != nil {
+                    // card表示用
+                    detailOffset += 200
+                }
+            } else {
+                // card表示用
+                detailOffset += 200
+            }
         }
         
         if (data.sensitive == 1 && data.mediaData != nil) { // もっと見る
@@ -923,11 +930,21 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         if hasCard {
-            // card表示
-            let cardView = CardView(id: data.reblog_id ?? data.id, dateStr: data.created_at)
-            cardView.isHidden = messageView.isHidden
-            cell.cardView = cardView
-            cell.addSubview(cardView)
+            if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 2.6 {
+                if let card = data.card {
+                    // card表示
+                    let cardView = CardView(card: card)
+                    cardView.isHidden = messageView.isHidden
+                    cell.cardView = cardView
+                    cell.addSubview(cardView)
+                }
+            } else {
+                // card表示
+                let cardView = CardView(id: data.reblog_id ?? data.id, dateStr: data.created_at)
+                cardView.isHidden = messageView.isHidden
+                cell.cardView = cardView
+                cell.addSubview(cardView)
+            }
         }
         
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in

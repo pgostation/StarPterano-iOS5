@@ -245,8 +245,24 @@ final class AnalyzeJson {
             visibility = reblog?["visibility"] as? String
         }
         
+        let card: CardData?
+        if reblog_acct == nil {
+            if let cardJson = json["card"] as? [String: Any] {
+                card = analyzeCard(json: cardJson)
+            } else {
+                card = nil
+            }
+        } else {
+            if let cardJson = reblog?["card"] as? [String: Any] {
+                card = analyzeCard(json: cardJson)
+            } else {
+                card = nil
+            }
+        }
+        
         let data = ContentData(accountId: acct,
                                application: application,
+                               card: card,
                                content: content,
                                created_at: created_at,
                                emojis: emojis,
@@ -372,6 +388,7 @@ final class AnalyzeJson {
     static func emptyContentData() -> ContentData {
         return ContentData(accountId: "",
                            application: nil,
+                           card: nil,
                            content: nil,
                            created_at: nil,
                            emojis: nil,
@@ -424,6 +441,7 @@ final class AnalyzeJson {
     struct ContentData {
         let accountId: String
         let application: [String: Any]?
+        let card: CardData?
         let content: String?
         let created_at: String?
         let emojis: [[String: Any]]?
