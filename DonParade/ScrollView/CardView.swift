@@ -185,6 +185,7 @@ final class CardView: UIView {
     private static func addCache(id: String, card: AnalyzeJson.CardData) {
         if cache.count >= 20 {
             oldCache = cache
+            cache = [:]
         }
         
         cache[id] = card

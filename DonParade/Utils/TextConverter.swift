@@ -25,7 +25,30 @@ final class TextConverter {
         }
     }
     
-    static func convert(_ text: String, to jpCharacter: JPCharacter) -> String {
+    private static var cache: [String: String] = [:]
+    private static var oldCache: [String: String] = [:]
+    
+    static func convertWithCache(_ text: String, to jpCharacter: JPCharacter) -> String {
+        if let cacheStr = cache[text] {
+            return cacheStr
+        }
+        if let cacheStr = oldCache[text] {
+            return cacheStr
+        }
+        
+        let converted = convert(text, to: jpCharacter)
+        
+        cache[text] = converted
+        
+        if cache.count > 50 {
+            oldCache = cache
+            cache = [:]
+        }
+        
+        return converted
+    }
+    
+    private static func convert(_ text: String, to jpCharacter: JPCharacter) -> String {
         let input = text.trimmingCharacters(in: .whitespacesAndNewlines)
         var output = ""
         let locale = CFLocaleCreate(kCFAllocatorDefault, CFLocaleCreateCanonicalLanguageIdentifierFromString(kCFAllocatorDefault, "ja" as CFString))
