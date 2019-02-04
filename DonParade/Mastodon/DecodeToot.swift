@@ -316,10 +316,14 @@ final class DecodeToot {
         // 絵文字から元のコードに置き換える
         let attributedStr = NSMutableAttributedString(attributedString: attributedText)
         for data in list.reversed() {
-            attributedStr.replaceCharacters(in: data.0, with: ":" + data.1 + ":")
+            attributedStr.replaceCharacters(in: data.0, with: "\u{200b}:" + data.1 + ":\u{200b}")
         }
         
-        return attributedStr.string
+        // 連続するゼロ幅スペースを1つにする
+        var str = attributedStr.string
+        str = str.replacingOccurrences(of: "\u{200b}\u{200b}", with: "\u{200b}")
+        
+        return str
     }
     
     // NSAttributedStringから絵文字のshortcodeの配列を返す
