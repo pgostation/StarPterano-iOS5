@@ -71,14 +71,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         // 通常テキスト
         guard let attributedText = view.textField.attributedText else { return }
         
-        let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText))
+        let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText), isToot: true)
         
         // 保護テキスト
         let spoilerText: String?
         if view.spoilerTextField.isHidden {
             spoilerText = nil
         } else {
-            spoilerText = DecodeToot.encodeEmoji(attributedText: view.spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: view.spoilerTextField.attributedText))
+            spoilerText = DecodeToot.encodeEmoji(attributedText: view.spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: view.spoilerTextField.attributedText), isToot: true)
         }
         
         // 投稿するものがない

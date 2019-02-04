@@ -295,7 +295,7 @@ final class DecodeToot {
     
     // 絵文字から元の文字列に戻す
     // https://stackoverflow.com/questions/36465761/can-nsattributedstring-which-contains-nstextattachment-be-storedor-restored
-    static func encodeEmoji(attributedText: NSAttributedString, textStorage: NSTextStorage) -> String {
+    static func encodeEmoji(attributedText: NSAttributedString, textStorage: NSTextStorage, isToot: Bool = false) -> String {
         // 絵文字のある場所をリストにする
         var list: [(NSRange, String)] = []
         let range = NSRange(location: 0, length: attributedText.length)
@@ -316,7 +316,11 @@ final class DecodeToot {
         // 絵文字から元のコードに置き換える
         let attributedStr = NSMutableAttributedString(attributedString: attributedText)
         for data in list.reversed() {
-            attributedStr.replaceCharacters(in: data.0, with: "\u{200b}:" + data.1 + ":\u{200b}")
+            if isToot {
+                attributedStr.replaceCharacters(in: data.0, with: "\u{200b}:" + data.1 + ":\u{200b}")
+            } else {
+                attributedStr.replaceCharacters(in: data.0, with: ":" + data.1 + ":")
+            }
         }
         
         // 連続するゼロ幅スペースを1つにする
