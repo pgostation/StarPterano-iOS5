@@ -226,7 +226,7 @@ final class NotificationView: UIView {
         let segAllWidth = min(360, screenBounds.width)
         let segWidth = segAllWidth / CGFloat(segmentControl.numberOfSegments)
         for i in 0..<segmentControl.numberOfSegments {
-            segmentControl.setWidth(segWidth, forSegmentAt: i)
+            segmentControl.setWidth(segWidth - 0.5, forSegmentAt: i)
         }
         
         segmentControl.frame = CGRect(x: screenBounds.width / 2 - segAllWidth / 2,

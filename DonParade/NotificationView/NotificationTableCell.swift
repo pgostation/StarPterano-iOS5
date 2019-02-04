@@ -101,6 +101,9 @@ final class NotificationTableCell: UITableViewCell {
         self.statusLabel.isScrollEnabled = false
         self.statusLabel.isEditable = false
         
+        let tapStatusGesture = UITapGestureRecognizer(target: self, action: #selector(tapStatusAction))
+        self.statusLabel.addGestureRecognizer(tapStatusGesture)
+        
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
         
@@ -246,6 +249,35 @@ final class NotificationTableCell: UITableViewCell {
                     self.favoriteButton.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
                 } else {
                     self.favoriteButton.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
+                }
+            }
+        }
+    }
+    
+    // トゥート部分をタップした時の処理
+    @objc func tapStatusAction() {
+        guard let url = URL(string: "https://\(SettingsData.hostName!)/api/v1/statuses/\(self.statusId!)") else { return }
+        try? MastodonRequest.get(url: url) { (data, response, error) in
+            if let data = data {
+                guard let responseJson = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)else { return }
+                guard let json = responseJson as? [String: Any] else { return }
+                var acct = ""
+                let data = AnalyzeJson.analyzeJson(view: nil, model: nil, json: json, acct: &acct)
+                
+                DispatchQueue.main.async {
+                    guard let timelineView = MainViewController.instance?.timelineViewController?.view as? TimeLineView else { return }
+                    let model = timelineView.model
+                    let mentionsData = model.getMentionsData(data: data)
+                    let timeLineViewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, timelineView.accountList))
+                    UIUtils.getFrontViewController()?.addChild(timeLineViewController)
+                    UIUtils.getFrontViewController()?.view.addSubview(timeLineViewController.view)
+                    timeLineViewController.view.frame = CGRect(x: UIScreen.main.bounds.width,
+                                                               y: 0,
+                                                               width: UIScreen.main.bounds.width,
+                                                               height: UIScreen.main.bounds.height)
+                    UIView.animate(withDuration: 0.3) {
+                        timeLineViewController.view.frame.origin.x = 0
+                    }
                 }
             }
         }

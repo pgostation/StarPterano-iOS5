@@ -1548,7 +1548,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // 会話部分のデータを取り出す
-    private func getMentionsData(data: AnalyzeJson.ContentData) -> [AnalyzeJson.ContentData] {
+    func getMentionsData(data: AnalyzeJson.ContentData) -> [AnalyzeJson.ContentData] {
         var mentionContents: [AnalyzeJson.ContentData] = [data]
         
         var in_reply_to_id = data.in_reply_to_id

@@ -94,7 +94,7 @@ final class MainViewController: MyViewController {
         }
     }
     
-    private var timelineViewController: TimeLineViewController?
+    var timelineViewController: TimeLineViewController?
     
     // タイムラインへの切り替え
     @objc func tlAction(_ sender: UIButton?) {
