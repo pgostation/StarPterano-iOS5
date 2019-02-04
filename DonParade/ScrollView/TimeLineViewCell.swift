@@ -901,7 +901,7 @@ final class TimeLineViewCell: UITableViewCell {
             var top: CGFloat = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
             
             if let cardView = self.cardView, cardView.alpha > 0 {
-                cardView.frame.origin.y = top
+                cardView.frame.origin.y = top + 5
                 
                 top = cardView.frame.maxY
             }
@@ -973,7 +973,7 @@ final class TimeLineViewCell: UITableViewCell {
         } else {
             if let cardView = self.cardView {
                 let top = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
-                cardView.frame.origin.y = top
+                cardView.frame.origin.y = top + 5
             }
         }
     }

@@ -24,7 +24,7 @@ final class CardView: UIView {
     }()
     
     init(id: String?, dateStr: String?) {
-        let rect = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 200)
+        let rect = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 195)
         super.init(frame: rect)
         
         self.addSubview(imageView)
