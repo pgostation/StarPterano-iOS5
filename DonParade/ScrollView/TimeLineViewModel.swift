@@ -724,6 +724,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                 apngView.contentMode = .scaleAspectFill
                                 apngView.autoStartAnimation = true
                                 apngView.backgroundColor = cell.backgroundColor
+                                DispatchQueue.main.async {
+                                    apngView.backgroundColor = cell.backgroundColor
+                                }
                                 let size = min(position.size.width, position.size.height)
                                 apngView.frame = CGRect(x: position.origin.x,
                                                         y: position.origin.y + 1,
