@@ -721,13 +721,14 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                 if image.frameCount <= 1 { return }
                                 let apngView = APNGImageView(image: image)
                                 apngView.tag = 5555
+                                apngView.contentMode = .scaleAspectFill
                                 apngView.autoStartAnimation = true
-                                apngView.backgroundColor = ThemeColor.cellBgColor
+                                apngView.backgroundColor = cell.backgroundColor
                                 let size = min(position.size.width, position.size.height)
                                 apngView.frame = CGRect(x: position.origin.x,
-                                                        y: position.origin.y + 3,
+                                                        y: position.origin.y + 1,
                                                         width: size,
-                                                        height: size)
+                                                        height: size + 4)
                                 messageView.addSubview(apngView)
                             }
                             break
