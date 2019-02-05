@@ -21,6 +21,7 @@ final class NotificationTableCell: UITableViewCell {
     let dateLabel = UILabel()
     let notificationLabel = UILabel()
     var statusLabel = UITextView()
+    let imageViews = [UIImageView(), UIImageView(), UIImageView(), UIImageView()]
     
     //var followButton: UIButton?
     let replyButton = UIButton()
@@ -50,6 +51,9 @@ final class NotificationTableCell: UITableViewCell {
         self.addSubview(dateLabel)
         self.addSubview(notificationLabel)
         self.addSubview(statusLabel)
+        for imageView in imageViews {
+            self.addSubview(imageView)
+        }
         self.addSubview(replyButton)
         self.addSubview(favoriteButton)
         self.layer.addSublayer(self.lineLayer)
@@ -101,9 +105,6 @@ final class NotificationTableCell: UITableViewCell {
         self.statusLabel.isScrollEnabled = false
         self.statusLabel.isEditable = false
         
-        let tapStatusGesture = UITapGestureRecognizer(target: self, action: #selector(tapStatusAction))
-        self.statusLabel.addGestureRecognizer(tapStatusGesture)
-        
         self.lineLayer.backgroundColor = ThemeColor.separatorColor.cgColor
         self.lineLayer.isOpaque = true
         
@@ -124,6 +125,17 @@ final class NotificationTableCell: UITableViewCell {
                 
                 self?.refreshDate()
             })
+        }
+        
+        // トゥートのタップジェスチャー
+        let tapStatusGesture = UITapGestureRecognizer(target: self, action: #selector(tapStatusAction))
+        self.statusLabel.addGestureRecognizer(tapStatusGesture)
+        
+        // 画像のタップジェスチャー
+        for imageView in self.imageViews {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapStatusAction))
+            imageView.addGestureRecognizer(tapGesture)
+            imageView.isUserInteractionEnabled = true
         }
         
         // アイコンのタップジェスチャー
@@ -392,13 +404,24 @@ final class NotificationTableCell: UITableViewCell {
                                         width: self.statusLabel.frame.width,
                                         height: self.statusLabel.frame.height)
         
+        var top = self.statusLabel.frame.maxY + 5
+        for imageView in self.imageViews {
+            if imageView.image != nil {
+                imageView.frame = CGRect(x: left + 5,
+                                         y: top,
+                                         width: screenBounds.width - left - 10,
+                                         height: 60)
+                top = imageView.frame.maxY + 5
+            }
+        }
+        
         self.replyButton.frame = CGRect(x: left + 10,
-                                        y: self.statusLabel.frame.maxY + 8,
+                                        y: top + 3,
                                         width: 32,
                                         height: 32)
         
         self.favoriteButton.frame = CGRect(x: left + 100,
-                                           y: self.statusLabel.frame.maxY + 8,
+                                           y: top + 3,
                                            width: 32,
                                            height: 32)
     }

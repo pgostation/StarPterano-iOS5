@@ -103,11 +103,20 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
                 self.dummyLabel.frame.size.width = UIScreen.main.bounds.width - 55
                 self.dummyLabel.sizeToFit()
                 
+                let height: CGFloat
                 if data.type == "mention" {
-                    return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20 + 40
+                    // 返信とお気に入りボタンの分
+                    height = self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20 + 40
                 } else {
-                    return self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20
+                    height = self.dummyLabel.frame.height + SettingsData.fontSize * 2 + 20
                 }
+                
+                // 画像がある場合
+                if let mediaCount = data.status?.mediaData?.count, mediaCount > 0 {
+                    return height + CGFloat(mediaCount) * 65
+                }
+                
+                return height
             }
             return SettingsData.fontSize * 2
         }
@@ -192,6 +201,22 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
             }
             cell.statusLabel.attributedText = attibutedText.0
             cell.statusLabel.textColor = ThemeColor.idColor
+        }
+        
+        for imageView in cell.imageViews {
+            imageView.image = nil
+        }
+        // 画像がある場合
+        if let mediaCount = data.status?.mediaData?.count, mediaCount > 0 {
+            for i in 0..<mediaCount {
+                let mediaData = (data.status?.mediaData?[i])!
+                ImageCache.image(urlStr: mediaData.preview_url, isTemp: true, isSmall: false) { (image) in
+                    cell.imageViews[i].image = image
+                    cell.imageViews[i].contentMode = .scaleAspectFill
+                    cell.imageViews[i].clipsToBounds = true
+                    cell.setNeedsLayout()
+                }
+            }
         }
         
         return cell
