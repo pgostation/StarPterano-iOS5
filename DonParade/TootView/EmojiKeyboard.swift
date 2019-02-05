@@ -96,11 +96,24 @@ final class EmojiKeyboard: UIView {
         guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
         let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2)
         
+        var spaceStr = " "
+        let list = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
+        for emoji in list {
+            if emoji.short_code == "space" {
+                spaceStr = "\u{200b}:space:\u{200b}"
+                break
+            } else if emoji.short_code == "blank" {
+                spaceStr = "\u{200b}:blank:\u{200b}"
+                break
+            }
+        }
+        
         if textView2?.isFirstResponder == true {
-            (textView2 as? UITextView)?.insertText(" ")
+            (textView2 as? UITextView)?.insertText(spaceStr)
             return
         }
-        (textView as? UITextView)?.insertText(" ")
+        
+        (textView as? UITextView)?.insertText(spaceStr)
     }
     
     @objc func returnAction() {
