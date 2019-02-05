@@ -159,6 +159,12 @@
 "PROFILE_UPDATE_FAILED" = "プロフィール更新に失敗しました";
 "PROFILE_LOCKED" = "承認制アカウントにする";
 
+// 色設定
+"SETTINGS_COLOR" = "アカウントの色設定";
+"COLOR_GREEN" = "グリーン";
+"COLOR_BLUE" = "ブルー";
+"COLOR_ORANGE" = "オレンジ";
+
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "マストドンのWebサイトへ";
 "SETTINGS_MYPAGE" = "自分のページへ";

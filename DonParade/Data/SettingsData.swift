@@ -548,4 +548,26 @@ final class SettingsData {
             }
         }
     }
+    
+    // 色
+    static var color: String? {
+        get {
+            guard let accessToken = accessToken else { return nil }
+            if let string = defaults.string(forKey: "color_\(accessToken)") {
+                return string
+            }
+            return nil
+        }
+        set(newValue) {
+            guard let accessToken = accessToken else { return }
+            
+            if newValue != nil {
+                defaults.set(newValue, forKey: "color_\(accessToken)")
+            } else {
+                defaults.removeObject(forKey: "color_\(accessToken)")
+            }
+            
+            ThemeColor.change()
+        }
+    }
 }

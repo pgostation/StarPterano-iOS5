@@ -102,7 +102,13 @@ final class WaitIndicator: UIView {
                                                        y: top + length * cos(angle) - size / 2,
                                                        width: size,
                                                        height: size))
-            UIColor(red: 0.8, green: 1, blue: 0, alpha: 1).setFill() // 色をセット
+            if SettingsData.color == "blue" {
+                UIColor(red: 0.0, green: 0.7, blue: 1.0, alpha: 1).setFill() // 色をセット
+            } else if SettingsData.color == "orange" {
+                UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1).setFill() // 色をセット
+            } else {
+                UIColor(red: 0.8, green: 1.0, blue: 0.0, alpha: 1).setFill() // 色をセット
+            }
             ballPath.fill()
         }
     }

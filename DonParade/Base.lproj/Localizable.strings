@@ -159,6 +159,12 @@
 "SETTINGS_ADD_ACCOUNT" = "Add account";
 "DIALOG_REMOVE_ACCOUNT" = "Remove account";
 
+// 色設定
+"SETTINGS_COLOR" = "Account Color";
+"COLOR_GREEN" = "Green";
+"COLOR_BLUE" = "Blue";
+"COLOR_ORANGE" = "Orange";
+
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "Mastodon Web";
 "SETTINGS_MYPAGE" = "Go to your page";

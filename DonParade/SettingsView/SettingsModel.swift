@@ -13,12 +13,14 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private enum Category: String {
         case selectAccount = "SETTINGS_SELECT_ACCOUNT"
         case account = "SETTINGS_ACCOUNT"
+        case color = "SETTINGS_COLOR"
         case mypage = "SETTINGS_MASTODON"
         case application = "SETTINGS_APPLICATION"
         case other = "SETTINGS_OTHER"
     }
     private let categoryList: [Category] = [.selectAccount,
                                             .account,
+                                            .color,
                                             .mypage,
                                             .application,
                                             .other]
@@ -32,7 +34,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     }
     private let accountList: [Account] = [.add]
     
-    // 3.マストドン設定
+    // 3.アカウント別設定
+    private enum AccountSettings: String {
+        case color = "SETTINGS_COLOR"
+    }
+    private let accountSettingsList: [AccountSettings] = [.color]
+    
+    // 4.マストドン設定
     private enum MyPage: String {
         case mastodonSite = "SETTINGS_MASTODON_SITE"
         case mypage = "SETTINGS_MYPAGE"
@@ -52,7 +60,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                         //.mute,
                                         //.block]
     
-    // 4.アプリの設定
+    // 5.アプリの設定
     private enum Application: String {
         case tootProtectDefault = "SETTINGS_TOOT_PROTECT_DEFAULT"
         case darkMode = "SETTINGS_DARKMODE"
@@ -84,7 +92,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .showFTLButton,
                                                   .hiragana]
     
-    // 5.その他
+    // 6.その他
     private enum Other: String {
         case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
@@ -112,14 +120,16 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case 1:
             return accountList.count
         case 2:
+            return accountSettingsList.count
+        case 3:
             if SettingsData.accountLocked(accessToken: SettingsData.accessToken ?? "") {
                 return myPageList.count
             } else {
                 return myPageList.count - 1
             }
-        case 3:
-            return applicationList.count
         case 4:
+            return applicationList.count
+        case 5:
             return otherList.count
         default:
             return 0
@@ -164,9 +174,23 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             title = I18n.get(accountList[indexPath.row].rawValue)
             cell.accessoryType = .disclosureIndicator
         case 2:
+            title = I18n.get(accountSettingsList[indexPath.row].rawValue)
+            cell.accessoryType = .disclosureIndicator
+            title = I18n.get(accountSettingsList[indexPath.row].rawValue)
+            switch accountSettingsList[indexPath.row] {
+            case .color:
+                if SettingsData.color == "blue" {
+                    subtitle = I18n.get("COLOR_BLUE")
+                } else if SettingsData.color == "orange" {
+                    subtitle = I18n.get("COLOR_ORANGE")
+                } else {
+                    subtitle = I18n.get("COLOR_GREEN")
+                }
+            }
+        case 3:
             title = I18n.get(myPageList[indexPath.row].rawValue)
             cell.accessoryType = .disclosureIndicator
-        case 3:
+        case 4:
             title = I18n.get(applicationList[indexPath.row].rawValue)
             switch applicationList[indexPath.row] {
             case .tootProtectDefault:
@@ -308,7 +332,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
                 return cell
             }
-        case 4:
+        case 5:
             title = I18n.get(otherList[indexPath.row].rawValue)
             switch otherList[indexPath.row] {
             case .license:
@@ -356,6 +380,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 SettingsViewController.instance?.dismiss(animated: false, completion: nil)
                 MainViewController.instance?.tlAction(nil)
                 MainViewController.instance?.setAccountIcon()
+                ThemeColor.change()
+                MainViewController.instance?.refreshColor()
             }
         case 1:
             switch accountList[indexPath.row] {
@@ -374,6 +400,43 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
             }
         case 2:
+            switch accountSettingsList[indexPath.row] {
+            case .color:
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+                
+                // グリーン
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("COLOR_GREEN"),
+                    style: UIAlertAction.Style.default) { _ in
+                        SettingsData.color = nil
+                        MainViewController.instance?.refreshColor()
+                })
+                
+                // ブルー
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("COLOR_BLUE"),
+                    style: UIAlertAction.Style.default) { _ in
+                        SettingsData.color = "blue"
+                        MainViewController.instance?.refreshColor()
+                })
+                
+                // オレンジ
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("COLOR_ORANGE"),
+                    style: UIAlertAction.Style.default) { _ in
+                        SettingsData.color = "orange"
+                        MainViewController.instance?.refreshColor()
+                })
+                
+                // キャンセル
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("BUTTON_CANCEL"),
+                    style: UIAlertAction.Style.cancel) { _ in
+                })
+                
+                UIUtils.getFrontViewController()?.present(alertController, animated: true, completion: nil)
+            }
+        case 3:
             switch myPageList[indexPath.row] {
             case .mastodonSite:
                 guard let url = URL(string: "https://\(SettingsData.hostName ?? "")") else { return }
@@ -397,7 +460,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             case .followRequest:
                 ShowMyAnyList.showFollowRequestList(rootVc: SettingsViewController.instance!)
             }
-        case 3:
+        case 4:
             switch applicationList[indexPath.row] {
             case .tootProtectDefault:
                 SettingsSelectProtectMode.showActionSheet() { mode in
@@ -407,7 +470,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             default:
                 break
             }
-        case 4:
+        case 5:
             switch otherList[indexPath.row] {
             case .license:
                 guard let path = Bundle.main.path(forResource: "License", ofType: "text") else { return }

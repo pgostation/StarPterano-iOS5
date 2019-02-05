@@ -73,13 +73,15 @@ final class MainViewController: MyViewController {
         TimeLineView.clearAudio()
     }
     
-    func refreshColor() {
+    func refreshColor(noReload: Bool = false) {
         guard let view = self.view as? MainView else { return }
         
         view.refreshColor()
         view.setNeedsLayout()
         
         self.setButtonNameAndBorder()
+        
+        if noReload { return }
         
         if let tlView = self.timelineViewController?.view as? TimeLineView {
             tlView.reloadData()
@@ -428,6 +430,8 @@ final class MainViewController: MyViewController {
             
             setButtonNameAndBorder()
             setAccountIcon()
+            ThemeColor.change()
+            MainViewController.instance?.refreshColor(noReload: true)
         }
         
         // タイムラインビューを入れる
