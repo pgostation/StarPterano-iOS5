@@ -510,8 +510,14 @@ final class SettingsData {
         }
         list.insert(key, at: 0)
         
-        if list.count > 16 {
-            list.remove(at: 16)
+        // 画面の2列に収まる数を超えたら削除
+        let buttonSize: CGFloat = 22 + SettingsData.fontSize
+        let margin: CGFloat = 2
+        let screenBounds = UIScreen.main.bounds
+        let xCount = Int(floor(screenBounds.width / (buttonSize + margin))) // ボタンの横に並ぶ数
+        
+        if list.count > xCount * 2 {
+            list.remove(at: xCount * 2)
         }
         
         let str = list.joined(separator: "\n")

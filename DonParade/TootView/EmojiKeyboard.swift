@@ -225,6 +225,7 @@ private final class EmojiInputScrollView: UIScrollView {
     private var emojiButtons: [EmojiButton] = []
     private var hiddenEmojiButtons: [EmojiButton] = []
     var searchText: String?
+    private let separatorView = UIView()
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -247,6 +248,9 @@ private final class EmojiInputScrollView: UIScrollView {
             
             retry(count: 0)
         }
+        
+        self.addSubview(self.separatorView)
+        self.separatorView.backgroundColor = UIColor.gray.withAlphaComponent(0.4)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -415,7 +419,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
         
-        if let recentEmojiButtons = recentEmojiButtons {
+        if let recentEmojiButtons = recentEmojiButtons, recentYCount > 0 {
             for y in 0..<Int(recentYCount) {
                 for x in 0..<Int(xCount) {
                     let index = y * Int(xCount) + x
@@ -427,6 +431,16 @@ private final class EmojiInputScrollView: UIScrollView {
                                           height: buttonSize)
                 }
             }
+            
+            self.separatorView.frame = CGRect(x: 0,
+                                              y: recentYCount * (buttonSize + margin) + 2,
+                                              width: screenBounds.width,
+                                              height: 8)
+        } else {
+            self.separatorView.frame = CGRect(x: 0,
+                                              y: -100,
+                                              width: 0,
+                                              height: 0)
         }
         
         for y in 0..<Int(yCount) {
