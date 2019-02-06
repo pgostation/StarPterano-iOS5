@@ -410,6 +410,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     style: UIAlertAction.Style.default) { _ in
                         SettingsData.color = nil
                         MainViewController.instance?.refreshColor()
+                        tableView.reloadData()
                 })
                 
                 // ブルー
@@ -418,6 +419,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     style: UIAlertAction.Style.default) { _ in
                         SettingsData.color = "blue"
                         MainViewController.instance?.refreshColor()
+                        tableView.reloadData()
                 })
                 
                 // オレンジ
@@ -426,6 +428,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     style: UIAlertAction.Style.default) { _ in
                         SettingsData.color = "orange"
                         MainViewController.instance?.refreshColor()
+                        tableView.reloadData()
                 })
                 
                 // キャンセル
@@ -502,6 +505,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                 for url in urls ?? [] {
                                     try? FileManager.default.removeItem(at: url)
                                 }
+                                tableView.reloadData()
                 })
             }
         default:
