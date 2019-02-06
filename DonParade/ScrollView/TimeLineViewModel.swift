@@ -1639,7 +1639,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         }
         
         let controller = SFSafariViewController(url: Url)
-        MainViewController.instance?.present(controller, animated: true)
+        UIUtils.getFrontViewController()?.present(controller, animated: true)
         
         return false
     }

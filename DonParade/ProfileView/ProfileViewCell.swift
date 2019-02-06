@@ -557,7 +557,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
     // UITextViewのリンクタップ時の処理
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
         let controller = SFSafariViewController(url: URL)
-        MainViewController.instance?.present(controller, animated: true)
+        UIUtils.getFrontViewController()?.present(controller, animated: true)
         
         return false
     }

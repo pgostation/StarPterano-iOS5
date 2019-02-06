@@ -174,7 +174,7 @@ final class CardView: UIView {
     @objc func tapAction() {
         if let url = self.url {
             let controller = SFSafariViewController(url: url)
-            MainViewController.instance?.present(controller, animated: true)
+            UIUtils.getFrontViewController()?.present(controller, animated: true)
         }
     }
     
