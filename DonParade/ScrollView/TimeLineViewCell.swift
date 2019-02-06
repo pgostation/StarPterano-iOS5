@@ -137,9 +137,12 @@ final class TimeLineViewCell: UITableViewCell {
     override func prepareForReuse() {
         self.id = ""
         self.showDetail = false
-        while let apngView = self.messageView?.viewWithTag(5555) as? APNGImageView {
-            apngView.stopAnimating()
-            apngView.removeFromSuperview()
+        while let apngBackView = self.messageView?.viewWithTag(5555) {
+            if let apngView = apngBackView.subviews.first as? APNGImageView {
+                apngView.stopAnimating()
+                apngView.removeFromSuperview()
+            }
+            apngBackView.removeFromSuperview()
         }
         self.messageView?.removeFromSuperview()
         self.messageView = nil

@@ -678,9 +678,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let y = cell.isMiniView == .superMini ? -9 : cell.detailDateLabel?.frame.maxY ?? cell.spolerTextLabel?.frame.maxY ?? ((cell.isMiniView != .normal ? -9 : 5) + SettingsData.fontSize)
             messageView.frame.origin.y = y
         })
-        while let apngView = messageView.viewWithTag(5555) as? APNGImageView {
-            apngView.stopAnimating()
-            apngView.removeFromSuperview()
+        while let apngBackView = messageView.viewWithTag(5555) {
+            if let apngView = apngBackView.subviews.first as? APNGImageView {
+                apngView.stopAnimating()
+                apngView.removeFromSuperview()
+            }
+            apngBackView.removeFromSuperview()
         }
         
         if data.id == nil && (timelineView.type != .user && timelineView.type != .mentions) {
@@ -719,20 +722,26 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         if emoji["shortcode"] as? String == data.1 {
                             APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
                                 if image.frameCount <= 1 { return }
-                                let apngView = APNGImageView(image: image)
-                                apngView.tag = 5555
-                                apngView.contentMode = .scaleAspectFill
-                                apngView.autoStartAnimation = true
-                                apngView.backgroundColor = cell.backgroundColor
+                                let backView = UIView()
+                                backView.tag = 5555
+                                backView.backgroundColor = cell.backgroundColor
                                 DispatchQueue.main.async {
-                                    apngView.backgroundColor = cell.backgroundColor
+                                    backView.backgroundColor = cell.backgroundColor
                                 }
+                                let apngView = APNGImageView(image: image)
+                                apngView.autoStartAnimation = true
                                 let size = min(position.size.width, position.size.height)
-                                apngView.frame = CGRect(x: position.origin.x,
+                                backView.frame = CGRect(x: position.origin.x,
                                                         y: position.origin.y + 1,
                                                         width: size,
                                                         height: size + 4)
-                                messageView.addSubview(apngView)
+                                let height = image.size.height / image.size.width * size
+                                apngView.frame = CGRect(x: 0,
+                                                        y: 2 + (size - height) / 2,
+                                                        width: size,
+                                                        height: height)
+                                backView.addSubview(apngView)
+                                messageView.addSubview(backView)
                             }
                             break
                         }
