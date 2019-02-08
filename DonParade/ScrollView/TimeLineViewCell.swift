@@ -191,6 +191,15 @@ final class TimeLineViewCell: UITableViewCell {
             self.favoritedLabel?.removeFromSuperview()
             self.detailButton?.removeFromSuperview()
             self.applicationLabel?.removeFromSuperview()
+            
+            self.replyButton = nil
+            self.repliedLabel = nil
+            self.boostButton = nil
+            self.boostedLabel = nil
+            self.favoriteButton = nil
+            self.favoritedLabel = nil
+            self.detailButton = nil
+            self.applicationLabel = nil
         }
         self.iconView?.removeFromSuperview()
         self.iconView?.image = nil
