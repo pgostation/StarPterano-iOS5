@@ -493,8 +493,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if self.selectedRow == indexPath.row {
             // 詳細表示の場合
         } else {
-            if messageView.frame.size.height >= 200 - 28 {
-                messageView.frame.size.height = 180 - 28
+            if messageView.frame.size.height >= 230 - 28 {
+                messageView.frame.size.height = 190 - 28
                 isContinue = true
             }
         }
