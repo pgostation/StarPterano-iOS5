@@ -284,7 +284,13 @@ private final class EmojiInputScrollView: UIScrollView {
         // 絵文字ボタンの追加
         for (index, emoji) in list.enumerated() {
             let button = EmojiButton(key: emoji.short_code ?? "")
-            if SettingsData.useAnimation && emoji.url?.hasSuffix(".png") == true {
+            
+            // 静的イメージ
+            ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
+                button.setImage(image, for: .normal)
+            }
+            
+            if SettingsData.useAnimation {
                 APNGImageCache.image(urlStr: emoji.url) { image in
                     if image.frameCount > 1 {
                         // APNGのビューを貼り付ける
@@ -299,16 +305,8 @@ private final class EmojiInputScrollView: UIScrollView {
                                                  width: buttonSize,
                                                  height: buttonSize)
                         button.addSubview(imageView)
-                    } else {
-                        ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
-                            button.setImage(image, for: .normal)
-                        }
+                        button.setImage(nil, for: .normal)
                     }
-                }
-            } else {
-                // APNG以外
-                ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
-                    button.setImage(image, for: .normal)
                 }
             }
             button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
