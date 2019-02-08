@@ -40,6 +40,8 @@ final class TimeLineViewCell: UITableViewCell {
     var detailDateLabel: UILabel?
     var DMBarLeft: UIView?
     var DMBarRight: UIView?
+    var pinnedView: UILabel?
+    var rightFavButton: UIButton?
     
     // 詳細ビュー
     var showDetail = false
@@ -201,6 +203,10 @@ final class TimeLineViewCell: UITableViewCell {
         }
         self.cardView?.removeFromSuperview()
         self.cardView = nil
+        self.pinnedView?.removeFromSuperview()
+        self.pinnedView = nil
+        self.rightFavButton?.removeFromSuperview()
+        self.rightFavButton = nil
         
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
@@ -808,6 +814,11 @@ final class TimeLineViewCell: UITableViewCell {
                                           height: SettingsData.fontSize)
         }
         
+        self.pinnedView?.frame = CGRect(x: screenBounds.width - 20,
+                                        y: self.dateLabel.frame.maxY,
+                                        width: 20,
+                                        height: 16)
+        
         self.detailDateLabel?.frame = CGRect(x: 50,
                                              y: 22,
                                              width: screenBounds.width - 55,
@@ -974,6 +985,17 @@ final class TimeLineViewCell: UITableViewCell {
                 top += SettingsData.fontSize + 4
             }
         } else {
+            if let rightFavButton = self.rightFavButton {
+                if isMiniView == .superMini {
+                    rightFavButton.frame.origin.x = -100
+                } else {
+                    rightFavButton.frame = CGRect(x: screenBounds.width - 32,
+                                                  y: (self.messageView?.frame.midY ?? 40) - 18,
+                                                  width: 32,
+                                                  height: 36)
+                }
+            }
+            
             if let cardView = self.cardView {
                 let top = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
                 cardView.frame.origin.y = top + 5

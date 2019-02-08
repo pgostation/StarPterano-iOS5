@@ -840,6 +840,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
+        if cell.isPinned {
+            cell.pinnedView = UILabel()
+            cell.pinnedView?.text = "📌"
+            cell.pinnedView?.font = UIFont.systemFont(ofSize: 12)
+            cell.addSubview(cell.pinnedView!)
+        }
+        
         // 詳細表示の場合
         if self.selectedRow == indexPath.row {
             cell.showDetail = true
@@ -940,6 +947,17 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         } else {
             setCellColor(cell: cell)
+            
+            // 右側のお気に入りボタン
+            cell.rightFavButton = UIButton()
+            cell.rightFavButton?.setTitle("★", for: .normal)
+            if data.favourited == 1 {
+                cell.rightFavButton?.setTitleColor(ThemeColor.detailButtonsHiliteColor, for: .normal)
+            } else {
+                cell.rightFavButton?.setTitleColor(ThemeColor.detailButtonsColor.withAlphaComponent(0.4), for: .normal)
+            }
+            cell.rightFavButton?.addTarget(cell, action: #selector(cell.favoriteAction), for: .touchUpInside)
+            cell.addSubview(cell.rightFavButton!)
         }
         
         if hasCard {
