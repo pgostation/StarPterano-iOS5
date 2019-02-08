@@ -250,9 +250,10 @@ final class MainView: UIView {
                                                height: buttonHeight)
         }
         
-        accountButton.frame = CGRect(x: screenBounds.width - (SettingsData.iconSize - 2),
+        let iconSize = min(36, SettingsData.iconSize - 2)
+        accountButton.frame = CGRect(x: screenBounds.width - iconSize,
                                      y: UIUtils.statusBarHeight() + 21,
-                                     width: SettingsData.iconSize - 2,
-                                     height: SettingsData.iconSize - 2)
+                                     width: iconSize,
+                                     height: iconSize)
     }
 }
