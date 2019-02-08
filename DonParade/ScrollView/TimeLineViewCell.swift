@@ -997,6 +997,11 @@ final class TimeLineViewCell: UITableViewCell {
             if let rightFavButton = self.rightFavButton {
                 if isMiniView == .superMini {
                     rightFavButton.frame.origin.x = -100
+                } else if isMiniView == .miniView {
+                    rightFavButton.frame = CGRect(x: screenBounds.width - 30,
+                                                  y: 16,
+                                                  width: 32,
+                                                  height: 36)
                 } else {
                     rightFavButton.frame = CGRect(x: screenBounds.width - 32,
                                                   y: (self.messageView?.frame.midY ?? 40) - 18,

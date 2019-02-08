@@ -134,7 +134,7 @@ final class TimeLineView: UITableView {
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=100\(sinceIdStr)")
         case .mentions:
-            if let id = model.getFirstTootId(), id != "" {
+            if let id = self.model.getFirstTootId(force: true), id != "" {
                 self.refreshContext(id: id)
             }
             return

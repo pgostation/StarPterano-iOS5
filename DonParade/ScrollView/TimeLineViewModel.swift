@@ -36,9 +36,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     // 一番新しいトゥートのID
-    func getFirstTootId() -> String? {
+    func getFirstTootId(force: Bool = false) -> String? {
         for data in list {
-            if !data.isMerge {
+            if !data.isMerge || force {
                 return data.id
             }
         }
