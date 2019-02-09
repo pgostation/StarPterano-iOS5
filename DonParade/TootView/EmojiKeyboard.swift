@@ -287,10 +287,12 @@ private final class EmojiInputScrollView: UIScrollView {
             
             // 静的イメージ
             ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
-                button.setImage(image, for: .normal)
-                button.imageView?.contentMode = .scaleAspectFit
-                button.contentHorizontalAlignment = .fill
-                button.contentVerticalAlignment = .fill
+                if button.viewWithTag(5555) == nil {
+                    button.setImage(image, for: .normal)
+                    button.imageView?.contentMode = .scaleAspectFit
+                    button.contentHorizontalAlignment = .fill
+                    button.contentVerticalAlignment = .fill
+                }
             }
             
             if SettingsData.useAnimation {
