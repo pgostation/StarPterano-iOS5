@@ -111,6 +111,7 @@ private class HelperView: UIView {
         var list: [String] = []
         
         // 最近使った宛先アカウント
+        tmpList += SettingsData.recentMentionList
         
         // フォローしているアカウント
         tmpList += SettingsData.followingList(accessToken: SettingsData.accessToken ?? "")
