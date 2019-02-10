@@ -116,18 +116,29 @@ private class HelperView: UIView {
         // フォローしているアカウント
         tmpList += SettingsData.followingList(accessToken: SettingsData.accessToken ?? "")
         
-        // 一致するアカウント20件をリストアップ
+        // まずは前方一致するアカウントをリストアップ
         for data in tmpList {
             if list.count >= 20 { break }
             
-            if text == "" || data.contains(text) {
+            if text == "" || data.hasPrefix(text) {
+                if list.contains(data) { continue }
+                list.append(data)
+            }
+        }
+        
+        // 一部でも一致するアカウントをリストアップ
+        for data in tmpList {
+            if list.count >= 20 { break }
+            
+            if data.contains(text) {
+                if list.contains(data) { continue }
                 list.append(data)
             }
         }
         
         // リストアップしたアカウントから、タップラベルを追加する
         for data in list {
-            let tapView = TapView(text: "@" + data + " ", textView: textView, location: location)
+            let tapView = TapView(text: "@" + data + " ", trueText: data, textView: textView, location: location)
             
             tapView.label.text = "@" + data
             tapView.label.font = UIFont.systemFont(ofSize: 16)
@@ -169,7 +180,7 @@ private class HelperView: UIView {
         
         // リストアップした絵文字から、タップラベルを追加する
         for emoji in list {
-            let tapView = TapView(text: "\u{200b}:" + (emoji.short_code ?? "") + ":\u{200b}", textView: textView, location: location)
+            let tapView = TapView(text: "\u{200b}:" + (emoji.short_code ?? "") + ":\u{200b}", trueText: (emoji.short_code ?? ""),  textView: textView, location: location)
             ImageCache.image(urlStr: emoji.url, isTemp: true, isSmall: true) { image in
                 tapView.iconView.image = image
             }
@@ -217,18 +228,29 @@ private class HelperView: UIView {
         // 最近TLで見たハッシュタグ
         tmpList += HashtagCache.recentHashtagList
         
-        // 一致するハッシュタグ20件をリストアップ
+        // まずは前方一致するハッシュタグをリストアップ
         for data in tmpList {
             if list.count >= 20 { break }
             
-            if text == "" || data.contains(text) {
+            if text == "" || data.hasPrefix(text) {
+                if list.contains(data) { continue }
+                list.append(data)
+            }
+        }
+        
+        // 一部でも一致するハッシュタグをリストアップ
+        for data in tmpList {
+            if list.count >= 20 { break }
+            
+            if data.contains(text) {
+                if list.contains(data) { continue }
                 list.append(data)
             }
         }
         
         // リストアップしたハッシュタグから、タップラベルを追加する
         for data in list {
-            let tapView = TapView(text: "#" + data + " ", textView: textView, location: location)
+            let tapView = TapView(text: "#" + data + " ", trueText: data, textView: textView, location: location)
             
             tapView.label.text = "#" + data
             tapView.label.font = UIFont.systemFont(ofSize: 16)
@@ -295,11 +317,13 @@ private class TapView: UIButton {
     let iconView = UIImageView()
     let label = UILabel()
     private let text: String
+    private let trueText: String
     private weak var textView: UITextView?
     private let location: Int
     
-    init(text: String, textView: UITextView?, location: Int) {
+    init(text: String, trueText: String, textView: UITextView?, location: Int) {
         self.text = text
+        self.trueText = trueText
         self.textView = textView
         self.location = location
         
@@ -330,13 +354,13 @@ private class TapView: UIButton {
         textView.insertText(self.text)
         
         if self.text.prefix(1) == "\u{200b}" {
-            SettingsData.addRecentEmoji(key: label.text ?? "")
+            SettingsData.addRecentEmoji(key: trueText)
         }
         else if self.text.prefix(1) == "#" {
-            SettingsData.addRecentHashtag(key: label.text ?? "")
+            SettingsData.addRecentHashtag(key: trueText)
         }
         else if self.text.prefix(1) == "@" {
-            SettingsData.addRecentMention(key: label.text ?? "")
+            SettingsData.addRecentMention(key: trueText)
         }
         
         (self.superview?.superview as? HelperView)?.closeAction()
