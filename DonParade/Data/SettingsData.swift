@@ -538,6 +538,68 @@ final class SettingsData {
         return array
     }
     
+    // 最近使ったハッシュタグに追加
+    static func addRecentHashtag(key: String) {
+        var list = recentHashtagList
+        if list.count > 0 && list[0] == key { return }
+        if let index = list.firstIndex(of: key) {
+            list.remove(at: index)
+        }
+        list.insert(key, at: 0)
+        
+        if list.count > 16 {
+            list.remove(at: 16)
+        }
+        
+        let str = list.joined(separator: "\n")
+        
+        defaults.set(str, forKey: "recentHashtagList_" + (SettingsData.accessToken ?? ""))
+    }
+    
+    // 最近使ったハッシュタグを取得
+    static var recentHashtagList: [String] {
+        let str = defaults.string(forKey: "recentHashtagList_" + (SettingsData.accessToken ?? ""))
+        
+        let tmpArray = (str ?? "").split(separator: "\n")
+        var array: [String] = []
+        for substr in tmpArray {
+            array.append(String(substr))
+        }
+        
+        return array
+    }
+    
+    // 最近メンションしたアカウントに追加
+    static func addRecentMention(key: String) {
+        var list = recentMentionList
+        if list.count > 0 && list[0] == key { return }
+        if let index = list.firstIndex(of: key) {
+            list.remove(at: index)
+        }
+        list.insert(key, at: 0)
+        
+        if list.count > 16 {
+            list.remove(at: 16)
+        }
+        
+        let str = list.joined(separator: "\n")
+        
+        defaults.set(str, forKey: "recentMentionList_" + (SettingsData.accessToken ?? ""))
+    }
+    
+    // 最近メンションしたアカウントを取得
+    static var recentMentionList: [String] {
+        let str = defaults.string(forKey: "recentMentionList_" + (SettingsData.accessToken ?? ""))
+        
+        let tmpArray = (str ?? "").split(separator: "\n")
+        var array: [String] = []
+        for substr in tmpArray {
+            array.append(String(substr))
+        }
+        
+        return array
+    }
+    
     // ひらがな変換するかどうか
     static var hiraganaMode: Bool {
         get {
@@ -575,5 +637,103 @@ final class SettingsData {
             
             ThemeColor.change()
         }
+    }
+    
+    // フォロー、フォロワーの情報をたまにチェックする
+    static func checkFFAccounts(accessToken: String) {
+        // 1週間以内にチェックしていたら、何もしない
+        do {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            
+            if let lastDateStr = defaults.string(forKey: "checkFFDate_\(accessToken)") {
+                if let date = dateFormatter.date(from: lastDateStr), date.timeIntervalSinceNow >= -7 * 86400 {
+                    return
+                }
+            }
+            
+            defaults.set(dateFormatter.string(from: Date()), forKey: "checkFFDate_\(accessToken)")
+        }
+        
+        // フォローイングの情報をチェック
+        checkFollowing(accessToken: accessToken, sinceId: nil)
+    }
+    
+    // フォローイングの情報をチェック
+    private static func checkFollowing(accessToken: String, sinceId: String?) {
+        if SettingsData.accessToken != accessToken { return }
+        
+        var sinceIdStr = ""
+        if let sinceId = sinceId {
+            sinceIdStr = "?since_id=\(sinceId)"
+        }
+        
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/accounts/\(SettingsData.accountNumberID(accessToken: accessToken) ?? "")/following" + sinceIdStr) else { return }
+        
+        try? MastodonRequest.get(url: url) { (data, response, error) in
+            guard let data = data else { return }
+            
+            do {
+                guard let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? Array<AnyObject> else { return }
+                
+                DispatchQueue.global().async {
+                    var lastId: Int? = nil
+                    
+                    for json in responseJson {
+                        if let accountJson = json as? [String: Any] {
+                            let accountData = AnalyzeJson.analyzeAccountJson(account: accountJson)
+                            SettingsData.addFollowingList(accessToken: accessToken, id: accountData.acct)
+                            
+                            if let numId = Int(accountData.id ?? "") {
+                                if let lastNumId = lastId {
+                                    if numId > lastNumId {
+                                        lastId = numId
+                                    }
+                                } else {
+                                    lastId = numId
+                                }
+                            }
+                        }
+                    }
+                    
+                    if let lastId = lastId {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            checkFollowing(accessToken: accessToken, sinceId: "\(lastId)")
+                        }
+                    }
+                }
+                
+            } catch { }
+        }
+    }
+    
+    // フォロー中リストデータに追加
+    private static let followingDefaults = UserDefaults(suiteName: "FollowingList")!
+    static func addFollowingList(accessToken: String, id: String?) {
+        guard let id = id else { return }
+        
+        var list = followingList(accessToken: accessToken)
+        if list.count > 0 && list[0] == id { return }
+        if let index = list.firstIndex(of: id) {
+            list.remove(at: index)
+        }
+        list.insert(id, at: 0)
+        
+        let str = list.joined(separator: "\n")
+        
+        followingDefaults.set(str, forKey: "followingList_\(accessToken)")
+    }
+    
+    // フォロー中リストデータを取得
+    static func followingList(accessToken: String) -> [String] {
+        let str = followingDefaults.string(forKey: "followingList_" + (accessToken))
+        
+        let tmpArray = (str ?? "").split(separator: "\n")
+        var array: [String] = []
+        for substr in tmpArray {
+            array.append(String(substr))
+        }
+        
+        return array
     }
 }

@@ -79,6 +79,11 @@ final class TimeLineViewController: MyViewController {
                             }
                         }
                     })
+                    
+                    // フォロー, フォロワーの情報をたまにチェックする
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        SettingsData.checkFFAccounts(accessToken: accessToken)
+                    }
                 }
                 
                 if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7.0rc1以上

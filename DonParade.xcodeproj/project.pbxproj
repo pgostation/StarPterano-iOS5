@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1205B45B220F0915007BF7A1 /* HelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205B45A220F0915007BF7A1 /* HelperView.swift */; };
+		1205B45D220FEB50007BF7A1 /* HashtagCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205B45C220FEB50007BF7A1 /* HashtagCache.swift */; };
 		121764C82167AB830017E76A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 121764CA2167AB830017E76A /* InfoPlist.strings */; };
 		121764CD216846AB0017E76A /* MovieCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764CC216846AB0017E76A /* MovieCache.swift */; };
 		121764D12168B24E0017E76A /* FollowRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764D02168B24E0017E76A /* FollowRequestViewController.swift */; };
@@ -78,6 +80,8 @@
 
 /* Begin PBXFileReference section */
 		07B719C767E8F3CB26EC8954 /* Pods-DonParade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonParade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DonParade/Pods-DonParade.debug.xcconfig"; sourceTree = "<group>"; };
+		1205B45A220F0915007BF7A1 /* HelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperView.swift; sourceTree = "<group>"; };
+		1205B45C220FEB50007BF7A1 /* HashtagCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCache.swift; sourceTree = "<group>"; };
 		121764C92167AB830017E76A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CB2167AB890017E76A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CC216846AB0017E76A /* MovieCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCache.swift; sourceTree = "<group>"; };
@@ -345,6 +349,7 @@
 				127A37BF2157C63500347880 /* ImageUpload.swift */,
 				1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */,
 				12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */,
+				1205B45A220F0915007BF7A1 /* HelperView.swift */,
 			);
 			path = TootView;
 			sourceTree = "<group>";
@@ -376,6 +381,7 @@
 				12F9AC98214CA9B100E9E508 /* SettingsData.swift */,
 				12CD0262214F49E000133A95 /* EmojiData.swift */,
 				12B8B4272165CD2B00869496 /* ListData.swift */,
+				1205B45C220FEB50007BF7A1 /* HashtagCache.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -557,10 +563,12 @@
 				12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */,
 				1255A976215BBD2D00DE1CF3 /* ImageCheckView.swift in Sources */,
 				12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */,
+				1205B45B220F0915007BF7A1 /* HelperView.swift in Sources */,
 				1255A96C215A6A1600DE1CF3 /* MastodonStreaming.swift in Sources */,
 				127A37B52157250700347880 /* ListSelectViewController.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
 				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
+				1205B45D220FEB50007BF7A1 /* HashtagCache.swift in Sources */,
 				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,
 				129771E321624204003728FC /* WideTouchButton.swift in Sources */,
 				1286DF5D21549A81008FFFAC /* SettingsSwitchCell.swift in Sources */,

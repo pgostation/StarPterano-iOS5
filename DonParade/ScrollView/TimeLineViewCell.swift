@@ -324,6 +324,10 @@ final class TimeLineViewCell: UITableViewCell {
                 if let vc = TootViewController.instance, let view = vc.view as? TootView {
                     view.textField.text = "@\(self.idLabel.text ?? "") "
                 }
+                
+                if let acctStr = self.idLabel.text {
+                    SettingsData.addRecentMention(key: acctStr)
+                }
             }
         }
     }

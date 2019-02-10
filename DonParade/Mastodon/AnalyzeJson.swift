@@ -228,7 +228,18 @@ final class AnalyzeJson {
             spoiler_text = reblog?["spoiler_text"] as? String
         }
         
-        //let tags = json["tags"] as? [String]
+        let tags: [[String: String]]?
+        if reblog_acct == nil {
+            let tmp = json["tags"] as? [[String: String]]
+            if tmp != nil && tmp!.count > 0 {
+                tags = tmp
+            } else {
+                tags = nil
+            }
+        } else {
+            tags = reblog?["tags"] as? [[String: String]]
+        }
+        
         //let uri = json["uri"] as? String
         
         let url: String?
@@ -284,7 +295,7 @@ final class AnalyzeJson {
                                replies_count: replies_count,
                                sensitive: sensitive,
                                spoiler_text: spoiler_text,
-                               //tags: tags,
+                               tags: tags,
                                //uri: uri,
                                url: url,
                                visibility: visibility,
@@ -410,6 +421,7 @@ final class AnalyzeJson {
                            replies_count: nil,
                            sensitive: nil,
                            spoiler_text: nil,
+                           tags: nil,
                            url: nil,
                            visibility: nil,
                            isMerge: false)
@@ -463,7 +475,7 @@ final class AnalyzeJson {
         let replies_count: Int?
         let sensitive: Int?
         let spoiler_text: String?
-        //let tags: [String]?
+        let tags: [[String: String]]?
         //let uri: String?
         let url: String?
         let visibility: String?

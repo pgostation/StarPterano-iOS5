@@ -766,6 +766,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.accountData = account
         cell.visibility = data.visibility
         
+        for dict in data.tags ?? [[:]] {
+            if let tag = dict["name"] {
+                HashtagCache.addHashtagList(text: tag)
+            }
+        }
+        
         if cell.isMiniView != .normal && self.selectedRow != indexPath.row {
             (messageView as? UILabel)?.numberOfLines = 1
             messageView.sizeToFit()

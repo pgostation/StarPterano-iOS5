@@ -100,6 +100,10 @@ final class NotificationViewController: MyViewController {
                             var account: AnalyzeJson.AccountData? = nil
                             if let accountJson = json["account"] as? [String: Any] {
                                 account = AnalyzeJson.analyzeAccountJson(account: accountJson)
+                                
+                                if let acct = account?.acct, acct != "" {
+                                    SettingsData.addRecentMention(key: acct)
+                                }
                             }
                             
                             var status: AnalyzeJson.ContentData? = nil

@@ -192,6 +192,19 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                                 view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
                             }
                         }
+                        
+                        // 最近使用したハッシュタグに追加
+                        do {
+                            if let responseJson = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] {
+                                var acct = ""
+                                let contentData = AnalyzeJson.analyzeJson(view: nil, model: nil, json: responseJson, acct: &acct)
+                                for dict in contentData.tags ?? [[:]] {
+                                    if let tag = dict["name"] {
+                                        SettingsData.addRecentHashtag(key: tag)
+                                    }
+                                }
+                            }
+                        } catch {}
                     } else {
                         Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
                     }
@@ -354,7 +367,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
     
     // テキストビューの高さを変化させる、絵文字にする
     func textViewDidChange(_ textView: UITextView) {
-        if textView.inputView is EmojiKeyboard || textView.text.contains(" :"){
+        if textView.inputView is EmojiKeyboard || textView.text.contains(" :") {
             var emojis: [[String: Any]] = []
             
             for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
@@ -390,14 +403,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         do {
             let text: String
             if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
-                text = DecodeToot.encodeEmoji(attributedText: textField.attributedText, textStorage: NSTextStorage(attributedString: textField.attributedText))
+                text = DecodeToot.encodeEmoji(attributedText: textField.attributedText, textStorage: textField.textStorage)
             } else {
                 text = ""
             }
             
             let spoilerText: String
             if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
-                spoilerText = DecodeToot.encodeEmoji(attributedText: spoilerTextField.attributedText, textStorage: NSTextStorage(attributedString: spoilerTextField.attributedText))
+                spoilerText = DecodeToot.encodeEmoji(attributedText: spoilerTextField.attributedText, textStorage: spoilerTextField.textStorage)
             } else {
                 spoilerText = ""
             }
@@ -424,5 +437,49 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         view.imageCheckView.isHidden = true
         view.setNeedsLayout()
+    }
+    
+    private static var helperMode = HelperViewManager.HelperMode.none
+    private static var helperRange: NSRange?
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            if text == ":" {
+                TootViewController.helperMode = .emoji
+                TootViewController.helperRange = range
+                HelperViewManager.show(mode: TootViewController.helperMode, textView: textView, location: TootViewController.helperRange?.location ?? 0)
+            }
+            else if text == "@" {
+                TootViewController.helperMode = .account
+                TootViewController.helperRange = range
+                HelperViewManager.show(mode: TootViewController.helperMode, textView: textView, location: TootViewController.helperRange?.location ?? 0)
+            }
+            else if text == "#" {
+                TootViewController.helperMode = .hashtag
+                TootViewController.helperRange = range
+                HelperViewManager.show(mode: TootViewController.helperMode, textView: textView, location: TootViewController.helperRange?.location ?? 0)
+            }
+            else if text == " " || text == "\n" {
+                TootViewController.helperMode = .none
+                TootViewController.helperRange = nil
+                HelperViewManager.close()
+            }
+            else if text == "" {
+                if let location = TootViewController.helperRange?.location {
+                    if textView.text.prefix(location + 1).suffix(1) != TootViewController.helperMode.rawValue {
+                        TootViewController.helperMode = .none
+                        TootViewController.helperRange = nil
+                        HelperViewManager.close()
+                    } else {
+                        HelperViewManager.change()
+                    }
+                }
+            }
+            else {
+                HelperViewManager.change()
+            }
+        }
+        
+        return true
     }
 }

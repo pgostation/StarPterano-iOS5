@@ -301,9 +301,7 @@ private final class EmojiInputScrollView: UIScrollView {
                         // APNGのビューを貼り付ける
                         let imageView = APNGImageView(image: image)
                         imageView.tag = 5555
-                        if image.frameCount > 1 {
-                            imageView.autoStartAnimation = true
-                        }
+                        imageView.autoStartAnimation = true
                         let buttonSize: CGFloat = 24 + SettingsData.fontSize
                         imageView.frame = CGRect(x: 0,
                                                  y: 0,

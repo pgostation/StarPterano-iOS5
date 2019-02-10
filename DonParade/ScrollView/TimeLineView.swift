@@ -587,6 +587,10 @@ final class TimeLineView: UITableView {
                         DispatchQueue.main.async {
                             strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
                         }
+                        
+                        if acct != "" {
+                            SettingsData.addRecentMention(key: acct)
+                        }
                     }
                 } catch {
                     
