@@ -377,19 +377,15 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             }
             
             let encodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
-            if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
-                textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
-                    textField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
-                    textField.textColor = ThemeColor.messageColor
-                    textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
-                })
-            }
-            else if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
-                spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
-                    spoilerTextField.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
-                    spoilerTextField.textColor = ThemeColor.messageColor
-                    spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
-                })
+            textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
+                textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
+                textView.textColor = ThemeColor.messageColor
+                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let newEncodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
+                if newEncodedText.count == encodedText.count { return }
+                textView.attributedText = DecodeToot.decodeName(name: newEncodedText, emojis: emojis, callback: nil)
             }
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
