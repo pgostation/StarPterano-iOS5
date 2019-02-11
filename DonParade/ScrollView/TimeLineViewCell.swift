@@ -385,9 +385,27 @@ final class TimeLineViewCell: UITableViewCell {
     
     // お気に入りボタンをタップした時の処理
     @objc func favoriteAction() {
-        self.favoriteButton?.isHidden = true
+        let id = self.reblog_id ?? self.id
+        let isFaved = self.isFaved
         
-        tableView?.favoriteAction(id: self.reblog_id ?? self.id, isFaved: self.isFaved)
+        func favAction() {
+            self.favoriteButton?.isHidden = true
+            self.rightFavButton?.isHidden = true
+            
+            tableView?.favoriteAction(id: id, isFaved: isFaved)
+        }
+        
+        if SettingsData.showFavDialog {
+            Dialog.show(message: isFaved ? I18n.get("ALERT_UNFAVORITE") : I18n.get("ALERT_FAVORITE"),
+                        okName: isFaved ? I18n.get("BUTTON_UNFAVORITE") : I18n.get("BUTTON_UNFAVORITE"),
+                        cancelName: I18n.get("BUTTON_CANCEL")) { result in
+                            if result {
+                                favAction()
+                            }
+            }
+        } else {
+            favAction()
+        }
     }
     
     // 「・・・」ボタンをタップした時の処理

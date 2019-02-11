@@ -44,6 +44,10 @@
 "ACTION_DESELECT" = "Deselect";
 "ACTION_PIN" = "Pin this toot";
 "ACTION_UNPIN" = "Unpin this toot";
+"ALERT_FAVORITE" = "Do you favorite this toot?";
+"BUTTON_FAVORITE" = "Favorite";
+"ALERT_UNFAVORITE" = "Do you unfavorite this toot?";
+"BUTTON_UNFAVORITE" = "Unfavorite";
 
 // 何分前
 "DATETIME_NOW" = "now";
@@ -192,6 +196,7 @@
 "SETTINGS_MERGELOCAL" = "Merge home to local TL";
 "SETTINGS_ABSOLUTETIME" = "Use absolute time";
 "SETTINGS_HIRAGANA" = "To hiragana";
+"SETTINGS_SHOWFAVDIALOG" = "Shows on favorite dialog";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

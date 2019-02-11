@@ -44,6 +44,10 @@
 "ACTION_DESELECT" = "選択を解除";
 "ACTION_PIN" = "固定トゥートにする";
 "ACTION_UNPIN" = "固定トゥートを解除する";
+"ALERT_FAVORITE" = "このトゥートをお気に入りにしますか";
+"BUTTON_FAVORITE" = "お気に入り";
+"ALERT_UNFAVORITE" = "このトゥートをお気に入り解除しますか";
+"BUTTON_UNFAVORITE" = "お気に入り解除";
 
 // 何分前
 "DATETIME_NOW" = "今";
@@ -192,6 +196,7 @@
 "SETTINGS_MERGELOCAL" = "ローカルにホームを統合表示";
 "SETTINGS_ABSOLUTETIME" = "絶対時間で表示";
 "SETTINGS_HIRAGANA" = "ひらがなにする";
+"SETTINGS_SHOWFAVDIALOG" = "お気に入り時にダイアログ表示";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";

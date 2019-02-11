@@ -1107,6 +1107,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         triangleView.font = UIFont.systemFont(ofSize: 24)
                         triangleView.sizeToFit()
                         imageView.addSubview(triangleView)
+                        triangleView.center = CGPoint(x: -100, y: 0)
                         DispatchQueue.main.async {
                             triangleView.center = CGPoint(x: imageView.bounds.width / 2, y: imageView.bounds.height / 2)
                         }
