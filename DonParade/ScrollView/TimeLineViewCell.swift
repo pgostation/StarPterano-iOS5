@@ -397,7 +397,7 @@ final class TimeLineViewCell: UITableViewCell {
         
         if SettingsData.showFavDialog {
             Dialog.show(message: isFaved ? I18n.get("ALERT_UNFAVORITE") : I18n.get("ALERT_FAVORITE"),
-                        okName: isFaved ? I18n.get("BUTTON_UNFAVORITE") : I18n.get("BUTTON_UNFAVORITE"),
+                        okName: isFaved ? I18n.get("BUTTON_UNFAVORITE") : I18n.get("BUTTON_FAVORITE"),
                         cancelName: I18n.get("BUTTON_CANCEL")) { result in
                             if result {
                                 favAction()
