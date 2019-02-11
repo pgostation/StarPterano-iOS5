@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1205B45B220F0915007BF7A1 /* HelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205B45A220F0915007BF7A1 /* HelperView.swift */; };
 		1205B45D220FEB50007BF7A1 /* HashtagCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205B45C220FEB50007BF7A1 /* HashtagCache.swift */; };
+		1205B45F2211742A007BF7A1 /* APNGImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1205B45E2211742A007BF7A1 /* APNGImageCache.swift */; };
 		121764C82167AB830017E76A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 121764CA2167AB830017E76A /* InfoPlist.strings */; };
 		121764CD216846AB0017E76A /* MovieCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764CC216846AB0017E76A /* MovieCache.swift */; };
 		121764D12168B24E0017E76A /* FollowRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121764D02168B24E0017E76A /* FollowRequestViewController.swift */; };
@@ -82,6 +83,7 @@
 		07B719C767E8F3CB26EC8954 /* Pods-DonParade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonParade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DonParade/Pods-DonParade.debug.xcconfig"; sourceTree = "<group>"; };
 		1205B45A220F0915007BF7A1 /* HelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperView.swift; sourceTree = "<group>"; };
 		1205B45C220FEB50007BF7A1 /* HashtagCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCache.swift; sourceTree = "<group>"; };
+		1205B45E2211742A007BF7A1 /* APNGImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = APNGImageCache.swift; path = "/Users/takayoshi/Documents/Cocoa練習/StarPterano4-iOS/DonParade/Utils/APNGImageCache.swift"; sourceTree = "<absolute>"; };
 		121764C92167AB830017E76A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CB2167AB890017E76A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		121764CC216846AB0017E76A /* MovieCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCache.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				12F9ACA0214CE18400E9E508 /* I18n.swift */,
 				12F9ACAB214D424D00E9E508 /* UIUtils.swift */,
 				12CD025C214EB24A00133A95 /* ImageCache.swift */,
+				1205B45E2211742A007BF7A1 /* APNGImageCache.swift */,
 				12F6602E215656890049AEE0 /* ImageUtils.swift */,
 				121764CC216846AB0017E76A /* MovieCache.swift */,
 				124CEC262206F49C0018E40D /* TextConverter.swift */,
@@ -531,6 +534,7 @@
 				12F9AC9B214CAB2200E9E508 /* LoginViewController.swift in Sources */,
 				127A37C62158F41A00347880 /* ProfileAction.swift in Sources */,
 				121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */,
+				1205B45F2211742A007BF7A1 /* APNGImageCache.swift in Sources */,
 				1286DF632154F2DA008FFFAC /* SettingsSelectProtectMode.swift in Sources */,
 				12B8B4242164BF0E00869496 /* MainView.swift in Sources */,
 				121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */,

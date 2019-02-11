@@ -720,8 +720,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     
                     for emoji in emojis {
                         if emoji["shortcode"] as? String == data.1 {
-                            APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
-                                if image.frameCount <= 1 { return }
+                            let urlStr = emoji["url"] as? String
+                            if NormalPNGFileList.isNormal(urlStr: urlStr) { continue }
+                            APNGImageCache.image(urlStr: urlStr) { image in
+                                if image.frameCount <= 1 {
+                                    NormalPNGFileList.add(urlStr: urlStr)
+                                    return
+                                }
                                 let backView = UIView()
                                 backView.tag = 5555
                                 backView.backgroundColor = cell.backgroundColor

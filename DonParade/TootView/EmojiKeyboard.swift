@@ -296,8 +296,13 @@ private final class EmojiInputScrollView: UIScrollView {
             }
             
             if SettingsData.useAnimation {
-                APNGImageCache.image(urlStr: emoji.url) { image in
-                    if image.frameCount > 1 {
+                let urlStr = emoji.url
+                if !NormalPNGFileList.isNormal(urlStr: urlStr) {
+                    APNGImageCache.image(urlStr: urlStr) { image in
+                        if image.frameCount <= 1 {
+                            NormalPNGFileList.add(urlStr: urlStr)
+                            return
+                        }
                         // APNGのビューを貼り付ける
                         let imageView = APNGImageView(image: image)
                         imageView.tag = 5555
