@@ -22,6 +22,7 @@ final class CardView: UIView {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
         return formatter
     }()
+    private static var lastRequestDate: Date?
     
     init(id: String?, dateStr: String?) {
         let rect = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 195)
@@ -41,7 +42,7 @@ final class CardView: UIView {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                     self?.request(id: id)
                 }
-            } else {
+            } else if CardView.lastRequestDate == nil || CardView.lastRequestDate!.timeIntervalSinceNow >= -60 {
                 // 今すぐカード情報を取得
                 request(id: id)
             }
@@ -114,6 +115,8 @@ final class CardView: UIView {
             draw(card: card)
             return
         }
+        
+        CardView.lastRequestDate = Date()
         
         // リクエスト
         guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(id)/card") else { return }
