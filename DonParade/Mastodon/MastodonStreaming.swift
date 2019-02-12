@@ -40,7 +40,7 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
         self.isConnected = true
         self.isConnecting = false
         
-        self.timer = Timer.scheduledTimer(timeInterval: 179, target: self, selector: #selector(ping), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 299, target: self, selector: #selector(ping), userInfo: nil, repeats: true)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {

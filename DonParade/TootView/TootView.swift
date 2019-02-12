@@ -16,6 +16,7 @@ final class TootView: UIView {
     static var savedImages: [URL] = []
     static var inReplyToId: String? = nil
     static var scheduledDate: Date? = nil
+    static var savedProtectMode: SettingsData.ProtectMode = .publicMode
     
     //----
     
@@ -59,6 +60,7 @@ final class TootView: UIView {
             // 下書きを復帰
             self.textField.attributedText = DecodeToot.decodeName(name: TootView.savedText, emojis: emojis, callback: nil)
             self.spoilerTextField.attributedText = DecodeToot.decodeName(name: TootView.savedSpoilerText, emojis: emojis, callback: nil)
+            self.protectMode = TootView.savedProtectMode
         }
         self.imageCheckView.urls = TootView.savedImages
         
@@ -114,6 +116,7 @@ final class TootView: UIView {
             TootView.savedText = DecodeToot.encodeEmoji(attributedText: self.textField.attributedText, textStorage: self.textField.textStorage)
             TootView.savedSpoilerText = DecodeToot.encodeEmoji(attributedText: self.spoilerTextField.attributedText, textStorage: self.spoilerTextField.textStorage)
             TootView.savedImages = self.imageCheckView.urls
+            TootView.savedProtectMode = self.protectMode
         }
         TootView.isTooted = false
     }

@@ -80,7 +80,7 @@ final class ThemeColor {
             if SettingsData.color == "blue" {
                 nameColor = UIColor(red: 0.3, green: 0.6, blue: 0.9, alpha: 1)
                 
-                detailButtonsHiliteColor = UIColor(red: 0.6, green: 0.5, blue: 1.0, alpha: 1)
+                detailButtonsHiliteColor = UIColor(red: 0.5, green: 0.7, blue: 1.0, alpha: 1)
                 mainButtonsBgColor = UIColor(red: 0.0, green: 0.20, blue: 0.25, alpha: 0.4)
                 mainButtonsTitleColor = UIColor(red: 0.1, green: 0.7, blue: 1.0, alpha: 1)
                 buttonBorderColor = UIColor(red: 0.1, green: 0.7, blue: 1.0, alpha: 0.8)
@@ -94,7 +94,7 @@ final class ThemeColor {
             } else if SettingsData.color == "orange" {
                 nameColor = UIColor(red: 0.8, green: 0.6, blue: 0.3, alpha: 1)
                 
-                detailButtonsHiliteColor = UIColor(red: 1.0, green: 0.7, blue: 0.5, alpha: 1)
+                detailButtonsHiliteColor = UIColor(red: 1.0, green: 0.8, blue: 0.5, alpha: 1)
                 mainButtonsBgColor = UIColor(red: 0.25, green: 0.20, blue: 0.00, alpha: 0.4)
                 mainButtonsTitleColor = UIColor(red: 1.0, green: 0.7, blue: 0.1, alpha: 1)
                 buttonBorderColor = UIColor(red: 1.0, green: 0.7, blue: 0.1, alpha: 0.8)
@@ -140,7 +140,7 @@ final class ThemeColor {
             if SettingsData.color == "blue" {
                 nameColor = UIColor(red: 0.1, green: 0.3, blue: 0.7, alpha: 1)
                 
-                detailButtonsHiliteColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1)
+                detailButtonsHiliteColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1)
                 mainButtonsBgColor = UIColor(red: 0.68, green: 0.88, blue: 1.0, alpha: 0.4)
                 mainButtonsTitleColor = UIColor(red: 0.0, green: 0.2, blue: 0.4, alpha: 1)
                 buttonBorderColor = UIColor(red: 0.0, green: 0.2, blue: 0.4, alpha: 0.8)
