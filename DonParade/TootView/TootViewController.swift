@@ -187,6 +187,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                             TootView.savedSpoilerText = nil
                             TootView.savedImages = []
                             TootView.inReplyToId = nil
+                            TootView.inReplyToContent = nil
                             TootView.scheduledDate = nil
                             if let view = self.view as? TootView {
                                 view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
@@ -394,6 +395,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         // テキストを全削除するとin_reply_toをクリアする
         if textView.text == nil || textView.text!.count == 0 {
             TootView.inReplyToId = nil
+            TootView.inReplyToContent = nil
+            (self.view as? TootView)?.inReplyToLabel.text = nil
         }
         
         do {

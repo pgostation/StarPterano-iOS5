@@ -297,6 +297,12 @@ final class TimeLineViewCell: UITableViewCell {
         } else {
             // 返信先を設定
             TootView.inReplyToId = self.id
+            TootView.inReplyToContent = (self.nameLabel.text ?? "") + " " + (self.idLabel.text ?? "") + "\n"
+            if let messageView = self.messageView as? UILabel {
+                TootView.inReplyToContent! += String(messageView.text ?? "")
+            } else if let messageView = self.messageView as? UITextView {
+                TootView.inReplyToContent! += String(messageView.text ?? "")
+            }
             
             // トゥート画面を開いていなければ開く
             if !TootViewController.isShown {
@@ -317,6 +323,8 @@ final class TimeLineViewCell: UITableViewCell {
                         view.refresh()
                     }
                 }
+            } else {
+                (TootViewController.instance?.view as? TootView)?.inReplyToLabel.text = "↩︎"
             }
             
             // @IDを入力する

@@ -15,6 +15,7 @@ final class TootView: UIView {
     static var savedSpoilerText: String?
     static var savedImages: [URL] = []
     static var inReplyToId: String? = nil
+    static var inReplyToContent: String? = nil
     static var scheduledDate: Date? = nil
     static var savedProtectMode: SettingsData.ProtectMode = .publicMode
     
@@ -31,6 +32,7 @@ final class TootView: UIView {
     let textField = NoAnimationTextView()
     let tootButton = UIButton()
     let textCountLabel = UILabel()
+    let inReplyToLabel = UILabel()
     
     // 入力バー
     let inputBar = UIView()
@@ -84,6 +86,7 @@ final class TootView: UIView {
         self.addSubview(closeButton)
         self.addSubview(tootButton)
         self.addSubview(textCountLabel)
+        self.addSubview(inReplyToLabel)
         
         self.addSubview(spoilerTextField)
         self.addSubview(textField)
@@ -176,6 +179,22 @@ final class TootView: UIView {
         textCountLabel.clipsToBounds = true
         textCountLabel.layer.cornerRadius = 10
         
+        inReplyToLabel.textColor = ThemeColor.contrastColor
+        inReplyToLabel.font = UIFont.systemFont(ofSize: 18)
+        inReplyToLabel.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.3)
+        inReplyToLabel.textAlignment = .center
+        inReplyToLabel.clipsToBounds = true
+        inReplyToLabel.layer.cornerRadius = 10
+        if TootView.inReplyToId != nil {
+            inReplyToLabel.text = "↩︎"
+        } else {
+            inReplyToLabel.text = nil
+        }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showInReplyToString))
+        inReplyToLabel.addGestureRecognizer(tapGesture)
+        inReplyToLabel.isUserInteractionEnabled = true
+        
         spoilerTextField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         spoilerTextField.textColor = ThemeColor.messageColor
         spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
@@ -228,6 +247,10 @@ final class TootView: UIView {
         emojiButton.setTitle("😀", for: .normal)
     }
     
+    @objc func showInReplyToString() {
+        Dialog.show(message: TootView.inReplyToContent ?? "")
+    }
+    
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
         
@@ -241,10 +264,27 @@ final class TootView: UIView {
                                   width: 80,
                                   height: 40)
         
-        textCountLabel.frame = CGRect(x: screenBounds.width / 2 - 60,
-                                      y: 9,
-                                      width: 120,
-                                      height: 22)
+        if inReplyToLabel.text == nil {
+            inReplyToLabel.frame = CGRect(x: 0,
+                                          y: 0,
+                                          width: 0,
+                                          height: 0)
+            
+            textCountLabel.frame = CGRect(x: screenBounds.width / 2 - 120 / 2,
+                                          y: 9,
+                                          width: 120,
+                                          height: 22)
+        } else {
+            inReplyToLabel.frame = CGRect(x: screenBounds.width / 2 - 140 / 2,
+                                          y: 3,
+                                          width: 30,
+                                          height: 34)
+            
+            textCountLabel.frame = CGRect(x: screenBounds.width / 2 - 140 / 2 + 30,
+                                          y: 9,
+                                          width: 110,
+                                          height: 22)
+        }
         
         var top: CGFloat = 40
         if spoilerTextField.isHidden == false {

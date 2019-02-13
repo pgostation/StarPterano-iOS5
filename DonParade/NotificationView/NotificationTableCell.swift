@@ -208,6 +208,8 @@ final class NotificationTableCell: UITableViewCell {
         } else {
             // 返信先を設定
             TootView.inReplyToId = self.statusId
+            TootView.inReplyToContent = (self.nameLabel.text ?? "") + " " + (self.idLabel.text ?? "") + "\n"
+            TootView.inReplyToContent! += String(self.statusLabel.text ?? "")
             
             // トゥート画面を開いていなければ開く
             if !TootViewController.isShown {
@@ -228,6 +230,8 @@ final class NotificationTableCell: UITableViewCell {
                         view.refresh()
                     }
                 }
+            } else {
+                (TootViewController.instance?.view as? TootView)?.inReplyToLabel.text = "↩︎"
             }
             
             // @IDを入力する
