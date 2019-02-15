@@ -42,7 +42,7 @@ final class CardView: UIView {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                     self?.request(id: id)
                 }
-            } else if CardView.lastRequestDate == nil || CardView.lastRequestDate!.timeIntervalSinceNow >= -60 {
+            } else if CardView.lastRequestDate == nil || CardView.lastRequestDate!.timeIntervalSinceNow >= -20 {
                 // 今すぐカード情報を取得
                 request(id: id)
             }

@@ -63,6 +63,10 @@ final class ImageCache {
             }
         }
         
+        if urlStr.hasSuffix("webp") {
+            print("#### \(urlStr)")
+        }
+        
         // ストレージキャッシュにある場合
         let cacheDir: String
         if isTemp {
@@ -93,6 +97,16 @@ final class ImageCache {
                         smallImage.shortcode = shortcode
                         DispatchQueue.main.async {
                             memCache.updateValue(smallImage, forKey: urlStr)
+                            callback(image)
+                            
+                            if memCache.count >= 100 { // メモリの使いすぎを防ぐ
+                                oldMemCache = memCache
+                                memCache = [:]
+                            }
+                        }
+                    } else if let image = LoadWebPImage.load(data: data) {
+                        DispatchQueue.main.async {
+                            memCache.updateValue(image, forKey: urlStr)
                             callback(image)
                             
                             if memCache.count >= 100 { // メモリの使いすぎを防ぐ
@@ -187,6 +201,28 @@ final class ImageCache {
                                 }
                             }
                         }
+                    }
+                } else if let image = LoadWebPImage.load(data: data) {
+                    DispatchQueue.main.async {
+                        if !isTemp {
+                            memCache.updateValue(image, forKey: urlStr)
+                        }
+                        callback(image)
+                        
+                        for waitingCallback in waitingDict[urlStr] ?? [] {
+                            waitingCallback(image)
+                        }
+                        
+                        waitingDict.removeValue(forKey: urlStr)
+                        
+                        if memCache.count >= 100 { // メモリの使いすぎを防ぐ
+                            oldMemCache = memCache
+                            memCache = [:]
+                        }
+                        
+                        // ストレージにキャッシュする
+                        let fileUrl = URL(fileURLWithPath: filePath)
+                        try? data.write(to: fileUrl)
                     }
                 }
             } else {

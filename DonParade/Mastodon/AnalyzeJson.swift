@@ -170,7 +170,7 @@ final class AnalyzeJson {
             in_reply_to_id = reblog?["in_reply_to_id"] as? String
         }
         
-        let language = json["language"] as? String
+        //let language = json["language"] as? String
         
         let pinned: Int?
         if reblog_acct == nil {
@@ -282,7 +282,6 @@ final class AnalyzeJson {
                                id: id,
                                in_reply_to_account_id: in_reply_to_account_id,
                                in_reply_to_id: in_reply_to_id,
-                               language: language,
                                mediaData: mediaData,
                                mentions: mentions,
                                muted: muted,
@@ -296,7 +295,6 @@ final class AnalyzeJson {
                                sensitive: sensitive,
                                spoiler_text: spoiler_text,
                                tags: tags,
-                               //uri: uri,
                                url: url,
                                visibility: visibility,
                                isMerge: isMerge)
@@ -408,7 +406,6 @@ final class AnalyzeJson {
                            id: nil,
                            in_reply_to_account_id: nil,
                            in_reply_to_id: nil,
-                           language: nil,
                            mediaData: nil,
                            mentions: nil,
                            muted: nil,
@@ -462,7 +459,7 @@ final class AnalyzeJson {
         let id: String? // 数値のID
         let in_reply_to_account_id: String?
         let in_reply_to_id: String?
-        let language: String?
+        //let language: String?
         let mediaData: [MediaData]?
         let mentions: [MentionData]?
         let muted: Int?

@@ -1092,6 +1092,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         imageView.image = image
                         imageView.backgroundColor = nil
                         cell.setNeedsLayout()
+                        
+                        if let label = imageView.viewWithTag(4321) {
+                            label.removeFromSuperview()
+                        }
                     }
                     cell.addSubview(imageView)
                     cell.imageViews.append(imageView)
@@ -1123,16 +1127,19 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                     // 不明
                     addImageView(withPlayButton: false)
                     
-                    // リンク先のファイル名を表示
-                    let label = UILabel()
-                    label.text = String((media.remote_url ?? "").split(separator: "/").last ?? "")
-                    label.textAlignment = .center
-                    label.numberOfLines = 0
-                    label.lineBreakMode = .byCharWrapping
-                    label.textColor = ThemeColor.linkTextColor
-                    cell.imageViews.last?.addSubview(label)
-                    DispatchQueue.main.async {
-                        label.frame = cell.imageViews.last?.bounds ?? CGRect(x: 0, y: 0, width: 0, height: 0)
+                    if cell.imageViews.last?.image == nil {
+                        // リンク先のファイル名を表示
+                        let label = UILabel()
+                        label.text = String((media.remote_url ?? "").split(separator: "/").last ?? "")
+                        label.tag = 4321
+                        label.textAlignment = .center
+                        label.numberOfLines = 0
+                        label.lineBreakMode = .byCharWrapping
+                        label.textColor = ThemeColor.linkTextColor
+                        cell.imageViews.last?.addSubview(label)
+                        DispatchQueue.main.async {
+                            label.frame = cell.imageViews.last?.bounds ?? CGRect(x: 0, y: 0, width: 0, height: 0)
+                        }
                     }
                 } else if media.type == "gifv" || media.type == "video" {
                     // 動画の場合
