@@ -659,7 +659,7 @@ final class TimeLineViewCell: UITableViewCell {
     @objc func imageTapAction(_ gesture: UITapGestureRecognizer) {
         for (index, imageView) in self.imageViews.enumerated() {
             if imageView == gesture.view {
-                if imageTypes[index] == "unknown" {
+                if imageTypes[index] == "unknown" && imageView.image == nil {
                     // 分からんので内蔵ブラウザで開く
                     guard let url = URL(string: originalUrls[index]) else { return }
                     let safariVC = SFSafariViewController(url: url)

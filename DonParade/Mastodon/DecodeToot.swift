@@ -10,6 +10,7 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 final class DecodeToot {
     // 自前でHTML解析

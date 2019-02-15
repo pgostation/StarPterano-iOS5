@@ -6,4 +6,6 @@ target 'DonParade' do
 pod 'Starscream'
 pod 'SwiftyGif'
 pod 'APNGKit'
+pod 'SDWebImage'
+pod 'SDWebImage/WebP'
 end

@@ -42,7 +42,6 @@
 		1286DF632154F2DA008FFFAC /* SettingsSelectProtectMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF622154F2DA008FFFAC /* SettingsSelectProtectMode.swift */; };
 		1286DF6521551824008FFFAC /* TootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF6421551824008FFFAC /* TootView.swift */; };
 		1286DF682155E906008FFFAC /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1286DF672155E906008FFFAC /* ImageViewController.swift */; };
-		128FB4062216F9960011668C /* WebP.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 128FB4032216F8200011668C /* WebP.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		129771E321624204003728FC /* WideTouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129771E221624204003728FC /* WideTouchButton.swift */; };
 		12B8B4242164BF0E00869496 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4232164BF0E00869496 /* MainView.swift */; };
 		12B8B4262165BAA900869496 /* ListSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B4252165BAA900869496 /* ListSelectTableViewCell.swift */; };
@@ -50,7 +49,6 @@
 		12B8B42A216612DF00869496 /* ListEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B429216612DF00869496 /* ListEditViewController.swift */; };
 		12B8B42C2166186300869496 /* ListEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B42B2166186300869496 /* ListEditTableViewCell.swift */; };
 		12B8B42E21663AE800869496 /* AllListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B42D21663AE800869496 /* AllListsViewController.swift */; };
-		12BBE1602216EB0E008A1DC5 /* LoadWebPImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BBE15F2216EB0E008A1DC5 /* LoadWebPImage.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -80,20 +78,6 @@
 		12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACAB214D424D00E9E508 /* UIUtils.swift */; };
 		5E5CE25540D5ADFBD2B1A09A /* Pods_DonParade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34A5C456964AEA66CDD4D8C /* Pods_DonParade.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		128FB4072216F9960011668C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				128FB4062216F9960011668C /* WebP.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		07B719C767E8F3CB26EC8954 /* Pods-DonParade.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonParade.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DonParade/Pods-DonParade.debug.xcconfig"; sourceTree = "<group>"; };
@@ -144,7 +128,6 @@
 		12B8B429216612DF00869496 /* ListEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditViewController.swift; sourceTree = "<group>"; };
 		12B8B42B2166186300869496 /* ListEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditTableViewCell.swift; sourceTree = "<group>"; };
 		12B8B42D21663AE800869496 /* AllListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllListsViewController.swift; sourceTree = "<group>"; };
-		12BBE15F2216EB0E008A1DC5 /* LoadWebPImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadWebPImage.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -305,7 +288,6 @@
 				12F6602E215656890049AEE0 /* ImageUtils.swift */,
 				121764CC216846AB0017E76A /* MovieCache.swift */,
 				124CEC262206F49C0018E40D /* TextConverter.swift */,
-				12BBE15F2216EB0E008A1DC5 /* LoadWebPImage.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -432,7 +414,6 @@
 				12F9AC71214CA35F00E9E508 /* Frameworks */,
 				12F9AC72214CA35F00E9E508 /* Resources */,
 				52E2F1C25A96B67EFAE45742 /* [CP] Embed Pods Frameworks */,
-				128FB4072216F9960011668C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -506,16 +487,20 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DonParade/Pods-DonParade-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APNGKit/APNGKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/APNGKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -594,7 +579,6 @@
 				1255A96C215A6A1600DE1CF3 /* MastodonStreaming.swift in Sources */,
 				127A37B52157250700347880 /* ListSelectViewController.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
-				12BBE1602216EB0E008A1DC5 /* LoadWebPImage.swift in Sources */,
 				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
 				1205B45D220FEB50007BF7A1 /* HashtagCache.swift in Sources */,
 				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,

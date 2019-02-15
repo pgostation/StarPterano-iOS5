@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftyGif
+import SDWebImage
 
 final class ImageCache {
     private static var gifCache: [String: UIImage] = [:]
@@ -20,6 +21,7 @@ final class ImageCache {
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "ImageCache")
     private static let imageGlobalQueue = DispatchQueue.global()
+    private static let webpDecoder = SDWebImageWebPCoder()
     
     // 画像をキャッシュから取得する。なければネットに取りに行く
     static func image(urlStr: String?, isTemp: Bool, isSmall: Bool, shortcode: String? = nil, isPreview: Bool = false, callback: @escaping (UIImage)->Void) {
@@ -63,10 +65,6 @@ final class ImageCache {
             }
         }
         
-        if urlStr.hasSuffix("webp") {
-            print("#### \(urlStr)")
-        }
-        
         // ストレージキャッシュにある場合
         let cacheDir: String
         if isTemp {
@@ -104,7 +102,7 @@ final class ImageCache {
                                 memCache = [:]
                             }
                         }
-                    } else if let image = LoadWebPImage.load(data: data) {
+                    } else if let image = webpDecoder.decodedImage(with: data) {
                         DispatchQueue.main.async {
                             memCache.updateValue(image, forKey: urlStr)
                             callback(image)
@@ -202,7 +200,7 @@ final class ImageCache {
                             }
                         }
                     }
-                } else if let image = LoadWebPImage.load(data: data) {
+                } else if let image = webpDecoder.decodedImage(with: data) {
                     DispatchQueue.main.async {
                         if !isTemp {
                             memCache.updateValue(image, forKey: urlStr)
@@ -219,11 +217,11 @@ final class ImageCache {
                             oldMemCache = memCache
                             memCache = [:]
                         }
-                        
-                        // ストレージにキャッシュする
-                        let fileUrl = URL(fileURLWithPath: filePath)
-                        try? data.write(to: fileUrl)
                     }
+                    
+                    // ストレージにキャッシュする
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    try? data.write(to: fileUrl)
                 }
             } else {
                 waitingDict.removeValue(forKey: urlStr)

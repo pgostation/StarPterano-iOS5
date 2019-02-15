@@ -1,24 +1,60 @@
 PODS:
   - APNGKit (1.1.0)
+  - libwebp (0.6.1):
+    - libwebp/core (= 0.6.1)
+    - libwebp/dec (= 0.6.1)
+    - libwebp/demux (= 0.6.1)
+    - libwebp/dsp (= 0.6.1)
+    - libwebp/enc (= 0.6.1)
+    - libwebp/mux (= 0.6.1)
+    - libwebp/utils (= 0.6.1)
+    - libwebp/webp (= 0.6.1)
+  - libwebp/core (0.6.1):
+    - libwebp/webp
+  - libwebp/dec (0.6.1):
+    - libwebp/core
+  - libwebp/demux (0.6.1):
+    - libwebp/core
+  - libwebp/dsp (0.6.1):
+    - libwebp/core
+  - libwebp/enc (0.6.1):
+    - libwebp/core
+  - libwebp/mux (0.6.1):
+    - libwebp/core
+  - libwebp/utils (0.6.1):
+    - libwebp/core
+  - libwebp/webp (0.6.1)
+  - SDWebImage (4.4.5):
+    - SDWebImage/Core (= 4.4.5)
+  - SDWebImage/Core (4.4.5)
+  - SDWebImage/WebP (4.4.5):
+    - libwebp (~> 0.5)
+    - SDWebImage/Core
   - Starscream (3.0.6)
   - SwiftyGif (4.2.0)
 
 DEPENDENCIES:
   - APNGKit
+  - SDWebImage
+  - SDWebImage/WebP
   - Starscream
   - SwiftyGif
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - APNGKit
+    - libwebp
+    - SDWebImage
     - Starscream
     - SwiftyGif
 
 SPEC CHECKSUMS:
   APNGKit: 8fcf50c4004d6d01473707412d162e90d1fa599a
+  libwebp: 0f01098c6c17175391af621b2f14150f3ca16e16
+  SDWebImage: ecc03494e973b93b80213649d32175f8d2d17d4d
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftyGif: a149bf84df23370592f3f075561ae02c8632a314
 
-PODFILE CHECKSUM: 3a72249a6e79d41c648a36dd3725f464585e77a2
+PODFILE CHECKSUM: 397c04cc4535afccb876a4dc69ab7233bec38644
 
 COCOAPODS: 1.6.0
