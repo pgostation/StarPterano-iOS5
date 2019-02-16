@@ -888,7 +888,7 @@ final class TimeLineViewCell: UITableViewCell {
             } else if let spolerTextLabel = self.spolerTextLabel {
                 y = spolerTextLabel.frame.maxY + 20
             } else {
-                y = self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 8) + SettingsData.fontSize)
+                y = self.detailDateLabel?.frame.maxY ?? ((isMiniView != .normal ? -9 : 10) + SettingsData.fontSize)
             }
             messageView.frame = CGRect(x: nameLeft,
                                        y: y,

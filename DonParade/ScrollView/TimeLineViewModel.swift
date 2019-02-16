@@ -456,7 +456,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // 行間を広げる
         let paragrahStyle = NSMutableParagraphStyle()
-        paragrahStyle.minimumLineHeight = SettingsData.fontSize * 1.5
+        paragrahStyle.minimumLineHeight = SettingsData.fontSize * 1.4
         paragrahStyle.maximumLineHeight = SettingsData.fontSize * 1.5
         attributedText.addAttributes([NSAttributedString.Key.paragraphStyle : paragrahStyle],
                                      range: NSMakeRange(0, attributedText.length))
