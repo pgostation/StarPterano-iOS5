@@ -158,6 +158,8 @@ final class LoginView: UIView {
         hostField.layer.borderColor = UIColor.gray.cgColor
         hostField.layer.borderWidth = 0.5
         hostField.keyboardType = .URL
+        hostField.autocapitalizationType = .none
+        hostField.autocorrectionType = .no
         
         authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
         authButton.backgroundColor = UIColor.blue
