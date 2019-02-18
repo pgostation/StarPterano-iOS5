@@ -463,7 +463,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         // プロパティ設定
         let messageView: UIView
-        if hasLink || (SettingsData.useAnimation && data.emojis != nil && data.emojis!.count > 0) {
+        if hasLink || (data.emojis != nil && data.emojis!.count > 0) {
             let msgView = dequeueReusableTextView()
             msgView.attributedText = attributedText
             msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
