@@ -299,9 +299,9 @@ private final class ListEditTableModel: NSObject, UITableViewDataSource, UITable
         cell.listId = self.listId
         cell.id = data.id ?? ""
         
-        cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) {
+        cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, uiLabel: cell.nameLabel) {
             if cell.id != data.id { return }
-            cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) {}
+            cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, uiLabel: cell.nameLabel) {}
         }
         
         cell.idLabel.text = data.acct

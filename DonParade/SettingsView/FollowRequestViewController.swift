@@ -227,9 +227,9 @@ final class FollowRequestTableModel: NSObject, UITableViewDataSource, UITableVie
             }
         }
         
-        cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, callback: {
+        cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, uiLabel: cell.nameLabel, callback: {
             if cell.accountId == data.acct {
-                cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, callback: nil)
+                cell.nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, uiLabel: cell.nameLabel, callback: nil)
                 cell.nameLabel.sizeToFit()
                 cell.setNeedsLayout()
             }

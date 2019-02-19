@@ -187,7 +187,7 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
             }
         }
         
-        nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis) { }
+        nameLabel.attributedText = DecodeToot.decodeName(name: data.display_name, emojis: data.emojis, uiLabel: nameLabel) { }
         nameLabel.textColor = ThemeColor.nameColor
         nameLabel.layer.shadowColor = UIColor.black.cgColor
         nameLabel.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)

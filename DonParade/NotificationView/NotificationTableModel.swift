@@ -150,9 +150,9 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
             }
         }
         
-        cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
+        cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, uiLabel: cell.nameLabel, callback: {
             if cell.id == id {
-                cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: nil)
+                cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, uiLabel: cell.nameLabel, callback: nil)
                 cell.setNeedsLayout()
             }
         })

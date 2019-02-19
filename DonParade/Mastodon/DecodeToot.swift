@@ -11,6 +11,7 @@
 import Foundation
 import UIKit
 import SDWebImage
+import APNGKit
 
 final class DecodeToot {
     // 自前でHTML解析
@@ -245,7 +246,7 @@ final class DecodeToot {
     }
     
     // 名前部分の絵文字解析
-    static func decodeName(name: String?, emojis: [[String: Any]]?, callback: (()->Void)?) -> NSMutableAttributedString {
+    static func decodeName(name: String?, emojis: [[String: Any]]?, uiLabel: UILabel? = nil, callback: (()->Void)?) -> NSMutableAttributedString {
         let text = name ?? ""
         
         let attributedText = NSMutableAttributedString(string: text)
@@ -267,6 +268,50 @@ final class DecodeToot {
                         attachment.image = image
                         if image.size.width > 0 {
                             attachment.bounds.size = CGSize(width: SettingsData.fontSize + 6, height: image.size.height / image.size.width * SettingsData.fontSize + 6)
+                        }
+                    }
+                    
+                    if let uiLabel = uiLabel {
+                        if NormalPNGFileList.isNormal(urlStr: emoji["url"] as? String) { return }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            if uiLabel.superview == nil { return }
+                            guard let attributedText = uiLabel.attributedText else { return }
+                            let list = DecodeToot.getEmojiList(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText))
+                            
+                            for data in list {
+                                for emoji in emojis {
+                                    if emoji["shortcode"] as? String == data.1 {
+                                        APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
+                                            if image.frameCount <= 1 { return }
+                                            
+                                            var rect = CGRect()
+                                            do {
+                                                let rangeCharacters = data.0
+                                                
+                                                let tmpLabel = UILabel()
+                                                tmpLabel.font = uiLabel.font
+                                                
+                                                let prevString = attributedText.attributedSubstring(from: NSRange.init(location: 0, length: max(0, rangeCharacters.location - 1)))
+                                                tmpLabel.attributedText = prevString
+                                                tmpLabel.sizeToFit()
+                                                
+                                                rect = CGRect(x: tmpLabel.frame.maxX, y: -2, width: SettingsData.fontSize + 6, height: SettingsData.fontSize + 6)
+                                            }
+                                            
+                                            let apngView = APNGImageView(image: image)
+                                            apngView.tag = 5555
+                                            apngView.autoStartAnimation = true
+                                            apngView.backgroundColor = ThemeColor.cellBgColor
+                                            let size = rect.size.width
+                                            if size > 0 {
+                                                apngView.frame = rect
+                                                uiLabel.addSubview(apngView)
+                                            }
+                                        }
+                                        break
+                                    }
+                                }
+                            }
                         }
                     }
                 }

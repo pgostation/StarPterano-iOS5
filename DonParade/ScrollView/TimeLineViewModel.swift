@@ -797,10 +797,10 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.spolerTextLabel = UILabel()
             cell.spolerTextLabel?.textColor = ThemeColor.messageColor
             cell.spolerTextLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
-            cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: {
+            cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, uiLabel: cell.spolerTextLabel, callback: {
                 if cell.id == id {
-                    cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, callback: nil)
-                    cell?.setNeedsLayout()
+                    cell.spolerTextLabel?.attributedText = DecodeToot.decodeName(name: data.spoiler_text ?? "", emojis: data.emojis, uiLabel: cell.spolerTextLabel, callback: nil)
+                    cell.setNeedsLayout()
                 }
             })
             cell.spolerTextLabel?.numberOfLines = 0
@@ -1026,9 +1026,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
-        cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: {
+        cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, uiLabel: cell.nameLabel, callback: {
             if cell.id == id {
-                cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, callback: nil)
+                cell.nameLabel.attributedText = DecodeToot.decodeName(name: account?.display_name ?? "", emojis: account?.emojis, uiLabel: cell.nameLabel, callback: nil)
                 cell?.setNeedsLayout()
             }
         })
@@ -1221,7 +1221,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 username = account?.acct ?? ""
             }
             let name = String(format: I18n.get("BOOSTED_BY_%@"), username)
-            cell.boostView?.attributedText = DecodeToot.decodeName(name: name, emojis: account?.emojis, callback: nil)
+            cell.boostView?.attributedText = DecodeToot.decodeName(name: name, emojis: account?.emojis, uiLabel: cell.boostView, callback: nil)
             cell.addSubview(cell.boostView!)
         }
         
@@ -1306,7 +1306,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                             label.setGesture()
                                         }
                                         let label = cell.rebologerLabels[count]
-                                        label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                        label.attributedText = DecodeToot.decodeName(name: "🔁 " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, uiLabel: label, callback: nil)
                                         count += 1
                                     }
                                     cell.setNeedsLayout()
@@ -1343,7 +1343,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                             label.setGesture()
                                         }
                                         let label = cell.favoriterLabels[count]
-                                        label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, callback: nil)
+                                        label.attributedText = DecodeToot.decodeName(name: "⭐️ " + (accountData.display_name ?? "") + " " + (accountData.acct ?? ""), emojis: accountData.emojis, uiLabel: label, callback: nil)
                                         count += 1
                                     }
                                     cell.setNeedsLayout()

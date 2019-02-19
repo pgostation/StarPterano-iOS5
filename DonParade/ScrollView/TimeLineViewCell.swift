@@ -217,6 +217,11 @@ final class TimeLineViewCell: UITableViewCell {
         self.rightFavButton?.removeFromSuperview()
         self.rightFavButton = nil
         
+        while let apngView = self.nameLabel.viewWithTag(5555) as? APNGImageView {
+            apngView.stopAnimating()
+            apngView.removeFromSuperview()
+        }
+        
         // フォントサイズと色を指定
         self.nameLabel.textColor = ThemeColor.nameColor
         self.nameLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
