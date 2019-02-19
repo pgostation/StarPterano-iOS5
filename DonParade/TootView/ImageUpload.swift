@@ -148,6 +148,7 @@ final class ImageUpload {
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [movieUrl], options: nil)
         
         if let asset = fetchResult.firstObject {
+            // iOS10以前
             let manager = PHImageManager.default()
             manager.requestAVAsset(forVideo: asset, options: nil) { (asset, audioMix, infoDictionary) in
                 guard let assetUrl = asset as? AVURLAsset else { return }
@@ -202,6 +203,12 @@ final class ImageUpload {
                     })
                 }
             }
+        } else {
+            // iOS11
+            self.filename = "movie.mp4"
+            self.mimetype = "video/mp4"
+            guard let data = try? Data(contentsOf: movieUrl) else { return }
+            uploadData(httpMethod: "POST", uploadUrl: uploadUrl, filePathKey: filePathKey, data: data, callback: callback)
         }
     }
     

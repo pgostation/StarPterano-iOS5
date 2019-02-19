@@ -10,6 +10,7 @@
 
 import UIKit
 import Photos
+import SDWebImage
 
 final class ImageCheckView: UIView {
     private let nsfwLabel = UILabel()
@@ -72,6 +73,16 @@ final class ImageCheckView: UIView {
                 addImage(imageUrl: imageUrl, image: gifImage)
             } else if let image = UIImage(contentsOfFile: imageUrl.path) {
                 addImage(imageUrl: imageUrl, image: image)
+            } else if let image = SDWebImageWebPCoder().decodedImage(with: data) {
+                addImage(imageUrl: imageUrl, image: image)
+            } else {
+                // 動画のプレビューイメージを作成
+                let avAsset = AVURLAsset(url: imageUrl, options: nil)
+                let generator = AVAssetImageGenerator(asset: avAsset)
+                if let capturedImage = try? generator.copyCGImage(at: avAsset.duration, actualTime: nil) {
+                    let image = UIImage(cgImage: capturedImage)
+                    addImage(imageUrl: imageUrl, image: image)
+                }
             }
         }
     }

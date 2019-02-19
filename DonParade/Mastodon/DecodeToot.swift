@@ -271,9 +271,9 @@ final class DecodeToot {
                         }
                     }
                     
-                    if let uiLabel = uiLabel {
-                        if NormalPNGFileList.isNormal(urlStr: emoji["url"] as? String) { return }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    // カスタム絵文字のアニメーション
+                    if let uiLabel = uiLabel, !NormalPNGFileList.isNormal(urlStr: emoji["url"] as? String) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             if uiLabel.superview == nil { return }
                             guard let attributedText = uiLabel.attributedText else { return }
                             let list = DecodeToot.getEmojiList(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText))
@@ -281,10 +281,14 @@ final class DecodeToot {
                             for data in list {
                                 for emoji in emojis {
                                     if emoji["shortcode"] as? String == data.1 {
-                                        APNGImageCache.image(urlStr: emoji["url"] as? String) { image in
-                                            if image.frameCount <= 1 { return }
+                                        let urlStr = emoji["url"] as? String
+                                        APNGImageCache.image(urlStr: urlStr) { image in
+                                            if image.frameCount <= 1 {
+                                                NormalPNGFileList.add(urlStr: urlStr)
+                                                return
+                                            }
                                             
-                                            var rect = CGRect()
+                                            let rect: CGRect
                                             do {
                                                 let rangeCharacters = data.0
                                                 
@@ -302,11 +306,8 @@ final class DecodeToot {
                                             apngView.tag = 5555
                                             apngView.autoStartAnimation = true
                                             apngView.backgroundColor = ThemeColor.cellBgColor
-                                            let size = rect.size.width
-                                            if size > 0 {
-                                                apngView.frame = rect
-                                                uiLabel.addSubview(apngView)
-                                            }
+                                            apngView.frame = rect
+                                            uiLabel.addSubview(apngView)
                                         }
                                         break
                                     }
