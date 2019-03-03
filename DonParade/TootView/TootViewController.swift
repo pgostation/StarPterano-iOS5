@@ -381,7 +381,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: {
                 textView.attributedText = DecodeToot.decodeName(name: encodedText, emojis: emojis, callback: nil)
                 textView.textColor = ThemeColor.messageColor
-                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
             })
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let newEncodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
@@ -389,7 +389,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 textView.attributedText = DecodeToot.decodeName(name: newEncodedText, emojis: emojis, callback: nil)
             }
             textView.textColor = ThemeColor.messageColor
-            textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+            textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
         }
         
         // テキストを全削除するとin_reply_toをクリアする

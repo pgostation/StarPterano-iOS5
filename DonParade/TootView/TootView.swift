@@ -197,7 +197,7 @@ final class TootView: UIView {
         
         spoilerTextField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         spoilerTextField.textColor = ThemeColor.messageColor
-        spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+        spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
         spoilerTextField.isEditable = true
         spoilerTextField.layer.borderColor = ThemeColor.messageColor.cgColor
         spoilerTextField.layer.borderWidth = 1 / UIScreen.main.scale
@@ -210,7 +210,7 @@ final class TootView: UIView {
         }
         textField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
         textField.textColor = ThemeColor.messageColor
-        textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 3)
+        textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
         textField.isEditable = true
         textField.layer.borderColor = ThemeColor.messageColor.cgColor
         textField.layer.borderWidth = 1 / UIScreen.main.scale

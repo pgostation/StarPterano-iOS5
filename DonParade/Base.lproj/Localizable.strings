@@ -125,6 +125,7 @@
 "ACTION_MUTE" = "Mute";
 "ACTION_OPEN_WITH_SAFARI" = "Open with Safari";
 "ACTION_ADD_TO_LIST" = "Add to lists";
+"ACTION_HIDE_BOOST" = "Hide boost";
 "ALERT_UNFOLLOW" = "Confirm";
 
 // リスト画面

@@ -383,11 +383,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             // ブーストした人の名前を表示
             if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
-                detailOffset += (SettingsData.fontSize + 4) * CGFloat(min(10, reblogs_count)) + 4
+                detailOffset += (SettingsData.fontSize + 6) * CGFloat(min(10, reblogs_count)) + 4
             }
             // お気に入りした人の名前を表示
             if let favourites_count = data.favourites_count, favourites_count > 0 {
-                detailOffset += (SettingsData.fontSize + 4) * CGFloat(min(10, favourites_count)) + 4
+                detailOffset += (SettingsData.fontSize + 6) * CGFloat(min(10, favourites_count)) + 4
             }
         }
         

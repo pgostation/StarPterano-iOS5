@@ -125,6 +125,7 @@
 "ACTION_MUTE" = "ミュートする";
 "ACTION_OPEN_WITH_SAFARI" = "Safariで表示";
 "ACTION_ADD_TO_LIST" = "リストに追加";
+"ACTION_HIDE_BOOST" = "ブーストを隠す";
 "ALERT_UNFOLLOW" = "フォロー解除しますか";
 
 // リスト画面
