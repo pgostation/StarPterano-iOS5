@@ -24,6 +24,7 @@ final class TimeLineView: UITableView {
     static let gifManager = SwiftyGifManager(memoryLimit: 100)
     var mediaOnly: Bool = false
     private static var audioPlayer: AVAudioPlayer? = nil
+    var prevLinkStr: String?
     
     var accountList: [String: AnalyzeJson.AccountData] = [:]
     
@@ -216,6 +217,22 @@ final class TimeLineView: UITableView {
                         }
                     }
                 } catch {
+                }
+                
+                if self?.type == .favorites {
+                    if let response = response as? HTTPURLResponse {
+                        if let linkStr = response.allHeaderFields["Link"] as? String {
+                            if linkStr.contains("rel=\"prev\"") {
+                                if let prefix = linkStr.split(separator: ">").first {
+                                    self?.prevLinkStr = String(prefix.suffix(prefix.count - 1))
+                                }
+                            } else {
+                                self?.model.showAutoPagerizeCell = false
+                            }
+                        } else {
+                            self?.model.showAutoPagerizeCell = false
+                        }
+                    }
                 }
             } else if let error = error {
                 print(error)
@@ -487,7 +504,11 @@ final class TimeLineView: UITableView {
             let mediaOnlyStr = mediaOnly ? "&only_media=1" : ""
             url = URL(string: "https://\(hostName)/api/v1/accounts/\(option)/statuses?limit=50\(maxIdStr)\(mediaOnlyStr)")
         case .favorites:
-            url = URL(string: "https://\(hostName)/api/v1/favourites?limit=50\(maxIdStr)")
+            if let prevLinkStr = self.prevLinkStr {
+                url = URL(string: prevLinkStr)
+            } else {
+                return
+            }
         case .localTag:
             guard let option = option else { return }
             guard let encodedOption = option.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else { return }

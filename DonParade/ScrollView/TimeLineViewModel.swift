@@ -662,8 +662,15 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         if index >= list.count {
             if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
-                // 過去のトゥートに遡る
-                timelineView.refreshOld(id: timelineView.model.getLastTootId())
+                if timelineView.type == .favorites {
+                    // 過去のトゥートに遡る
+                    if let prevLinkStr = timelineView.prevLinkStr {
+                        timelineView.refreshOld(id: "-")
+                    }
+                } else {
+                    // 過去のトゥートに遡る
+                    timelineView.refreshOld(id: timelineView.model.getLastTootId())
+                }
             }
             let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
             cell.backgroundColor = ThemeColor.viewBgColor
