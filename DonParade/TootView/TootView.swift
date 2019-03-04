@@ -195,7 +195,7 @@ final class TootView: UIView {
         inReplyToLabel.addGestureRecognizer(tapGesture)
         inReplyToLabel.isUserInteractionEnabled = true
         
-        spoilerTextField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
+        spoilerTextField.backgroundColor = ThemeColor.cellBgColor
         spoilerTextField.textColor = ThemeColor.messageColor
         spoilerTextField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
         spoilerTextField.isEditable = true
@@ -208,7 +208,7 @@ final class TootView: UIView {
                 self.textField.becomeFirstResponder()
             }
         }
-        textField.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
+        textField.backgroundColor = ThemeColor.cellBgColor
         textField.textColor = ThemeColor.messageColor
         textField.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
         textField.isEditable = true
@@ -216,7 +216,7 @@ final class TootView: UIView {
         textField.layer.borderWidth = 1 / UIScreen.main.scale
         textField.tag = UIUtils.responderTag
         
-        inputBar.backgroundColor = ThemeColor.cellBgColor.withAlphaComponent(0.9)
+        inputBar.backgroundColor = ThemeColor.cellBgColor
         
         imagesButton.setTitle("🏞", for: .normal)
         
