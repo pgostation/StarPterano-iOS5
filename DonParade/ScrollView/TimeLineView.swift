@@ -565,6 +565,22 @@ final class TimeLineView: UITableView {
                     }
                 } catch {
                 }
+                
+                if self?.type == .favorites {
+                    if let response = response as? HTTPURLResponse {
+                        if let linkStr = response.allHeaderFields["Link"] as? String {
+                            if linkStr.contains("rel=\"prev\"") {
+                                if let prefix = linkStr.split(separator: ">").first {
+                                    self?.prevLinkStr = String(prefix.suffix(prefix.count - 1))
+                                }
+                            } else {
+                                self?.model.showAutoPagerizeCell = false
+                            }
+                        } else {
+                            self?.model.showAutoPagerizeCell = false
+                        }
+                    }
+                }
             } else if let error = error {
                 print(error)
             }

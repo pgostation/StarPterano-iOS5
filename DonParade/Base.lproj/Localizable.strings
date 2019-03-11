@@ -169,6 +169,7 @@
 "COLOR_GREEN" = "Green";
 "COLOR_BLUE" = "Blue";
 "COLOR_ORANGE" = "Orange";
+"COLOR_MONOCHROME" = "Monochrome";
 
 // 設定画面(マイページ)
 "SETTINGS_MASTODON_SITE" = "Mastodon Web";

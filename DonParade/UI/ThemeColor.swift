@@ -105,6 +105,20 @@ final class ThemeColor {
                 mentionedBgColor = UIColor(red: 0.12, green: 0.20, blue: 0.30, alpha: 1)
                 mentionedSameBgColor = UIColor(red: 0.12, green: 0.16, blue: 0.24, alpha: 1)
                 toMentionBgColor = UIColor(red: 0.12, green: 0.25, blue: 0.15, alpha: 1)
+            } else if SettingsData.color == "monochrome" {
+                nameColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+                
+                detailButtonsHiliteColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
+                mainButtonsBgColor = UIColor(red: 0.20, green: 0.20, blue: 0.20, alpha: 0.4)
+                mainButtonsTitleColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+                buttonBorderColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.8)
+                
+                selectedBgColor = UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1)
+                mentionedMeBgColor = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1)
+                sameAccountBgColor = UIColor(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+                mentionedBgColor = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1)
+                mentionedSameBgColor = UIColor(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+                toMentionBgColor = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1)
             }
         } else {
             // 通常モード
@@ -165,6 +179,20 @@ final class ThemeColor {
                 mentionedBgColor = UIColor(red: 0.85, green: 1.0, blue: 0.91, alpha: 1)
                 mentionedSameBgColor = UIColor(red: 0.86, green: 0.94, blue: 0.88, alpha: 1)
                 toMentionBgColor = UIColor(red: 0.80, green: 0.85, blue: 0.99, alpha: 1)
+            } else if SettingsData.color == "monochrome" {
+                nameColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                
+                detailButtonsHiliteColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+                mainButtonsBgColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 0.4)
+                mainButtonsTitleColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                buttonBorderColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 0.8)
+                
+                selectedBgColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1)
+                mentionedMeBgColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1)
+                sameAccountBgColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+                mentionedBgColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1)
+                mentionedSameBgColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+                toMentionBgColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1)
             }
         }
         

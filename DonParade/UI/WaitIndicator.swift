@@ -106,6 +106,8 @@ final class WaitIndicator: UIView {
                 UIColor(red: 0.0, green: 0.7, blue: 1.0, alpha: 1).setFill() // 色をセット
             } else if SettingsData.color == "orange" {
                 UIColor(red: 1.0, green: 0.8, blue: 0.0, alpha: 1).setFill() // 色をセット
+            } else if SettingsData.color == "monochrome" {
+                UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1).setFill() // 色をセット
             } else {
                 UIColor(red: 0.8, green: 1.0, blue: 0.0, alpha: 1).setFill() // 色をセット
             }

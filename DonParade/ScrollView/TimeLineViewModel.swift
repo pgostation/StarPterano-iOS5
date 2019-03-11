@@ -105,7 +105,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             }
             
-            if self.list.count == 0 {
+            if tableView.type == .favorites {
+                self.list += addList2
+            } else if self.list.count == 0 {
                 self.list = addList2
                 if isStreaming {
                     tableView.reloadData()
@@ -663,7 +665,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         if index >= list.count {
             if self.showAutoPagerizeCell, let timelineView = tableView as? TimeLineView {
                 if timelineView.type == .favorites {
-                    // 過去のトゥートに遡る
+                    // 過去のお気に入りに遡る
                     if let prevLinkStr = timelineView.prevLinkStr {
                         timelineView.refreshOld(id: "-")
                     }

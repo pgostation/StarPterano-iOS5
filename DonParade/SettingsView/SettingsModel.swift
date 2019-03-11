@@ -185,6 +185,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     subtitle = I18n.get("COLOR_BLUE")
                 } else if SettingsData.color == "orange" {
                     subtitle = I18n.get("COLOR_ORANGE")
+                } else if SettingsData.color == "monochrome" {
+                    subtitle = I18n.get("COLOR_MONOCHROME")
                 } else {
                     subtitle = I18n.get("COLOR_GREEN")
                 }
@@ -436,6 +438,15 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     title: I18n.get("COLOR_ORANGE"),
                     style: UIAlertAction.Style.default) { _ in
                         SettingsData.color = "orange"
+                        MainViewController.instance?.refreshColor()
+                        tableView.reloadData()
+                })
+                
+                // モノクローム
+                alertController.addAction(UIAlertAction(
+                    title: I18n.get("COLOR_MONOCHROME"),
+                    style: UIAlertAction.Style.default) { _ in
+                        SettingsData.color = "monochrome"
                         MainViewController.instance?.refreshColor()
                         tableView.reloadData()
                 })
