@@ -19,6 +19,8 @@
 		121DC0DC2153C64F00928DCC /* MyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DB2153C64F00928DCC /* MyWindow.swift */; };
 		121DC0DE2153CF7F00928DCC /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0DD2153CF7F00928DCC /* TimeLineView.swift */; };
 		121DC0E22153E32500928DCC /* WaitIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121DC0E12153E32500928DCC /* WaitIndicator.swift */; };
+		12403B852236868100C167B9 /* SetPollsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12403B842236868100C167B9 /* SetPollsViewController.swift */; };
+		12403B872236A57100C167B9 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12403B862236A57100C167B9 /* PollView.swift */; };
 		124CEC272206F49C0018E40D /* TextConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124CEC262206F49C0018E40D /* TextConverter.swift */; };
 		1255A96C215A6A1600DE1CF3 /* MastodonStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255A96B215A6A1600DE1CF3 /* MastodonStreaming.swift */; };
 		1255A96E215A7F5900DE1CF3 /* License.text in Resources */ = {isa = PBXBuildFile; fileRef = 1255A96D215A7F5900DE1CF3 /* License.text */; };
@@ -95,6 +97,8 @@
 		121DC0DB2153C64F00928DCC /* MyWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWindow.swift; sourceTree = "<group>"; };
 		121DC0DD2153CF7F00928DCC /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		121DC0E12153E32500928DCC /* WaitIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitIndicator.swift; sourceTree = "<group>"; };
+		12403B842236868100C167B9 /* SetPollsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPollsViewController.swift; sourceTree = "<group>"; };
+		12403B862236A57100C167B9 /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
 		124CEC262206F49C0018E40D /* TextConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextConverter.swift; sourceTree = "<group>"; };
 		12515156217AA73D0068F9AA /* decision21.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = decision21.mp3; sourceTree = "<group>"; };
 		1255A96B215A6A1600DE1CF3 /* MastodonStreaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonStreaming.swift; sourceTree = "<group>"; };
@@ -342,6 +346,7 @@
 				12CD025E214F2F1400133A95 /* TimeLineViewModel.swift */,
 				12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */,
 				1263CEBE22051EB300CA2E97 /* CardView.swift */,
+				12403B862236A57100C167B9 /* PollView.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -356,6 +361,7 @@
 				127A37BF2157C63500347880 /* ImageUpload.swift */,
 				1255A975215BBD2D00DE1CF3 /* ImageCheckView.swift */,
 				12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */,
+				12403B842236868100C167B9 /* SetPollsViewController.swift */,
 				1205B45A220F0915007BF7A1 /* HelperView.swift */,
 			);
 			path = TootView;
@@ -563,6 +569,7 @@
 				121764D3216F1C4E0017E76A /* ProfileEditViewController.swift in Sources */,
 				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
 				127A37C02157C63500347880 /* ImageUpload.swift in Sources */,
+				12403B872236A57100C167B9 /* PollView.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
 				12CD0263214F49E000133A95 /* EmojiData.swift in Sources */,
 				12B8B4282165CD2B00869496 /* ListData.swift in Sources */,
@@ -579,6 +586,7 @@
 				1255A96C215A6A1600DE1CF3 /* MastodonStreaming.swift in Sources */,
 				127A37B52157250700347880 /* ListSelectViewController.swift in Sources */,
 				1286DF5B215488CB008FFFAC /* ThemeColor.swift in Sources */,
+				12403B852236868100C167B9 /* SetPollsViewController.swift in Sources */,
 				127A37B221570B5600347880 /* NotificationViewController.swift in Sources */,
 				1205B45D220FEB50007BF7A1 /* HashtagCache.swift in Sources */,
 				127A37BC2157649600347880 /* SearchViewController.swift in Sources */,

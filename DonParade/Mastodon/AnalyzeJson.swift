@@ -183,6 +183,55 @@ final class AnalyzeJson {
         
         //let language = json["language"] as? String
         
+        func getPoll(json: [String: Any]) -> PollData? {
+            func getOptions(json: [Any]?) -> [(String, Int?)]? {
+                guard let json = json else { return nil }
+                
+                var list: [(String, Int?)] = []
+                for data in json {
+                    if let data = data as? [String: Any] {
+                        if let title = data["title"] as? String {
+                            let votes_count = data["votes_count"] as? Int
+                            list.append((title, votes_count))
+                        }
+                    }
+                }
+                
+                return list
+            }
+            
+            let id = json["id"] as? String
+            let expires_at = json["expires_at"] as? String
+            let expired = json["expired"] as? Bool
+            let multiple = json["multiple"] as? Bool
+            let votes_count = json["votes_count"] as? Int
+            let options = getOptions(json: json["options"] as? [Any])
+            let voted = json["voted"] as? Bool
+            
+            return PollData(id: id ?? "",
+                            expires_at: expires_at,
+                            expired: expired ?? false,
+                            multiple: multiple ?? false,
+                            votes_count: votes_count ?? -1,
+                            options: options ?? [],
+                            voted: voted)
+        }
+        
+        let poll: PollData?
+        if reblog_acct == nil {
+            if let pollJson = json["poll"] as? [String: Any] {
+                poll = getPoll(json: pollJson)
+            } else {
+                poll = nil
+            }
+        } else {
+            if let pollJson = reblog?["poll"] as? [String: Any] {
+                poll = getPoll(json: pollJson)
+            } else {
+                poll = nil
+            }
+        }
+        
         let pinned: Int?
         if reblog_acct == nil {
             if isPinned == true {
@@ -297,6 +346,7 @@ final class AnalyzeJson {
                                mentions: mentions,
                                muted: muted,
                                pinned: pinned,
+                               poll: poll,
                                reblog_acct: reblog_acct,
                                reblog_created_at: reblog_created_at,
                                reblog_id: reblog_id,
@@ -421,6 +471,7 @@ final class AnalyzeJson {
                            mentions: nil,
                            muted: nil,
                            pinned: nil,
+                           poll: nil,
                            reblog_acct: nil,
                            reblog_created_at: nil,
                            reblog_id: nil,
@@ -475,6 +526,7 @@ final class AnalyzeJson {
         let mentions: [MentionData]?
         let muted: Int?
         let pinned: Int?
+        let poll: PollData?
         let reblog_acct: String?
         let reblog_created_at: String?
         let reblog_id: String?
@@ -548,5 +600,15 @@ final class AnalyzeJson {
         let description: String?
         let image: String?
         let type: String? // "link", "photo", "video", or "rich"
+    }
+    
+    struct PollData {
+        let id: String
+        let expires_at: String?
+        let expired: Bool
+        let multiple: Bool
+        let votes_count: Int
+        let options: [(String, Int?)]
+        let voted: Bool?
     }
 }

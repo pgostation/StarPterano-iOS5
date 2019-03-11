@@ -71,6 +71,16 @@
 "DIALOG_SEARCH_EMOJI" = "絵文字検索";
 "BUTTON_SCHEDULED_TOOT" = "予約投稿";
 
+// 投票
+"ACTION_POLLS" = "投票";
+"ALERT_IMAGE_AND_POLLS" = "画像と投票は同時に投稿できません";
+"EXPIRES_TIME:" = "締め切り:";
+"BUTTON_SET" = "セット";
+"ALERT_POLL_TWO_TEXT" = "投票する項目を2つ以上設定してください";
+"POLLS_MULTIPLE" = "複数項目に投票可能";
+"POLLS_HIDE_TOTAL" = "締め切りまで結果表示しない";
+"POLL_OPTION" = "項目";
+
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "予約投稿設定";
 "ACTION_CLEAR_SCHEDULE" = "予約投稿解除";

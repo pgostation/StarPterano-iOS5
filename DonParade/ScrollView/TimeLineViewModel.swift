@@ -405,6 +405,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
         }
         
+        if let poll = data.poll {
+            // 投票表示用
+            detailOffset += 50 + CGFloat(poll.options.count) * 30
+        }
+        
         if (data.sensitive == 1 && data.mediaData != nil) { // もっと見る
             detailOffset += 20
         }
@@ -1009,6 +1014,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.cardView = cardView
                 cell.addSubview(cardView)
             }
+        }
+        
+        if let poll = data.poll {
+            // 投票表示
+            let pollView = PollView(data: poll)
+            cell.pollView = pollView
+            cell.addSubview(pollView)
         }
         
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in

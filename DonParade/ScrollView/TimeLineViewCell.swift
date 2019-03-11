@@ -54,6 +54,7 @@ final class TimeLineViewCell: UITableViewCell {
     var detailButton: UIButton?
     var applicationLabel: UILabel?
     var cardView: CardView?
+    var pollView: PollView?
     
     // お気に入りした人やブーストした人の名前表示
     var rebologerLabels: [UILabel] = []
@@ -212,6 +213,8 @@ final class TimeLineViewCell: UITableViewCell {
         }
         self.cardView?.removeFromSuperview()
         self.cardView = nil
+        self.pollView?.removeFromSuperview()
+        self.pollView = nil
         self.pinnedView?.removeFromSuperview()
         self.pinnedView = nil
         self.rightFavButton?.removeFromSuperview()
@@ -964,6 +967,12 @@ final class TimeLineViewCell: UITableViewCell {
                 top = cardView.frame.maxY
             }
             
+            if let pollView = self.pollView {
+                pollView.frame.origin.y = top + 5
+                
+                top = pollView.frame.maxY
+            }
+            
             if self.tableView?.type == .scheduled {
                 self.replyButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)
                 self.boostButton?.frame = CGRect(x: -100, y: 0, width: 0, height: 0)
@@ -1048,6 +1057,14 @@ final class TimeLineViewCell: UITableViewCell {
             if let cardView = self.cardView {
                 let top = self.boostView?.frame.maxY ?? self.imageViews.last?.frame.maxY ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
                 cardView.frame.origin.y = top + 5
+            }
+            
+            if let pollView = self.pollView {
+                var top = self.cardView?.frame.maxY
+                top = top ?? self.boostView?.frame.maxY
+                top = top ?? self.imageViews.last?.frame.maxY
+                top = top ?? ((self.messageView?.frame.maxY ?? 0) + 8 + imagesOffset)
+                pollView.frame.origin.y = top! + 5
             }
         }
     }

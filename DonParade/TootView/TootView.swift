@@ -40,7 +40,7 @@ final class TootView: UIView {
     let imagesCountButton = UIButton()
     let protectButton = UIButton()
     let cwButton = UIButton()
-    let scheduledButton = UIButton()
+    let optionButton = UIButton()
     let emojiButton = UIButton()
     
     // 画像チェック画面
@@ -96,7 +96,7 @@ final class TootView: UIView {
         inputBar.addSubview(imagesCountButton)
         inputBar.addSubview(protectButton)
         inputBar.addSubview(cwButton)
-        inputBar.addSubview(scheduledButton)
+        inputBar.addSubview(optionButton)
         inputBar.addSubview(emojiButton)
         
         self.addSubview(imageCheckView)
@@ -242,7 +242,7 @@ final class TootView: UIView {
         cwButton.setTitle("CW", for: .normal)
         cwButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
-        scheduledButton.setTitle("🕒", for: .normal)
+        optionButton.setTitle("…", for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
     }
@@ -330,18 +330,18 @@ final class TootView: UIView {
                                 width: 40,
                                 height: 40)
         
-        scheduledButton.frame = CGRect(x: cwButton.frame.maxX + margin,
-                                       y: 0,
-                                       width: 40,
-                                       height: 40)
+        optionButton.frame = CGRect(x: cwButton.frame.maxX + margin,
+                                    y: 0,
+                                    width: 40,
+                                    height: 40)
         
-        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7.0rc1以上
-            scheduledButton.isHidden = false
+        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7以上
+            optionButton.isHidden = false
         } else {
-            scheduledButton.isHidden = true
+            optionButton.isHidden = true
         }
         
-        emojiButton.frame = CGRect(x: scheduledButton.frame.maxX + margin,
+        emojiButton.frame = CGRect(x: optionButton.frame.maxX + margin,
                                    y: 0,
                                    width: 40,
                                    height: 40)

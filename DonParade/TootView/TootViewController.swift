@@ -55,7 +55,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         view.imagesCountButton.addTarget(self, action: #selector(showImagesAction), for: .touchUpInside)
         view.protectButton.addTarget(self, action: #selector(protectAction), for: .touchUpInside)
         view.cwButton.addTarget(self, action: #selector(cwAction), for: .touchUpInside)
-        view.scheduledButton.addTarget(self, action: #selector(scheduleAction), for: .touchUpInside)
+        view.optionButton.addTarget(self, action: #selector(optionAction), for: .touchUpInside)
         view.emojiButton.addTarget(self, action: #selector(emojiAction), for: .touchUpInside)
         
         // 添付画像の復帰
@@ -147,6 +147,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
         
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+            formatter.locale = enUSPosixLocale
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            return formatter
+        }()
+        
         var bodyJson: [String: Any] = [
             "status": text,
             "visibility": visibility,
@@ -160,17 +168,41 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         if let inReplyToId = TootView.inReplyToId {
             bodyJson.updateValue(inReplyToId, forKey: "in_reply_to_id")
         }
+        
+        // 投票
+        if (SetPollsView.pollArray[0].text ?? "").count > 0 && (SetPollsView.pollArray[1].text ?? "").count > 0 {
+            var pollJson: [String: Any] = [:]
+            
+            // option
+            var array: [String] = []
+            for poll in SetPollsView.pollArray {
+                if let text = poll.text, text != "" {
+                    array.append(text)
+                }
+            }
+            pollJson["options"] = array
+            
+            // expires_in
+            let date = Date().addingTimeInterval(max(310, Double(SetPollsView.expiresTime) * 60))
+            let expires_in = dateFormatter.string(from: date)
+            pollJson["expires_in"] = expires_in
+            
+            // multiple
+            pollJson["multiple"] = SetPollsView.multipleSwitch.isOn
+            
+            // hide_totals
+            pollJson["hide_totals"] = SetPollsView.hideTotalsSwitch.isOn
+            
+            bodyJson.updateValue(pollJson, forKey: "poll")
+        }
+        
+        // メディア
         for data in addJson {
             bodyJson.updateValue(data.value, forKey: data.key)
         }
+        
+        // 予約投稿
         if let scheduledDate = TootView.scheduledDate {
-            let dateFormatter: DateFormatter = {
-                let formatter = DateFormatter()
-                let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
-                formatter.locale = enUSPosixLocale
-                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-                return formatter
-            }()
             let str = dateFormatter.string(from: scheduledDate)
             bodyJson.updateValue(str, forKey: "scheduled_at")
         }
@@ -285,8 +317,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    // スケジュール設定/解除/スケジュール投稿確認
-    @objc func scheduleAction() {
+    // 投票/スケジュール設定/解除/スケジュール投稿確認
+    @objc func optionAction() {
         let rootVC = UIUtils.getFrontViewController()
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -320,6 +352,21 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 }
                 ShowMyAnyList.showScheduledList(rootVc: rootVC!)
         })
+        
+        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 279.9 || SettingsData.hostName == "mstdn.jp" { // v2.8以上
+            // 投票
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_POLLS"),
+                style: UIAlertAction.Style.default) { _ in
+                    if let tootView = TootViewController.instance?.view as? TootView {
+                        if tootView.imageCheckView.urls.count > 0 {
+                            Dialog.show(message: I18n.get("ALERT_IMAGE_AND_POLLS"))
+                            return
+                        }
+                    }
+                    SetPollsViewController.show()
+            })
+        }
         
         // キャンセル
         alertController.addAction(UIAlertAction(

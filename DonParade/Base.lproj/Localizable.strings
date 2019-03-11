@@ -71,6 +71,16 @@
 "DIALOG_SEARCH_EMOJI" = "Emoji Search";
 "BUTTON_SCHEDULED_TOOT" = "Set toot";
 
+// 投票
+"ACTION_POLLS" = "Set polls";
+"ALERT_IMAGE_AND_POLLS" = "Can't toot polls and images at same time";
+"EXPIRES_TIME:" = "Expires:";
+"BUTTON_SET" = "Set";
+"ALERT_POLL_TWO_TEXT" = "It have to least 2 polls";
+"POLLS_MULTIPLE" = "Multiple choices allow";
+"POLLS_HIDE_TOTAL" = "Hide totals until poll ends";
+"POLL_OPTION" = "Choice ";
+
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "Set schedule";
 "ACTION_CLEAR_SCHEDULE" = "Clear schedule";
