@@ -77,9 +77,14 @@
 "EXPIRES_TIME:" = "Expires:";
 "BUTTON_SET" = "Set";
 "ALERT_POLL_TWO_TEXT" = "It have to least 2 polls";
+"ALERT_SAME_POLL" = "There are same polls";
 "POLLS_MULTIPLE" = "Multiple choices allow";
 "POLLS_HIDE_TOTAL" = "Hide totals until poll ends";
 "POLL_OPTION" = "Choice ";
+"BUTTON_VOTE_DONE" = "Done";
+"VOTE_TOTAL:" = "Total:";
+"POLLS_EXPIRED" = "Expired";
+"VOTED_LABEL" = "Voted";
 
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "Set schedule";

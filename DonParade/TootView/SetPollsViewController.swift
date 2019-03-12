@@ -117,13 +117,23 @@ final class SetPollsViewController: MyViewController, UITextFieldDelegate {
     }
     
     @objc func setAction() {
-        if SetPollsView.pollArray[0].text == nil ||
-            SetPollsView.pollArray[0].text == "" ||
-            SetPollsView.pollArray[1].text == nil ||
-            SetPollsView.pollArray[1].text == "" {
+        if (SetPollsView.pollArray[0].text ?? "") == "" ||
+            (SetPollsView.pollArray[1].text ?? "") == "" {
             Dialog.show(message: I18n.get("ALERT_POLL_TWO_TEXT"))
             
             return
+        }
+        
+        for i in 0..<2 {
+            if (SetPollsView.pollArray[i].text ?? "") == "" { continue }
+            for j in i+1..<3 {
+                if (SetPollsView.pollArray[j].text ?? "") == "" { continue }
+                if SetPollsView.pollArray[i].text == SetPollsView.pollArray[j].text {
+                    Dialog.show(message: I18n.get("ALERT_SAME_POLL"))
+                    
+                    return
+                }
+            }
         }
         
         dismiss(animated: false, completion: nil)

@@ -77,9 +77,15 @@
 "EXPIRES_TIME:" = "締め切り:";
 "BUTTON_SET" = "セット";
 "ALERT_POLL_TWO_TEXT" = "投票する項目を2つ以上設定してください";
+"ALERT_SAME_POLL" = "同一内容の項目があります";
 "POLLS_MULTIPLE" = "複数項目に投票可能";
 "POLLS_HIDE_TOTAL" = "締め切りまで結果表示しない";
 "POLL_OPTION" = "項目";
+"BUTTON_VOTE_DONE" = "投票完了";
+"VOTE_TOTAL:" = "投票数:";
+"POLLS_EXPIRED" = "締め切り済み";
+"VOTED_LABEL" = "投票済み";
+"EXPIRES_TIME_FOR:" = "締め切りまで:";
 
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "予約投稿設定";

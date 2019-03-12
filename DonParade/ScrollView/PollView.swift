@@ -15,11 +15,15 @@ final class PollView: UIView {
     private var voteGraphs: [UIView] = [] // グラフ
     private var voteCountLabels: [UILabel] = [] // %と投票数の表示
     private var buttons: [UIButton] = [] // 投票ボタン
+    private var doneButton = UIButton() // 完了ボタン
     private let totalLabel = UILabel() // 総投票数を表示
     private let expiredLabel = UILabel() // 残り時間/締め切り済みを表示
     private let votedLabel = UILabel() // 投票済みを表示
+    private var data: AnalyzeJson.PollData
     
     init(data: AnalyzeJson.PollData) {
+        self.data = data
+        
         super.init(frame: CGRect(x: 10,
                                  y: 0,
                                  width: UIScreen.main.bounds.width - 20,
@@ -28,8 +32,11 @@ final class PollView: UIView {
         self.addSubview(totalLabel)
         self.addSubview(expiredLabel)
         self.addSubview(votedLabel)
+        if data.multiple && data.voted != true {
+            self.addSubview(doneButton)
+        }
         
-        setProperties(data: data)
+        setProperties()
         
         for graph in voteGraphs {
             self.addSubview(graph)
@@ -40,10 +47,12 @@ final class PollView: UIView {
         for label in voteCountLabels {
             self.addSubview(label)
         }
+        
         for button in buttons {
             self.addSubview(button)
             button.addTarget(self, action: #selector(voteAction(_:)), for: .touchUpInside)
         }
+        doneButton.addTarget(self, action: #selector(doneAction), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -51,7 +60,7 @@ final class PollView: UIView {
     }
     
     // プロパティ設定
-    private func setProperties(data: AnalyzeJson.PollData) {
+    private func setProperties() {
         for option in data.options {
             if let vote = option.1 {
                 let view = UIView()
@@ -74,37 +83,121 @@ final class PollView: UIView {
             label.adjustsFontSizeToFitWidth = true
             labels.append(label)
             
-            if data.expired == false && data.voted != true {
-                let button = UIButton()
-                button.setTitle("+", for: .normal)
-                button.backgroundColor = UIColor.blue
-                button.clipsToBounds = true
-                button.layer.cornerRadius = 8
-                buttons.append(button)
+            let button = UIButton()
+            button.setTitle("+", for: .normal)
+            button.backgroundColor = UIColor.blue
+            button.clipsToBounds = true
+            button.layer.cornerRadius = 8
+            buttons.append(button)
+            if data.expired == true || data.voted == true {
+                button.alpha = 0.3
+                button.isEnabled = false
             }
         }
         
-        totalLabel.text = "\(data.votes_count)"
+        totalLabel.text = I18n.get("VOTE_TOTAL:") + "\(data.votes_count)"
         totalLabel.textColor = ThemeColor.contrastColor
         totalLabel.adjustsFontSizeToFitWidth = true
         
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+            formatter.locale = enUSPosixLocale
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            return formatter
+        }()
+        
         if data.expired {
-            expiredLabel.text = "expired"
+            expiredLabel.text = I18n.get("POLLS_EXPIRED")
         } else if let expires_at = data.expires_at {
-            expiredLabel.text = "expires at: \(expires_at)"
+            if let date = dateFormatter.date(from: expires_at) {
+                let remain = date.timeIntervalSinceNow
+                let str: String
+                if remain < 60 {
+                    str = String(format: I18n.get("DATETIME_%D_SECS_AGO"), Int(remain))
+                } else if remain < 60 * 60 {
+                    str = String(format: I18n.get("DATETIME_%D_MINS_AGO"), Int(remain / 60))
+                } else if remain < 24 * 60 * 60 {
+                    str = String(format: I18n.get("DATETIME_%D_HOURS_AGO"), Int(remain / 60 / 60))
+                } else {
+                    str = String(format: I18n.get("DATETIME_%D_DAYS_AGO"), Int(remain / 60 / 60 / 24))
+                }
+                expiredLabel.text = I18n.get("EXPIRES_TIME_FOR:") + str
+            } else {
+                expiredLabel.text = I18n.get("EXPIRES_TIME:") + "\(expires_at)"
+            }
         }
         expiredLabel.textColor = ThemeColor.contrastColor
         expiredLabel.adjustsFontSizeToFitWidth = true
         
         if let voted = data.voted, voted == true {
-            votedLabel.text = "voted"
+            votedLabel.text = I18n.get("VOTED_LABEL")
             votedLabel.textColor = ThemeColor.contrastColor
             votedLabel.adjustsFontSizeToFitWidth = true
+        }
+        
+        doneButton.setTitle(I18n.get("BUTTON_VOTE_DONE"), for: .normal)
+        doneButton.isEnabled = false
+        doneButton.backgroundColor = UIColor.gray
+        doneButton.clipsToBounds = true
+        doneButton.layer.cornerRadius = 8
+        
+        if data.voted == true {
+            doneButton.isHidden = true
         }
     }
     
     @objc func voteAction(_ sender: UIButton) {
-        // "####"
+        if sender.backgroundColor != ThemeColor.cellBgColor {
+            sender.backgroundColor = ThemeColor.cellBgColor
+        } else {
+            sender.backgroundColor = UIColor.blue
+            return
+        }
+        
+        if !data.multiple {
+            voteRequest()
+        } else {
+            doneButton.isEnabled = true
+        }
+    }
+    
+    @objc func doneAction() {
+        voteRequest()
+        
+        doneButton.isHidden = true
+    }
+    
+    private func voteRequest() {
+        let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/polls/\(data.id)/votes")!
+        
+        var choiceArray: [String] = []
+        
+        for (i, button) in self.buttons.enumerated() {
+            if button.backgroundColor == ThemeColor.cellBgColor {
+                choiceArray.append(data.options[i].0)
+            }
+        }
+        
+        if choiceArray.count == 0 { return }
+        
+        let body: [String: Any] = ["choices": choiceArray]
+        
+        try? MastodonRequest.post(url: url, body: body) { [weak self] (data, response, error) in
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        if let pollData = AnalyzeJson.getPoll(json: responseJson) {
+                            self?.data = pollData
+                            
+                            DispatchQueue.main.async {
+                                self?.setProperties()
+                            }
+                        }
+                    }
+                } catch { }
+            }
+        }
     }
     
     override func layoutSubviews() {
@@ -153,12 +246,17 @@ final class PollView: UIView {
         
         expiredLabel.frame = CGRect(x: 70,
                                     y: top,
-                                    width: 180,
+                                    width: 170,
                                     height: 30)
         
-        votedLabel.frame = CGRect(x: 260,
+        votedLabel.frame = CGRect(x: 250,
                                   y: top,
-                                  width: 60,
+                                  width: 55,
+                                  height: 30)
+        
+        doneButton.frame = CGRect(x: 220,
+                                  y: top,
+                                  width: 95,
                                   height: 30)
     }
 }

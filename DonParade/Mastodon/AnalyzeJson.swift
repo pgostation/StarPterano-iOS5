@@ -183,40 +183,6 @@ final class AnalyzeJson {
         
         //let language = json["language"] as? String
         
-        func getPoll(json: [String: Any]) -> PollData? {
-            func getOptions(json: [Any]?) -> [(String, Int?)]? {
-                guard let json = json else { return nil }
-                
-                var list: [(String, Int?)] = []
-                for data in json {
-                    if let data = data as? [String: Any] {
-                        if let title = data["title"] as? String {
-                            let votes_count = data["votes_count"] as? Int
-                            list.append((title, votes_count))
-                        }
-                    }
-                }
-                
-                return list
-            }
-            
-            let id = json["id"] as? String
-            let expires_at = json["expires_at"] as? String
-            let expired = json["expired"] as? Bool
-            let multiple = json["multiple"] as? Bool
-            let votes_count = json["votes_count"] as? Int
-            let options = getOptions(json: json["options"] as? [Any])
-            let voted = json["voted"] as? Bool
-            
-            return PollData(id: id ?? "",
-                            expires_at: expires_at,
-                            expired: expired ?? false,
-                            multiple: multiple ?? false,
-                            votes_count: votes_count ?? -1,
-                            options: options ?? [],
-                            voted: voted)
-        }
-        
         let poll: PollData?
         if reblog_acct == nil {
             if let pollJson = json["poll"] as? [String: Any] {
@@ -360,6 +326,41 @@ final class AnalyzeJson {
                                visibility: visibility,
                                isMerge: isMerge)
         return data
+    }
+    
+    // 投票データ
+    static func getPoll(json: [String: Any]) -> PollData? {
+        func getOptions(json: [Any]?) -> [(String, Int?)]? {
+            guard let json = json else { return nil }
+            
+            var list: [(String, Int?)] = []
+            for data in json {
+                if let data = data as? [String: Any] {
+                    if let title = data["title"] as? String {
+                        let votes_count = data["votes_count"] as? Int
+                        list.append((title, votes_count))
+                    }
+                }
+            }
+            
+            return list
+        }
+        
+        let id = json["id"] as? String
+        let expires_at = json["expires_at"] as? String
+        let expired = json["expired"] as? Bool
+        let multiple = json["multiple"] as? Bool
+        let votes_count = json["votes_count"] as? Int
+        let options = getOptions(json: json["options"] as? [Any])
+        let voted = json["voted"] as? Bool
+        
+        return PollData(id: id ?? "",
+                        expires_at: expires_at,
+                        expired: expired ?? false,
+                        multiple: multiple ?? false,
+                        votes_count: votes_count ?? -1,
+                        options: options ?? [],
+                        voted: voted)
     }
     
     // アカウント
