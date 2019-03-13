@@ -182,7 +182,7 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
         case "follow":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_FOLLOW")
         default:
-            cell.notificationLabel.text = nil
+            cell.notificationLabel.text = data.type
         }
         
         if let created_at = data.created_at {

@@ -86,7 +86,7 @@ final class TimeLineViewController: MyViewController {
                     }
                 }
                 
-                if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 269.9 { // v2.7.0rc1以上
+                if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 279.9 { // v2.8以上
                     // バージョンチェック不要
                 } else {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

@@ -353,7 +353,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 ShowMyAnyList.showScheduledList(rootVc: rootVC!)
         })
         
-        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 279.9 || SettingsData.hostName == "mstdn.jp" { // v2.8以上
+        if SettingsData.instanceVersion(hostName: SettingsData.hostName ?? "") >= 279.9 || SettingsData.hostName == "mstdn.jp" || SettingsData.hostName == "kirishima.cloud" { // v2.8以上
             // 投票
             alertController.addAction(UIAlertAction(
                 title: I18n.get("ACTION_POLLS"),

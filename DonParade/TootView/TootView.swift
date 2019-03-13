@@ -243,6 +243,7 @@ final class TootView: UIView {
         cwButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         optionButton.setTitle("…", for: .normal)
+        optionButton.setTitleColor(ThemeColor.mainButtonsTitleColor, for: .normal)
         
         emojiButton.setTitle("😀", for: .normal)
     }
