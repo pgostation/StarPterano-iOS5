@@ -71,7 +71,7 @@ final class PollView: UIView {
                 voteGraphs.append(view)
                 
                 let label = UILabel()
-                label.text = "\(vote)"
+                label.text = "\(vote)" + I18n.get("VOTE_COUNT_NUM")
                 label.textColor = ThemeColor.contrastColor
                 label.adjustsFontSizeToFitWidth = true
                 voteCountLabels.append(label)
@@ -79,8 +79,12 @@ final class PollView: UIView {
             
             let label = UILabel()
             label.text = option.0
+            label.sizeToFit()
+            if label.frame.width > self.frame.width - 100 {
+                label.numberOfLines = 2
+                label.font = UIFont.systemFont(ofSize: 12)
+            }
             label.textColor = ThemeColor.contrastColor
-            label.adjustsFontSizeToFitWidth = true
             labels.append(label)
             
             let button = UIButton()
@@ -171,11 +175,11 @@ final class PollView: UIView {
     private func voteRequest() {
         let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/polls/\(data.id)/votes")!
         
-        var choiceArray: [String] = []
+        var choiceArray: [Int] = []
         
         for (i, button) in self.buttons.enumerated() {
             if button.backgroundColor == ThemeColor.cellBgColor {
-                choiceArray.append(data.options[i].0)
+                choiceArray.append(i)
             }
         }
         
@@ -205,7 +209,7 @@ final class PollView: UIView {
         for label in labels {
             label.frame = CGRect(x: 10,
                                  y: top,
-                                 width: self.frame.width - 80,
+                                 width: self.frame.width - 110,
                                  height: 30)
             top += 30
         }

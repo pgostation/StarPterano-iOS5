@@ -85,6 +85,8 @@
 "VOTE_TOTAL:" = "Total:";
 "POLLS_EXPIRED" = "Expired";
 "VOTED_LABEL" = "Voted";
+"EXPIRES_TIME_FOR:" = "Expires time for:";
+"VOTE_COUNT_NUM" = "";
 
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "Set schedule";

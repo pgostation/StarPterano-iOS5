@@ -86,6 +86,7 @@
 "POLLS_EXPIRED" = "締め切り済み";
 "VOTED_LABEL" = "投票済み";
 "EXPIRES_TIME_FOR:" = "締め切りまで:";
+"VOTE_COUNT_NUM" = "票";
 
 // 予約投稿
 "ACTION_SET_SCHEDULE" = "予約投稿設定";

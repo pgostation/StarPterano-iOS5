@@ -224,6 +224,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                             if let view = self.view as? TootView {
                                 view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
                             }
+                            
+                            SetPollsView.clear()
                         }
                         
                         // 最近使用したハッシュタグに追加
