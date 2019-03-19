@@ -238,6 +238,23 @@ final class NotificationTableCell: UITableViewCell {
             DispatchQueue.main.asyncAfter(deadline: .now() + (TootViewController.isShown ? 0.0 : 0.2)) {
                 if let vc = TootViewController.instance, let view = vc.view as? TootView {
                     view.textField.text = "@\(self.idLabel.text ?? "") "
+                    
+                    do {
+                        let string = self.statusLabel.text ?? ""
+                        let regex = try? NSRegularExpression(pattern: "@[a-zA-Z0-9_]+",
+                                                             options: NSRegularExpression.Options())
+                        let matches = regex?.matches(in: string,
+                                                     options: NSRegularExpression.MatchingOptions(),
+                                                     range: NSMakeRange(0, string.count))
+                        for result in matches ?? [] {
+                            for i in 0..<result.numberOfRanges {
+                                let idStr = (string as NSString).substring(with: result.range(at: i))
+                                if idStr != "@" + (SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? "") && idStr != "@\(self.idLabel.text ?? "")" {
+                                    view.textField.text += idStr + " "
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
