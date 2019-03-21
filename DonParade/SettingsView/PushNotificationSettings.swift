@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import FirebaseMessaging
 
 final class PushNotificationSettings {
     static func auth() {
@@ -40,10 +41,22 @@ extension AppDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let token = deviceToken.map { String(format: "%.2hhx", $0) }.joined()
+        //let iosToken = deviceToken.map { String(format: "%.2hhx", $0) }.joined()
         
-        TootViewController.toot(text: "StarPterano Push Notification Device Token:\n" + token, spoilerText: nil, nsfw: false, visibility: "direct", addJson: [:], view: nil)
-        
+        sendFcmToken(isRetry: false)
+    }
+    
+    private func sendFcmToken(isRetry: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // Firebase Cloud Messaging用のトークンを取得する
+            if let fcmToken = Messaging.messaging().fcmToken {
+                TootViewController.toot(text: "StarPterano Push Notification Device Token:\n" + fcmToken, spoilerText: nil, nsfw: false, visibility: "direct", addJson: [:], view: nil)
+            } else if !isRetry {
+                self.sendFcmToken(isRetry: true)
+            } else {
+                Dialog.show(message: "Error: Can't get token.")
+            }
+        }
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

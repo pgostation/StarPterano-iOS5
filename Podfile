@@ -8,4 +8,6 @@ pod 'SwiftyGif'
 pod 'APNGKit'
 pod 'SDWebImage'
 pod 'SDWebImage/WebP'
+pod 'Firebase/Core'
+pod 'Firebase/Messaging'
 end

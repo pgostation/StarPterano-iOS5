@@ -59,6 +59,7 @@
 		12CD0263214F49E000133A95 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0262214F49E000133A95 /* EmojiData.swift */; };
 		12CD0265214FD37700133A95 /* AnalyzeJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0264214FD37700133A95 /* AnalyzeJson.swift */; };
 		12CD0267214FD4F000133A95 /* TimeLineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */; };
+		12D381B02243A8FE00B0140A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 12D381AF2243A8FE00B0140A /* GoogleService-Info.plist */; };
 		12D5300821FC17BD00061A87 /* SetScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */; };
 		12E4ABF921ECCBC00029A933 /* decision21.caf in Resources */ = {isa = PBXBuildFile; fileRef = 12E4ABF821ECCAAE0029A933 /* decision21.caf */; };
 		12F6602F215656890049AEE0 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F6602E215656890049AEE0 /* ImageUtils.swift */; };
@@ -141,6 +142,7 @@
 		12CD0262214F49E000133A95 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
 		12CD0264214FD37700133A95 /* AnalyzeJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeJson.swift; sourceTree = "<group>"; };
 		12CD0266214FD4F000133A95 /* TimeLineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewCell.swift; sourceTree = "<group>"; };
+		12D381AF2243A8FE00B0140A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		12D5300721FC17BD00061A87 /* SetScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScheduleViewController.swift; sourceTree = "<group>"; };
 		12E4ABF821ECCAAE0029A933 /* decision21.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = decision21.caf; sourceTree = "<group>"; };
 		12F6602E215656890049AEE0 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				12F9AC7B214CA35F00E9E508 /* Main.storyboard */,
 				12F9AC7E214CA36100E9E508 /* Assets.xcassets */,
 				12F9AC80214CA36100E9E508 /* LaunchScreen.storyboard */,
+				12D381AF2243A8FE00B0140A /* GoogleService-Info.plist */,
 				12F9AC83214CA36100E9E508 /* Info.plist */,
 				121764CA2167AB830017E76A /* InfoPlist.strings */,
 				12F9ACA4214CE9B900E9E508 /* Localizable.strings */,
@@ -481,6 +484,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12F9AC82214CA36100E9E508 /* LaunchScreen.storyboard in Resources */,
+				12D381B02243A8FE00B0140A /* GoogleService-Info.plist in Resources */,
 				121764C82167AB830017E76A /* InfoPlist.strings in Resources */,
 				12F9ACA2214CE9B900E9E508 /* Localizable.strings in Resources */,
 				12F9AC7F214CA36100E9E508 /* Assets.xcassets in Resources */,
@@ -503,20 +507,26 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DonParade/Pods-DonParade-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APNGKit/APNGKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework",
 				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/APNGKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGif.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
