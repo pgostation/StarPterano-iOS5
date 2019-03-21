@@ -131,18 +131,18 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 // 画像を全てアップロードし終わったら投稿
                 group.notify(queue: DispatchQueue.main) {
                     let addJson: [String: Any] = ["media_ids": idList]
-                    self.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson)
+                    TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson, view: self.view as? TootView)
                 }
             }
         } else {
             // テキストだけなのですぐに投稿
-            toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: [:])
+            TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: [:], view: self.view as? TootView)
         }
         
         closeAction()
     }
     
-    private func toot(text: String, spoilerText: String?, nsfw: Bool, visibility: String, addJson: [String: Any]) {
+    static func toot(text: String, spoilerText: String?, nsfw: Bool, visibility: String, addJson: [String: Any], view: TootView?) {
         guard let hostName = SettingsData.hostName else { return }
         
         let url = URL(string: "https://\(hostName)/api/v1/statuses")!
@@ -221,7 +221,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                             TootView.inReplyToId = nil
                             TootView.inReplyToContent = nil
                             TootView.scheduledDate = nil
-                            if let view = self.view as? TootView {
+                            if let view = view {
                                 view.tootButton.setTitle(I18n.get("BUTTON_TOOT"), for: .normal)
                             }
                             

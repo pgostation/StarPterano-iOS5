@@ -226,6 +226,8 @@
 "SETTINGS_SEARCH" = "Search in timeline";
 "SETTINGS_LICENSE" = "Licenses";
 "SETTINGS_VERSION" = "Version";
+"SETTINGS_PUSH_NOTIFICATIONS" = "macOS App Notifications";
+"DIALOG_PUSH_NOTIFY" = "It send Device token by DM. You set it to StarPterano macOS ver.";
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "Stream is disconnected";

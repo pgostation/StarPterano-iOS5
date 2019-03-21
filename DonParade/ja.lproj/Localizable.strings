@@ -226,6 +226,8 @@
 "SETTINGS_SEARCH" = "タイムライン内を検索";
 "SETTINGS_LICENSE" = "著作権情報";
 "SETTINGS_VERSION" = "バージョン";
+"SETTINGS_PUSH_NOTIFICATIONS" = "macOSアプリからの通知";
+"DIALOG_PUSH_NOTIFY" = "このiPhone用のトークンをDMで送信します。macOS版星プテラノに設定してください";
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "ストリーミング切断";

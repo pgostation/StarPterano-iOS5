@@ -118,6 +118,10 @@ final class LoginViewController: MyViewController {
                         view.inputCodeField.isHidden = true
                         view.codeEnterButton.isHidden = true
                         view.resetButton.isHidden = true
+                        
+                        view.authButton.backgroundColor = UIColor.blue
+                        view.codeEnterButton.backgroundColor = UIColor.blue
+                        view.inputCodeField.text = nil
                     }
                 } catch {
                 }

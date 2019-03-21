@@ -99,10 +99,12 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case license = "SETTINGS_LICENSE"
         case version = "SETTINGS_VERSION"
         case clearCache = "SETTINGS_CLEAR_CACHE"
+        case pushNotify = "SETTINGS_PUSH_NOTIFICATIONS"
     }
     private let otherList: [Other] = [.license,
                                       .version,
-                                      .clearCache]
+                                      .clearCache,
+                                      .pushNotify]
     
     // セクションの数
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -360,6 +362,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 if let urls = try? FileManager.default.contentsOfDirectory(at: cacheDirUrl, includingPropertiesForKeys: nil, options: .skipsPackageDescendants) {
                     subtitle = "\(urls.count)"
                 }
+            case .pushNotify:
+                cell.accessoryType = .disclosureIndicator
             }
         default:
             break
@@ -527,6 +531,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                 }
                                 tableView.reloadData()
                 })
+            case .pushNotify:
+                Dialog.show(message: I18n.get("DIALOG_PUSH_NOTIFY"))
+                
+                // デバイストークンを取得してDMで送る
+                getAndSendDeviceToken()
             }
         default:
             break
@@ -569,5 +578,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 }
             }
         }
+    }
+    
+    // デバイストークンを取得し、DMで送る
+    private func getAndSendDeviceToken() {
+        PushNotificationSettings.auth()
+        
+        
+        
     }
 }

@@ -16,6 +16,7 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+GoogleService-Info.plist
 
 Pods/*
 

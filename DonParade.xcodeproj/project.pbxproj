@@ -78,6 +78,7 @@
 		12F9ACA8214D1C0900E9E508 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA7214D1C0900E9E508 /* MainViewController.swift */; };
 		12F9ACAA214D412400E9E508 /* TimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */; };
 		12F9ACAC214D424D00E9E508 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F9ACAB214D424D00E9E508 /* UIUtils.swift */; };
+		12FAE0B92243503E00BED9E1 /* PushNotificationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FAE0B82243503E00BED9E1 /* PushNotificationSettings.swift */; };
 		5E5CE25540D5ADFBD2B1A09A /* Pods_DonParade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34A5C456964AEA66CDD4D8C /* Pods_DonParade.framework */; };
 /* End PBXBuildFile section */
 
@@ -162,6 +163,8 @@
 		12F9ACA7214D1C0900E9E508 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		12F9ACA9214D412400E9E508 /* TimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineViewController.swift; sourceTree = "<group>"; };
 		12F9ACAB214D424D00E9E508 /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
+		12FAE0B82243503E00BED9E1 /* PushNotificationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSettings.swift; sourceTree = "<group>"; };
+		12FAE0BA224350A800BED9E1 /* DonParade.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonParade.entitlements; sourceTree = "<group>"; };
 		A49ADC84994CC2099CB2E38C /* Pods-DonParade.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonParade.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonParade/Pods-DonParade.release.xcconfig"; sourceTree = "<group>"; };
 		B34A5C456964AEA66CDD4D8C /* Pods_DonParade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonParade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -256,6 +259,7 @@
 		12F9AC76214CA35F00E9E508 /* DonParade */ = {
 			isa = PBXGroup;
 			children = (
+				12FAE0BA224350A800BED9E1 /* DonParade.entitlements */,
 				12515155217AA71D0068F9AA /* Sound */,
 				12F9AC8D214CA3FD00E9E508 /* Mastodon */,
 				12F9AC8A214CA3A300E9E508 /* UI */,
@@ -331,6 +335,7 @@
 				1286DF622154F2DA008FFFAC /* SettingsSelectProtectMode.swift */,
 				1255A977215D1B2600DE1CF3 /* ShowMyAnyList.swift */,
 				121764D02168B24E0017E76A /* FollowRequestViewController.swift */,
+				12FAE0B82243503E00BED9E1 /* PushNotificationSettings.swift */,
 				1255A96D215A7F5900DE1CF3 /* License.text */,
 			);
 			path = SettingsView;
@@ -443,6 +448,11 @@
 					12F9AC73214CA35F00E9E508 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -568,6 +578,7 @@
 				124CEC272206F49C0018E40D /* TextConverter.swift in Sources */,
 				121764D3216F1C4E0017E76A /* ProfileEditViewController.swift in Sources */,
 				12CD025F214F2F1400133A95 /* TimeLineViewModel.swift in Sources */,
+				12FAE0B92243503E00BED9E1 /* PushNotificationSettings.swift in Sources */,
 				127A37C02157C63500347880 /* ImageUpload.swift in Sources */,
 				12403B872236A57100C167B9 /* PollView.swift in Sources */,
 				12F9AC7A214CA35F00E9E508 /* ViewController.swift in Sources */,
@@ -770,6 +781,8 @@
 			baseConfigurationReference = 07B719C767E8F3CB26EC8954 /* Pods-DonParade.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DonParade/DonParade.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5M8K6XWJN;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -786,6 +799,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pgostation.DonParade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -796,6 +810,8 @@
 			baseConfigurationReference = A49ADC84994CC2099CB2E38C /* Pods-DonParade.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DonParade/DonParade.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L5M8K6XWJN;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -812,6 +828,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pgostation.DonParade;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
