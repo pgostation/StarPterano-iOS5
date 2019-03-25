@@ -50,7 +50,7 @@ extension AppDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // Firebase Cloud Messaging用のトークンを取得する
             if let fcmToken = Messaging.messaging().fcmToken {
-                TootViewController.toot(text: "StarPterano Push Notification Device Token:\n" + fcmToken, spoilerText: nil, nsfw: false, visibility: "direct", addJson: [:], view: nil)
+                TootViewController.toot(text: I18n.get("DM_TOKEN_MESSAGE") + fcmToken, spoilerText: nil, nsfw: false, visibility: "direct", addJson: [:], view: nil)
             } else if !isRetry {
                 self.sendFcmToken(isRetry: true)
             } else {

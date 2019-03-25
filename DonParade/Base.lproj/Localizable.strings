@@ -228,6 +228,7 @@
 "SETTINGS_VERSION" = "Version";
 "SETTINGS_PUSH_NOTIFICATIONS" = "macOS App Notifications";
 "DIALOG_PUSH_NOTIFY" = "It send Device token by DM. You set it to StarPterano macOS ver.";
+"DM_TOKEN_MESSAGE" = "StarPterano Push Notification Device Token:\n";
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "Stream is disconnected";

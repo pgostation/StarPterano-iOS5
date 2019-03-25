@@ -228,6 +228,7 @@
 "SETTINGS_VERSION" = "バージョン";
 "SETTINGS_PUSH_NOTIFICATIONS" = "macOSアプリからの通知";
 "DIALOG_PUSH_NOTIFY" = "このiPhone用のトークンをDMで送信します。macOS版星プテラノに設定してください";
+"DM_TOKEN_MESSAGE" = "星プテラノプッシュ通知トークン(通知設定にコピペしてください):\n";
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "ストリーミング切断";
