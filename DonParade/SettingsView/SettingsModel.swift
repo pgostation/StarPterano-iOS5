@@ -77,6 +77,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case showListButton = "SETTINGS_SHOWLISTBUTTON"
         case hiragana = "SETTINGS_HIRAGANA"
         case showFavDialog = "SETTINGS_SHOWFAVDIALOG"
+        case hashtagDialog = "SETTINGS_HASHTAG_DIALOG"
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
@@ -92,7 +93,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .showListButton,
                                                   .showFTLButton,
                                                   .hiragana,
-                                                  .showFavDialog]
+                                                  .showFavDialog,
+                                                  .hashtagDialog]
     
     // 6.その他
     private enum Other: String {
@@ -344,6 +346,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     SettingsData.showFavDialog = isOn
                 }
                 return cell
+            case .hashtagDialog:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.hashtagDialog)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.hashtagDialog = isOn
+                }
+                return cell
             }
         case 5:
             title = I18n.get(otherList[indexPath.row].rawValue)
@@ -583,8 +592,5 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     // デバイストークンを取得し、DMで送る
     private func getAndSendDeviceToken() {
         PushNotificationSettings.auth()
-        
-        
-        
     }
 }

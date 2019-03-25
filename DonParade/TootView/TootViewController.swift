@@ -71,6 +71,34 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         // 通常テキスト
         guard let attributedText = view.textField.attributedText else { return }
         
+        // 公開範囲
+        let visibility = view.protectMode
+        
+        // ハッシュタグが含まれている場合、公開にするかどうか
+        if SettingsData.hashtagDialog {
+            if attributedText.string.contains("#") && (visibility == .privateMode || visibility == .unlisted) {
+                Dialog.show(message: I18n.get("DIALOG_CHANGE_HASHTAG_PROTECTMODE"),
+                            okName: I18n.get("BUTTON_CHANGE_TO_PUBLIC"),
+                            cancelName: I18n.get("BUTTON_NOT_CHANGE")) { result in
+                                if result {
+                                    self.innerTootAction(visibility: SettingsData.ProtectMode.publicMode)
+                                } else {
+                                    self.innerTootAction(visibility: visibility)
+                                }
+                }
+                return
+            }
+        }
+        
+        innerTootAction(visibility: visibility)
+    }
+    
+    private func innerTootAction(visibility: SettingsData.ProtectMode) {
+        guard let view = self.view as? TootView else { return }
+        
+        // 通常テキスト
+        guard let attributedText = view.textField.attributedText else { return }
+        
         let text = DecodeToot.encodeEmoji(attributedText: attributedText, textStorage: NSTextStorage(attributedString: attributedText), isToot: true)
         
         // 保護テキスト
@@ -84,8 +112,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         // 投稿するものがない
         if attributedText.length == 0 && spoilerText == nil && view.imageCheckView.urls.count == 0 { return }
         
-        // 公開範囲
-        let visibility = view.protectMode.rawValue
+        // NSFW
         let nsfw = (!view.spoilerTextField.isHidden) || view.imageCheckView.nsfwSw.isOn
         
         if view.imageCheckView.urls.count > 0 {
@@ -131,12 +158,12 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 // 画像を全てアップロードし終わったら投稿
                 group.notify(queue: DispatchQueue.main) {
                     let addJson: [String: Any] = ["media_ids": idList]
-                    TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: addJson, view: self.view as? TootView)
+                    TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility.rawValue, addJson: addJson, view: self.view as? TootView)
                 }
             }
         } else {
             // テキストだけなのですぐに投稿
-            TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility, addJson: [:], view: self.view as? TootView)
+            TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility.rawValue, addJson: [:], view: self.view as? TootView)
         }
         
         closeAction()

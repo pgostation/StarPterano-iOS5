@@ -70,6 +70,9 @@
 "ALERT_IMAGE_COUNT_MAX" = "Images maximum 4.";
 "DIALOG_SEARCH_EMOJI" = "Emoji Search";
 "BUTTON_SCHEDULED_TOOT" = "Set toot";
+"DIALOG_CHANGE_HASHTAG_PROTECTMODE" = "This toot contains hashtag, Do you change the visibility to public?";
+"BUTTON_CHANGE_TO_PUBLIC" = "Public";
+"BUTTON_NOT_CHANGE" = "Not change";
 
 // 投票
 "ACTION_POLLS" = "Set polls";
@@ -216,6 +219,7 @@
 "SETTINGS_ABSOLUTETIME" = "Use absolute time";
 "SETTINGS_HIRAGANA" = "To hiragana";
 "SETTINGS_SHOWFAVDIALOG" = "Shows on favorite dialog";
+"SETTINGS_HASHTAG_DIALOG" = "Shows dialog with hashtag toot";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

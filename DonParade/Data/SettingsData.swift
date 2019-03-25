@@ -470,6 +470,24 @@ final class SettingsData {
         }
     }
     
+    // ハッシュタグ使用時に公開にするダイアログを開くかどうか
+    static var hashtagDialog: Bool {
+        get {
+            if let string = defaults.string(forKey: "hashtagDialog") {
+                let value = (string == "ON")
+                return value
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "hashtagDialog")
+            } else {
+                defaults.removeObject(forKey: "hashtagDialog")
+            }
+        }
+    }
+    
     // 絵文字キーボードサイズ
     static var emojiKeyboardHeight: CGFloat {
         get {
