@@ -114,6 +114,7 @@ final class EmojiKeyboard: UIView {
         }
         
         (textView as? UITextView)?.insertText(spaceStr)
+        (textView as? UITextField)?.insertText(spaceStr)
     }
     
     @objc func returnAction() {
@@ -125,10 +126,11 @@ final class EmojiKeyboard: UIView {
             return
         }
         (textView as? UITextView)?.insertText("\n")
+        (textView as? UITextField)?.insertText("\n")
     }
     
     @objc func deleteAction() {
-        guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag)  as? UITextView else { return }
+        guard let textView = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag) else { return }
         let textView2 = UIUtils.getFrontViewController()?.view.viewWithTag(UIUtils.responderTag2) as? UITextView
         
         if textView2?.isFirstResponder == true, let textView2 = textView2 {
@@ -139,10 +141,14 @@ final class EmojiKeyboard: UIView {
             return
         }
         
-        if EmojiKeyboard.getCarretBeforeChar(textView: textView) == "\u{200b}" {
+        if let textView = textView as? UITextView {
+            if EmojiKeyboard.getCarretBeforeChar(textView: textView) == "\u{200b}" {
+                textView.deleteBackward()
+            }
             textView.deleteBackward()
+        } else if let textField = textView as? UITextField {
+            textField.deleteBackward()
         }
-        textView.deleteBackward()
     }
     
     @objc func searchAction() {
@@ -378,6 +384,8 @@ private final class EmojiInputScrollView: UIScrollView {
             // ダークモードでテキストが黒に戻ってしまう問題対策として、もう一度フォントを設定
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
+        } else if let textField = textView as? UITextField {
+            textField.insertText("\u{200b}:" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
         }
         
         addRecent(key: button.key)

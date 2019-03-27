@@ -10,7 +10,7 @@
 
 import UIKit
 
-final class SetPollsViewController: MyViewController, UITextFieldDelegate {
+final class SetPollsViewController: MyViewController, UITextFieldDelegate, UIScrollViewDelegate {
     static func show() {
         let vc = SetPollsViewController()
         vc.modalPresentationStyle = .overCurrentContext
@@ -32,15 +32,20 @@ final class SetPollsViewController: MyViewController, UITextFieldDelegate {
     }
     
     override func loadView() {
-        self.view = SetPollsView()
+        let view = SetPollsView()
+        self.view = view
         
         SetPollsView.expiresButton.addTarget(self, action: #selector(expiresAction), for: .touchUpInside)
         SetPollsView.setButton.addTarget(self, action: #selector(setAction), for: .touchUpInside)
         SetPollsView.cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
         
+        view.emojiButton.addTarget(self, action: #selector(emojiAction), for: .touchUpInside)
+        
         for poll in SetPollsView.pollArray {
             poll.delegate = self
         }
+        
+        view.scrollView.delegate = self
     }
     
     @objc func expiresAction() {
@@ -116,6 +121,38 @@ final class SetPollsViewController: MyViewController, UITextFieldDelegate {
         rootVC?.present(alertController, animated: true, completion: nil)
     }
     
+    // 絵文字ボタンの処理
+    @objc func emojiAction() {
+        guard let view = self.view as? SetPollsView else { return }
+        
+        if SetPollsView.pollArray.first?.inputView is EmojiKeyboard {
+            // テキストフィールドのカスタムキーボードを解除
+            for field in SetPollsView.pollArray {
+                field.inputView = nil
+            }
+            
+            view.emojiButton.setTitle("😀", for: .normal)
+        } else {
+            let emojiView = EmojiKeyboard()
+            
+            // テキストフィールドのカスタムキーボードを変更
+            for field in SetPollsView.pollArray {
+                field.inputView = emojiView
+            }
+            
+            view.emojiButton.setTitle("🔠", for: .normal)
+        }
+        
+        var firstResponder: UITextField? = nil
+        for field in SetPollsView.pollArray {
+            if field.isFirstResponder {
+                firstResponder = field
+            }
+        }
+        firstResponder?.resignFirstResponder()
+        firstResponder?.becomeFirstResponder()
+    }
+    
     @objc func setAction() {
         if (SetPollsView.pollArray[0].text ?? "") == "" ||
             (SetPollsView.pollArray[1].text ?? "") == "" {
@@ -153,10 +190,18 @@ final class SetPollsViewController: MyViewController, UITextFieldDelegate {
         
         return true
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.tag = UIUtils.responderTag
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.setNeedsLayout()
+    }
 }
 
 final class SetPollsView: UIView {
-    private let scrollView = UIScrollView()
+    let scrollView = UIScrollView()
     private let mainView = UIView()
     private let multipleLabel = UILabel()
     private let hideTotalsLabel = UILabel()
@@ -169,6 +214,9 @@ final class SetPollsView: UIView {
     
     static var expiresTime: Int = 60 // デフォルト60分
     
+    // 入力バー
+    let inputBar = UIView()
+    let emojiButton = UIButton()
     private var keyBoardHeight: CGFloat = 0
     
     init() {
@@ -186,6 +234,8 @@ final class SetPollsView: UIView {
         for poll in SetPollsView.pollArray {
             mainView.addSubview(poll)
         }
+        mainView.addSubview(inputBar)
+        inputBar.addSubview(emojiButton)
         
         setProperties()
         
@@ -228,6 +278,10 @@ final class SetPollsView: UIView {
             poll.textColor = ThemeColor.contrastColor
             poll.placeholder = I18n.get("POLL_OPTION") + "\(i + 1)"
         }
+        
+        inputBar.backgroundColor = ThemeColor.cellBgColor
+        
+        emojiButton.setTitle("😀", for: .normal)
         
         // キーボードの高さを監視
         NotificationCenter.default.addObserver(
@@ -340,6 +394,23 @@ final class SetPollsView: UIView {
                                 height: 40)
             top += 50
         }
+        
+        if keyBoardHeight > 0 {
+            self.inputBar.frame = CGRect(x: 0,
+                                         y: screenBounds.height - keyBoardHeight - 40 + scrollView.contentOffset.y - 20,
+                                         width: screenBounds.width,
+                                         height: 40)
+        } else {
+            self.inputBar.frame = CGRect(x: 0,
+                                         y: screenBounds.height + scrollView.contentOffset.y,
+                                         width: screenBounds.width,
+                                         height: 40)
+        }
+        
+        self.emojiButton.frame = CGRect(x: screenBounds.width - 50,
+                                        y: 0,
+                                        width: 40,
+                                        height: 40)
         
         mainView.frame = CGRect(x: 0,
                                 y: 0,
