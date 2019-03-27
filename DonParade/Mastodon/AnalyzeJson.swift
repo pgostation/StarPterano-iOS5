@@ -353,6 +353,7 @@ final class AnalyzeJson {
         let votes_count = json["votes_count"] as? Int
         let options = getOptions(json: json["options"] as? [Any])
         let voted = json["voted"] as? Bool
+        let emojis = json["emojis"] as? [[String: Any]]
         
         return PollData(id: id ?? "",
                         expires_at: expires_at,
@@ -360,7 +361,8 @@ final class AnalyzeJson {
                         multiple: multiple ?? false,
                         votes_count: votes_count ?? -1,
                         options: options ?? [],
-                        voted: voted)
+                        voted: voted,
+                        emojis: emojis)
     }
     
     // アカウント
@@ -611,5 +613,6 @@ final class AnalyzeJson {
         let votes_count: Int
         let options: [(String, Int?)]
         let voted: Bool?
+        let emojis: [[String: Any]]?
     }
 }

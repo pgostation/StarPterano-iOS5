@@ -78,7 +78,10 @@ final class PollView: UIView {
             }
             
             let label = UILabel()
-            label.text = option.0
+            let (attrStr, _) = DecodeToot.decodeContent(content: option.0, emojis: data.emojis) { [weak self] in
+                label.attributedText = DecodeToot.decodeContent(content: option.0, emojis: self?.data.emojis, callback: nil).0
+            }
+            label.attributedText = attrStr
             label.sizeToFit()
             if label.frame.width > self.frame.width - 100 {
                 label.numberOfLines = 2
