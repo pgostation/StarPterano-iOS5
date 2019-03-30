@@ -192,6 +192,10 @@ final class SetPollsViewController: MyViewController, UITextFieldDelegate, UIScr
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        for textField in SetPollsView.pollArray {
+            textField.tag = 0
+        }
+        
         textField.tag = UIUtils.responderTag
     }
     

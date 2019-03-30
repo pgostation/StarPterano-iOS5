@@ -210,9 +210,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             pollJson["options"] = array
             
             // expires_in
-            let date = Date().addingTimeInterval(max(310, Double(SetPollsView.expiresTime) * 60))
-            let expires_in = dateFormatter.string(from: date)
-            pollJson["expires_in"] = expires_in
+            pollJson["expires_in"] = max(310, SetPollsView.expiresTime * 60)
             
             // multiple
             pollJson["multiple"] = SetPollsView.multipleSwitch.isOn
