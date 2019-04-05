@@ -172,14 +172,16 @@ final class TimeLineView: UITableView {
             if let data = data {
                 do {
                     if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject] {
-                        AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isPinned: pinned)
-                        
-                        // ローカルにホームを統合する場合
-                        if SettingsData.mergeLocalTL && self?.type == .home {
-                            let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
-                            if let localTlVc = MainViewController.instance?.timelineList[localKey] {
-                                if let localTlView = localTlVc.view as? TimeLineView {
-                                    AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isMerge: true)
+                        TimeLineView.tableDispatchQueue.async {
+                            AnalyzeJson.analyzeJsonArray(view: strongSelf, model: strongSelf.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isPinned: pinned)
+                            
+                            // ローカルにホームを統合する場合
+                            if SettingsData.mergeLocalTL && self?.type == .home {
+                                let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
+                                if let localTlVc = MainViewController.instance?.timelineList[localKey] {
+                                    if let localTlView = localTlVc.view as? TimeLineView {
+                                        AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isMerge: true)
+                                    }
                                 }
                             }
                         }
@@ -250,7 +252,7 @@ final class TimeLineView: UITableView {
         }
         
         // ストリーミングが停止していれば再開
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
             self.startStreaming()
         }
     }
