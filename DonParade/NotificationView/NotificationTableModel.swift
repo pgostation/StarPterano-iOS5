@@ -181,6 +181,8 @@ final class NotificationTableModel: NSObject, UITableViewDataSource, UITableView
             cell.notificationLabel.text = I18n.get("NOTIFICATION_FAV")
         case "follow":
             cell.notificationLabel.text = I18n.get("NOTIFICATION_FOLLOW")
+        case "poll":
+            cell.notificationLabel.text = I18n.get("NOTIFICATION_POLL")
         default:
             cell.notificationLabel.text = data.type
         }

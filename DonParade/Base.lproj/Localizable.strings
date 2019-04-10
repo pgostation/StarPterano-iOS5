@@ -112,6 +112,7 @@
 "NOTIFICATION_BOOST" = "🔁is Boosted";
 "NOTIFICATION_FAV" = "🌟is Favorited";
 "NOTIFICATION_FOLLOW" = "is Followed";
+"NOTIFICATION_POLL" = "Poll is finished";
 "NOTIFY_SEG_ALL" = "All";
 "NOTIFY_SEG_MENTION" = "Mention";
 "NOTIFY_SEG_FOLLOW" = "Follow";

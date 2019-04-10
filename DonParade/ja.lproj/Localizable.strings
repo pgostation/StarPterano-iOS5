@@ -75,11 +75,11 @@
 "BUTTON_NOT_CHANGE" = "そのまま";
 
 // 投票
-"ACTION_POLLS" = "投票";
-"ALERT_IMAGE_AND_POLLS" = "画像と投票は同時に投稿できません";
+"ACTION_POLLS" = "アンケート";
+"ALERT_IMAGE_AND_POLLS" = "画像とアンケートは同時に投稿できません";
 "EXPIRES_TIME:" = "締め切り:";
 "BUTTON_SET" = "セット";
-"ALERT_POLL_TWO_TEXT" = "投票する項目を2つ以上設定してください";
+"ALERT_POLL_TWO_TEXT" = "アンケート項目を2つ以上設定してください";
 "ALERT_SAME_POLL" = "同一内容の項目があります";
 "POLLS_MULTIPLE" = "複数項目に投票可能";
 "POLLS_HIDE_TOTAL" = "締め切りまで結果表示しない";
@@ -112,6 +112,7 @@
 "NOTIFICATION_BOOST" = "🔁ブーストしました";
 "NOTIFICATION_FAV" = "🌟お気に入りしました";
 "NOTIFICATION_FOLLOW" = "➕フォローしました";
+"NOTIFICATION_POLL" = "アンケートが終了しました";
 "NOTIFY_SEG_ALL" = "すべて";
 "NOTIFY_SEG_MENTION" = "返信";
 "NOTIFY_SEG_FOLLOW" = "フォロー";
