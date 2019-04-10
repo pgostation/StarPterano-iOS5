@@ -157,7 +157,7 @@ final class TimeLineView: UITableView {
         guard let requestUrl = url else { return }
         
         self.isManualLoading = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
             self.isManualLoading = false
         }
         
@@ -252,7 +252,7 @@ final class TimeLineView: UITableView {
         }
         
         // ストリーミングが停止していれば再開
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.startStreaming()
         }
     }
