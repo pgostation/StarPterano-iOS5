@@ -78,6 +78,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case hiragana = "SETTINGS_HIRAGANA"
         case showFavDialog = "SETTINGS_SHOWFAVDIALOG"
         case hashtagDialog = "SETTINGS_HASHTAG_DIALOG"
+        case sounds = "SETTINGS_SOUNDS"
     }
     private let applicationList: [Application] = [.tootProtectDefault,
                                                   .darkMode,
@@ -94,7 +95,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                                   .showFTLButton,
                                                   .hiragana,
                                                   .showFavDialog,
-                                                  .hashtagDialog]
+                                                  .hashtagDialog,
+                                                  .sounds]
     
     // 6.その他
     private enum Other: String {
@@ -351,6 +353,13 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 cell.textLabel?.text = title
                 cell.callback = { isOn in
                     SettingsData.hashtagDialog = isOn
+                }
+                return cell
+            case .sounds:
+                let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.sounds)
+                cell.textLabel?.text = title
+                cell.callback = { isOn in
+                    SettingsData.sounds = isOn
                 }
                 return cell
             }

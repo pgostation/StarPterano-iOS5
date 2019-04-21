@@ -437,21 +437,23 @@ final class TimeLineView: UITableView {
                     MainViewController.instance?.markNotificationButton(accessToken: accessToken ?? "", to: true)
                     
                     // 効果音を出す
-                    if TimeLineView.audioPlayer == nil {
-                        // バックグラウンドの音楽再生を止めないようにする
-                        if #available(iOS 10.0, *) {
-                            try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient,
-                                                                             mode: AVAudioSession.Mode.default,
-                                                                             options: AVAudioSession.CategoryOptions.allowBluetooth)
+                    if SettingsData.sounds {
+                        if TimeLineView.audioPlayer == nil {
+                            // バックグラウンドの音楽再生を止めないようにする
+                            if #available(iOS 10.0, *) {
+                                try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient,
+                                                                                 mode: AVAudioSession.Mode.default,
+                                                                                 options: AVAudioSession.CategoryOptions.allowBluetooth)
+                            }
+                            
+                            let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "caf")!
+                            let sound = URL(fileURLWithPath: soundFilePath)
+                            TimeLineView.audioPlayer = try? AVAudioPlayer(contentsOf: sound, fileTypeHint:nil)
+                            TimeLineView.audioPlayer?.prepareToPlay()
                         }
-                        
-                        let soundFilePath = Bundle.main.path(forResource: "decision21", ofType: "caf")!
-                        let sound = URL(fileURLWithPath: soundFilePath)
-                        TimeLineView.audioPlayer = try? AVAudioPlayer(contentsOf: sound, fileTypeHint:nil)
-                        TimeLineView.audioPlayer?.prepareToPlay()
+                        TimeLineView.audioPlayer?.currentTime = 0
+                        TimeLineView.audioPlayer?.play()
                     }
-                    TimeLineView.audioPlayer?.currentTime = 0
-                    TimeLineView.audioPlayer?.play()
                 case "delete":
                     if let deleteId = payload as? String {
                         // waitingStatusListからの削除

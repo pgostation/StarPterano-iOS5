@@ -675,6 +675,23 @@ final class SettingsData {
         }
     }
     
+    // 通知オン
+    static var sounds: Bool {
+        get {
+            if let string = defaults.string(forKey: "sounds") {
+                return (string == "ON")
+            }
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "sounds")
+            } else {
+                defaults.removeObject(forKey: "sounds")
+            }
+        }
+    }
+    
     // フォロー、フォロワーの情報をたまにチェックする
     static func checkFFAccounts(accessToken: String) {
         // 1週間以内にチェックしていたら、何もしない
