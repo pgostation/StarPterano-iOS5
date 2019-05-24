@@ -221,6 +221,7 @@
 "SETTINGS_HIRAGANA" = "To hiragana";
 "SETTINGS_SHOWFAVDIALOG" = "Shows on favorite dialog";
 "SETTINGS_HASHTAG_DIALOG" = "Shows dialog with hashtag toot";
+"SETTINGS_SOUNDS" = "Use sounds";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "Clear cache";

@@ -64,7 +64,7 @@ final class DecodeToot {
             var linkStr = ""
             if let startLinkRange = tmpHrefStr2.range(of: ">") {
                 let linkStartIndex = tmpHrefStr2.index(startLinkRange.lowerBound, offsetBy: 1)
-                linkStr = String(tmpHrefStr2.suffix(tmpHrefStr2.count - linkStartIndex.encodedOffset).prefix(endIndex.encodedOffset - linkStartIndex.encodedOffset - 4))
+                linkStr = String(tmpHrefStr2.suffix(max(0, tmpHrefStr2.count - linkStartIndex.encodedOffset)).prefix(max(0, endIndex.encodedOffset - linkStartIndex.encodedOffset - 4)))
             }
             
             var offset = 0

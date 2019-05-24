@@ -221,6 +221,7 @@
 "SETTINGS_HIRAGANA" = "ひらがなにする";
 "SETTINGS_SHOWFAVDIALOG" = "お気に入り時にダイアログ表示";
 "SETTINGS_HASHTAG_DIALOG" = "ハッシュタグの場合に公開を確認";
+"SETTINGS_SOUNDS" = "通知音";
 
 // 設定画面(キャッシュ)
 "SETTINGS_CLEAR_CACHE" = "キャッシュをクリア";
