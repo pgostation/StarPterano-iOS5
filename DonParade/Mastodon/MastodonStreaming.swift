@@ -20,7 +20,9 @@ final class MastodonStreaming: NSObject, WebSocketDelegate, WebSocketPongDelegat
     var isConnected = false
     
     init(url: URL, callback: @escaping (String?)->Void) {
-        self.socket = WebSocket(url: url)
+        var request = URLRequest(url: url)
+        request.setValue("StarPterano", forHTTPHeaderField: "User-Agent")
+        self.socket = WebSocket(request: request)
         
         self.callback = callback
         
