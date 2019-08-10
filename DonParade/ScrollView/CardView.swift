@@ -119,7 +119,7 @@ final class CardView: UIView {
         CardView.lastRequestDate = Date()
         
         // リクエスト
-        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(id)/card") else { return }
+        guard let url = URL(string: "https://\(SettingsData.hostName ?? "")/api/v1/statuses/\(id)") else { return }
         try? MastodonRequest.get(url: url) { [weak self] (data, response, error) in
             guard let strongSelf = self else { return }
             
