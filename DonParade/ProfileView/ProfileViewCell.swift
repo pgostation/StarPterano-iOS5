@@ -434,23 +434,13 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
                 }))
             }
         } else {
-            if id.suffix(id.count - 1).contains("@") {
-                // リモートフォローする
-                alertController.addAction(UIAlertAction(
-                    title: I18n.get("ACTION_REMOTE_FOLLOW"),
-                    style: UIAlertAction.Style.default,
-                    handler: { _ in
-                        ProfileAction.remoteFollow(uri: uri)
-                }))
-            } else {
-                // フォローする
-                alertController.addAction(UIAlertAction(
-                    title: I18n.get("ACTION_FOLLOW"),
-                    style: UIAlertAction.Style.default,
-                    handler: { _ in
-                        ProfileAction.follow(id: id)
-                }))
-            }
+            // フォローする
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_FOLLOW"),
+                style: UIAlertAction.Style.default,
+                handler: { _ in
+                    ProfileAction.follow(id: id)
+            }))
         }
         
         if relationshipData.blocking == 1 {
