@@ -609,7 +609,7 @@ final class MainViewController: MyViewController {
                 view.notifyLabel.alpha = 1
             })
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4 + min(Double(text.count), 2)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4 + max(min(Double(text.count - 10), 2), 0)) {
                 UIView.animate(withDuration: 0.3, animations: {
                     view.notifyLabel.alpha = 0
                 })

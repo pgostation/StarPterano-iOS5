@@ -160,17 +160,17 @@ private class HelperView: UIView {
         
         // 最近使った絵文字を前に持ってくる
         for key in SettingsData.recentEmojiList.reversed() {
-            for (index, emoji) in emojiList.enumerated() {
+            for (index, emoji) in emojiList.0.enumerated() {
                 if emoji.short_code == key {
-                    emojiList.remove(at: index)
-                    emojiList.insert(emoji, at: 0)
+                    emojiList.0.remove(at: index)
+                    emojiList.0.insert(emoji, at: 0)
                     break
                 }
             }
         }
         
         // 一致する絵文字20件をリストアップ
-        for emoji in emojiList {
+        for emoji in emojiList.0 {
             if list.count >= 20 { break }
             
             if text == "" || (emoji.short_code?.lowercased() ?? "").contains(text) {

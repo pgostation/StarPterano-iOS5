@@ -98,7 +98,7 @@ final class EmojiKeyboard: UIView {
         
         var spaceStr = " "
         let list = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: false)
-        for emoji in list {
+        for emoji in list.0 {
             if emoji.short_code == "space" {
                 spaceStr = "\u{200b}:space:\u{200b}"
                 break
@@ -226,7 +226,7 @@ final class EmojiKeyboard: UIView {
 }
 
 private final class EmojiInputScrollView: UIScrollView {
-    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).sorted(by: EmojiInputScrollView.sortFunc)
+    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).0.sorted(by: EmojiInputScrollView.sortFunc)
     private var recentEmojiButtons: [EmojiButton] = []
     private var emojiButtons: [EmojiButton] = []
     private var hiddenEmojiButtons: [EmojiButton] = []
@@ -242,7 +242,7 @@ private final class EmojiInputScrollView: UIScrollView {
             // 絵文字データが取れるまでリトライする
             func retry(count: Int) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).sorted(by: EmojiInputScrollView.sortFunc)
+                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).0.sorted(by: EmojiInputScrollView.sortFunc)
                     if self.emojiList.count > 0 {
                         self.addEmojis()
                         self.setNeedsLayout()
@@ -271,7 +271,9 @@ private final class EmojiInputScrollView: UIScrollView {
     }
     
     private static func sortFunc(e1: EmojiData.EmojiStruct, e2: EmojiData.EmojiStruct) -> Bool {
-        return (e1.short_code?.lowercased() ?? "") < (e2.short_code?.lowercased() ?? "")
+        let str1 = (e1.category ?? "") + (e1.short_code?.lowercased() ?? "")
+        let str2 = (e2.category ?? "") + (e2.short_code?.lowercased() ?? "")
+        return (str1 < str2)
     }
     
     private func addEmojis() {
@@ -349,7 +351,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         var emojis: [[String: Any]] = []
         
-        for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
+        for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true).0 {
             let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
                                        "url": emoji.url ?? ""]
             emojis.append(dict)

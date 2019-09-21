@@ -53,7 +53,7 @@ final class TootView: UIView {
             // 絵文字データを取得
             let emojiCache = EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true)
             var emojis: [[String: Any]] = []
-            for emoji in emojiCache {
+            for emoji in emojiCache.0 {
                 let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
                                            "url": emoji.url ?? ""]
                 emojis.append(dict)

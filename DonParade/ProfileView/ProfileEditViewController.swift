@@ -316,7 +316,7 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         if textView.inputView is EmojiKeyboard || textView.text.contains(" :") || (textView.returnKeyType == .done && textView.text.contains("\n")) {
             var emojis: [[String: Any]] = []
             
-            for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true) {
+            for emoji in EmojiData.getEmojiCache(host: SettingsData.hostName ?? "", showHiddenEmoji: true).0 {
                 let dict: [String: Any] = ["shortcode": emoji.short_code ?? "",
                                            "url": emoji.url ?? ""]
                 emojis.append(dict)
