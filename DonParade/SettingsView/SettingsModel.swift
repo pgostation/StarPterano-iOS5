@@ -428,6 +428,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                         (vc.view as? LoginView)?.reset()
                     } else {
                         let loginViewController = LoginViewController()
+                        loginViewController.modalPresentationStyle = .fullScreen
                         UIUtils.getFrontViewController()?.present(loginViewController, animated: false, completion: nil)
                     }
                 }
