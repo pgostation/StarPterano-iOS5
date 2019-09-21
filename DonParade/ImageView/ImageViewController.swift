@@ -461,10 +461,11 @@ private final class ImageScrollView: UIScrollView, UIScrollViewDelegate {
             }
             
             // 上下スワイプで閉じる
-            if scrollView.contentOffset.y > 30 {
+            let offset = scrollView.contentOffset.y + (UIUtils.isIphoneX ? 44 : 0)
+            if offset > 30 {
                 ImageViewController.instance?.closeAction()
             }
-            else if scrollView.contentOffset.y < -30 {
+            else if offset < -30 {
                 ImageViewController.instance?.closeAction()
             }
         }
