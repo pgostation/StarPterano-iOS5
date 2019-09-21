@@ -179,8 +179,10 @@ final class TimeLineView: UITableView {
                             if SettingsData.mergeLocalTL && self?.type == .home {
                                 let localKey = "\(hostName)_\(accessToken)_\(SettingsData.TLMode.local.rawValue)"
                                 if let localTlVc = MainViewController.instance?.timelineList[localKey] {
-                                    if let localTlView = localTlVc.view as? TimeLineView {
-                                        AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isMerge: true)
+                                    DispatchQueue.main.async {
+                                        if let localTlView = localTlVc.view as? TimeLineView {
+                                            AnalyzeJson.analyzeJsonArray(view: localTlView, model: localTlView.model, jsonList: responseJson, isNew: true, isNewRefresh: isNewRefresh, isMerge: true)
+                                        }
                                     }
                                 }
                             }
