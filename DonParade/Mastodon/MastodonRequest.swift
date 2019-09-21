@@ -38,7 +38,25 @@ final class MastodonRequest {
         session.dataTask(with: request) { (data, response, error) in
             if let response = response as? HTTPURLResponse {
                 if response.statusCode != 200 {
-                    print("response.statusCode=\(response.statusCode), data=\(String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? "-")")
+                    let string = String(data: data ?? Data(), encoding: String.Encoding.utf8) ?? ""
+                    
+                    print("response.statusCode=\(response.statusCode), data=\(string)")
+                    
+                    let regex = try? NSRegularExpression(pattern: "<h1>[^<]+</h1>",
+                                                         options: NSRegularExpression.Options())
+                    let matches = regex?.matches(in: string,
+                                                 options: NSRegularExpression.MatchingOptions(),
+                                                 range: NSMakeRange(0, string.count))
+                    if let result = matches?.first {
+                        for i in 0..<result.numberOfRanges {
+                            let parsedText = (string as NSString).substring(with: result.range(at: i))
+                            
+                            MainViewController.instance?.showNotify(text: "ステータス: \(response.statusCode)\n\n\(parsedText)")
+                            break
+                        }
+                    } else {
+                        MainViewController.instance?.showNotify(text: "ステータス: \(response.statusCode)")
+                    }
                 }
                 if let remain = response.allHeaderFields["x-ratelimit-remaining"] {
                     print("GET remain=\(remain)")

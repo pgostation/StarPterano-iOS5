@@ -609,7 +609,7 @@ final class MainViewController: MyViewController {
                 view.notifyLabel.alpha = 1
             })
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4 + min(Double(text.count), 2)) {
                 UIView.animate(withDuration: 0.3, animations: {
                     view.notifyLabel.alpha = 0
                 })
@@ -617,7 +617,7 @@ final class MainViewController: MyViewController {
             
             let screenBounds = UIScreen.main.bounds
             let notifyLabel = view.notifyLabel
-            notifyLabel.frame.size.width = screenBounds.width - 50
+            notifyLabel.frame.size.width = screenBounds.width - 100
             notifyLabel.sizeToFit()
             notifyLabel.frame.size.width += 10
             
