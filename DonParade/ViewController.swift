@@ -20,10 +20,12 @@ final class ViewController: MyViewController {
             if SettingsData.accessToken == nil {
                 // 初回起動時はログイン画面を表示
                 let loginViewController = LoginViewController()
+                loginViewController.modalPresentationStyle = .fullScreen
                 self.present(loginViewController, animated: false, completion: nil)
             } else {
                 // アカウント登録済みなので、メイン画面へ移動
                 let mainViewController = MainViewController()
+                mainViewController.modalPresentationStyle = .fullScreen
                 self.present(mainViewController, animated: false, completion: nil)
             }
         }
