@@ -28,6 +28,9 @@ final class MainView: UIView {
     // 上側の一時メッセージ表示
     let notifyLabel = UILabel()
     
+    // ノッチ部分のカバー
+    let statusBarCover = UIView()
+    
     init() {
         super.init(frame: UIScreen.main.bounds)
         
@@ -40,6 +43,7 @@ final class MainView: UIView {
         self.addSubview(notificationsButton)
         self.addSubview(accountButton)
         self.addSubview(notifyLabel)
+        self.addSubview(statusBarCover)
         
         setProperties()
     }
@@ -188,6 +192,8 @@ final class MainView: UIView {
         notifyLabel.layer.cornerRadius = 4
         notifyLabel.clipsToBounds = true
         notifyLabel.alpha = 0
+        
+        statusBarCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.5)
     }
     
     override func layoutSubviews() {
@@ -255,5 +261,10 @@ final class MainView: UIView {
                                      y: UIUtils.statusBarHeight() + 21,
                                      width: iconSize,
                                      height: iconSize)
+        
+        statusBarCover.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: screenBounds.width,
+                                      height: UIUtils.statusBarHeight() - (UIUtils.isIphoneX ? 14 : 1))
     }
 }
