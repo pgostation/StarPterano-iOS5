@@ -45,7 +45,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case mastodonSite = "SETTINGS_MASTODON_SITE"
         case mypage = "SETTINGS_MYPAGE"
         case profile = "SETTINGS_PROFILE"
-        case dm = "SETTINGS_DMLIST"
         case favorite = "SETTINGS_FAVORITELIST"
         case mute = "SETTINGS_MUTELIST"
         case block = "SETTINGS_BLOCKLIST"
@@ -54,7 +53,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
     private let myPageList: [MyPage] = [.mastodonSite,
                                         .mypage,
                                         .profile,
-                                        .dm,
                                         .favorite,
                                         .followRequest] // 最後のアイテムの表示はロックアカウントのみ
                                         //.mute,
@@ -495,8 +493,6 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 ShowMyAnyList.showMyPage(rootVc: SettingsViewController.instance!)
             case .profile:
                 ShowMyAnyList.editProfile(rootVc: SettingsViewController.instance!)
-            case .dm:
-                ShowMyAnyList.showDMList(rootVc: SettingsViewController.instance!)
             case .favorite:
                 ShowMyAnyList.showFavoriteList(rootVc: SettingsViewController.instance!)
             case .block:

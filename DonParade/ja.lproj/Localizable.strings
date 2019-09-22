@@ -118,7 +118,6 @@
 "NOTIFY_SEG_FOLLOW" = "フォロー";
 "NOTIFY_SEG_FAV" = "🌟";
 "NOTIFY_SEG_BOOST" = "🔁";
-"NOTIFY_SEG_DM" = "DM";
 
 // 検索画面
 "SEARCH_SEG_TAG" = "タグ";
