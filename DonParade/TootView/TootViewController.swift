@@ -475,14 +475,14 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         
         do {
             let text: String
-            if let textField = (self.view as? TootView)?.textField, textField.isFirstResponder {
+            if let textField = (self.view as? TootView)?.textField {
                 text = DecodeToot.encodeEmoji(attributedText: textField.attributedText, textStorage: textField.textStorage)
             } else {
                 text = ""
             }
             
             let spoilerText: String
-            if let spoilerTextField = (self.view as? TootView)?.spoilerTextField, spoilerTextField.isFirstResponder {
+            if let spoilerTextField = (self.view as? TootView)?.spoilerTextField {
                 spoilerText = DecodeToot.encodeEmoji(attributedText: spoilerTextField.attributedText, textStorage: spoilerTextField.textStorage)
             } else {
                 spoilerText = ""
