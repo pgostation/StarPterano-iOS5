@@ -30,6 +30,7 @@ final class MainView: UIView {
     
     // ノッチ部分のカバー
     let statusBarCover = UIView()
+    let bottomCover = UIView()
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -44,6 +45,7 @@ final class MainView: UIView {
         self.addSubview(accountButton)
         self.addSubview(notifyLabel)
         self.addSubview(statusBarCover)
+        self.addSubview(bottomCover)
         
         setProperties()
     }
@@ -194,11 +196,14 @@ final class MainView: UIView {
         notifyLabel.alpha = 0
         
         statusBarCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.5)
+        
+        bottomCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.3)
+        bottomCover.isUserInteractionEnabled = true
     }
     
     override func layoutSubviews() {
         let screenBounds = UIScreen.main.bounds
-        let bottomOffset: CGFloat = UIUtils.isIphoneX ? 50 : 0
+        let bottomOffset: CGFloat = UIUtils.isIphoneX ? 45 : 0
         let bottomOffset2: CGFloat = (SettingsData.showFTLButton || !ftlButton.isHidden) ? 50 : 0
         let buttonWidth: CGFloat = 60
         let buttonHeight: CGFloat = 40
@@ -266,5 +271,10 @@ final class MainView: UIView {
                                       y: 0,
                                       width: screenBounds.width,
                                       height: UIUtils.statusBarHeight() - (UIUtils.isIphoneX ? 14 : 1))
+        
+        bottomCover.frame = CGRect(x: 0,
+                                   y: screenBounds.height - (UIUtils.isIphoneX ? 30 : 0),
+                                   width: screenBounds.width,
+                                   height: (UIUtils.isIphoneX ? 30 : 0))
     }
 }
