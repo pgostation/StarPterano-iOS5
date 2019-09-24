@@ -239,6 +239,12 @@ final class SettingsData {
             if let string = defaults.string(forKey: "isDarkMode") {
                 return (string == "ON")
             }
+            if #available(iOS 13.0, *) {
+                if MainViewController.instance?.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark {
+                    return true
+                }
+            }
+            
             return false
         }
         set(newValue) {

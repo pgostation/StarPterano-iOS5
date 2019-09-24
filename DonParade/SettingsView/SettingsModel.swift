@@ -215,6 +215,11 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                     subtitle = I18n.get("PROTECTMODE_DIRECT")
                 }
             case .darkMode:
+                if #available(iOS 13.0, *) {
+                    if MainViewController.instance?.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark {
+                        return cell
+                    }
+                }
                 let cell = SettingsSwitchCell(style: .default, isOn: SettingsData.isDarkMode)
                 cell.textLabel?.text = title
                 cell.callback = { [weak tableView] isOn in

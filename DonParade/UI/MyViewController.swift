@@ -19,7 +19,11 @@ class MyViewController: UIViewController {
         if SettingsData.isDarkMode {
             return UIStatusBarStyle.lightContent
         } else {
-            return UIStatusBarStyle.default
+            if #available(iOS 13.0, *) {
+                return UIStatusBarStyle.darkContent
+            } else {
+                return UIStatusBarStyle.default
+            }
         }
     }
 }
