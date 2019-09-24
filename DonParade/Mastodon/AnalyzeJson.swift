@@ -352,6 +352,7 @@ final class AnalyzeJson {
         let multiple = json["multiple"] as? Bool
         let votes_count = json["votes_count"] as? Int
         let options = getOptions(json: json["options"] as? [Any])
+        let own_votes = json["own_votes"] as? [Int]
         let voted = json["voted"] as? Bool
         let emojis = json["emojis"] as? [[String: Any]]
         
@@ -361,6 +362,7 @@ final class AnalyzeJson {
                         multiple: multiple ?? false,
                         votes_count: votes_count ?? -1,
                         options: options ?? [],
+                        own_votes: own_votes ?? [],
                         voted: voted,
                         emojis: emojis)
     }
@@ -612,6 +614,7 @@ final class AnalyzeJson {
         let multiple: Bool
         let votes_count: Int
         let options: [(String, Int?)]
+        let own_votes: [Int]
         let voted: Bool?
         let emojis: [[String: Any]]?
     }

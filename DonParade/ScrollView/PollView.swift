@@ -61,7 +61,7 @@ final class PollView: UIView {
     
     // プロパティ設定
     private func setProperties() {
-        for option in data.options {
+        for (index, option) in data.options.enumerated() {
             if let vote = option.1 {
                 let view = UIView()
                 view.backgroundColor = ThemeColor.contrastColor.withAlphaComponent(0.3)
@@ -99,6 +99,11 @@ final class PollView: UIView {
             if data.expired == true || data.voted == true {
                 button.alpha = 0.3
                 button.isEnabled = false
+            }
+            if data.own_votes.contains(index) {
+                // 自分が投票したのはグレーにする
+                button.backgroundColor = UIColor.black
+                button.setTitle("✔︎", for: .normal)
             }
         }
         
