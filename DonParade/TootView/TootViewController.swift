@@ -119,15 +119,17 @@ final class TootViewController: UIViewController, UITextViewDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 // 画像をアップロードしてから投稿
                 let group = DispatchGroup()
+                var successCount = 0
                 
-                var idList: [String] = []
-                for url in view.imageCheckView.urls {
+                var idList: [String?] = []
+                for (index, url) in view.imageCheckView.urls.enumerated() {
                     group.enter()
                     let lowUrlStr = url.absoluteString.lowercased()
                     if lowUrlStr.contains(".mp4") || lowUrlStr.contains(".m4v") || lowUrlStr.contains(".mov") {
                         // 動画
                         ImageUpload.upload(movieUrl: url, callback: { json in
                             if let json = json {
+                                successCount += 1
                                 if let id = json["id"] as? String {
                                     idList.append(id)
                                 }
@@ -139,11 +141,16 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                             }
                         })
                     } else {
+                        while idList.count < view.imageCheckView.urls.count {
+                            idList.append(nil)
+                        }
+                        
                         // 静止画
-                        ImageUpload.upload(httpMethod: "POST", imageUrl: url, count: view.imageCheckView.urls.count,  callback: { json in
+                        ImageUpload.upload(httpMethod: "POST", imageUrl: url, count: view.imageCheckView.urls.count, callback: { json in
                             if let json = json {
+                                successCount += 1
                                 if let id = json["id"] as? String {
-                                    idList.append(id)
+                                    idList[index] = id
                                 }
                                 group.leave()
                             } else {
@@ -157,8 +164,27 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 
                 // 画像を全てアップロードし終わったら投稿
                 group.notify(queue: DispatchQueue.main) {
-                    let addJson: [String: Any] = ["media_ids": idList]
-                    TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility.rawValue, addJson: addJson, view: self.view as? TootView)
+                    func toot() {
+                        for index in (0..<idList.count).reversed() {
+                            if idList[index] == nil {
+                                idList.remove(at: index)
+                            }
+                        }
+                        let addJson: [String: Any] = ["media_ids": idList]
+                        TootViewController.toot(text: text, spoilerText: spoilerText, nsfw: nsfw, visibility: visibility.rawValue, addJson: addJson, view: self.view as? TootView)
+                    }
+                    
+                    if successCount < view.imageCheckView.urls.count {
+                        Dialog.show(message: I18n.get("ALERT_UPLOAD_IMAGES"),
+                                    okName: I18n.get("BUTTON_NO_TIMAGES_TOOT"),
+                                    cancelName: I18n.get("BUTTON_CANCEL_TOOT")) { result in
+                                        if result {
+                                            toot()
+                                        }
+                        }
+                    } else {
+                        toot()
+                    }
                 }
             }
         } else {

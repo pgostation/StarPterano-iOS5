@@ -237,3 +237,6 @@
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "Stream is disconnected";
+"BUTTON_NO_TIMAGES_TOOT" = "Toot with no images";
+"BUTTON_CANCEL_TOOT" = "Cancel";
+"ALERT_UPLOAD_IMAGES" = "Upload Image failure.";

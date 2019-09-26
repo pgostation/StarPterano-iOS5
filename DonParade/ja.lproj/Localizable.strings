@@ -237,3 +237,6 @@
 
 // エラー等
 "NOTIFY_DISCONNECTED_STREAMING" = "ストリーミング切断";
+"BUTTON_NO_TIMAGES_TOOT" = "画像無しで投稿";
+"BUTTON_CANCEL_TOOT" = "キャンセル";
+"ALERT_UPLOAD_IMAGES" = "画像送信に失敗しました";
