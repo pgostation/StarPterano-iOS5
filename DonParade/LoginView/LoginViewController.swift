@@ -164,6 +164,7 @@ final class LoginView: UIView {
         hostField.keyboardType = .URL
         hostField.autocapitalizationType = .none
         hostField.autocorrectionType = .no
+        hostField.textColor = UIColor.black
         
         authButton.setTitle(I18n.get("BUTTON_MASTODON_OAUTH"), for: .normal)
         authButton.backgroundColor = UIColor.blue
@@ -175,6 +176,7 @@ final class LoginView: UIView {
         inputCodeField.layer.borderColor = UIColor.gray.cgColor
         inputCodeField.layer.borderWidth = 0.5
         inputCodeField.keyboardType = .alphabet
+        inputCodeField.textColor = UIColor.black
         
         codeEnterButton.setTitle(I18n.get("BUTTON_ENTER_CODE"), for: .normal)
         codeEnterButton.backgroundColor = UIColor.blue
