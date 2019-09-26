@@ -197,7 +197,7 @@ final class MainView: UIView {
         
         statusBarCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.5)
         
-        bottomCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.3)
+        bottomCover.backgroundColor = ThemeColor.viewBgColor.withAlphaComponent(0.4)
         bottomCover.isUserInteractionEnabled = true
     }
     
@@ -273,8 +273,8 @@ final class MainView: UIView {
                                       height: UIUtils.statusBarHeight() - (UIUtils.isIphoneX ? 14 : 1))
         
         bottomCover.frame = CGRect(x: 0,
-                                   y: screenBounds.height - (UIUtils.isIphoneX ? 30 : 0),
+                                   y: screenBounds.height - (UIUtils.isIphoneX ? 35 : 0),
                                    width: screenBounds.width,
-                                   height: (UIUtils.isIphoneX ? 30 : 0))
+                                   height: (UIUtils.isIphoneX ? 35 : 0))
     }
 }
