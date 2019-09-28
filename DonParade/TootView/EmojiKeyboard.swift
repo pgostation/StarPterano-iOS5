@@ -469,6 +469,13 @@ private final class EmojiInputScrollView: UIScrollView {
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
         
+        for separatorView in self.separatorViews {
+            separatorView.frame = CGRect(x: 0,
+                                         y: -100,
+                                         width: 0,
+                                         height: 0)
+        }
+        
         // 最近使った絵文字
         if let recentEmojiButtons = recentEmojiButtons, recentYCount > 0 {
             for y in 0..<Int(recentYCount) {
