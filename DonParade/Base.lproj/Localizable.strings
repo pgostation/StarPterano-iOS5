@@ -48,6 +48,7 @@
 "BUTTON_FAVORITE" = "Favorite";
 "ALERT_UNFAVORITE" = "Do you unfavorite this toot?";
 "BUTTON_UNFAVORITE" = "Unfavorite";
+"ACTION_SHOW_OTHER_LTL" = "Open this server LTL";
 
 // 何分前
 "DATETIME_NOW" = "now";

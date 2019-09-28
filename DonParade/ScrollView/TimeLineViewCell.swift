@@ -561,6 +561,19 @@ final class TimeLineViewCell: UITableViewCell {
             }))
         }
         
+        // このサーバーのタイムラインを見る
+        if self.accountData?.acct?.contains("@") == true {
+            let accountHostName = String((self.accountData?.acct ?? "").split(separator: "@").last ?? "")
+            alertController.addAction(UIAlertAction(
+                title: I18n.get("ACTION_SHOW_OTHER_LTL"),
+                style: UIAlertAction.Style.default,
+                handler: { _ in
+                    guard let url = URL(string: "https://\(accountHostName)/public") else { return }
+                    let controller = SFSafariViewController(url: url)
+                    UIUtils.getFrontViewController()?.present(controller, animated: true)
+            }))
+        }
+        
         // キャンセル
         alertController.addAction(UIAlertAction(
             title: I18n.get("BUTTON_CANCEL"),

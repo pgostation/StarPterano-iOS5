@@ -48,6 +48,7 @@
 "BUTTON_FAVORITE" = "お気に入り";
 "ALERT_UNFAVORITE" = "このトゥートをお気に入り解除しますか";
 "BUTTON_UNFAVORITE" = "お気に入り解除";
+"ACTION_SHOW_OTHER_LTL" = "このサーバーのTLを開く";
 
 // 何分前
 "DATETIME_NOW" = "今";
