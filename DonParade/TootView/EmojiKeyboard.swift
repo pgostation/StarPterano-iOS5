@@ -226,12 +226,12 @@ final class EmojiKeyboard: UIView {
 }
 
 private final class EmojiInputScrollView: UIScrollView {
-    private var emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).0.sorted(by: EmojiInputScrollView.sortFunc)
+    private var (emojiList, categoryList) = EmojiInputScrollView.getEmojiData()
     private var recentEmojiButtons: [EmojiButton] = []
     private var emojiButtons: [EmojiButton] = []
     private var hiddenEmojiButtons: [EmojiButton] = []
     var searchText: String?
-    private let separatorView = UIView()
+    private var separatorViews: [UILabel] = [UILabel()]
     
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -242,7 +242,7 @@ private final class EmojiInputScrollView: UIScrollView {
             // 絵文字データが取れるまでリトライする
             func retry(count: Int) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.emojiList = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true).0.sorted(by: EmojiInputScrollView.sortFunc)
+                    (self.emojiList, self.categoryList) = EmojiInputScrollView.getEmojiData()
                     if self.emojiList.count > 0 {
                         self.addEmojis()
                         self.setNeedsLayout()
@@ -254,9 +254,6 @@ private final class EmojiInputScrollView: UIScrollView {
             
             retry(count: 0)
         }
-        
-        self.addSubview(self.separatorView)
-        self.separatorView.backgroundColor = UIColor.gray.withAlphaComponent(0.4)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -268,6 +265,14 @@ private final class EmojiInputScrollView: UIScrollView {
             apngView.stopAnimating()
             apngView.removeFromSuperview()
         }
+    }
+    
+    private static func getEmojiData() -> ([EmojiData.EmojiStruct], [String]?) {
+        let data = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true)
+        
+        let list = data.0.sorted(by: EmojiInputScrollView.sortFunc)
+        
+        return (list, data.1)
     }
     
     private static func sortFunc(e1: EmojiData.EmojiStruct, e2: EmojiData.EmojiStruct) -> Bool {
@@ -291,7 +296,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         // 絵文字ボタンの追加
         for (index, emoji) in list.enumerated() {
-            let button = EmojiButton(key: emoji.short_code ?? "")
+            let button = EmojiButton(key: emoji.short_code ?? "", category: emoji.category)
             
             // 静的イメージ
             ImageCache.image(urlStr: emoji.url, isTemp: false, isSmall: true, shortcode: emoji.short_code) { image in
@@ -339,6 +344,23 @@ private final class EmojiInputScrollView: UIScrollView {
             } else {
                 hiddenEmojiButtons.append(button)
             }
+        }
+        
+        // カテゴリラベルをカテゴリの数+1用意する
+        for (index, category) in (self.categoryList ?? []).enumerated() {
+            if self.separatorViews.count < index + 2 {
+                self.separatorViews.append(UILabel())
+            }
+            
+            let label = self.separatorViews[index + 1]
+            label.text = category
+        }
+        
+        // カテゴリラベルをビューに貼る
+        for separatorView in self.separatorViews {
+            if separatorView.superview != nil { continue }
+            self.addSubview(separatorView)
+            separatorView.backgroundColor = UIColor.gray.withAlphaComponent(0.4)
         }
     }
     
@@ -401,10 +423,12 @@ private final class EmojiInputScrollView: UIScrollView {
     }
     
     private final class EmojiButton: UIButton {
+        let category: String?
         let key: String
         
-        init(key: String) {
+        init(key: String, category: String?) {
             self.key = key
+            self.category = category
             
             super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         }
@@ -421,8 +445,12 @@ private final class EmojiInputScrollView: UIScrollView {
             layoutEmojiButtons(recentEmojiButtons: nil, emojiButtons: filteredEmojiButtons)
             return
         }
-        
-        layoutEmojiButtons(recentEmojiButtons: self.recentEmojiButtons, emojiButtons: self.emojiButtons)
+
+        if self.categoryList == nil || self.categoryList!.count == 0 {
+            layoutEmojiButtons(recentEmojiButtons: self.recentEmojiButtons, emojiButtons: self.emojiButtons)
+        } else {
+            layoutCategoryEmojiButtons(recentEmojiButtons: self.recentEmojiButtons, emojiButtons: self.emojiButtons)
+        }
         
         for button in self.hiddenEmojiButtons {
             button.frame.origin.x = -100
@@ -441,6 +469,7 @@ private final class EmojiInputScrollView: UIScrollView {
         
         self.contentSize = CGSize(width: screenBounds.width, height: viewHeight)
         
+        // 最近使った絵文字
         if let recentEmojiButtons = recentEmojiButtons, recentYCount > 0 {
             for y in 0..<Int(recentYCount) {
                 for x in 0..<Int(xCount) {
@@ -454,17 +483,18 @@ private final class EmojiInputScrollView: UIScrollView {
                 }
             }
             
-            self.separatorView.frame = CGRect(x: 0,
-                                              y: recentYCount * (buttonSize + margin) + 2,
-                                              width: screenBounds.width,
-                                              height: 8)
+            self.separatorViews[0].frame = CGRect(x: 0,
+                                                  y: recentYCount * (buttonSize + margin) + 2,
+                                                  width: screenBounds.width,
+                                                  height: 8)
         } else {
-            self.separatorView.frame = CGRect(x: 0,
-                                              y: -100,
-                                              width: 0,
-                                              height: 0)
+            self.separatorViews[0].frame = CGRect(x: 0,
+                                                  y: -100,
+                                                  width: 0,
+                                                  height: 0)
         }
         
+        // 通常の絵文字
         for y in 0..<Int(yCount) {
             for x in 0..<Int(xCount) {
                 let index = y * Int(xCount) + x
@@ -476,6 +506,64 @@ private final class EmojiInputScrollView: UIScrollView {
                                       height: buttonSize)
             }
         }
+    }
+    
+    private func layoutCategoryEmojiButtons(recentEmojiButtons: [UIButton]?, emojiButtons: [EmojiButton]) {
+        let buttonSize: CGFloat = 22 + SettingsData.fontSize
+        let margin: CGFloat = 2
+        let screenBounds = UIScreen.main.bounds
+        let xCount = floor(screenBounds.width / (buttonSize + margin)) // ボタンの横に並ぶ数
+        let recentYCount = ceil(CGFloat(recentEmojiButtons?.count ?? 0) / xCount)
+        var y: CGFloat = recentYCount * buttonSize
+        
+        // 最近使った絵文字
+        if let recentEmojiButtons = recentEmojiButtons, recentYCount > 0 {
+            for y in 0..<Int(recentYCount) {
+                for x in 0..<Int(xCount) {
+                    let index = y * Int(xCount) + x
+                    if index >= recentEmojiButtons.count { break }
+                    let button = recentEmojiButtons[index]
+                    button.frame = CGRect(x: CGFloat(x) * (buttonSize + margin),
+                                          y: CGFloat(y) * (buttonSize + margin),
+                                          width: buttonSize,
+                                          height: buttonSize)
+                }
+            }
+        }
+
+        self.separatorViews[0].frame = CGRect(x: 0,
+                                              y: -100,
+                                              width: 0,
+                                              height: 0)
+        
+        // カテゴリー絵文字
+        for (index, category) in (self.categoryList ?? []).enumerated() {
+            // カテゴリ表示ラベル
+            self.separatorViews[index + 1].frame = CGRect(x: 0,
+                                                          y: y + 1,
+                                                          width: screenBounds.width,
+                                                          height: 16)
+            y += 18
+            
+            // 絵文字ボタン
+            var x: CGFloat = 0
+            for button in emojiButtons {
+                if button.category != category { continue }
+                if x >= CGFloat(xCount) * (buttonSize + margin) - 0.1 {
+                    x = 0
+                    y += buttonSize + margin
+                }
+                button.frame = CGRect(x: x,
+                                      y: y,
+                                      width: buttonSize,
+                                      height: buttonSize)
+                
+                x += buttonSize + margin
+            }
+            y += buttonSize + margin
+        }
+        
+        self.contentSize = CGSize(width: screenBounds.width, height: y)
     }
     
     private func getFilteredEmojiButtons(key: String) -> [UIButton] {
