@@ -402,7 +402,6 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         ProfileAction.timelineView = self.timelineView
         
         let id = self.id
-        let uri = self.uri
         
         let myUserName = SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "") ?? ""
         let alertController = UIAlertController(title: nil, message: myUserName + "@" + (SettingsData.hostName ?? ""), preferredStyle: UIAlertController.Style.actionSheet)

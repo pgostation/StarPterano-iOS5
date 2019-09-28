@@ -139,6 +139,8 @@ final class TimeLineView: UITableView {
                 self.refreshContext(id: id)
             }
             return
+        case .direct:
+            url = URL(string: "https://\(hostName)/api/v1/conversations?limit=50\(sinceIdStr)")
         case .list:
             guard let listId = SettingsData.selectedListId(accessToken: SettingsData.accessToken) else {
                 DispatchQueue.main.async {
@@ -523,6 +525,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/tag/\(encodedOption)?&limit=50\(maxIdStr)")
         case .mentions:
             return
+        case .direct:
+            url = URL(string: "https://\(hostName)/api/v1/conversations?limit=50\(maxIdStr)")
         case .list:
             guard let listId = SettingsData.selectedListId(accessToken: SettingsData.accessToken) else {
                 DispatchQueue.main.async {

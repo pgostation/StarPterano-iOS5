@@ -52,6 +52,14 @@ final class ShowMyAnyList {
         }
     }
     
+    // DM
+    static func showDMList(rootVc: UIViewController) {
+        DispatchQueue.main.async {
+            let vc = TimeLineViewController(type: .direct)
+            show(rootVc: rootVc, vc: vc)
+        }
+    }
+    
     // お気に入り
     static func showFavoriteList(rootVc: UIViewController) {
         DispatchQueue.main.async {

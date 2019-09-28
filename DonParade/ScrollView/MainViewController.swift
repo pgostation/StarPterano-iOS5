@@ -356,6 +356,14 @@ final class MainViewController: MyViewController {
                 ShowMyAnyList.editProfile(rootVc: self)
         }))
         
+        // DMを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_DMLIST"),
+            style: UIAlertAction.Style.default,
+            handler: { _ in
+                ShowMyAnyList.showDMList(rootVc: self)
+        }))
+        
         // お気に入りを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_FAVORITELIST"),

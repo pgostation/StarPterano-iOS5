@@ -19,9 +19,13 @@ final class AnalyzeJson {
         for json in jsonList {
             guard let json = json as? [String: Any] else { continue }
             
-            let data = analyzeJson(view: view, model: model, json: json, acct: &acct, isMerge: isMerge, isPinned: isPinned)
-            
-            contentList.append(data)
+            if let lastStatus = json["last_status"] as? [String: Any] {
+                let data = analyzeJson(view: view, model: model, json: lastStatus, acct: &acct, isMerge: isMerge, isPinned: isPinned)
+                contentList.append(data)
+            } else {
+                let data = analyzeJson(view: view, model: model, json: json, acct: &acct, isMerge: isMerge, isPinned: isPinned)
+                contentList.append(data)
+            }
         }
         
         // 新着の場合、更新した数を一時的に表示
