@@ -217,6 +217,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
             case .darkMode:
                 if #available(iOS 13.0, *) {
                     if MainViewController.instance?.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark {
+                        cell.textLabel?.text = title
                         return cell
                     }
                 }

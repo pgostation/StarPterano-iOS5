@@ -13,6 +13,7 @@ import UIKit
 final class MainViewController: MyViewController {
     static weak var instance: MainViewController?
     var timelineList: [String: TimeLineViewController] = [:]
+    private var isDarkMode = SettingsData.isDarkMode
     
     override func loadView() {
         MainViewController.instance = self
@@ -63,6 +64,11 @@ final class MainViewController: MyViewController {
         } else {
             tlAction(nil)
         }
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(becomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,6 +77,18 @@ final class MainViewController: MyViewController {
         ImageCache.clear()
         APNGImageCache.clear()
         TimeLineView.clearAudio()
+    }
+    
+    @objc func becomeActive() {
+        if self.isDarkMode == SettingsData.isDarkMode {
+            return // 変わってない
+        }
+        
+        self.isDarkMode = SettingsData.isDarkMode
+        
+        ThemeColor.change()
+        
+        refreshColor()
     }
     
     func refreshColor(noReload: Bool = false) {
