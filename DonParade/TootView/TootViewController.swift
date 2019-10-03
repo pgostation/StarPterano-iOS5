@@ -487,6 +487,8 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                 let newEncodedText = DecodeToot.encodeEmoji(attributedText: textView.attributedText, textStorage: textView.textStorage)
                 if newEncodedText.count == encodedText.count { return }
                 textView.attributedText = DecodeToot.decodeName(name: newEncodedText, emojis: emojis, callback: nil)
+                textView.textColor = ThemeColor.messageColor
+                textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
             }
             textView.textColor = ThemeColor.messageColor
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 2)
