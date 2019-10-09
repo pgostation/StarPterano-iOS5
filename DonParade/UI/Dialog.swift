@@ -13,6 +13,13 @@ import UIKit
 final class Dialog {
     // OKボタンだけのダイアログを表示
     static func show(message: String, viewController: UIViewController? = nil) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                show(message: message, viewController: viewController)
+            }
+            return
+        }
+        
         let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
         
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
