@@ -292,7 +292,9 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                             }
                         } catch {}
                     } else {
-                        Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
+                        DispatchQueue.main.async {
+                            Dialog.show(message: I18n.get("ALERT_SEND_TOOT_FAILURE") + "\nHTTP status \(response.statusCode)")
+                        }
                     }
                 }
             }
