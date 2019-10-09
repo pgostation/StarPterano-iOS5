@@ -542,6 +542,14 @@ private final class EmojiInputScrollView: UIScrollView {
                                               y: -100,
                                               width: 0,
                                               height: 0)
+
+        // 一旦絵文字ボタンをすべて隠す
+        for button in emojiButtons {
+            button.frame = CGRect(x: -100,
+                                  y: -100,
+                                  width: 0,
+                                  height: 0)
+        }
         
         // カテゴリー絵文字
         for (index, category) in (self.categoryList ?? []).enumerated() {
