@@ -51,6 +51,7 @@
 		12B8B42A216612DF00869496 /* ListEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B429216612DF00869496 /* ListEditViewController.swift */; };
 		12B8B42C2166186300869496 /* ListEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B42B2166186300869496 /* ListEditTableViewCell.swift */; };
 		12B8B42E21663AE800869496 /* AllListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B8B42D21663AE800869496 /* AllListsViewController.swift */; };
+		12BB70EC2351D3D70035A70B /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB70EB2351D3D70035A70B /* FilterData.swift */; };
 		12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0256214E981D00133A95 /* SettingsViewController.swift */; };
 		12CD0259214E989D00133A95 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0258214E989D00133A95 /* SettingsModel.swift */; };
 		12CD025D214EB24A00133A95 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD025C214EB24A00133A95 /* ImageCache.swift */; };
@@ -134,6 +135,7 @@
 		12B8B429216612DF00869496 /* ListEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditViewController.swift; sourceTree = "<group>"; };
 		12B8B42B2166186300869496 /* ListEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEditTableViewCell.swift; sourceTree = "<group>"; };
 		12B8B42D21663AE800869496 /* AllListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllListsViewController.swift; sourceTree = "<group>"; };
+		12BB70EB2351D3D70035A70B /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
 		12CD0256214E981D00133A95 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		12CD0258214E989D00133A95 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		12CD025C214EB24A00133A95 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 			children = (
 				12F9AC98214CA9B100E9E508 /* SettingsData.swift */,
 				12CD0262214F49E000133A95 /* EmojiData.swift */,
+				12BB70EB2351D3D70035A70B /* FilterData.swift */,
 				12B8B4272165CD2B00869496 /* ListData.swift */,
 				1205B45C220FEB50007BF7A1 /* HashtagCache.swift */,
 			);
@@ -599,6 +602,7 @@
 				121764CD216846AB0017E76A /* MovieCache.swift in Sources */,
 				12F9AC9D214CAB7000E9E508 /* MyViewController.swift in Sources */,
 				127A37C221583DC700347880 /* ProfileViewCell.swift in Sources */,
+				12BB70EC2351D3D70035A70B /* FilterData.swift in Sources */,
 				12F9AC78214CA35F00E9E508 /* AppDelegate.swift in Sources */,
 				12CD0257214E981D00133A95 /* SettingsViewController.swift in Sources */,
 				1255A976215BBD2D00DE1CF3 /* ImageCheckView.swift in Sources */,

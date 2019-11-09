@@ -19,7 +19,11 @@ final class TootViewController: UIViewController, UITextViewDelegate {
         TootViewController.instance = self
         TootViewController.isShown = true
         
+        // カスタム絵文字を取得する
         _ = EmojiData.getEmojiCache(host: SettingsData.hostName!, showHiddenEmoji: true)
+        
+        // フィルターを取得する
+        _ = FilterData.getCache(host: SettingsData.hostName!)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             // 通知ボタンの位置を上にずらす
