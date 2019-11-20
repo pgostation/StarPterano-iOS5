@@ -67,7 +67,7 @@ final class ListEditViewController: MyViewController {
                     }
                 }
                 
-                /* リストに自分は追加できなかった
+                // リストに自分を追加
                 let myName = SettingsData.accountUsername(accessToken: SettingsData.accessToken ?? "")
                 if text == myName {
                     let myData = AnalyzeJson.AccountData(acct: nil,
@@ -89,7 +89,7 @@ final class ListEditViewController: MyViewController {
                                                          url: nil,
                                                          username: nil)
                     list.append(myData)
-                }*/
+                }
                 
                 DispatchQueue.main.async {
                     if let view = self?.view as? ListEditView {

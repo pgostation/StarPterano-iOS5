@@ -68,20 +68,21 @@ final class ImageCheckView: UIView {
         } else {
             guard let data = try? Data(contentsOf: imageUrl) else { return }
             
-            let gifImage = UIImage(gifData: data)
-            if let imageCount = gifImage.imageCount, imageCount >= 2 {
-                addImage(imageUrl: imageUrl, image: gifImage)
-            } else if let image = UIImage(contentsOfFile: imageUrl.path) {
-                addImage(imageUrl: imageUrl, image: image)
-            } else if let image = SDWebImageWebPCoder().decodedImage(with: data) {
-                addImage(imageUrl: imageUrl, image: image)
-            } else {
-                // 動画のプレビューイメージを作成
-                let avAsset = AVURLAsset(url: imageUrl, options: nil)
-                let generator = AVAssetImageGenerator(asset: avAsset)
-                if let capturedImage = try? generator.copyCGImage(at: avAsset.duration, actualTime: nil) {
-                    let image = UIImage(cgImage: capturedImage)
+            if let gifImage = try? UIImage(gifData: data) {
+                if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                    addImage(imageUrl: imageUrl, image: gifImage)
+                } else if let image = UIImage(contentsOfFile: imageUrl.path) {
                     addImage(imageUrl: imageUrl, image: image)
+                } else if let image = SDWebImageWebPCoder().decodedImage(with: data) {
+                    addImage(imageUrl: imageUrl, image: image)
+                } else {
+                    // 動画のプレビューイメージを作成
+                    let avAsset = AVURLAsset(url: imageUrl, options: nil)
+                    let generator = AVAssetImageGenerator(asset: avAsset)
+                    if let capturedImage = try? generator.copyCGImage(at: avAsset.duration, actualTime: nil) {
+                        let image = UIImage(cgImage: capturedImage)
+                        addImage(imageUrl: imageUrl, image: image)
+                    }
                 }
             }
         }
@@ -96,11 +97,12 @@ final class ImageCheckView: UIView {
         manager.requestImageData(for: asset, options: options) { [weak self] (data, string, orientation, infoDict) in
             guard let data = data else { return }
             
-            let gifImage = UIImage(gifData: data)
-            if let imageCount = gifImage.imageCount, imageCount >= 2 {
-                self?.addImage(imageUrl: imageUrl, image: gifImage)
-            } else if let image = UIImage(contentsOfFile: imageUrl.path) {
-                self?.addImage(imageUrl: imageUrl, image: image)
+            if let gifImage = try? UIImage(gifData: data) {
+                if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                    self?.addImage(imageUrl: imageUrl, image: gifImage)
+                } else if let image = UIImage(contentsOfFile: imageUrl.path) {
+                    self?.addImage(imageUrl: imageUrl, image: image)
+                }
             }
         }
     }

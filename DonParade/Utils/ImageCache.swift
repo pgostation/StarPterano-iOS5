@@ -79,16 +79,17 @@ final class ImageCache {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
                     if url.absoluteString.hasSuffix(".gif") {
-                        let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
-                        image.shortcode = shortcode
-                        DispatchQueue.main.async {
-                            gifCache.updateValue(image, forKey: urlStr)
-                            callback(image)
-                        }
-                        
-                        if gifCache.count >= 30 { // メモリの使いすぎを防ぐ
-                            oldGifCache = gifCache
-                            gifCache = [:]
+                        if let image = try? EmojiImage(gifData: data, levelOfIntegrity: 0.5) {
+                            image.shortcode = shortcode
+                            DispatchQueue.main.async {
+                                gifCache.updateValue(image, forKey: urlStr)
+                                callback(image)
+                            }
+                            
+                            if gifCache.count >= 30 { // メモリの使いすぎを防ぐ
+                                oldGifCache = gifCache
+                                gifCache = [:]
+                            }
                         }
                     } else if let image = EmojiImage(data: data) {
                         let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
@@ -138,29 +139,30 @@ final class ImageCache {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
                 if url.absoluteString.hasSuffix(".gif") {
-                    let image = EmojiImage(gifData: data, levelOfIntegrity: 0.5)
-                    image.shortcode = shortcode
-                    DispatchQueue.main.async {
-                        if !isTemp {
-                            gifCache.updateValue(image, forKey: urlStr)
+                    if let image = try? EmojiImage(gifData: data, levelOfIntegrity: 0.5) {
+                        image.shortcode = shortcode
+                        DispatchQueue.main.async {
+                            if !isTemp {
+                                gifCache.updateValue(image, forKey: urlStr)
+                            }
+                            callback(image)
+                            
+                            for waitingCallback in waitingDict[urlStr] ?? [] {
+                                waitingCallback(image)
+                            }
+                            
+                            waitingDict.removeValue(forKey: urlStr)
+                            
+                            if gifCache.count >= 30 { // メモリの使いすぎを防ぐ
+                                oldGifCache = gifCache
+                                gifCache = [:]
+                            }
                         }
-                        callback(image)
                         
-                        for waitingCallback in waitingDict[urlStr] ?? [] {
-                            waitingCallback(image)
-                        }
-                        
-                        waitingDict.removeValue(forKey: urlStr)
-                        
-                        if gifCache.count >= 30 { // メモリの使いすぎを防ぐ
-                            oldGifCache = gifCache
-                            gifCache = [:]
-                        }
+                        // ストレージにキャッシュする
+                        let fileUrl = URL(fileURLWithPath: filePath)
+                        try? data.write(to: fileUrl)
                     }
-                    
-                    // ストレージにキャッシュする
-                    let fileUrl = URL(fileURLWithPath: filePath)
-                    try? data.write(to: fileUrl)
                 } else if let image = EmojiImage(data: data) {
                     let smallImage = isSmall ? ImageUtils.small(image: image, size: 50) : image
                     smallImage.shortcode = shortcode

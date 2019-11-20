@@ -161,11 +161,12 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
                 } else {
                     guard let data = try? Data(contentsOf: url) else { return }
                     
-                    let gifImage = UIImage(gifData: data)
-                    if let imageCount = gifImage.imageCount, imageCount >= 2 {
-                        self?.addImage(imageUrl: url, image: gifImage, isIcon: isIcon)
-                    } else if let image = UIImage(contentsOfFile: url.path) {
-                        self?.addImage(imageUrl: url, image: image, isIcon: isIcon)
+                    if let gifImage = try? UIImage(gifData: data) {
+                        if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                            self?.addImage(imageUrl: url, image: gifImage, isIcon: isIcon)
+                        } else if let image = UIImage(contentsOfFile: url.path) {
+                            self?.addImage(imageUrl: url, image: image, isIcon: isIcon)
+                        }
                     }
                 }
             }
@@ -181,12 +182,13 @@ final class ProfileEditViewController: MyViewController, UITextViewDelegate {
         manager.requestImageData(for: asset, options: options) { [weak self] (data, string, orientation, infoDict) in
             guard let data = data else { return }
             
-            let gifImage = UIImage(gifData: data)
-            if let imageCount = gifImage.imageCount, imageCount >= 2 {
-                self?.addImage(imageUrl: imageUrl, image: gifImage, isIcon: isIcon)
-            } else {
-                guard let image = UIImage(data: data) else { return }
-                self?.addImage(imageUrl: imageUrl, image: image, isIcon: isIcon)
+            if let gifImage = try? UIImage(gifData: data) {
+                if let imageCount = gifImage.imageCount, imageCount >= 2 {
+                    self?.addImage(imageUrl: imageUrl, image: gifImage, isIcon: isIcon)
+                } else {
+                    guard let image = UIImage(data: data) else { return }
+                    self?.addImage(imageUrl: imageUrl, image: image, isIcon: isIcon)
+                }
             }
         }
     }
