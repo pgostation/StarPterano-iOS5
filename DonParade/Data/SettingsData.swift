@@ -698,6 +698,24 @@ final class SettingsData {
         }
     }
     
+    // 設定ボタンの位置移動するかどうか
+    static var buttonLocation: Bool {
+        get {
+            if let string = defaults.string(forKey: "buttonLocation") {
+                return (string == "ON")
+            }
+            
+            return false
+        }
+        set(newValue) {
+            if newValue {
+                defaults.set("ON", forKey: "buttonLocation")
+            } else {
+                defaults.removeObject(forKey: "buttonLocation")
+            }
+        }
+    }
+    
     // フォロー、フォロワーの情報をたまにチェックする
     static func checkFFAccounts(accessToken: String) {
         // 1週間以内にチェックしていたら、何もしない

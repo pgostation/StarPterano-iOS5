@@ -366,6 +366,15 @@ final class MainViewController: MyViewController {
                                                 message: nil,
                                                 preferredStyle: UIAlertController.Style.actionSheet)
         
+        // 場所を移動
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("MOVE_BUTTON_LOCATION"),
+            style: UIAlertAction.Style.default,
+            handler: { _ in
+                SettingsData.buttonLocation = !SettingsData.buttonLocation
+                self.view.setNeedsLayout()
+        }))
+        
         // プロフィール編集
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_PROFILE"),

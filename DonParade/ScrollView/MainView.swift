@@ -262,10 +262,17 @@ final class MainView: UIView {
         }
         
         let iconSize = min(36, SettingsData.iconSize - 2)
-        accountButton.frame = CGRect(x: screenBounds.width - iconSize,
-                                     y: UIUtils.statusBarHeight() + 21,
-                                     width: iconSize,
-                                     height: iconSize)
+        if SettingsData.buttonLocation {
+            accountButton.frame = CGRect(x: screenBounds.width - iconSize,
+                                         y: screenBounds.height - 120 - iconSize - bottomOffset,
+                                         width: iconSize,
+                                         height: iconSize)
+        } else {
+            accountButton.frame = CGRect(x: screenBounds.width - iconSize,
+                                         y: UIUtils.statusBarHeight() + 21,
+                                         width: iconSize,
+                                         height: iconSize)
+        }
         
         statusBarCover.frame = CGRect(x: 0,
                                       y: 0,
