@@ -14,7 +14,8 @@ final class APNGImageCache {
     private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "APNGImageCache")
-    private static let imageGlobalQueue = DispatchQueue.global()
+    private static let imageGlobalQueue = DispatchQueue(label: "imageGlobalQueue")
+    private static let apngNgList: [String] = ["daaf9f882665be1c.png", "d1a67b5ff4204938.png", "ac79990e5256048f.png"] // 暫定対策
     
     static func image(urlStr: String?, callback: @escaping (APNGImage)->Void) {
         guard let urlStr = urlStr else { return }
@@ -39,6 +40,11 @@ final class APNGImageCache {
             imageGlobalQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
+                    if apngNgList.contains(String(urlStr.split(separator: "/").last ?? "-")) {
+                        return
+                    }
+                    
+                    print("#### \(urlStr)")
                     if let image = APNGImage(data: data) {
                         DispatchQueue.main.async {
                             memCache.updateValue(image, forKey: urlStr)
