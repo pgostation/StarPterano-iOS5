@@ -7,6 +7,7 @@
 
 import UIKit
 import APNGKit
+import BerryPlant
 
 final class APNGImageCache {
     private static var memCache: [String: APNGImage] = [:]
@@ -14,8 +15,8 @@ final class APNGImageCache {
     private static var waitingDict: [String: [(APNGImage)->Void]] = [:]
     private static let fileManager = FileManager()
     private static let imageQueue = DispatchQueue(label: "APNGImageCache")
-    private static let imageGlobalQueue = DispatchQueue(label: "imageGlobalQueue")
-    private static let apngNgList: [String] = ["daaf9f882665be1c.png", "d1a67b5ff4204938.png", "ac79990e5256048f.png"] // 暫定対策
+    private static let imageGlobalQueue = DispatchQueue.global()
+    private static var notAnimeList: [String] = []
     
     static func image(urlStr: String?, callback: @escaping (APNGImage)->Void) {
         guard let urlStr = urlStr else { return }
@@ -37,14 +38,21 @@ final class APNGImageCache {
         let cacheDir = NSHomeDirectory() + "/Library/Caches"
         let filePath = cacheDir + "/" + urlStr.replacingOccurrences(of: "/", with: "|")
         if fileManager.fileExists(atPath: filePath) {
+            if notAnimeList.contains(filePath) {
+                return
+            }
+            
             imageGlobalQueue.async {
                 let url = URL(fileURLWithPath: filePath)
                 if let data = try? Data(contentsOf: url) {
-                    if apngNgList.contains(String(urlStr.split(separator: "/").last ?? "-")) {
-                        return
+                    if urlStr.hasSuffix(".png") {
+                        let format = BerryImageFormat.getImageFormat(data)
+                        if format != .apng {
+                            notAnimeList.append(filePath)
+                            return
+                        }
                     }
                     
-                    print("#### \(urlStr)")
                     if let image = APNGImage(data: data) {
                         DispatchQueue.main.async {
                             memCache.updateValue(image, forKey: urlStr)
@@ -77,6 +85,13 @@ final class APNGImageCache {
         imageQueue.async {
             guard let url = URL(string: urlStr) else { return }
             if let data = try? Data(contentsOf: url) {
+                if urlStr.hasSuffix(".png") {
+                    let format = BerryImageFormat.getImageFormat(data)
+                    if format != .apng {
+                        return
+                    }
+                }
+                
                 if let image = APNGImage(data: data) {
                     DispatchQueue.main.async {
                         memCache.updateValue(image, forKey: urlStr)

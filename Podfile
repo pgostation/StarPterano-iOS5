@@ -6,6 +6,7 @@ target 'DonParade' do
 pod 'Starscream'
 pod 'SwiftyGif'
 pod 'APNGKit'
+pod 'BerryPlant'
 pod 'SDWebImage'
 pod 'SDWebImage/WebP'
 pod 'Firebase/Core'
