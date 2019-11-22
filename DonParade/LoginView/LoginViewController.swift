@@ -219,7 +219,7 @@ final class LoginView: UIView {
                                        width: buttonWidth,
                                        height: buttonHeight)
         
-        resetButton.frame = CGRect(x: 10,
+        resetButton.frame = CGRect(x: screenBounds.width - buttonHeight - 10 ,
                                    y: 30,
                                    width: buttonHeight,
                                    height: buttonHeight)
