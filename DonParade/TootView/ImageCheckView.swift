@@ -68,21 +68,20 @@ final class ImageCheckView: UIView {
         } else {
             guard let data = try? Data(contentsOf: imageUrl) else { return }
             
-            if let gifImage = try? UIImage(gifData: data) {
-                if let imageCount = gifImage.imageCount, imageCount >= 2 {
-                    addImage(imageUrl: imageUrl, image: gifImage)
-                } else if let image = UIImage(contentsOfFile: imageUrl.path) {
+            let gifImage = try? UIImage(gifData: data)
+            if let gifImage = gifImage, let imageCount = gifImage.imageCount, imageCount >= 2 {
+                addImage(imageUrl: imageUrl, image: gifImage)
+            } else if let image = UIImage(contentsOfFile: imageUrl.path) {
+                addImage(imageUrl: imageUrl, image: image)
+            } else if let image = SDWebImageWebPCoder().decodedImage(with: data) {
+                addImage(imageUrl: imageUrl, image: image)
+            } else {
+                // 動画のプレビューイメージを作成
+                let avAsset = AVURLAsset(url: imageUrl, options: nil)
+                let generator = AVAssetImageGenerator(asset: avAsset)
+                if let capturedImage = try? generator.copyCGImage(at: avAsset.duration, actualTime: nil) {
+                    let image = UIImage(cgImage: capturedImage)
                     addImage(imageUrl: imageUrl, image: image)
-                } else if let image = SDWebImageWebPCoder().decodedImage(with: data) {
-                    addImage(imageUrl: imageUrl, image: image)
-                } else {
-                    // 動画のプレビューイメージを作成
-                    let avAsset = AVURLAsset(url: imageUrl, options: nil)
-                    let generator = AVAssetImageGenerator(asset: avAsset)
-                    if let capturedImage = try? generator.copyCGImage(at: avAsset.duration, actualTime: nil) {
-                        let image = UIImage(cgImage: capturedImage)
-                        addImage(imageUrl: imageUrl, image: image)
-                    }
                 }
             }
         }
