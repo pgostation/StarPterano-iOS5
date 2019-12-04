@@ -410,6 +410,7 @@ private final class EmojiInputScrollView: UIScrollView {
             textView.font = UIFont.systemFont(ofSize: SettingsData.fontSize + 5)
         } else if let textField = textView as? UITextField {
             textField.insertText("\u{200b}:" + button.key + ":\u{200b}") // U+200bはゼロ幅のスペース
+            textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(), replacementString: "") // 強制更新
         }
         
         addRecent(key: button.key)
