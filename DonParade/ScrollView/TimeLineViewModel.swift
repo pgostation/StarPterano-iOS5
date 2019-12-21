@@ -419,7 +419,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 spolerTextLabel.text = data.spoiler_text
                 spolerTextLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                 spolerTextLabel.numberOfLines = 0
-                spolerTextLabel.lineBreakMode = .byCharWrapping
+                spolerTextLabel.lineBreakMode = .byWordWrapping
                 spolerTextLabel.frame.size.width = UIScreen.main.bounds.width - 70
                 spolerTextLabel.sizeToFit()
                 detailOffset += 20 + spolerTextLabel.frame.height
@@ -500,7 +500,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             msgView.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
             msgView.textColor = ThemeColor.messageColor
             msgView.numberOfLines = 0
-            msgView.lineBreakMode = .byCharWrapping
+            msgView.lineBreakMode = .byWordWrapping
             msgView.backgroundColor = ThemeColor.cellBgColor
             msgView.isOpaque = true
             messageView = msgView
@@ -571,7 +571,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         let msgView = MyTextView()
         msgView.model = self
         msgView.linkTextAttributes = [NSAttributedString.Key.foregroundColor: ThemeColor.linkTextColor]
-        msgView.textContainer.lineBreakMode = .byCharWrapping
+        msgView.textContainer.lineBreakMode = .byWordWrapping
         msgView.isOpaque = true
         msgView.isScrollEnabled = false
         msgView.isEditable = false
@@ -833,7 +833,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
             })
             cell.spolerTextLabel?.numberOfLines = 0
-            cell.spolerTextLabel?.lineBreakMode = .byCharWrapping
+            cell.spolerTextLabel?.lineBreakMode = .byWordWrapping
             cell.spolerTextLabel?.frame.size.width = UIScreen.main.bounds.width - 70
             cell.spolerTextLabel?.sizeToFit()
             cell.addSubview(cell.spolerTextLabel!)
@@ -1170,7 +1170,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                         label.tag = 4321
                         label.textAlignment = .center
                         label.numberOfLines = 0
-                        label.lineBreakMode = .byCharWrapping
+                        label.lineBreakMode = .byWordWrapping
                         label.textColor = ThemeColor.linkTextColor
                         cell.imageViews.last?.addSubview(label)
                         DispatchQueue.main.async {

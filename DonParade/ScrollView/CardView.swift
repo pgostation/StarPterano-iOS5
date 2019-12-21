@@ -83,7 +83,7 @@ final class CardView: UIView {
         imageView.alpha = 0.6
         
         titleLabel.numberOfLines = 0
-        titleLabel.lineBreakMode = .byCharWrapping
+        titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.textColor = ThemeColor.nameColor
         titleLabel.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
         titleLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
@@ -92,7 +92,7 @@ final class CardView: UIView {
         titleLabel.layer.shadowRadius = 1.0
         
         bodyLabel.numberOfLines = 0
-        bodyLabel.lineBreakMode = .byCharWrapping
+        bodyLabel.lineBreakMode = .byWordWrapping
         bodyLabel.textColor = ThemeColor.contrastColor
         bodyLabel.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
         bodyLabel.layer.shadowColor = ThemeColor.viewBgColor.cgColor
