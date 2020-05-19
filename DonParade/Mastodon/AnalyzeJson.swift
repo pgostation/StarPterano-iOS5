@@ -286,6 +286,13 @@ final class AnalyzeJson {
             visibility = reblog?["visibility"] as? String
         }
         
+        let bookmarked: Int?
+        if reblog_acct == nil {
+            bookmarked = json["bookmarked"] as? Int
+        } else {
+            bookmarked = reblog?["bookmarked"] as? Int
+        }
+        
         let card: CardData?
         if reblog_acct == nil {
             if let cardJson = json["card"] as? [String: Any] {
@@ -328,6 +335,7 @@ final class AnalyzeJson {
                                tags: tags,
                                url: url,
                                visibility: visibility,
+                               bookmarked: bookmarked,
                                isMerge: isMerge)
         return data
     }
@@ -492,6 +500,7 @@ final class AnalyzeJson {
                            tags: nil,
                            url: nil,
                            visibility: nil,
+                           bookmarked: nil,
                            isMerge: false)
     }
     
@@ -548,6 +557,7 @@ final class AnalyzeJson {
         //let uri: String?
         let url: String?
         let visibility: String?
+        let bookmarked: Int?
         var isMerge: Bool
     }
     

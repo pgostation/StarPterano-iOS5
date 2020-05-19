@@ -76,6 +76,14 @@ final class ShowMyAnyList {
         }
     }
     
+    // ブックマークの一覧
+    static func showBookmarkList(rootVc: UIViewController) {
+        DispatchQueue.main.async {
+            let vc = TimeLineViewController(type: .bookmarked)
+            show(rootVc: rootVc, vc: vc)
+        }
+    }
+    
     // ブロック
     static func showBlockList(rootVc: UIViewController) {
         // ####

@@ -81,6 +81,7 @@ final class TimeLineViewCell: UITableViewCell {
     var isFaved = false
     var isBoosted = false
     var isPinned = false
+    var isBookmarked = false
     
     // セルの初期化
     init(reuseIdentifier: String?) {
@@ -573,6 +574,14 @@ final class TimeLineViewCell: UITableViewCell {
                     UIUtils.getFrontViewController()?.present(controller, animated: true)
             }))
         }
+        
+        // ブックマークする/解除する
+        alertController.addAction(UIAlertAction(
+            title: self.isBookmarked ? I18n.get("ACTION_UNBOOKMARK") : I18n.get("ACTION_BOOKMARK"),
+            style: UIAlertAction.Style.default,
+            handler: { _ in
+                self.tableView?.bookmarkAction(id: id, isBookmarked: self.isBookmarked)
+        }))
         
         // キャンセル
         alertController.addAction(UIAlertAction(

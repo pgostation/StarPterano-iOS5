@@ -399,6 +399,14 @@ final class MainViewController: MyViewController {
                 ShowMyAnyList.showFavoriteList(rootVc: self)
         }))
         
+        // ブックマークを表示
+        alertController.addAction(UIAlertAction(
+            title: I18n.get("SETTINGS_BOOKMARKLIST"),
+            style: UIAlertAction.Style.default,
+            handler: { _ in
+                ShowMyAnyList.showBookmarkList(rootVc: self)
+        }))
+        
         // 自分のページを表示
         alertController.addAction(UIAlertAction(
             title: I18n.get("SETTINGS_MYPAGE"),

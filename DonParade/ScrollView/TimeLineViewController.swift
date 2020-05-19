@@ -23,6 +23,7 @@ final class TimeLineViewController: MyViewController {
         case direct // ダイレクトメッセージ
         case list // リスト
         case scheduled // 予約投稿の一覧
+        case bookmarked // ブックマークの一覧
     }
     
     static var closeButtons: [UIButton] = []

@@ -49,6 +49,8 @@
 "ALERT_UNFAVORITE" = "Do you unfavorite this toot?";
 "BUTTON_UNFAVORITE" = "Unfavorite";
 "ACTION_SHOW_OTHER_LTL" = "Open this server LTL";
+"ACTION_BOOKMARK" = "Bookmark";
+"ACTION_UNBOOKMARK" = "Unbookmark";
 
 // 何分前
 "DATETIME_NOW" = "now";
@@ -200,6 +202,7 @@
 "SETTINGS_LIST"= "List";
 "SETTINGS_DMLIST"= "DM list";
 "SETTINGS_FAVORITELIST"= "Favorite list";
+"SETTINGS_BOOKMARKLIST"= "Bookmark list";
 "SETTINGS_MUTELIST" = "Mute list";
 "SETTINGS_BLOCKLIST" = "Block list";
 "SETTINGS_FOLLOWREQUESTLIST" = "Follow request list";

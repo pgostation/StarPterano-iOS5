@@ -799,6 +799,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.isMiniView = SettingsData.isMiniView
         cell.accountData = account
         cell.visibility = data.visibility
+        cell.isBookmarked = (data.bookmarked == 1)
         
         for dict in data.tags ?? [[:]] {
             if let tag = dict["name"] {

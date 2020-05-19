@@ -152,6 +152,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(sinceIdStr)")
         case .scheduled:
             url = URL(string: "https://\(hostName)/api/v1/scheduled_statuses")
+        case .bookmarked:
+            url = URL(string: "https://\(hostName)/api/v1/bookmarks")
         }
         
         guard let requestUrl = url else { return }
@@ -538,6 +540,8 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/timelines/list/\(listId)?limit=50\(maxIdStr)")
         case .scheduled:
             return
+        case .bookmarked:
+            return
         }
         
         guard let requestUrl = url else { return }
@@ -683,6 +687,38 @@ final class TimeLineView: UITableView {
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unpin")!
         } else {
             url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/pin")!
+        }
+        
+        try? MastodonRequest.post(url: url, body: [:]) { [weak self] (data, response, error) in
+            guard let strongSelf = self else { return }
+            
+            if let data = data {
+                do {
+                    if let responseJson = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject] {
+                        var acct = ""
+                        let contentData = AnalyzeJson.analyzeJson(view: strongSelf, model: strongSelf.model, json: responseJson, acct: &acct)
+                        let contentList = [contentData]
+                        
+                        DispatchQueue.main.async {
+                            strongSelf.model.change(tableView: strongSelf, addList: contentList, accountList: [:])
+                        }
+                    }
+                } catch {
+                    
+                }
+            }
+        }
+    }
+    
+    // ブックマークにする/解除する
+    func bookmarkAction(id: String, isBookmarked: Bool) {
+        guard let hostName = SettingsData.hostName else { return }
+        
+        let url: URL
+        if isBookmarked {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/unbookmark")!
+        } else {
+            url = URL(string: "https://\(hostName)/api/v1/statuses/\(id)/bookmark")!
         }
         
         try? MastodonRequest.post(url: url, body: [:]) { [weak self] (data, response, error) in

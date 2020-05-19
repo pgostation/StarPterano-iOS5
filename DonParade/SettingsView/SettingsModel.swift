@@ -46,6 +46,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
         case mypage = "SETTINGS_MYPAGE"
         case profile = "SETTINGS_PROFILE"
         case favorite = "SETTINGS_FAVORITELIST"
+        case bookmark = "SETTINGS_BOOKMARKLIST"
         case mute = "SETTINGS_MUTELIST"
         case block = "SETTINGS_BLOCKLIST"
         case followRequest = "SETTINGS_FOLLOWREQUESTLIST"
@@ -54,6 +55,7 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                                         .mypage,
                                         .profile,
                                         .favorite,
+                                        .bookmark,
                                         .followRequest] // 最後のアイテムの表示はロックアカウントのみ
                                         //.mute,
                                         //.block]
@@ -501,6 +503,8 @@ final class SettingsModel: NSObject, UITableViewDataSource, UITableViewDelegate 
                 ShowMyAnyList.editProfile(rootVc: SettingsViewController.instance!)
             case .favorite:
                 ShowMyAnyList.showFavoriteList(rootVc: SettingsViewController.instance!)
+            case .bookmark:
+                ShowMyAnyList.showBookmarkList(rootVc: SettingsViewController.instance!)
             case .block:
                 ShowMyAnyList.showBlockList(rootVc: SettingsViewController.instance!)
             case .mute:
