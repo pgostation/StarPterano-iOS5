@@ -48,7 +48,9 @@ final class APNGImageCache {
                     if urlStr.hasSuffix(".png") {
                         let format = BerryImageFormat.getImageFormat(data)
                         if format != .apng {
-                            notAnimeList.append(filePath)
+                            DispatchQueue.main.async {
+                                notAnimeList.append(filePath)
+                            }
                             return
                         }
                     }

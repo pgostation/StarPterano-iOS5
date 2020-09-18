@@ -291,11 +291,20 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // 途中読み込みセルをタップしたら
     @objc func reloadOld(_ sender: UIButton) {
+        if let tableView = sender.superview?.superview as? UITableView {
+            reloadOld(tableView: tableView)
+        }
+    }
+    
+    func reloadOld(tableView: UITableView) {
         // 一番上で見つかった途中読み込みセルより前をすべて消す
         for (index, data) in self.list.enumerated() {
             if data.id == nil {
-                self.list.removeLast(self.list.count - index)
-                if let tableView = sender.superview?.superview as? UITableView {
+                //self.list.removeLast(self.list.count - index)
+                for _ in 0..<self.list.count - index {
+                    self.list.removeLast()
+                }
+                if let tableView = tableView.superview?.superview as? UITableView {
                     tableView.reloadData()
                 }
                 break
@@ -464,6 +473,9 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     private var cacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool, Bool)] = [:]
     private var oldCacheDict: [String: (UIView, AnalyzeJson.ContentData, Bool, Bool)] = [:]
     private func getMessageViewAndData(index: Int, indexPath: IndexPath, add: Bool, callback: (()->Void)?) -> (UIView, AnalyzeJson.ContentData, Bool, Bool) {
+        if index >= list.count {
+            return (UIView(), AnalyzeJson.ContentData(accountId: "", application: nil, card: nil, content: nil, created_at: nil, emojis: nil, favourited: nil, favourites_count: nil, id: nil, in_reply_to_account_id: nil, in_reply_to_id: nil, mediaData: nil, mentions: nil, muted: nil, pinned: nil, poll: nil, reblog_acct: nil, reblog_created_at: nil, reblog_id: nil, reblogged: nil, reblogs_count: nil, replies_count: nil, sensitive: nil, spoiler_text: nil, tags: nil, url: nil, visibility: nil, bookmarked: nil, isMerge: false), false, false)
+        }
         let data = list[index]
         
         if data.emojis == nil, let id = data.id, let cache = self.cacheDict[id] ?? self.oldCacheDict[id] {
@@ -723,8 +735,8 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             let loadButton = UIButton()
             loadButton.setTitle("🔄", for: .normal)
             loadButton.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: SettingsData.isMiniView == .normal ? 60 : (SettingsData.isMiniView == .miniView ? 44 : 30))
-            cell.addSubview(loadButton)
             loadButton.addTarget(self, action: #selector(reloadOld(_:)), for: .touchUpInside)
+            cell.addSubview(loadButton)
             return cell
         } else if data.id == nil {
             let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
@@ -1575,6 +1587,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             
             // トゥート詳細画面に移動
             let (_, data, _, _) = getMessageViewAndData(index: index, indexPath: indexPath, add: true, callback: nil)
+            // iOS14では途中リロードボタンが無視されるので、ここで途中リロード
+            if data.id == nil {
+                reloadOld(tableView: tableView)
+                return
+            }
             let mentionsData = getMentionsData(data: data)
             let viewController = TimeLineViewController(type: TimeLineViewController.TimeLineType.mentions, option: nil, mentions: (mentionsData, accountList))
             UIUtils.getFrontViewController()?.addChild(viewController)

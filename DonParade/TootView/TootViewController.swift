@@ -335,7 +335,7 @@ final class TootViewController: UIViewController, UITextViewDelegate {
                         }
                     })
                 }
-            case .denied, .notDetermined, .restricted:
+            case .denied, .notDetermined, .restricted, .limited:
                 DispatchQueue.main.async {
                     Dialog.show(message: "許可されていません")
                 }
