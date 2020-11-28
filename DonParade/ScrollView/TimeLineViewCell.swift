@@ -521,11 +521,12 @@ final class TimeLineViewCell: UITableViewCell {
         }))
         
         // ペーストボードにコピー
+        let str = self.copyToot()
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_COPY_TOOT"),
             style: UIAlertAction.Style.default,
             handler: { _ in
-                self.copyToot()
+                UIPasteboard.general.string = str
         }))
         
         // Safariで開く
@@ -621,11 +622,12 @@ final class TimeLineViewCell: UITableViewCell {
         }))
         
         // ペーストボードにコピー
+        let str = self.copyToot()
         alertController.addAction(UIAlertAction(
             title: I18n.get("ACTION_COPY_TOOT"),
             style: UIAlertAction.Style.default,
             handler: { _ in
-                self.copyToot()
+                UIPasteboard.general.string = str
         }))
         
         // キャンセル
@@ -639,7 +641,7 @@ final class TimeLineViewCell: UITableViewCell {
     }
     
     // ペーストボードにコピー
-    private func copyToot() {
+    private func copyToot() -> String {
         let spoilerText: String
         if let attrtext = self.spolerTextLabel?.attributedText {
             spoilerText = DecodeToot.encodeEmoji(attributedText: attrtext, textStorage: NSTextStorage(attributedString: attrtext))
@@ -665,7 +667,7 @@ final class TimeLineViewCell: UITableViewCell {
             finalText = text
         }
         
-        UIPasteboard.general.string = finalText
+        return finalText
     }
     
     // もっと見る
