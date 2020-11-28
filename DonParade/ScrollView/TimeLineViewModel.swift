@@ -291,7 +291,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // 途中読み込みセルをタップしたら
     @objc func reloadOld(_ sender: UIButton) {
-        if let tableView = sender.superview?.superview as? UITableView {
+        if let tableView = sender.superview?.superview?.superview as? UITableView {
             reloadOld(tableView: tableView)
         }
     }
@@ -304,9 +304,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 for _ in 0..<self.list.count - index {
                     self.list.removeLast()
                 }
-                if let tableView = tableView.superview?.superview as? UITableView {
-                    tableView.reloadData()
-                }
+                tableView.reloadData()
                 break
             }
         }
@@ -736,7 +734,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             loadButton.setTitle("🔄", for: .normal)
             loadButton.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: SettingsData.isMiniView == .normal ? 60 : (SettingsData.isMiniView == .miniView ? 44 : 30))
             loadButton.addTarget(self, action: #selector(reloadOld(_:)), for: .touchUpInside)
-            cell.addSubview(loadButton)
+            cell.contentView.addSubview(loadButton)
             return cell
         } else if data.id == nil {
             let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: nil)
@@ -849,16 +847,16 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.spolerTextLabel?.lineBreakMode = .byWordWrapping
             cell.spolerTextLabel?.frame.size.width = UIScreen.main.bounds.width - 70
             cell.spolerTextLabel?.sizeToFit()
-            cell.addSubview(cell.spolerTextLabel!)
+            cell.contentView.addSubview(cell.spolerTextLabel!)
         }
         
         func barColor(color: UIColor) {
             cell.DMBarLeft = UIView()
             cell.DMBarLeft?.backgroundColor = color
-            cell.addSubview(cell.DMBarLeft!)
+            cell.contentView.addSubview(cell.DMBarLeft!)
             cell.DMBarRight = UIView()
             cell.DMBarRight?.backgroundColor = color
-            cell.addSubview(cell.DMBarRight!)
+            cell.contentView.addSubview(cell.DMBarRight!)
         }
         
         if data.visibility == "direct" {
@@ -897,7 +895,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.pinnedView = UILabel()
             cell.pinnedView?.text = "📌"
             cell.pinnedView?.font = UIFont.systemFont(ofSize: 12)
-            cell.addSubview(cell.pinnedView!)
+            cell.contentView.addSubview(cell.pinnedView!)
         }
         
         // 詳細表示の場合
@@ -926,11 +924,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.replyButton?.setTitle("↩︎", for: .normal)
             cell.replyButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             cell.replyButton?.addTarget(cell, action: #selector(cell.replyAction), for: .touchUpInside)
-            cell.addSubview(cell.replyButton!)
+            cell.contentView.addSubview(cell.replyButton!)
             
             // 返信された数
             cell.repliedLabel = UILabel()
-            cell.addSubview(cell.repliedLabel!)
+            cell.contentView.addSubview(cell.repliedLabel!)
             if let replies_count = data.replies_count, replies_count > 0 {
                 cell.repliedLabel?.text = "\(replies_count)"
                 cell.repliedLabel?.textColor = ThemeColor.messageColor
@@ -950,11 +948,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 }
                 cell.boostButton?.addTarget(cell, action: #selector(cell.boostAction), for: .touchUpInside)
             }
-            cell.addSubview(cell.boostButton!)
+            cell.contentView.addSubview(cell.boostButton!)
             
             // ブーストされた数
             cell.boostedLabel = UILabel()
-            cell.addSubview(cell.boostedLabel!)
+            cell.contentView.addSubview(cell.boostedLabel!)
             if let reblogs_count = data.reblogs_count, reblogs_count > 0 {
                 cell.boostedLabel?.text = "\(reblogs_count)"
                 cell.boostedLabel?.textColor = ThemeColor.messageColor
@@ -970,11 +968,11 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.favoriteButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             }
             cell.favoriteButton?.addTarget(cell, action: #selector(cell.favoriteAction), for: .touchUpInside)
-            cell.addSubview(cell.favoriteButton!)
+            cell.contentView.addSubview(cell.favoriteButton!)
             
             // お気に入りされた数
             cell.favoritedLabel = UILabel()
-            cell.addSubview(cell.favoritedLabel!)
+            cell.contentView.addSubview(cell.favoritedLabel!)
             if let favourites_count = data.favourites_count, favourites_count > 0 {
                 cell.favoritedLabel?.text = "\(favourites_count)"
                 cell.favoritedLabel?.textColor = ThemeColor.messageColor
@@ -986,12 +984,12 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.detailButton?.setTitle("…", for: .normal)
             cell.detailButton?.setTitleColor(ThemeColor.detailButtonsColor, for: .normal)
             cell.detailButton?.addTarget(cell, action: #selector(cell.detailAction), for: .touchUpInside)
-            cell.addSubview(cell.detailButton!)
+            cell.contentView.addSubview(cell.detailButton!)
             
             // 使用アプリケーション
             if let application = data.application, let name = application["name"] as? String {
                 cell.applicationLabel = UILabel()
-                cell.addSubview(cell.applicationLabel!)
+                cell.contentView.addSubview(cell.applicationLabel!)
                 cell.applicationLabel?.text = name
                 cell.applicationLabel?.textColor = ThemeColor.dateColor
                 cell.applicationLabel?.textAlignment = .right
@@ -1010,7 +1008,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.rightFavButton?.setTitleColor(ThemeColor.detailButtonsColor.withAlphaComponent(0.4), for: .normal)
             }
             cell.rightFavButton?.addTarget(cell, action: #selector(cell.favoriteAction), for: .touchUpInside)
-            cell.addSubview(cell.rightFavButton!)
+            cell.contentView.addSubview(cell.rightFavButton!)
         }
         
         if hasCard {
@@ -1019,13 +1017,13 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 let cardView = CardView(card: card)
                 cardView.isHidden = messageView.isHidden
                 cell.cardView = cardView
-                cell.addSubview(cardView)
+                cell.contentView.addSubview(cardView)
             } else {
                 // card表示
                 let cardView = CardView(id: data.reblog_id ?? data.id, dateStr: data.created_at)
                 cardView.isHidden = messageView.isHidden
                 cell.cardView = cardView
-                cell.addSubview(cardView)
+                cell.contentView.addSubview(cardView)
             }
         }
         
@@ -1033,7 +1031,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             // 投票表示
             let pollView = PollView(data: poll)
             cell.pollView = pollView
-            cell.addSubview(pollView)
+            cell.contentView.addSubview(pollView)
         }
         
         ImageCache.image(urlStr: account?.avatar ?? account?.avatar_static, isTemp: false, isSmall: true) { image in
@@ -1052,7 +1050,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 
                 iconView.tag = TimeLineViewCell.iconViewTag
                 cell.iconView = iconView
-                cell.addSubview(iconView)
+                cell.contentView.addSubview(iconView)
                 cell.iconView?.image = image
                 cell.iconView?.layer.cornerRadius = 5
                 cell.iconView?.clipsToBounds = true
@@ -1104,7 +1102,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                 cell.detailDateLabel?.textColor = ThemeColor.dateColor
                 cell.detailDateLabel?.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                 cell.detailDateLabel?.textAlignment = .right
-                cell.addSubview(cell.detailDateLabel!)
+                cell.contentView.addSubview(cell.detailDateLabel!)
             } else {
                 cell.date = date
                 cell.refreshDate()
@@ -1146,7 +1144,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                             label.removeFromSuperview()
                         }
                     }
-                    cell.addSubview(imageView)
+                    cell.contentView.addSubview(imageView)
                     cell.imageViews.append(imageView)
                     
                     if data.sensitive == 1 || data.spoiler_text != "" {
@@ -1256,7 +1254,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.continueView?.text = "▼"
             cell.continueView?.textColor = ThemeColor.nameColor
             cell.continueView?.textAlignment = .center
-            cell.addSubview(cell.continueView!)
+            cell.contentView.addSubview(cell.continueView!)
         }
         
         // ブーストの場合
@@ -1271,7 +1269,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             }
             let name = String(format: I18n.get("BOOSTED_BY_%@"), username)
             cell.boostView?.attributedText = DecodeToot.decodeName(name: name, emojis: account?.emojis, uiLabel: cell.boostView, callback: nil)
-            cell.addSubview(cell.boostView!)
+            cell.contentView.addSubview(cell.boostView!)
         }
         
         // もっと見るの場合
@@ -1280,7 +1278,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.showMoreButton?.setTitle(I18n.get("BUTTON_SHOW_MORE"), for: .normal)
             cell.showMoreButton?.setTitleColor(ThemeColor.nameColor, for: .normal)
             cell.showMoreButton?.addTarget(cell, action: #selector(cell.showMoreAction), for: .touchUpInside)
-            cell.addSubview(cell.showMoreButton!)
+            cell.contentView.addSubview(cell.showMoreButton!)
             
             if let id = data.id, id != "" && TimeLineViewCell.showMoreList.contains(id) {
                 // すでに解除済み
@@ -1294,7 +1292,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
             cell.boostView?.font = UIFont.boldSystemFont(ofSize: SettingsData.fontSize)
             cell.boostView?.textColor = UIColor.red
             cell.boostView?.text = I18n.get("THIS_TOOT_IS_DIRECT_MESSAGE")
-            cell.addSubview(cell.boostView!)
+            cell.contentView.addSubview(cell.boostView!)
         }
         
         // お気に入りした人やブーストした人の名前表示
@@ -1386,7 +1384,7 @@ final class TimeLineViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
                                             cell.favoriterLabels.append(label)
                                             label.font = UIFont.systemFont(ofSize: SettingsData.fontSize)
                                             label.textColor = ThemeColor.idColor
-                                            cell.addSubview(label)
+                                            cell.contentView.addSubview(label)
                                             
                                             label.accountData = accountData
                                             label.setGesture()
