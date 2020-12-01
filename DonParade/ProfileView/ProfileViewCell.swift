@@ -70,27 +70,27 @@ final class ProfileViewCell: UITableViewCell, UITextViewDelegate {
         }
         
         // ヘッダ画像
-        self.addSubview(headerImageView)
+        self.contentView.addSubview(headerImageView)
         
         // メインの表示
-        self.addSubview(nameLabel)
-        self.addSubview(idLabel)
-        self.addSubview(noteLabel)
-        self.addSubview(dateLabel)
+        self.contentView.addSubview(nameLabel)
+        self.contentView.addSubview(idLabel)
+        self.contentView.addSubview(noteLabel)
+        self.contentView.addSubview(dateLabel)
         
         // 数の表示
-        self.addSubview(followingCountTitle)
-        self.addSubview(followingCountLabel)
-        self.addSubview(followerCountTitle)
-        self.addSubview(followerCountLabel)
-        self.addSubview(statusCountTitle)
-        self.addSubview(statusCountLabel)
+        self.contentView.addSubview(followingCountTitle)
+        self.contentView.addSubview(followingCountLabel)
+        self.contentView.addSubview(followerCountTitle)
+        self.contentView.addSubview(followerCountLabel)
+        self.contentView.addSubview(statusCountTitle)
+        self.contentView.addSubview(statusCountLabel)
         
-        self.addSubview(mediaOnlyButton)
+        self.contentView.addSubview(mediaOnlyButton)
         
         // フォローしているか、フォローされているかの表示
-        self.addSubview(relationshipLabel)
-        self.addSubview(actionButton)
+        self.contentView.addSubview(relationshipLabel)
+        self.contentView.addSubview(actionButton)
         
         setProperties(data: accountData)
         
